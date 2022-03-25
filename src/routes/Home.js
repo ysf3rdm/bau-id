@@ -318,7 +318,9 @@ const TextLogo = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
-
+  @media (max-width: 768px) {
+    display: none;
+  }
   img {
     object-fit: contain;
   }
