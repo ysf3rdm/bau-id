@@ -50,21 +50,23 @@ const NoDomainsContainer = styled('div')`
   margin-bottom: 40px;
 
   h2 {
-    color: #adbbcd;
-    font-weight: 100;
+    color: #b1b1b1;
     margin-bottom: 0;
     padding: 0;
     margin-top: 20px;
     text-align: center;
     max-width: 500px;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
   }
 
   p {
-    color: #2b2b2b;
-    font-size: 18px;
-    font-weight: 300;
+    color: #b1b1b1;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
     margin-top: 20px;
-    line-height: 1.3em;
     text-align: center;
     max-width: 400px;
   }
@@ -73,6 +75,10 @@ const NoDomainsContainer = styled('div')`
 const H2 = styled(DefaultH2)`
   margin-top: 50px;
   margin-left: 20px;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  color: #47c799;
   ${mq.medium`
     margin-left: 0;
   `}

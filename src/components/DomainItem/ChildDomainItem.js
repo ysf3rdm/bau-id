@@ -57,6 +57,7 @@ const DomainLink = styled(Link)`
     margin: 0;
     font-weight: 100;
     font-size: 28px;
+    color: #379070;
   }
 
   ${p =>

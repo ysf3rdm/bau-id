@@ -31,7 +31,6 @@ const Header = styled('div')`
     font-family: Overpass;
     font-weight: 300;
     font-size: 18px;
-    color: #2b2b2b;
     letter-spacing: 0;
     margin: 0;
     margin-bottom: 5px;
@@ -55,6 +54,13 @@ const Header = styled('div')`
 
 const NotifyButton = styled(Button)`
   flex-shrink: 0;
+  color: #5ed6ab;
+  border-color: #5ed6ab;
+
+  &:hover {
+    border-color: #5ed6ab;
+    color: #5ed6ab;
+  }
 `
 
 const NotifyButtonDisabled = styled('div')`
@@ -76,7 +82,7 @@ const Explainer = ({ step, waitPercentComplete, waitTime }) => {
     <>
       <Header>
         <div>
-          <h2>{titles[step]}</h2>
+          <h2 style={{ color: ' #379070' }}>{titles[step]}</h2>
           <p>{t('register.favourite')}</p>
         </div>
         {hasPermission() ? (

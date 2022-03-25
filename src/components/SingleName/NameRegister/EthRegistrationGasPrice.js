@@ -30,6 +30,11 @@ const Value = styled('div')`
 
 const TotalValue = styled(Value)`
   font-weight: 300;
+  color: #47c799;
+
+  span {
+    color: #379070;
+  }
 `
 
 const Description = styled('div')`
@@ -42,7 +47,7 @@ const Description = styled('div')`
 
 const USD = styled('span')`
   font-size: 22px;
-  color: #adbbcd;
+  color: #adbbcd !important;
   margin-left: 20px;
   ${mq.small`
     font-size: 28px;
@@ -73,8 +78,11 @@ const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
   return (
     <PriceContainer>
       <TotalValue>
-        {ethVal.toFixed(3)} ETH + at most {registerGasFast.toFixed(3)} ETH gas
-        fee = at most {totalFast.toFixed(3)} ETH
+        {ethVal.toFixed(3)}
+        <span> ETH + at most </span> {registerGasFast.toFixed(3)}
+        <span> ETH gas</span>
+        <span>fee = at most</span> {totalFast.toFixed(3)}
+        <span> ETH</span>
         {ethVal && ethUsdPrice && (
           <USD>
             {' '}

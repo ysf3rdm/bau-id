@@ -18,7 +18,7 @@ const NetworkInformationContainer = styled('div')`
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 20px;
   ${mq.medium`
-    margin-top: 80px;
+    margin-top: 0px;
     margin-bottom: 50px;
     display: block;
     border: none;
@@ -28,7 +28,7 @@ const NetworkInformationContainer = styled('div')`
 const Blockies = styled(UnstyledBlockies)`
   border-radius: 50%;
   position: absolute;
-  left: 10px;
+  left: 0px;
   top: 10px;
   ${mq.medium`
     box-shadow: 3px 5px 24px 0 #d5e2ec;
@@ -51,10 +51,10 @@ const NetworkStatus = styled('div')`
   font-size: 14px;
   text-transform: capitalize;
   font-weight: 100;
-  margin-top: -2px;
-  margin-left: 1px;
+  margin-left: 56px;
   display: flex;
   align-items: center;
+  margin-bottom: 16px;
 
   &:before {
     content: '';
@@ -62,7 +62,7 @@ const NetworkStatus = styled('div')`
     width: 6px;
     height: 6px;
     border-radius: 3px;
-    background: #5284ff;
+    background: #628ffd;
     margin-right: 5px;
   }
 `
@@ -76,23 +76,24 @@ const Account = styled('div')`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-left: 56px;
 `
 
 const AccountContainer = styled('div')`
-  padding: 10px 10px 10px 65px;
+  padding: 15px 0 0;
   position: relative;
   ${mq.medium`
-    transform: translate(-25px, 5px);
-    width: 225px;
-    &:hover {
-      background: white;
-      box-shadow: -4px 18px 70px 0 rgba(108, 143, 167, 0.32);
-      border-radius: 6px;
-      .account {
-        overflow: visible;
-        white-space: normal;
-      }
-    }
+    // transform: translate(-25px, 5px);
+    width: 100%;
+    // &:hover {
+    //   background: white;
+    //   box-shadow: -4px 18px 70px 0 rgba(108, 143, 167, 0.32);
+    //   border-radius: 6px;
+    //   .account {
+    //     overflow: visible;
+    //     white-space: normal;
+    //   }
+    // }
   `}
 `
 
@@ -146,7 +147,7 @@ function NetworkInformation() {
             <NoAccountsModal
               onClick={disconnectProvider}
               buttonText={t('c.disconnect')}
-              colour={'#F5A623'}
+              colour={'#0191E2'}
             />
           )}
         </AccountContainer>
@@ -160,7 +161,7 @@ function NetworkInformation() {
           </NetworkStatus>
           <NoAccountsModal
             onClick={connectProvider}
-            colour={'#F5A623'}
+            colour={'#25FFB1'}
             buttonText={t('c.connect')}
           />
         </AccountContainer>

@@ -11,16 +11,16 @@ injectGlobal`
   }
 
   a {
-    color: #5284ff;
+    color: #18E199;
     text-decoration: none;
     transition: 0.2s;
 
     &:hover {
-      color: #2C46A6;
+      color: #379070;
     }
 
     &:visited {
-      color: #5284ff
+      color: #379070
     } 
   }
 `

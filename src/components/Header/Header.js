@@ -9,6 +9,7 @@ import Search from '../SearchName/Search'
 import Hamburger from './Hamburger'
 import SideNav from '../SideNav/SideNav'
 import Banner from '../Banner'
+import searchIcon from '../../assets/searchWhite.svg'
 
 import { hasNonAscii } from '../../utils/utils'
 
@@ -34,6 +35,8 @@ const StyledBannerInner = styled('div')`
 `
 
 const Header = styled('header')`
+  padding: 14px 100px;
+  background: #18e199;
   ${p =>
     p.isMenuOpen
       ? `
@@ -59,17 +62,50 @@ const Header = styled('header')`
 const SearchHeader = styled(Search)`
   margin-top: 50px;
   width: 100%;
+
   ${mq.medium`
     margin-top: 0;
     width: calc(100% - 200px);
+    height: 54px;
+    border: 1px solid #ffffff;
+    border-radius: 16px;
+    // overflow: hidden;
   `}
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translate(0, -50%);
+    display: block;
+    width: 27px;
+    height: 27px;
+    background: url(${searchIcon}) no-repeat;
+  }
+
+  input {
+    background: #18e199;
+    color: #ffffff;
+    font-size: 20px;
+    border-radius: 16px;
+    margin-right: 48px;
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
+
+  button {
+    background: transparent;
+  }
 `
 
 const Logo = styled(DefaultLogo)`
-  background: white;
+  background: #18e199;
   position: relative;
   display: flex;
   width: 100%;
+  margin-right: 43px;
   ${p =>
     p.isMenuOpen
       ? `
@@ -79,16 +115,6 @@ const Logo = styled(DefaultLogo)`
 
   ${mq.medium`
     opacity: 1;
-    &:before {
-      background: #d3d3d3;
-      height: 32px;
-      margin-top: 30px;
-      content: '';
-      width: 1px;
-      right: 35px;
-      top: 0;
-      position: absolute;
-    }
   `}
 `
 

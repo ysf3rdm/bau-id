@@ -27,7 +27,7 @@ const BaseContainer = styled('div')`
   .bg-string {
     font-family: Overpass Mono;
     position: relative;
-    color: #5284ff;
+    color: #379070;
     font-size: 26px;
     font-weight: 300;
     line-height: 1em;
@@ -47,7 +47,6 @@ const BaseContainer = styled('div')`
     text-align: center;
 
     h2 {
-      color: #2b2b2b;
       background: rgba(255, 255, 255, 0.7);
       font-size: 16px;
       font-weight: 500;

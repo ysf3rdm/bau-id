@@ -67,10 +67,11 @@ const ActiveLanguage = styled('div')`
   display: flex;
   justify-content: center;
   height: 100%;
-  padding: 0 20px;
+  padding: 0 6px;
   align-items: center;
   span {
     margin-right: 10px;
+    color: #ffffff;
   }
 
   &:hover {
@@ -81,6 +82,7 @@ const ActiveLanguage = styled('div')`
 const LanguageSwitcherContainer = styled('div')`
   background: white;
   position: relative;
+  background: rgba(147, 196, 178, 0.08);
 `
 
 const Dropdown = styled(motion.div)`
@@ -88,11 +90,13 @@ const Dropdown = styled(motion.div)`
   background: white;
   top: 100%;
   right: 0;
-  margin-top: 20px;
+  margin-top: 10px;
   border-radius: 8px;
   box-shadow: -4px 18px 70px 0 rgba(108, 143, 167, 0.32);
   width: 230px;
   z-index: 2;
+  max-height: 180px;
+  overflow-y: auto;
   li {
     color: #adbbcd;
     padding: 20px 30px;

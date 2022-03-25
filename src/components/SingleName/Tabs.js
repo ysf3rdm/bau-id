@@ -7,31 +7,26 @@ import mq from 'mediaQuery'
 
 const TabLink = styled(Link)`
   font-size: 14px;
-  background: ${({ active }) => (active ? '#2C46A6' : 'transparent')};
-  color: ${({ active }) => (active ? 'white' : '#D2D2D2')};
+  background: ${({ active }) => (active ? '#5ED6AB' : 'transparent')};
+  color: ${({ active }) => (active ? 'white!important' : '#B1B1B1 !important')};
   transform: scale(${({ active }) => (active ? '1.08' : '1')});
   transition: background 0.1s ease-out, transform 0.3s ease-out;
-  padding: 10px 20px;
+  padding: 5px 20px;
+  margin: 0 10px;
+  border-radius: 10px;
+  overflow: hidden;
   ${mq.small`
     padding: 10px 30px;
   `}
-  &:hover,
-  &:visited {
-    color: ${({ active }) => (active ? 'white' : '#D2D2D2')};
-  }
-  &:first-child {
-    border-radius: 4px 0 0 4px;
-  }
-
-  &:last-child {
-    border-radius: 0 4px 4px 0;
+  &:hover {
+    background: #5ed6ab;
+    color: white !important;
   }
 `
 
 const TabContainer = styled('div')`
   display: inline-flex;
   justify-content: flex-start;
-  border: 2px solid #dfdfdf;
   border-radius: 4px;
   margin-left: 20px;
   margin-top: 20px;

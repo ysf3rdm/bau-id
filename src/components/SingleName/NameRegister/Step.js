@@ -81,7 +81,7 @@ const Step = ({ number, text, title, progress = 100 }) => (
       <span>{number}</span>
     </Number>
     <Content>
-      <h3>{title}</h3>
+      <h3 style={{ color: '#379070' }}>{title}</h3>
       <p>{text}</p>
     </Content>
   </StepContainer>

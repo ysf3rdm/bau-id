@@ -27,7 +27,6 @@ function SingleName({
   location: { pathname }
 }) {
   useScrollTo(0)
-
   const [valid, setValid] = useState(undefined)
   const [type, setType] = useState(undefined)
   const [name, setNormalisedName] = useState('')

@@ -16,11 +16,15 @@ const Value = styled('div')`
   font-family: Overpass;
   font-weight: 100;
   font-size: 22px;
-  color: #2b2b2b;
-  border-bottom: 1px solid #dbdbdb;
+  color: #47c799;
+  border-bottom: 1px solid #5ed6ab;
   ${mq.small`
     font-size: 28px;
   `}
+
+  span {
+    color: #379070;
+  }
 `
 
 const Description = styled('div')`
@@ -70,7 +74,7 @@ const Price = ({
   return (
     <PriceContainer>
       <Value>
-        {ethPrice} ETH
+        {ethPrice} <span>ETH</span>
         {withPremium && (
           <USD>
             {withPremium}${priceInUsd}
