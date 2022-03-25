@@ -17,41 +17,9 @@ const CheckBoxContainer = styled('div')`
 `
 
 const Container = styled.div`
-  &:before {
-    content: '';
-    background: ${p => {
-      if (p.hasInvalidCharacter) return 'black'
-
-      switch (p.state) {
-        case 'Yours':
-          return '#52E5FF'
-        case 'Open':
-          return '#42E068'
-        case 'Auction':
-        case 'Reveal':
-          return 'linear-gradient(-180deg, #42E068 0%, #52E5FF 100%)'
-        case 'Owned':
-          return '#CACACA'
-        case 'Forbidden':
-          return 'black'
-        case 'NotYetAvailable':
-          return 'red'
-        default:
-          return 'red'
-      }
-    }};
-
-    width: 4px;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 10;
-  }
-
   position: relative;
   background-color: white;
-  border-radius: 6px;
+  border-radius: 20px;
   box-shadow: 3px 4px 20px 0 rgba(144, 171, 191, 0.42);
   padding: ${p => (p.hasInvalidCharacter ? '20' : '0')}px;
   padding-left: 0px;
@@ -59,14 +27,14 @@ const Container = styled.div`
 
 const DomainContainer = styled(Link)`
   padding: 20px;
-  color: #2b2b2b;
+  color: #379170;
   overflow: hidden;
   position: relative;
   background: ${({ percentDone }) =>
     percentDone
       ? `
   linear-gradient(to right, rgba(128, 255, 128, 0.1) 0%, rgba(82,229,255, 0.1) ${percentDone}%,#ffffff ${percentDone}%)`
-      : 'white'};
+      : '#F0F7F4;'};
   height: 65px;
   display: grid;
   height: auto;
@@ -74,9 +42,12 @@ const DomainContainer = styled(Link)`
   grid-gap: 10px;
   align-items: center;
   font-size: 22px;
+  font-weight: 500;
+  line-height: 29px;
   margin-bottom: 4px;
   transition: 0.2s all;
-  border-radius: 6px;
+  border-radius: 20px;
+  border: 2px solid #18e199;
 
   ${mq.medium`
     grid-template-columns: 1fr minmax(150px,350px) 100px 50px 50px;
@@ -111,9 +82,9 @@ const DomainName = styled('h2')`
     switch (p.state) {
       case 'Yours':
       case 'Owned':
-        return '#2b2b2b'
+        return '#379070'
       default:
-        return '#2b2b2b'
+        return '#379070'
     }
   }};
 `

@@ -14,20 +14,15 @@ const Stepper = styled('div')`
   grid-template-columns:
     30px auto
     30px;
-  border-bottom: 1px solid #dfdfdf;
+  border-bottom: 1px solid #5ed6ab;
 `
 
 const Icon = styled('div')`
   font-family: Overpass;
   font-size: 28px;
   font-weight: 100;
-  color: #adbbcd;
-  ${p => p.emphasize && 'background-color: #5384fe;'}
-  ${p => (p.emphasize ? 'color: white;' : 'color: #adbbcd;')}
-  ${p => (p.emphasize ? 'border-color: white;' : 'color: #adbbcd;')}
-  
+  background: transparent;
   border-radius: 50%;
-  border: solid 1px;
   width: 30px;
   height: 30px;
   display: flex;
@@ -35,10 +30,12 @@ const Icon = styled('div')`
   align-items: center;
   align-self: center;
   transition: 0.2s;
+  border: solid #379070 1px;
+  color: #379070;
 
   &:hover {
-    border: solid #2500a6 1px;
-    color: #2500a6;
+    border: solid #379070 1px;
+    color: #379070;
     cursor: pointer;
   }
 `
@@ -50,7 +47,7 @@ const Amount = styled('div')`
   font-family: Overpass;
   font-size: 28px;
   font-weight: 100;
-  color: #2b2b2b;
+  color: #379070;
   justify-self: left;
   align-self: center;
 
@@ -59,7 +56,7 @@ const Amount = styled('div')`
     font-family: Overpass;
     font-size: 28px;
     font-weight: 100;
-    color: #2b2b2b;
+    color: #47c799;
     border: none;
     max-width: 65px;
     outline: 0;

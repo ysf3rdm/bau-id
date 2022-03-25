@@ -18,6 +18,13 @@ let provider
 const option = {
   network: 'mainnet', // optional
   cacheProvider: true, // optional
+  theme: {
+    background: '#D7ECE3',
+    main: '#379070',
+    secondary: 'rgb(136, 136, 136)',
+    border: '#47C799',
+    hover: '#47C799'
+  },
   providerOptions: {
     walletconnect: {
       package: () => import('@walletconnect/web3-provider'),

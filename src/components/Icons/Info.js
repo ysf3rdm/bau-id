@@ -14,24 +14,29 @@ class Info extends Component {
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
       >
-        <g
-          id="Designs"
-          stroke="none"
-          strokeWidth="1"
+        <svg
+          width="19"
+          height="18"
+          viewBox="0 0 19 18"
           fill="none"
-          fillRule="evenodd"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <g
-            id="Records-V1"
-            transform="translate(-1177.000000, -525.000000)"
-            fill="#ADBBCD"
-          >
-            <path
-              d="M1186,543 C1181.02944,543 1177,538.970563 1177,534 C1177,529.029437 1181.02944,525 1186,525 C1190.97056,525 1195,529.029437 1195,534 C1195,538.970563 1190.97056,543 1186,543 Z M1185,532 L1185,538.5 L1187,538.5 L1187,532 L1185,532 Z M1186,531 C1186.55228,531 1187,530.552285 1187,530 C1187,529.447715 1186.55228,529 1186,529 C1185.44772,529 1185,529.447715 1185,530 C1185,530.552285 1185.44772,531 1186,531 Z"
-              id="info-icon"
-            />
-          </g>
-        </g>
+          <path
+            d="M9.16602 17C13.5843 17 17.166 13.4183 17.166 9C17.166 4.58172 13.5843 1 9.16602 1C4.74774 1 1.16602 4.58172 1.16602 9C1.16602 13.4183 4.74774 17 9.16602 17Z"
+            stroke="#B1B1B1"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M9.16602 13V8"
+            stroke="#B1B1B1"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle cx="9.16602" cy="5" r="1" fill="#B1B1B1" />
+        </svg>
       </InfoContainer>
     )
   }
@@ -41,6 +46,18 @@ const InfoContainer = styled('svg')`
   opacity: 1 !important;
   margin-left: 0px !important;
   margin-right: 5px;
+
+  &:hover {
+    path {
+      stroke: #47c799;
+      fill: transparent;
+    }
+    circle {
+      fill: #47c799;
+    }
+
+    background: transparent;
+  }
 `
 
 export default Info

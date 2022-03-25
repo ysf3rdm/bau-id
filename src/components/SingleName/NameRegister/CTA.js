@@ -82,7 +82,15 @@ function getCTA({
         {mutate =>
           isAboveMinDuration && !readOnly ? (
             hasSufficientBalance ? (
-              <Button data-testid="request-register-button" onClick={mutate}>
+              <Button
+                style={{
+                  color: '#5ED6AB',
+                  background: 'none',
+                  border: '2px solid #5ED6AB'
+                }}
+                data-testid="request-register-button"
+                onClick={mutate}
+              >
                 {t('register.buttons.request')}
               </Button>
             ) : (
@@ -152,7 +160,15 @@ function getCTA({
                   <OrangeExclamation />
                   {t('register.buttons.warning')}
                 </Prompt>
-                <Button data-testid="register-button" onClick={mutate}>
+                <Button
+                  style={{
+                    color: '#5ED6AB',
+                    background: 'none',
+                    border: '2px solid #5ED6AB'
+                  }}
+                  data-testid="register-button"
+                  onClick={mutate}
+                >
                   {t('register.buttons.register')}
                 </Button>
               </>
@@ -216,6 +232,11 @@ function getCTA({
           {t('register.buttons.manage')}
         </LeftLink>
         <Button
+          style={{
+            color: '#5ED6AB',
+            background: 'none',
+            border: '2px solid #5ED6AB'
+          }}
           onClick={async () => {
             await Promise.all([refetchIsMigrated()])
             history.push(`/address/${account}`)

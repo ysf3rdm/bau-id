@@ -26,6 +26,7 @@ import Modal from './Modal/Modal'
 import Bin from '../components/Forms/Bin'
 import Gap from '../components/Utils/Gap'
 import { gql } from '@apollo/client'
+import { textLight } from '../utils/textLight'
 
 const Loading = styled('span')`
   color: #adbbcd;
@@ -36,9 +37,8 @@ const Warning = styled('div')`
 `
 
 const AddReverseRecordContainer = styled('div')`
-  background: #f0f6fa;
-  border: 1px solid #ededed;
-  border-radius: 8px;
+  background: #d7ece3;
+  border-radius: 13px;
   margin: 20px 30px 20px;
   padding: 10px 15px;
 
@@ -96,10 +96,16 @@ const Explanation = styled('div')`
   margin-bottom: 10px;
   max-width: 768px;
   hyphens: auto;
+
+  strong {
+    color: red;
+    font-weight: 400;
+    font-size: 14px;
+  }
 `
 
 const EditableNotSet = styled('div')`
-  color: #5384fe;
+  color: #47c799;
 `
 
 const ButtonsContainer = styled('div')`
@@ -233,8 +239,13 @@ function AddReverseRecord({ account, currentAddress }) {
               {t('singleName.record.messages.setTo') + getReverseRecord.name}
             </MessageContent>
           ) : (
-            <EditableNotSet data-testid="editable-reverse-record-not-set">
-              {t('singleName.record.messages.notSet')}
+            <EditableNotSet
+              dangerouslySetInnerHTML={{
+                __html: textLight(t('singleName.record.messages.notSet'), 'ENS')
+              }}
+              data-testid="editable-reverse-record-not-set"
+            >
+              {/*{t('singleName.record.messages.notSet')}*/}
             </EditableNotSet>
           )}
           {pending && !confirmed && txHash ? (

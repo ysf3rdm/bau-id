@@ -11,7 +11,7 @@ export default ({ colour, buttonText, onClick, textColour, className }) => {
   return (
     <NoAccountContainer className={className}>
       <NoAccounts
-        colour={colour}
+        colour={colour || '#25FFB1'}
         buttonText={buttonText}
         textColour={textColour}
         active={showModal}

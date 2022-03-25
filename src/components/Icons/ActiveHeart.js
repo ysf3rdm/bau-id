@@ -16,15 +16,15 @@ const Heart = ({ active, className }) => (
 const HeartContainer = styled('svg')`
   vertical-align: middle;
   path {
-    fill: #c7d3e3;
-    stroke: #c7d3e3;
+    fill: #47c799;
+    stroke: #47c799;
     transition: 0.2s ease-out;
   }
 
   &:hover {
     path {
-      fill: none;
-      stroke: #e7e7e7;
+      fill: #47c799;
+      stroke: #47c799;
     }
   }
 `

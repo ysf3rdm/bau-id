@@ -8,6 +8,14 @@ import DomainInfo from '../components/SearchName/DomainInfo'
 import { validateName, parseSearchTerm } from '../utils/utils'
 import SearchErrors from '../components/SearchErrors/SearchErrors'
 import { useHistory } from 'react-router-dom'
+import styled from '@emotion/styled/macro'
+
+const H22 = styled(H2)`
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  color: #47c799;
+`
 
 const RESULTS_CONTAINER = gql`
   query getResultsContainer {
@@ -87,9 +95,9 @@ const ResultsContainer = ({ searchDomain, match }) => {
   if (parsed) {
     return (
       <>
-        <H2>
+        <H22>
           <Trans i18nKey="singleName.search.title">Names</Trans>
-        </H2>
+        </H22>
         <DomainInfo searchTerm={parsed} />
       </>
     )

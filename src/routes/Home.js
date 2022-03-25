@@ -9,6 +9,7 @@ import mq from 'mediaQuery'
 import SearchDefault from '../components/SearchName/Search'
 import NoAccountsDefault from '../components/NoAccounts/NoAccountsModal'
 import bg from '../assets/heroBG.jpg'
+import testLogo from '../assets/textLogo.png'
 import TextBubbleDefault from '../components/Icons/TextBubble'
 import QuestionMarkDefault from '../components/Icons/QuestionMark'
 import HowToUseDefault from '../components/HowToUse/HowToUse'
@@ -22,8 +23,9 @@ import {
 } from '../components/Banner/DAOBanner'
 
 const HeroTop = styled('div')`
-  display: grid;
+  display: flex;
   padding: 20px;
+  justify-content: space-between;
   position: absolute;
   left: 0;
   top: 0;
@@ -34,10 +36,13 @@ const HeroTop = styled('div')`
   `}
 `
 
-const NoAccounts = styled(NoAccountsDefault)``
+const NoAccounts = styled(NoAccountsDefault)`
+  margin-top: 0;
+`
 
 const Network = styled('div')`
-  margin-bottom: 5px;
+  margin-left: 20px;
+  color: #25ffb1;
 `
 const Name = styled('span')`
   margin-left: 5px;
@@ -47,12 +52,16 @@ const Name = styled('span')`
 `
 
 const NetworkStatus = styled('div')`
+  flex: 1;
   color: white;
-  font-weight: 200;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
   text-transform: capitalize;
-  display: none;
+  display: flex;
+  align-items: center;
   ${mq.small`
-    display: block;
+    display: flex;
   `}
   ${mq.medium`
     left: 40px;
@@ -74,18 +83,21 @@ const NetworkStatus = styled('div')`
 
 const Nav = styled('div')`
   display: flex;
+  flex: 1;
   justify-content: center;
+  align-items: center;
   ${mq.small`
     justify-content: flex-end;
   `}
   a {
-    font-weight: 300;
+    font-weight: 700;
     color: white;
   }
 `
 
 const NavLink = styled(Link)`
   margin-left: 20px;
+  color: #25ffb1 !important;
   &:first-child {
     margin-left: 0;
   }
@@ -93,6 +105,10 @@ const NavLink = styled(Link)`
 
 const ExternalLink = styled('a')`
   margin-left: 20px;
+  color: #25ffb1 !important;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
   &:first-child {
     margin-left: 0;
   }
@@ -165,6 +181,11 @@ const SearchContainer = styled('div')`
 
 const Search = styled(SearchDefault)`
   min-width: 90%;
+  border-radius: 16px;
+  background: rgba(147, 196, 178, 0.08);
+  border: 3px solid #25ffb1;
+  // overflow: hidden;
+  height: 54px;
   ${mq.medium`
     min-width: 780px;
   `}
@@ -172,14 +193,21 @@ const Search = styled(SearchDefault)`
   input {
     width: 100%;
     border-radius: 0px;
+    background: rgba(147, 196, 178, 0.08);
+    box-sizing: border-box;
+    color: #25ffb1;
+    &::placeholder {
+      color: rgba(147, 255, 216, 0.5);
+    }
     ${mq.medium`
       border-radius: 6px 0 0 6px;
-      font-size: 28px;
+      font-size: 20px;
     `}
   }
 
   button {
     border-radius: 0 6px 6px 0;
+    background: rgba(147, 196, 178, 0.08);
   }
 `
 
@@ -249,7 +277,7 @@ const LogoLarge = styled(motion.img)`
   width: 50%;
   margin: 0 auto 0;
   ${mq.medium`
-    width: 223px;
+    width: 120px;
   `}
 `
 
@@ -286,6 +314,16 @@ export const GET_ACCOUNT = gql`
   }
 `
 
+const TextLogo = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+
+  img {
+    object-fit: contain;
+  }
+`
+
 const animation = {
   initial: {
     scale: 0,
@@ -315,6 +353,12 @@ export default ({ match }) => {
     <Hero>
       <HeroTop>
         <NetworkStatus>
+          {!isSafeApp && (
+            <NoAccounts
+              onClick={isReadOnly ? connectProvider : disconnectProvider}
+              buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
+            />
+          )}
           <Network>
             {`${network} ${t('c.network')}`}
             {isReadOnly && <ReadOnly>({t('c.readonly')})</ReadOnly>}
@@ -322,13 +366,10 @@ export default ({ match }) => {
               <Name data-testid="display-name">({displayName})</Name>
             )}
           </Network>
-          {!isSafeApp && (
-            <NoAccounts
-              onClick={isReadOnly ? connectProvider : disconnectProvider}
-              buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
-            />
-          )}
         </NetworkStatus>
+        <TextLogo>
+          <img src={testLogo} style={{ width: 190 }} />
+        </TextLogo>
         <Nav>
           {accounts?.length > 0 && !isReadOnly && (
             <NavLink
