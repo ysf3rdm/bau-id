@@ -224,7 +224,9 @@ const getInitialTextRecords = (dataTextRecords, domain) => {
 
 const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
   const initialTextRecords = getInitialTextRecords(dataTextRecords, domain)
-  const initialCoins = getInitialCoins(dataAddresses)
+  var initialCoins = getInitialCoins(dataAddresses)
+  // FIXME check will fail
+  initialCoins[0].key = 'EVM'
   const initialContent = getInitialContent(domain)
 
   return [...initialTextRecords, ...initialCoins, initialContent]
