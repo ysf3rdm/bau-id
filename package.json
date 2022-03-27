@@ -1,8 +1,8 @@
 {
-  "name": "ens-app",
-  "version": "1.1.9",
+  "name": "sid-app",
+  "version": "1.0.1",
   "private": true,
-  "homepage": "https://app.ens.domains",
+  "homepage": "https://space.id",
   "dependencies": {
     "@0xproject/utils": "^0.7.3",
     "@apollo/client": "^3.4.4",
