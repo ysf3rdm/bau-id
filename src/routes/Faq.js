@@ -89,7 +89,7 @@ const Section = ({ question, children }) => {
 function Faq() {
   const { t } = useTranslation()
   useEffect(() => {
-    document.title = 'ENS Faq'
+    document.title = 'SID Faq'
   }, [])
 
   return (
@@ -98,24 +98,24 @@ function Faq() {
         <StyledTitle>FAQ</StyledTitle>
         <FaqBody>
           <H2>Before You register</H2>
-          <Section question="Is ENS only for storing an Ethereum address?">
+          <Section question="Is SID only for storing an Ethereum address?">
             No, you can store the addresses of over 100 blockchains, a content
             hash of a decentralized website, profile information such as an
             avatar and Twitter handle, and more.
           </Section>
 
-          <Section question="Can I use an ENS name to point to my website?">
-            Though ENS can technically store anything, there aren't many third
+          <Section question="Can I use an SID name to point to my website?">
+            Though SID can technically store anything, there aren't many third
             party tools and applications which resolve IP addresses attached to
-            ENS.
+            SID.
             <br />
             Instead, we suggest hosting your static html/css/images on IPFS and
-            put the hash in your ENS name's Content record. Then it can be
-            resolved by ENS-aware browsers (e.g. Opera), browser extensions
+            put the hash in your SID name's Content record. Then it can be
+            resolved by SID-aware browsers (e.g. Opera), browser extensions
             (Metamask), or any browser with ".link" or ".limo" appended to the
             end (e.g. matoken.eth.link or matoken.eth.limo).
             <br />
-            If you want to redirect your ENS name to an existing website, you
+            If you want to redirect your SID name to an existing website, you
             could write a html file containing JavaScript logic to redirect to
             your website, upload the file into ipfs using services like{' '}
             <a href="https://pinata.cloud/">IPFS Pinata</a>, then set the CID to
@@ -132,9 +132,9 @@ function Faq() {
           <Section question="How much does it cost to register a .eth name?">
             Currently, registration costs are set at the following prices:
             <ul>
-              <li>5+ character .eth names: $5 in ETH per year.</li>
-              <li>4 character .eth names: $160 in ETH per year.</li>
-              <li>3 character .eth names $640 in ETH per year.</li>
+              <li>5+ character .eth names: $5 in BNBT per year.</li>
+              <li>4 character .eth names: $160 in BNBT per year.</li>
+              <li>3 character .eth names $640 in BNBT per year.</li>
             </ul>
             3 and 4 character names have 'premium' pricing to reflect the small
             number of these names available.
@@ -160,7 +160,7 @@ function Faq() {
           </Section>
 
           <Section question="Can I register names other than .eth?">
-            Yes, you can import into ENS any DNS name with the required DNSSEC.
+            Yes, you can import into SID any DNS name with the required DNSSEC.
             <br />
             Please refer to our{' '}
             <a href="https://docs.ens.domains/dns-registrar-guide">guide</a> for
@@ -186,7 +186,7 @@ function Faq() {
 
           <Section question="My transaction at step 3 failed">
             This happens occasionally when the USD price changes and you haven't
-            registered with enough ETH. Please try again from step 3.
+            registered with enough BNBT. Please try again from step 3.
             <br />
             Please also be noted that the registration step will expire if you
             don't complete within 24 hrs and you have to start from step 1
@@ -199,7 +199,7 @@ function Faq() {
             many wallets fetch metadata from OpenSea.
             <br />
             As long as you can see your registered name under "My Account" on
-            our site or your ETH address under the name section, your name is
+            our site or your BNBT address under the name section, your name is
             registered successfully.
           </Section>
 
@@ -226,20 +226,20 @@ function Faq() {
 
           <Section question="What is a Resolver?">
             A Resolver is a smart contract that holds records. Names are set by
-            default to the Public Resolver managed by the ENS team and has all
-            the standard ENS record types. You can set your Resolver to a custom
+            default to the Public Resolver managed by the SID team and has all
+            the standard SID record types. You can set your Resolver to a custom
             resolver contract if you,d like.
           </Section>
 
-          <Section question="What is a Primary ENS Name record?">
-            A Primary ENS Name record (formerly Reverse Record) makes your
-            Ethereum address point to an ENS name. This allows dapps to find and
-            display your ENS name when you connect to them with your Ethereum
+          <Section question="What is a Primary SID Name record?">
+            A Primary SID Name record (formerly Reverse Record) makes your
+            Ethereum address point to an SID name. This allows dapps to find and
+            display your SID name when you connect to them with your Ethereum
             account. This can only be set by you so it is not set automatically
             upon registration.
             <br />
-            To set the Primary ENS Name record, please click "My account", and
-            select "Primary ENS Name".
+            To set the Primary SID Name record, please click "My account", and
+            select "Primary SID Name".
           </Section>
 
           <Section question="How do I unregister my name?">
@@ -264,7 +264,7 @@ function Faq() {
             name does not change the controller nor records, so the recipient
             may need to update them once received. If the recipient is not
             experienced or you prefer your address not to be associated to the
-            transferring names, it may be a good idea for you to set the ETH
+            transferring names, it may be a good idea for you to set the BNBT
             Address record to their Ethereum address, set the controller, then
             transfer the name.
             <br />
@@ -274,7 +274,7 @@ function Faq() {
           </Section>
 
           <Section question="Why are some of my subdomains shown as a jumble of characters?">
-            ENS names are stored as a hash on-chain so we have to decode the
+            SID names are stored as a hash on-chain so we have to decode the
             name using a list of possible names, and it shows in the hashed
             format if we don't have it on our list. You can still access and
             manage the name if you search for the name directly in the search
@@ -304,12 +304,12 @@ function Faq() {
             owner can't edit the records but can still re-register the name.
             After the grace period, the name is released for registration by
             anyone with a temporary premium which decreases over a 28 days
-            period. The released name continues to resolve your ETH address
+            period. The released name continues to resolve your BNBT address
             until the new owner overwrites it.
           </Section>
 
           <Section question="Where can I see the list of names to be released">
-            You can see the list at the "ENS Names to be released" section of{' '}
+            You can see the list at the "SID Names to be released" section of{' '}
             <a href="https://dune.xyz/makoto/ens-released-to-be-released-names">
               {' '}
               the Dune Analytics dashboard
@@ -318,7 +318,7 @@ function Faq() {
           </Section>
 
           <Section question="I lost access to the Ethereum account that owns a name I registered. Can I still extend its registration period?">
-            Any Ethereum account can pay to extend the registration of any ENS
+            Any Ethereum account can pay to extend the registration of any SID
             name, though doing so from an account that's not the owner will not
             change ownership of the name. Just go to the name's page and click
             "Extend".
@@ -331,10 +331,10 @@ function Faq() {
             <br />
             Please remember that the amount you will receive is the amount of
             the second-highest bidder (unless you were the only bidder). For
-            example, if you bid 1 ETH and the second highest bidder bid 0.1 ETH,
-            you deposited 0.1 ETH and you have already received the remaining
-            (0.9 ETH) when you finailsed the auction. Therefore you can now only
-            reclaim 0.1 ETH back. Please read the{' '}
+            example, if you bid 1 BNBT and the second highest bidder bid 0.1
+            BNBT, you deposited 0.1 BNBT and you have already received the
+            remaining (0.9 BNBT) when you finailsed the auction. Therefore you
+            can now only reclaim 0.1 BNBT back. Please read the{' '}
             <a href="https://medium.com/the-ethereum-name-service/a-beginners-guide-to-buying-an-ens-domain-3ccac2bdc770">
               {' '}
               the initial guide back in 2017{' '}
