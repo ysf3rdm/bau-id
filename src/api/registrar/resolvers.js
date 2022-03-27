@@ -19,7 +19,8 @@ const resolvers = {
     },
     async getRentPrice(_, { label, duration }) {
       const registrar = getRegistrar()
-      return registrar.getRentPrice(label, duration)
+      const rent = await registrar.getRentPrice(label, duration)
+      return rent
     },
     async getRentPrices(_, { labels, duration }) {
       const registrar = getRegistrar()

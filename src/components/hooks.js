@@ -169,6 +169,7 @@ export function useGasPrice(enabled = true) {
       const run = async () => {
         const provider = await getProvider()
         const blockDetails = await provider.getBlock('latest')
+        console.log(blockDetails)
         if (blockDetails.baseFeePerGas) {
           const baseFeeWei = ethers.utils.formatUnits(
             blockDetails.baseFeePerGas,
@@ -180,7 +181,8 @@ export function useGasPrice(enabled = true) {
           }
           setPrice(price)
         } else {
-          setPrice({ slow: 0, fast: 0 })
+          // FIXME this has to be addressed in BNB mainnet
+          setPrice({ slow: 1000000000, fast: 10000000000 })
         }
         setLoading(false)
       }
