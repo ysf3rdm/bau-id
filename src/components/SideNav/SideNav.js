@@ -175,22 +175,6 @@ function SideNav({ match, isMenuOpen, toggleMenu }) {
             <span>{t('c.favourites')}</span>
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            onClick={toggleMenu}
-            active={url === '/faq' ? 1 : 0}
-            to="/faq"
-          >
-            <FaqIcon />
-            <span>{t('c.faq')}</span>
-          </NavLink>
-        </li>
-        <li>
-          <ThirdPartyLink href={aboutPageURL()}>
-            <Info />
-            <span>{t('c.about')}</span>
-          </ThirdPartyLink>
-        </li>
       </ul>
     </SideNavContainer>
   )

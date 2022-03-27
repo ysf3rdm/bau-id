@@ -11,7 +11,7 @@ import { useEditable } from '../../hooks'
 import { ADD_MULTI_RECORDS } from '../../../graphql/mutations'
 import COIN_LIST from 'constants/coinList'
 import PendingTx from '../../PendingTx'
-import { formatsByCoinType } from '@ensdomains/address-encoder'
+import { formatsByCoinType } from '@siddomains/address-encoder'
 
 import {
   GET_ADDRESSES,
@@ -233,7 +233,7 @@ const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
 const getCoins = updatedRecords =>
   updatedRecords
     .filter(record => record.contractFn === 'setAddr(bytes32,uint256,bytes)')
-    .sort(record => (record.key === 'ETH' ? -1 : 1))
+    .sort(record => (record.key === 'EVM' ? -1 : 1))
 
 const getContent = updatedRecords => {
   const content = updatedRecords.filter(

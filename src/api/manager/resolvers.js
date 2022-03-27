@@ -12,7 +12,7 @@ import {
   labelhash,
   utils
 } from '@siddomains/ui'
-import { formatsByName } from '@ensdomains/address-encoder'
+import { formatsByName } from '@siddomains/address-encoder'
 import isEqual from 'lodash/isEqual'
 import modeNames from '../modes'
 import { sendHelper, sendHelperArray } from '../resolverUtils'
