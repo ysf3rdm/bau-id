@@ -1,6 +1,6 @@
 import { encodeContenthash, isValidContenthash } from '@siddomains/ui'
 import { addressUtils, supportedAvatarProtocols } from 'utils/utils'
-import { formatsByName } from '@ensdomains/address-encoder'
+import { formatsByName } from '@siddomains/address-encoder'
 import validateTokenURI from 'api/avatar'
 
 export function validateRecord({ key, value, contractFn, addr }) {
