@@ -4,7 +4,7 @@ import styled from '@emotion/styled/macro'
 const NoAccountsContainer = styled('div')`
   box-shadow: ${({ active }) =>
     active ? '0 -10px 30px 0 rgba(108, 143, 167, 0.05)' : 'none'};
-  padding: 5px 20px;
+  padding: 13.2px 13.46px 13.2px 13px;
   border-bottom: 1px solid
     ${({ active, colour }) => (active ? '#F5A623' : colour)};
   border-top: ${({ active, colour }) =>
@@ -13,13 +13,13 @@ const NoAccountsContainer = styled('div')`
     `1px solid ${active ? '#fff' : colour}`};
   border-right: ${({ active, colour }) =>
     `1px solid ${active ? '#fff' : colour}`};
-  border-radius: ${({ active }) => (active ? '6px 6px 0 0' : '6px')};
+  border-radius: 13px;
   background: ${({ active }) => (active ? 'white' : 'transparent')};
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  width: ${({ active }) => (active ? '150px' : '150px')};
+  width: 146px;
   transition: 0.2s;
 
   span {

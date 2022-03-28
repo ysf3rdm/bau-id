@@ -9,30 +9,26 @@ import mq from 'mediaQuery'
 import SearchDefault from '../components/SearchName/Search'
 import NoAccountsDefault from '../components/NoAccounts/NoAccountsModal'
 import bg from '../assets/heroBG.jpg'
-import testLogo from '../assets/textLogo.png'
-import TextBubbleDefault from '../components/Icons/TextBubble'
-import QuestionMarkDefault from '../components/Icons/QuestionMark'
-import HowToUseDefault from '../components/HowToUse/HowToUse'
 import ENSLogo from '../components/HomePage/images/ENSLogo.svg'
 import { aboutPageURL } from '../utils/utils'
 import { connectProvider, disconnectProvider } from '../utils/providerUtils'
 import { gql } from '@apollo/client'
-import {
-  MainPageBannerContainer,
-  DAOBannerContent
-} from '../components/Banner/DAOBanner'
+import HamburgerIcon from 'components/Icons/HamburgerIcon'
+import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
 
 const HeroTop = styled('div')`
   display: flex;
-  padding: 20px;
+  padding: 20px 60px;
   justify-content: space-between;
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  grid-template-columns: 1fr;
-  ${mq.small`
-     grid-template-columns: 1fr 1fr;
+  height: 100px;
+  align-items: center;
+  font-family: 'CocoSharp';
+  ${mq.xLarge`
+    padding: 20px 100px;
   `}
 `
 
@@ -40,19 +36,20 @@ const NoAccounts = styled(NoAccountsDefault)`
   margin-top: 0;
 `
 
-const Network = styled('div')`
-  margin-left: 20px;
-  color: #25ffb1;
-`
-const Name = styled('span')`
-  margin-left: 5px;
-  text-transform: none;
-  display: inline-block;
-  width: 100px;
+const HamburgerIconContainer = styled('div')`
+  display: flex;
+  align-items: center;
+  display: flex;
+  position: absolute;
+  top: 0px;
+  right: 60px;
+  height: 100px;
+  ${mq.lg`
+    display: none;
+  `}
 `
 
 const NetworkStatus = styled('div')`
-  flex: 1;
   color: white;
   font-weight: 700;
   font-size: 16px;
@@ -60,12 +57,14 @@ const NetworkStatus = styled('div')`
   text-transform: capitalize;
   display: flex;
   align-items: center;
+  z-index: 1;
+  letter-spacing: 0.08em;
 
   @media (max-width: 768px) {
-    display: none;
+    display: block;
   }
   ${mq.small`
-    display: none;
+    display: block;
   `}
   ${mq.medium`
     left: 40px;
@@ -86,64 +85,41 @@ const NetworkStatus = styled('div')`
 `
 
 const Nav = styled('div')`
-  display: flex;
-  flex: 1;
+  display: none;
   justify-content: center;
   align-items: center;
-  ${mq.small`
-    justify-content: flex-end;
-  `}
+  z-index: 1;
   a {
     font-weight: 700;
     color: white;
   }
+  ${mq.lg`
+    display: flex;
+  `}
 `
 
 const NavLink = styled(Link)`
-  margin-left: 20px;
+  margin-left: 16px;
+  text-align: right;
   color: #25ffb1 !important;
+  letter-spacing: 0.08em;
+  min-width: 100px !important;
   &:first-child {
     margin-left: 0;
   }
 `
 
 const ExternalLink = styled('a')`
-  margin-left: 20px;
+  text-align: right;
+  margin-left: 16px;
   color: #25ffb1 !important;
+  min-width: 100px !important;
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
   &:first-child {
     margin-left: 0;
   }
-`
-
-const Announcement = styled('div')`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  background: #5284ff;
-  padding: 0 10px;
-  border-bottom: #5284ff solid 3px;
-  h3 {
-    color: white;
-    font-weight: 400;
-    text-align: center;
-    padding: 0 20px;
-    margin-bottom: 10px;
-  }
-  p {
-    text-align: center;
-    color: white;
-  }
-  a {
-    color: white;
-    text-decoration: none;
-  }
-`
-
-const HowToUse = styled(HowToUseDefault)`
-  padding: 70px;
 `
 
 const Hero = styled('section')`
@@ -215,68 +191,6 @@ const Search = styled(SearchDefault)`
   }
 `
 
-const Explanation = styled('div')`
-  display: grid;
-  width: 100%;
-
-  grid-template-columns: 1fr;
-  grid-template-rows: auto;
-  ${mq.medium`
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-  `}
-  grid-gap: 0;
-`
-
-const H2 = styled('h2')`
-  font-size: 30px;
-  font-weight: 500;
-`
-
-const Section = styled('section')`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const WhatItIs = styled(Section)`
-  padding: 40px 20px 80px;
-  p {
-    font-size: 18px;
-  }
-`
-
-const HowItWorks = styled(Section)`
-  background: #f0f6fa;
-  padding: 40px 20px 80px;
-`
-
-const Inner = styled('div')`
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 350px;
-
-  > p {
-    font-weight: 300;
-    font-size: 20px;
-    margin-bottom: 1.5em;
-  }
-`
-const NameAnimation = styled(Section)`
-  display: block;
-  height: 100%;
-`
-
-const TextBubble = styled(TextBubbleDefault)`
-  margin-right: 10px;
-`
-
-const QuestionMark = styled(QuestionMarkDefault)`
-  transform: scale(1.18);
-  margin-right: 10px;
-`
-
 const LogoLarge = styled(motion.img)`
   width: 50%;
   margin: 0 auto 0;
@@ -299,10 +213,6 @@ const PermanentRegistrarLogo = styled(motion.h1)`
   text-align: center;
 `
 
-const ReadOnly = styled('span')`
-  margin-left: 1em;
-`
-
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
     network
@@ -318,17 +228,22 @@ export const GET_ACCOUNT = gql`
   }
 `
 
-const TextLogo = styled.div`
-  flex: 1;
-  display: flex;
+const TextLogoContainer = styled.div`
+  align-items: center;
   justify-content: center;
-  @media (max-width: 768px) {
-    display: none;
-  }
-  img {
-    object-fit: contain;
-  }
+  display: flex;
+  top: 30px;
+  color: #25ffb1;
+  font-weight: 700;
+  font-size: 40px;
+  letter-spacing: 5px;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  z-index: 0;
 `
+
+const TextLogo = styled.div``
 
 const animation = {
   initial: {
@@ -355,8 +270,17 @@ export default ({ match }) => {
     variables: { address: accounts?.[0] }
   })
 
+  console.log('isSafeApp', isSafeApp)
+
+  console.log('accounts', accounts)
+
   return (
     <Hero>
+      <TextLogoContainer>
+        <SmallLogoIcon />
+        <TextLogo>SPACE ID</TextLogo>
+      </TextLogoContainer>
+
       <HeroTop>
         <NetworkStatus>
           {!isSafeApp && (
@@ -365,17 +289,8 @@ export default ({ match }) => {
               buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
             />
           )}
-          <Network>
-            {`${network} ${t('c.network')}`}
-            {isReadOnly && <ReadOnly>({t('c.readonly')})</ReadOnly>}
-            {!isReadOnly && displayName && (
-              <Name data-testid="display-name">({displayName})</Name>
-            )}
-          </Network>
         </NetworkStatus>
-        <TextLogo>
-          <img src={testLogo} style={{ width: 190 }} />
-        </TextLogo>
+
         <Nav>
           {accounts?.length > 0 && !isReadOnly && (
             <NavLink
@@ -389,6 +304,10 @@ export default ({ match }) => {
           <ExternalLink href={aboutPageURL()}>{t('c.about')}</ExternalLink>
         </Nav>
       </HeroTop>
+      <HamburgerIconContainer>
+        <HamburgerIcon />
+      </HamburgerIconContainer>
+
       <SearchContainer>
         <>
           <LogoLarge

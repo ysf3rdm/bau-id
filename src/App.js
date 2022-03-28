@@ -112,9 +112,9 @@ const App = () => {
     setupAnalytics()
   }, [])
 
-  if (globalError.network) {
-    return <NetworkError message={globalError.network} />
-  }
+  // if (globalError.network) {
+  //   return <NetworkError message={globalError.network} />
+  // }
 
   return (
     <Router>

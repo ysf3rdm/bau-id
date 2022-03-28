@@ -5,6 +5,7 @@ const breakpoints = {
   small: 576,
   medium: 768,
   large: 992,
+  lg: 1024,
   xLarge: 1200
 }
 

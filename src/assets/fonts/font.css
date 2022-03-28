@@ -1,0 +1,167 @@
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Light-trial.ttf');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Light-Italic-trial.ttf');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Regular-trial.ttf');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Italic-trial.ttf');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Italic-trial.ttf');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Bold-trial.ttf');
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Bold-Italic-trial.ttf');
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Extrabold-trial.ttf');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Extrabold-Italic-trial.ttf');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Heavy-trial.ttf');
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CocoSharp';
+  src: url('./cocosharp/Coco-Sharp-Heavy-Italic-trial.ttf');
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('./urbanist/Urbanist-Light.ttf');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-LightItalic.ttf');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-Medium.ttf');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-MediumItalic.ttf');
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-SemiBold.ttf');
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-SemiBoldItalic.ttf');
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-Bold.ttf');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-BoldItalic.ttf');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-ExtraBold.ttf');
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Urbanist;
+  src: url('./urbanist/Urbanist-BlackItalic.ttf');
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+}
