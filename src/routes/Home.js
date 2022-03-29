@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled/macro'
@@ -9,6 +9,7 @@ import mq from 'mediaQuery'
 import SearchDefault from '../components/SearchName/Search'
 import NoAccountsDefault from '../components/NoAccounts/NoAccountsModal'
 import bg from '../assets/heroBG.jpg'
+import MaskGroup from '../assets/mask-group.png'
 import ENSLogo from '../components/HomePage/images/ENSLogo.svg'
 import { aboutPageURL } from '../utils/utils'
 import { connectProvider, disconnectProvider } from '../utils/providerUtils'
@@ -34,6 +35,9 @@ const HeroTop = styled('div')`
 
 const NoAccounts = styled(NoAccountsDefault)`
   margin-top: 0;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `
 
 const HamburgerIconContainer = styled('div')`
@@ -41,8 +45,8 @@ const HamburgerIconContainer = styled('div')`
   align-items: center;
   display: flex;
   position: absolute;
-  top: 0px;
-  right: 60px;
+  top: 5px;
+  right: 28px;
   height: 100px;
   ${mq.lg`
     display: none;
@@ -61,14 +65,8 @@ const NetworkStatus = styled('div')`
   letter-spacing: 0.08em;
 
   @media (max-width: 768px) {
-    display: block;
+    display: none;
   }
-  ${mq.small`
-    display: block;
-  `}
-  ${mq.medium`
-    left: 40px;
-  `}
 
   &:before {
     position: absolute;
@@ -109,6 +107,12 @@ const NavLink = styled(Link)`
   }
 `
 
+const MobileNavLink = styled(Link)`
+  color: white !important;
+  margin-top: 24px;
+  display: block;
+`
+
 const ExternalLink = styled('a')`
   text-align: right;
   margin-left: 16px;
@@ -120,6 +124,12 @@ const ExternalLink = styled('a')`
   &:first-child {
     margin-left: 0;
   }
+`
+
+const MobileNavExternalLink = styled('a')`
+  color: white !important;
+  margin-top: 24px;
+  display: block;
 `
 
 const Hero = styled('section')`
@@ -194,9 +204,7 @@ const Search = styled(SearchDefault)`
 const LogoLarge = styled(motion.img)`
   width: 50%;
   margin: 0 auto 0;
-  ${mq.medium`
-    width: 120px;
-  `}
+  width: 120px;
 `
 
 const PermanentRegistrarLogo = styled(motion.h1)`
@@ -241,9 +249,89 @@ const TextLogoContainer = styled.div`
   width: 100%;
   text-align: center;
   z-index: 0;
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    margin-left: 28px;
+  }
+`
+
+const SmallLogoIconContainer = styled.div`
+  margin-right: 13px;
+  margin-top: 3px;
+  ${mq.medium`
+    display: none;
+  `}
+`
+
+const Menu = styled.div`
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  overflow: hidden;
+  background-color: #18e199;
+`
+
+const MobileNavMenu = styled.div`
+  margin-top: 100px;
+  text-align: center;
+  color: white;
+  font-family: Urbanist;
+  font-size: 24px;
+`
+
+const MobileConnect = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 28px;
+`
+
+const ConnectButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+
+const Network = styled('div')`
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+`
+
+const Image = styled('img')`
+  width: 60px;
+  height: 60px;
+  margin-right: 17px;
+`
+
+const Point = styled('div')`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #628ffd;
+  margin-right: 8px;
 `
 
 const TextLogo = styled.div``
+
+const Name = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const ReadOnly = styled('span')`
+  margin-left: 1em;
+`
+
+const NetworkLabelContainer = styled('div')`
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+`
 
 const animation = {
   initial: {
@@ -260,6 +348,8 @@ export default ({ match }) => {
   const { url } = match
   const { t } = useTranslation()
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   const {
     data: { accounts }
   } = useQuery(GET_ACCOUNT)
@@ -270,14 +360,16 @@ export default ({ match }) => {
     variables: { address: accounts?.[0] }
   })
 
-  console.log('isSafeApp', isSafeApp)
-
-  console.log('accounts', accounts)
+  const menuOpen = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
 
   return (
     <Hero>
       <TextLogoContainer>
-        <SmallLogoIcon />
+        <SmallLogoIconContainer>
+          <SmallLogoIcon />
+        </SmallLogoIconContainer>
         <TextLogo>SPACE ID</TextLogo>
       </TextLogoContainer>
 
@@ -285,6 +377,7 @@ export default ({ match }) => {
         <NetworkStatus>
           {!isSafeApp && (
             <NoAccounts
+              active={isReadOnly ? false : true}
               onClick={isReadOnly ? connectProvider : disconnectProvider}
               buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
             />
@@ -304,8 +397,8 @@ export default ({ match }) => {
           <ExternalLink href={aboutPageURL()}>{t('c.about')}</ExternalLink>
         </Nav>
       </HeroTop>
-      <HamburgerIconContainer>
-        <HamburgerIcon />
+      <HamburgerIconContainer onClick={() => menuOpen()}>
+        <HamburgerIcon style={{ color: '#25ffb1' }} />
       </HamburgerIconContainer>
 
       <SearchContainer>
@@ -323,6 +416,60 @@ export default ({ match }) => {
           <Search />
         </>
       </SearchContainer>
+      {isMenuOpen && (
+        <Menu>
+          <TextLogoContainer style={{ color: 'white' }}>
+            <SmallLogoIconContainer>
+              <SmallLogoIcon style={{ color: 'white' }} />
+            </SmallLogoIconContainer>
+            <TextLogo>SPACE ID</TextLogo>
+          </TextLogoContainer>
+          <HamburgerIconContainer onClick={() => menuOpen()}>
+            <HamburgerIcon style={{ color: 'white' }} />
+          </HamburgerIconContainer>
+          <MobileNavMenu>
+            {accounts?.length > 0 && !isReadOnly && (
+              <MobileNavLink
+                active={url === '/address/' + accounts[0]}
+                to={'/address/' + accounts[0]}
+              >
+                {t('c.mynames')}
+              </MobileNavLink>
+            )}
+            <MobileNavLink to="/favourites">{t('c.favourites')}</MobileNavLink>
+            <MobileNavLink>FAQ</MobileNavLink>
+            <MobileNavExternalLink href={aboutPageURL()}>
+              {t('c.about')}
+            </MobileNavExternalLink>
+          </MobileNavMenu>
+          <MobileConnect>
+            <Network>
+              <Image src={MaskGroup} alt="mask-group-image" />
+              <div>
+                <div>
+                  {isReadOnly && <ReadOnly>{t('c.readonly')}</ReadOnly>}
+                  {!isReadOnly && displayName && (
+                    <Name data-testid="display-name">{displayName}</Name>
+                  )}
+                </div>
+                <NetworkLabelContainer>
+                  <Point />
+                  {`${network} ${t('c.network')}`}
+                </NetworkLabelContainer>
+              </div>
+            </Network>
+            <ConnectButtonContainer>
+              {!isSafeApp && (
+                <NoAccounts
+                  active={isReadOnly ? false : true}
+                  onClick={isReadOnly ? connectProvider : disconnectProvider}
+                  buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
+                />
+              )}
+            </ConnectButtonContainer>
+          </MobileConnect>
+        </Menu>
+      )}
     </Hero>
   )
 }

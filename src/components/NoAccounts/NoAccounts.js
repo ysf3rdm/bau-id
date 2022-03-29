@@ -5,16 +5,12 @@ const NoAccountsContainer = styled('div')`
   box-shadow: ${({ active }) =>
     active ? '0 -10px 30px 0 rgba(108, 143, 167, 0.05)' : 'none'};
   padding: 13.2px 13.46px 13.2px 13px;
-  border-bottom: 1px solid
-    ${({ active, colour }) => (active ? '#F5A623' : colour)};
-  border-top: ${({ active, colour }) =>
-    `1px solid ${active ? '#fff' : colour}`};
-  border-left: ${({ active, colour }) =>
-    `1px solid ${active ? '#fff' : colour}`};
-  border-right: ${({ active, colour }) =>
-    `1px solid ${active ? '#fff' : colour}`};
+  border-bottom: 1px solid #25ffb1;
+  border-top: 1px solid #25ffb1;
+  border-left: 1px solid #25ffb1;
+  border-right: 1px solid #25ffb1;
   border-radius: 13px;
-  background: ${({ active }) => (active ? 'white' : 'transparent')};
+  background: 'transparent';
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,7 +19,23 @@ const NoAccountsContainer = styled('div')`
   transition: 0.2s;
 
   span {
-    color: ${({ active, colour }) => (active ? '#F5A623' : colour)};
+    color: #25ffb1;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    span {
+      color: ${({ active, colour }) =>
+        active ? '#0191E2' : 'white'} !important;
+    }
+    border-bottom: 1px solid
+      ${({ active, colour }) => (active ? '#0191E2' : 'white')};
+    border-top: ${({ active, colour }) =>
+      `1px solid ${active ? '#0191E2' : 'white'}`};
+    border-left: ${({ active, colour }) =>
+      `1px solid ${active ? '#0191E2' : 'white'}`};
+    border-right: ${({ active, colour }) =>
+      `1px solid ${active ? '#0191E2' : 'white'}`};
   }
 
   &:hover {
