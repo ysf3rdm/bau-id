@@ -26,7 +26,8 @@ const Container = styled.div`
 `
 
 const DomainContainer = styled(Link)`
-  padding: 20px;
+  width: 100%;
+  padding: 18px 28px;
   color: #379170;
   overflow: hidden;
   position: relative;
@@ -36,10 +37,9 @@ const DomainContainer = styled(Link)`
   linear-gradient(to right, rgba(128, 255, 128, 0.1) 0%, rgba(82,229,255, 0.1) ${percentDone}%,#ffffff ${percentDone}%)`
       : '#F0F7F4;'};
   height: 65px;
-  display: grid;
+  display: flex;
+  justify-content: space-between;
   height: auto;
-  grid-template-columns: 1fr;
-  grid-gap: 10px;
   align-items: center;
   font-size: 22px;
   font-weight: 500;
@@ -70,12 +70,19 @@ const RightContainer = styled('div')`
   align-items: center;
 `
 
-const DomainName = styled('h2')`
+const SecondContainer = styled('div')`
+  display: flex;
+  align-items: center;
+`
+
+const DomainName = styled('div')`
   font-size: 18px;
   font-weight: 100;
 
+  font-family: 'Urbanist'
   ${mq.medium`
-    font-size: 28px;
+    font-size: 24px;
+
   `}
 
   color: ${p => {
@@ -210,38 +217,40 @@ const Domain = ({
         <DomainName state={isOwner ? 'Yours' : domain.state}>
           {humaniseName(domain.name)}
         </DomainName>
-        <ExpiryDate expiryDate={expiryDate} name={domain.name} />
-        {!hasInvalidCharacter && <Label domain={domain} isOwner={isOwner} />}
-        <RightContainer>
-          <AddFavourite
-            domain={domain}
-            isSubDomain={isSubDomain}
-            isFavourite={isFavourite}
-          />
-        </RightContainer>
-        <RightContainer>
-          {expiryDate && (
-            <CheckBoxContainer>
-              <Checkbox
-                testid={`checkbox-${domain.name}`}
-                checked={checkedBoxes[domain.name]}
-                onClick={e => {
-                  e.preventDefault()
-                  setCheckedBoxes &&
-                    setCheckedBoxes(prevState => {
-                      return {
-                        ...prevState,
-                        [domain.name]: !prevState[domain.name]
-                      }
-                    })
-                  if (checkedBoxes[domain.name]) {
-                    setSelectAll(false)
-                  }
-                }}
-              />
-            </CheckBoxContainer>
-          )}
-        </RightContainer>
+        <SecondContainer>
+          <ExpiryDate expiryDate={expiryDate} name={domain.name} />
+          {!hasInvalidCharacter && <Label domain={domain} isOwner={isOwner} />}
+          <RightContainer>
+            <AddFavourite
+              domain={domain}
+              isSubDomain={isSubDomain}
+              isFavourite={isFavourite}
+            />
+          </RightContainer>
+          <RightContainer>
+            {expiryDate && (
+              <CheckBoxContainer>
+                <Checkbox
+                  testid={`checkbox-${domain.name}`}
+                  checked={checkedBoxes[domain.name]}
+                  onClick={e => {
+                    e.preventDefault()
+                    setCheckedBoxes &&
+                      setCheckedBoxes(prevState => {
+                        return {
+                          ...prevState,
+                          [domain.name]: !prevState[domain.name]
+                        }
+                      })
+                    if (checkedBoxes[domain.name]) {
+                      setSelectAll(false)
+                    }
+                  }}
+                />
+              </CheckBoxContainer>
+            )}
+          </RightContainer>
+        </SecondContainer>
       </DomainContainer>
     </Container>
   )

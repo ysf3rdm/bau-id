@@ -16,7 +16,6 @@ const NetworkInformationContainer = styled('div')`
   display: flex;
   justify-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 20px;
   ${mq.medium`
     margin-top: 0px;
     margin-bottom: 50px;
@@ -82,19 +81,7 @@ const Account = styled('div')`
 const AccountContainer = styled('div')`
   padding: 15px 0 0;
   position: relative;
-  ${mq.medium`
-    // transform: translate(-25px, 5px);
-    width: 100%;
-    // &:hover {
-    //   background: white;
-    //   box-shadow: -4px 18px 70px 0 rgba(108, 143, 167, 0.32);
-    //   border-radius: 6px;
-    //   .account {
-    //     overflow: visible;
-    //     white-space: normal;
-    //   }
-    // }
-  `}
+  padding: ${({ isReadOnly }) => (isReadOnly ? '50px 0 0' : '15px 0 0')};
 `
 
 const NETWORK_INFORMATION_QUERY = gql`
@@ -127,7 +114,7 @@ function NetworkInformation() {
   return (
     <NetworkInformationContainer hasAccount={accounts && accounts.length > 0}>
       {!isReadOnly ? (
-        <AccountContainer>
+        <AccountContainer isReadOnly={isReadOnly}>
           {!reverseRecordLoading &&
           getReverseRecord &&
           getReverseRecord.avatar ? (
@@ -148,21 +135,25 @@ function NetworkInformation() {
               onClick={disconnectProvider}
               buttonText={t('c.disconnect')}
               colour={'#0191E2'}
+              active={isReadOnly ? true : false}
+              width="100%"
             />
           )}
         </AccountContainer>
       ) : (
-        <AccountContainer>
-          <Account data-testid="account" className="account">
+        <AccountContainer isReadOnly={isReadOnly}>
+          {/* <Account data-testid="account" className="account">
             {t('c.readonly')}
           </Account>
           <NetworkStatus>
             {network} {t('c.network')}
-          </NetworkStatus>
+          </NetworkStatus> */}
           <NoAccountsModal
             onClick={connectProvider}
             colour={'#25FFB1'}
             buttonText={t('c.connect')}
+            active={isReadOnly ? true : false}
+            width="100%"
           />
         </AccountContainer>
       )}

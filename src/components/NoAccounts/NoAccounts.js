@@ -15,8 +15,9 @@ const NoAccountsContainer = styled('div')`
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 146px;
+  width: ${({ width }) => (width ? width : '146px')};
   transition: 0.2s;
+  height: 40px;
 
   span {
     color: #25ffb1;
@@ -53,7 +54,8 @@ const NoAccounts = ({
   textColour,
   onClick,
   buttonText,
-  active
+  active,
+  width
 }) => (
   <NoAccountsContainer
     colour={colour}
@@ -61,6 +63,7 @@ const NoAccounts = ({
     onClick={onClick}
     active={active}
     textColour={textColour}
+    width={width}
   >
     <span>{buttonText}</span>
   </NoAccountsContainer>

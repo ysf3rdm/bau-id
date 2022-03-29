@@ -8,7 +8,8 @@ export default ({
   onClick,
   textColour,
   className,
-  active
+  active,
+  width
 }) => {
   let [showModal, setShowModal] = useState(active)
   return (
@@ -19,6 +20,7 @@ export default ({
         textColour={textColour}
         active={active}
         onClick={onClick}
+        width={width}
       />
     </div>
   )

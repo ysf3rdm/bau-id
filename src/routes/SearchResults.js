@@ -10,11 +10,11 @@ import SearchErrors from '../components/SearchErrors/SearchErrors'
 import { useHistory } from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 
-const H22 = styled(H2)`
+const H22 = styled('div')`
   font-weight: 500;
   font-size: 24px;
-  line-height: 29px;
   color: #47c799;
+  margin-bottom: 11px;
 `
 
 const RESULTS_CONTAINER = gql`
@@ -23,10 +23,9 @@ const RESULTS_CONTAINER = gql`
   }
 `
 
-import {
-  NonMainPageBannerContainer,
-  DAOBannerContent
-} from '../components/Banner/DAOBanner'
+const SearchResultsContainer = styled('div')`
+  font-family: Urbanist;
+`
 
 const useCheckValidity = (_searchTerm, isENSReady) => {
   const [errors, setErrors] = useState([])
@@ -94,12 +93,12 @@ const ResultsContainer = ({ searchDomain, match }) => {
   }
   if (parsed) {
     return (
-      <>
+      <SearchResultsContainer>
         <H22>
           <Trans i18nKey="singleName.search.title">Names</Trans>
         </H22>
         <DomainInfo searchTerm={parsed} />
-      </>
+      </SearchResultsContainer>
     )
   } else {
     return ''

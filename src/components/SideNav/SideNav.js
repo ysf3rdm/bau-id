@@ -13,31 +13,10 @@ import { ReactComponent as FaqIcon } from '../../assets/faqIcon.svg'
 import mq from 'mediaQuery'
 import { Link, withRouter } from 'react-router-dom'
 import gql from 'graphql-tag'
-import Info from 'components/Icons/Info'
 
 const SideNavContainer = styled('nav')`
-  display: ${p => (p.isMenuOpen ? 'block' : 'none')};
-  position: fixed;
-  z-index: 1;
-  ${mq.medium`
-    z-index: 1;
-  `}
-
-  left: 0;
-  height: auto;
-  background: #121d46;
-  width: 100%;
-  margin-top: -10px;
-  ${mq.medium`
-    padding: 0;
-    left: 100px;
-    margin-top: 25px;
-    height: auto;
-    background: transparent;
-    width: 200px;
-    display: block;
-  `}
-
+  width: 362px;
+  height: 100%;
   ul {
     padding: 0;
     margin: 0;
@@ -45,17 +24,8 @@ const SideNavContainer = styled('nav')`
   li {
     list-style: none;
   }
-
-  ${p =>
-    p.hasNonAscii
-      ? `
-      top: 200px;
-      ${mq.medium`top: 200px`}
-    `
-      : `
-      top: 100px;
-      ${mq.medium`top: 100px`}
-    `}
+  padding: 15px 62px 0px 100px;
+  font-family: Urbanist;
 `
 
 const NavLink = styled(Link)`
@@ -81,45 +51,6 @@ const NavLink = styled(Link)`
   span {
     transition: 0.2s;
     margin-left: 15px;
-    color: ${p => (p.active ? '#47C799' : '#B1B1B1')};
-  }
-
-  &:hover {
-    span {
-      color: #47c799;
-    }
-    path {
-      fill: #47c799;
-    }
-    g {
-      fill: #47c799;
-    }
-  }
-`
-
-const ThirdPartyLink = styled('a')`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  color: ${p => (p.active ? '#47C799' : '#B1B1B1')};
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-
-  ${mq.medium`
-    justify-content: start;
-    border-bottom: 0;
-  `}
-
-  &:visited {
-    color: #c7d3e3;
-  }
-
-  span {
-    transition: 0.2s;
-    margin-left: 10px;
     color: ${p => (p.active ? '#47C799' : '#B1B1B1')};
   }
 

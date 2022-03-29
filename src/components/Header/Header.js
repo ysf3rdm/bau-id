@@ -46,10 +46,8 @@ const Header = styled('header')`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  position: fixed;
-  left: 0;
-  top: 0;
   width: 100%;
+  position: sticky;
   z-index: 2;
   box-shadow: 0 4px 8px 0 rgba(230, 240, 247, 0.8);
   height: 50px;
