@@ -8,9 +8,15 @@ import {
   PREMIUM_PERIOD
 } from 'utils/dates'
 
-const ExpiryDateContainer = styled('p')`
+const ExpiryDateContainer = styled('div')`
   font-size: 18px;
   font-weight: 100;
+  order: 1;
+  margin-right: 23px;
+  @media (max-width: 768px) {
+    font-size: 12px;
+    margin-right: 0px;
+  }
   color: ${({ isExpiredSoon }) => (isExpiredSoon ? 'red' : '#adbbcd')};
 `
 

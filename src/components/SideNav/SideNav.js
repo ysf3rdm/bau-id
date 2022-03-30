@@ -26,6 +26,9 @@ const SideNavContainer = styled('nav')`
   }
   padding: 15px 62px 0px 100px;
   font-family: Urbanist;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 const NavLink = styled(Link)`

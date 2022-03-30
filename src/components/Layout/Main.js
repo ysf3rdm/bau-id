@@ -7,6 +7,9 @@ import { hasNonAscii } from '../../utils/utils'
 const MainContainer = styled('main')`
   width: 100%;
   padding: 40px 100px 0px 30px;
+  @media (max-width: 768px) {
+    padding: 50px 30px 0px 30px;
+  }
 `
 
 const Main = ({ children }) => (

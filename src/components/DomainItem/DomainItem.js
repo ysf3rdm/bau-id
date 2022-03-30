@@ -2,7 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled/macro'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import mq from 'mediaQuery'
 
 import AddFavourite from '../AddFavourite/AddFavourite'
 import { useAccount } from '../QueryAccount'
@@ -12,8 +11,13 @@ import { humaniseName } from '../../utils/utils'
 import Checkbox from '../Forms/Checkbox'
 import warningImage from '../../assets/warning.svg'
 
+import mq, { useMediaMin, useMediaMax } from 'mediaQuery'
+
 const CheckBoxContainer = styled('div')`
-  margin: 5px;
+  margin-left: 24px;
+  @media (max-width: 768px) {
+    margin-left: 21px;
+  }
 `
 
 const Container = styled.div`
@@ -68,11 +72,18 @@ const DomainContainer = styled(Link)`
 const RightContainer = styled('div')`
   display: flex;
   align-items: center;
+  order: 3;
+  @media (max-width: 768px) {
+    justify-content: flex-end;
+  }
 `
 
 const SecondContainer = styled('div')`
   display: flex;
   align-items: center;
+  @media (max-width: 768px) {
+    display: block;
+  }
 `
 
 const DomainName = styled('div')`
@@ -102,6 +113,7 @@ const LabelContainer = styled('div')`
   color: #ccd4da;
   display: none;
   align-items: center;
+  order: 2;
 `
 
 const LabelText = styled('div')``
@@ -170,6 +182,7 @@ const Domain = ({
   hasInvalidCharacter
 }) => {
   console.log('DomainItem: ', Array.from(domain.name))
+  const mediumBP = useMediaMax('medium')
   if (loading) {
     return (
       <DomainContainer state={'Owned'} className={className} to="">
@@ -216,18 +229,17 @@ const Domain = ({
       >
         <DomainName state={isOwner ? 'Yours' : domain.state}>
           {humaniseName(domain.name)}
+          {mediumBP && !hasInvalidCharacter && (
+            <Label domain={domain} isOwner={isOwner} />
+          )}
         </DomainName>
         <SecondContainer>
-          <ExpiryDate expiryDate={expiryDate} name={domain.name} />
-          {!hasInvalidCharacter && <Label domain={domain} isOwner={isOwner} />}
           <RightContainer>
             <AddFavourite
               domain={domain}
               isSubDomain={isSubDomain}
               isFavourite={isFavourite}
             />
-          </RightContainer>
-          <RightContainer>
             {expiryDate && (
               <CheckBoxContainer>
                 <Checkbox
@@ -250,6 +262,10 @@ const Domain = ({
               </CheckBoxContainer>
             )}
           </RightContainer>
+          {!mediumBP && !hasInvalidCharacter && (
+            <Label domain={domain} isOwner={isOwner} />
+          )}
+          <ExpiryDate expiryDate={expiryDate} name={domain.name} />
         </SecondContainer>
       </DomainContainer>
     </Container>

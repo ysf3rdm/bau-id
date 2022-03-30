@@ -15,6 +15,9 @@ const H22 = styled('div')`
   font-size: 24px;
   color: #47c799;
   margin-bottom: 11px;
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `
 
 const RESULTS_CONTAINER = gql`

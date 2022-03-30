@@ -48,6 +48,10 @@ const SearchForm = styled('form')`
       /* Chrome/Opera/Safari */
       color: #ccd4da;
     }
+
+    @media (max-width: 768px) {
+      background: transparent !important;
+    }
   }
 
   button {
