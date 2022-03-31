@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from '@emotion/styled/macro'
 
-import mq, { useMediaMin, useMediaMax } from 'mediaQuery'
+import mq from 'mediaQuery'
 
 import DefaultLogo from '../Logo'
 import Search from '../SearchName/Search'
-import Hamburger from './Hamburger'
 import Banner from '../Banner'
 import searchIcon from '../../assets/searchWhite.svg'
 
 import { hasNonAscii } from '../../utils/utils'
 import HamburgerIcon from 'components/Icons/HamburgerIcon'
+import MobileMenu from 'components/Menu/MobileMenu'
 
 const StyledBanner = styled(Banner)`
   margin-bottom: 0;
@@ -123,7 +123,7 @@ function HeaderContainer() {
       <Header isMenuOpen={isMenuOpen}>
         <LogoContainer>
           <Logo isMenuOpen={isMenuOpen} />
-          <HamburgerIconContainer>
+          <HamburgerIconContainer onClick={toggleMenu}>
             <HamburgerIcon style={{ color: 'white' }} />
           </HamburgerIconContainer>
         </LogoContainer>
@@ -147,6 +147,7 @@ function HeaderContainer() {
           </StyledBannerInner>
         </StyledBanner>
       )}
+      {isMenuOpen && <MobileMenu menuOpen={toggleMenu} />}
     </>
   )
 }

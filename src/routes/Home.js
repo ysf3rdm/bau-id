@@ -16,6 +16,7 @@ import { connectProvider, disconnectProvider } from '../utils/providerUtils'
 import { gql } from '@apollo/client'
 import HamburgerIcon from 'components/Icons/HamburgerIcon'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
+import MobileMenu from 'components/Menu/MobileMenu'
 
 const HeroTop = styled('div')`
   display: flex;
@@ -316,8 +317,6 @@ const Point = styled('div')`
   margin-right: 8px;
 `
 
-const TextLogo = styled.div``
-
 const Name = styled.div`
   display: flex;
   align-items: center;
@@ -357,7 +356,9 @@ export default ({ match }) => {
   const {
     data: { network, displayName, isReadOnly, isSafeApp }
   } = useQuery(HOME_DATA, {
-    variables: { address: accounts?.[0] }
+    variables: {
+      address: accounts?.[0]
+    }
   })
 
   const menuOpen = () => {
@@ -370,7 +371,7 @@ export default ({ match }) => {
         <SmallLogoIconContainer>
           <SmallLogoIcon />
         </SmallLogoIconContainer>
-        <TextLogo>SPACE ID</TextLogo>
+        <div>SPACE ID</div>
       </TextLogoContainer>
 
       <HeroTop>
@@ -398,9 +399,12 @@ export default ({ match }) => {
         </Nav>
       </HeroTop>
       <HamburgerIconContainer onClick={() => menuOpen()}>
-        <HamburgerIcon style={{ color: '#25ffb1' }} />
+        <HamburgerIcon
+          style={{
+            color: '#25ffb1'
+          }}
+        />
       </HamburgerIconContainer>
-
       <SearchContainer>
         <>
           <LogoLarge
@@ -417,58 +421,15 @@ export default ({ match }) => {
         </>
       </SearchContainer>
       {isMenuOpen && (
-        <Menu>
-          <TextLogoContainer style={{ color: 'white' }}>
-            <SmallLogoIconContainer>
-              <SmallLogoIcon style={{ color: 'white' }} />
-            </SmallLogoIconContainer>
-            <TextLogo>SPACE ID</TextLogo>
-          </TextLogoContainer>
-          <HamburgerIconContainer onClick={() => menuOpen()}>
-            <HamburgerIcon style={{ color: 'white' }} />
-          </HamburgerIconContainer>
-          <MobileNavMenu>
-            {accounts?.length > 0 && !isReadOnly && (
-              <MobileNavLink
-                active={url === '/address/' + accounts[0]}
-                to={'/address/' + accounts[0]}
-              >
-                {t('c.mynames')}
-              </MobileNavLink>
-            )}
-            <MobileNavLink to="/favourites">{t('c.favourites')}</MobileNavLink>
-            <MobileNavLink>FAQ</MobileNavLink>
-            <MobileNavExternalLink href={aboutPageURL()}>
-              {t('c.about')}
-            </MobileNavExternalLink>
-          </MobileNavMenu>
-          <MobileConnect>
-            <Network>
-              <Image src={MaskGroup} alt="mask-group-image" />
-              <div>
-                <div>
-                  {isReadOnly && <ReadOnly>{t('c.readonly')}</ReadOnly>}
-                  {!isReadOnly && displayName && (
-                    <Name data-testid="display-name">{displayName}</Name>
-                  )}
-                </div>
-                <NetworkLabelContainer>
-                  <Point />
-                  {`${network} ${t('c.network')}`}
-                </NetworkLabelContainer>
-              </div>
-            </Network>
-            <ConnectButtonContainer>
-              {!isSafeApp && (
-                <NoAccounts
-                  active={isReadOnly ? false : true}
-                  onClick={isReadOnly ? connectProvider : disconnectProvider}
-                  buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
-                />
-              )}
-            </ConnectButtonContainer>
-          </MobileConnect>
-        </Menu>
+        <MobileMenu
+          accounts={accounts}
+          isReadOnly={isReadOnly}
+          url={url}
+          network={network}
+          displayName={displayName}
+          isSafeApp={isSafeApp}
+          menuOpen={menuOpen}
+        />
       )}
     </Hero>
   )
