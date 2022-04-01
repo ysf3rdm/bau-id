@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { useSelector, useDispatch } from 'react-redux'
 import mq from 'mediaQuery'
+
+import { getAccounts, getHomeData } from 'app/slices/accountSlice'
 
 import SearchDefault from '../components/SearchName/Search'
 import NoAccountsDefault from '../components/NoAccounts/NoAccountsModal'
@@ -108,12 +111,6 @@ const NavLink = styled(Link)`
   }
 `
 
-const MobileNavLink = styled(Link)`
-  color: white !important;
-  margin-top: 24px;
-  display: block;
-`
-
 const ExternalLink = styled('a')`
   text-align: right;
   margin-left: 16px;
@@ -125,12 +122,6 @@ const ExternalLink = styled('a')`
   &:first-child {
     margin-left: 0;
   }
-`
-
-const MobileNavExternalLink = styled('a')`
-  color: white !important;
-  margin-top: 24px;
-  display: block;
 `
 
 const Hero = styled('section')`
@@ -264,74 +255,6 @@ const SmallLogoIconContainer = styled.div`
   `}
 `
 
-const Menu = styled.div`
-  margin: 0;
-  width: 100%;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  overflow: hidden;
-  background-color: #18e199;
-`
-
-const MobileNavMenu = styled.div`
-  margin-top: 100px;
-  text-align: center;
-  color: white;
-  font-family: Urbanist;
-  font-size: 24px;
-`
-
-const MobileConnect = styled.div`
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  padding: 28px;
-`
-
-const ConnectButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`
-
-const Network = styled('div')`
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-`
-
-const Image = styled('img')`
-  width: 60px;
-  height: 60px;
-  margin-right: 17px;
-`
-
-const Point = styled('div')`
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #628ffd;
-  margin-right: 8px;
-`
-
-const Name = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const ReadOnly = styled('span')`
-  margin-left: 1em;
-`
-
-const NetworkLabelContainer = styled('div')`
-  display: flex;
-  align-items: center;
-  margin-top: 4px;
-`
-
 const animation = {
   initial: {
     scale: 0,
@@ -346,6 +269,7 @@ const animation = {
 export default ({ match }) => {
   const { url } = match
   const { t } = useTranslation()
+  const dispatch = useDispatch()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -354,12 +278,27 @@ export default ({ match }) => {
   } = useQuery(GET_ACCOUNT)
 
   const {
-    data: { network, displayName, isReadOnly, isSafeApp }
+    // data: { network, displayName, isReadOnly, isSafeApp }
+    data
   } = useQuery(HOME_DATA, {
     variables: {
       address: accounts?.[0]
     }
   })
+
+  useEffect(() => {
+    if (accounts) {
+      dispatch(getAccounts(accounts))
+    }
+  }, [accounts])
+
+  useEffect(() => {
+    if (data?.network) {
+      dispatch(getHomeData(data))
+    }
+  }, [data])
+
+  const { network, displayName, isReadOnly, isSafeApp } = data
 
   const menuOpen = () => {
     setIsMenuOpen(!isMenuOpen)

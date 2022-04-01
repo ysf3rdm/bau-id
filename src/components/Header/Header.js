@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector, useDispatch } from 'react-redux'
+import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled/macro'
 
 import mq from 'mediaQuery'
+import { gql } from '@apollo/client'
+
+import { getAccounts, getHomeData } from 'app/slices/accountSlice'
 
 import DefaultLogo from '../Logo'
 import Search from '../SearchName/Search'
@@ -113,10 +118,53 @@ const HamburgerIconContainer = styled('div')`
   }
 `
 
+export const GET_ACCOUNT = gql`
+  query getAccounts @client {
+    accounts
+  }
+`
+
+export const HOME_DATA = gql`
+  query getHomeData($address: string) @client {
+    network
+    displayName(address: $address)
+    isReadOnly
+    isSafeApp
+  }
+`
+
 function HeaderContainer() {
   const [isMenuOpen, setMenuOpen] = useState(false)
   const toggleMenu = () => setMenuOpen(!isMenuOpen)
   const { t } = useTranslation()
+  const dispatch = useDispatch()
+
+  const account = useSelector(state => state.account)
+
+  const {
+    data: { accounts }
+  } = useQuery(GET_ACCOUNT)
+
+  const {
+    // data: { network, displayName, isReadOnly, isSafeApp }
+    data
+  } = useQuery(HOME_DATA, {
+    variables: {
+      address: accounts?.[0]
+    }
+  })
+
+  useEffect(() => {
+    if (accounts) {
+      dispatch(getAccounts(accounts))
+    }
+  }, [accounts])
+
+  useEffect(() => {
+    if (data?.network) {
+      dispatch(getHomeData(data))
+    }
+  }, [data])
 
   return (
     <>
@@ -147,7 +195,17 @@ function HeaderContainer() {
           </StyledBannerInner>
         </StyledBanner>
       )}
-      {isMenuOpen && <MobileMenu menuOpen={toggleMenu} />}
+      {isMenuOpen && (
+        <MobileMenu
+          accounts={account.accounts}
+          isReadOnly={account.isReadOnly}
+          url={window.location.pathname}
+          network={account.network}
+          displayName={account.displayName}
+          isSafeApp={account.isSafeApp}
+          menuOpen={toggleMenu}
+        />
+      )}
     </>
   )
 }
