@@ -35,6 +35,7 @@ const SVG = styled('svg')`
 
 const Content = styled('div')`
   margin-left: 8px;
+  font-family: Urbanist;
 
   h3 {
     margin-top: 2px;
@@ -47,6 +48,7 @@ const Content = styled('div')`
     font-size: 14px;
     font-weight: 400;
     margin-top: 0;
+    color: #7a7a7a;
   }
 `
 
@@ -56,30 +58,6 @@ const StepContainer = styled('div')`
 
 const Step = ({ number, text, title, progress = 100 }) => (
   <StepContainer>
-    <Number progress={progress}>
-      <SVG height="60" width="60" progress={progress}>
-        <circle
-          cx="30"
-          cy="30"
-          r="28"
-          stroke="#dfdfdf"
-          strokeWidth="2"
-          fill="none"
-          transform="rotate(-90, 30, 30)"
-        />
-        <circle
-          cx="30"
-          cy="30"
-          r="28"
-          strokeWidth="2"
-          stroke="#42E068"
-          fill="none"
-          className="progress"
-          transform="rotate(-90, 30, 30)"
-        />
-      </SVG>
-      <span>{number}</span>
-    </Number>
     <Content>
       <h3 style={{ color: '#379070' }}>{title}</h3>
       <p>{text}</p>

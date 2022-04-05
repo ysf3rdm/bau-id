@@ -17,6 +17,10 @@ import NameContainer from '../Basic/MainContainer'
 import Copy from '../CopyToClipboard/'
 import { isOwnerOfParentDomain } from '../../utils/utils'
 
+const Container = styled('div')`
+  font-family: Urbanist;
+`
+
 const Owner = styled('div')`
   color: #ccd4da;
   margin-right: 20px;
@@ -25,6 +29,13 @@ const Owner = styled('div')`
 const RightBar = styled('div')`
   display: flex;
   align-items: center;
+`
+
+const SingleNameContainer = styled('div')`
+  color: #47c799;
+  font-size: 24px;
+  margin-bottom: 11px;
+  margin-left: 12px;
 `
 
 const Favourite = styled(DefaultFavourite)``
@@ -108,80 +119,83 @@ function Name({ details: domain, name, pathname, type, refetch }) {
   const key = useRefreshComponent()
 
   return (
-    <NameContainer state={containerState} key={key}>
-      <TopBar percentDone={percentDone}>
-        <Title>
-          {domain?.decrypted
-            ? name
-            : '[unknown' +
-              domain.name?.split('.')[0].slice(1, 11) +
-              ']' +
-              '.' +
-              domain.parent}
-          <Copy
-            value={
-              domain?.decrypted
-                ? name
-                : '[unknown' +
-                  domain.name?.split('.')[0].slice(1, 11) +
-                  ']' +
-                  '.' +
-                  domain.parent
-            }
-          />
-        </Title>
-        <RightBar>
-          {!!ownerType && (
-            <Owner data-testid="owner-type">
-              {ownerType === 'Registrant'
-                ? t('c.registrant')
-                : t('c.Controller')}
-            </Owner>
-          )}
-          <Favourite domain={domain} />
-          {smallBP && (
-            <Tabs
-              pathname={pathname}
-              tab={preferredTab}
-              domain={domain}
-              parent={domain.parent}
+    <Container>
+      <SingleNameContainer>Names</SingleNameContainer>
+      <NameContainer state={containerState} key={key}>
+        <TopBar percentDone={percentDone}>
+          <Title>
+            {domain?.decrypted
+              ? name
+              : '[unknown' +
+                domain.name?.split('.')[0].slice(1, 11) +
+                ']' +
+                '.' +
+                domain.parent}
+            <Copy
+              value={
+                domain?.decrypted
+                  ? name
+                  : '[unknown' +
+                    domain.name?.split('.')[0].slice(1, 11) +
+                    ']' +
+                    '.' +
+                    domain.parent
+              }
             />
-          )}
-        </RightBar>
-      </TopBar>
-      {!smallBP && (
-        <Tabs
-          pathname={pathname}
-          tab={preferredTab}
-          domain={domain}
-          parent={domain.parent}
-        />
-      )}
-      {isDNSRegistrationOpen(domain) ? (
-        <DNSNameRegister
-          domain={domain}
-          registrarAddress={registrarAddress}
-          pathname={pathname}
-          refetch={refetch}
-          account={account}
-          readOnly={account === EMPTY_ADDRESS}
-        />
-      ) : type === 'short' && domain.owner === EMPTY_ADDRESS ? ( // check it's short and hasn't been claimed already
-        <ShortName name={name} />
-      ) : (
-        <NameDetails
-          tab={preferredTab}
-          domain={domain}
-          pathname={pathname}
-          name={name}
-          isOwner={isOwner}
-          isOwnerOfParent={isOwnerOfParent}
-          refetch={refetch}
-          account={account}
-          registrationOpen={registrationOpen}
-        />
-      )}
-    </NameContainer>
+          </Title>
+          <RightBar>
+            {!!ownerType && (
+              <Owner data-testid="owner-type">
+                {ownerType === 'Registrant'
+                  ? t('c.registrant')
+                  : t('c.Controller')}
+              </Owner>
+            )}
+            <Favourite domain={domain} />
+            {smallBP && (
+              <Tabs
+                pathname={pathname}
+                tab={preferredTab}
+                domain={domain}
+                parent={domain.parent}
+              />
+            )}
+          </RightBar>
+        </TopBar>
+        {!smallBP && (
+          <Tabs
+            pathname={pathname}
+            tab={preferredTab}
+            domain={domain}
+            parent={domain.parent}
+          />
+        )}
+        {isDNSRegistrationOpen(domain) ? (
+          <DNSNameRegister
+            domain={domain}
+            registrarAddress={registrarAddress}
+            pathname={pathname}
+            refetch={refetch}
+            account={account}
+            readOnly={account === EMPTY_ADDRESS}
+          />
+        ) : type === 'short' && domain.owner === EMPTY_ADDRESS ? ( // check it's short and hasn't been claimed already
+          <ShortName name={name} />
+        ) : (
+          <NameDetails
+            tab={preferredTab}
+            domain={domain}
+            pathname={pathname}
+            name={name}
+            isOwner={isOwner}
+            isOwnerOfParent={isOwnerOfParent}
+            refetch={refetch}
+            account={account}
+            registrationOpen={registrationOpen}
+          />
+        )}
+      </NameContainer>
+    </Container>
   )
 }
 

@@ -11,6 +11,7 @@ const TOGAL_GAS_WEI = COMMIT_GAS_WEI + REGISTER_GAS_WEI
 
 const PriceContainer = styled('div')`
   width: 100%;
+  font-size: 24px;
   ${mq.medium`
     width: auto
   `}
@@ -20,18 +21,19 @@ const PriceContainer = styled('div')`
 const Value = styled('div')`
   font-family: Overpass;
   font-weight: 100;
-  font-size: 22px;
+  font-size: 24px;
   color: #2b2b2b;
-  border-bottom: 1px solid #dbdbdb;
-  ${mq.small`
-    font-size: 28px;
-  `}
+  border-bottom: 1px solid #5ed6ab;
+  font-family: Urbanist;
 `
 
 const TotalValue = styled(Value)`
   font-weight: 300;
   color: #47c799;
-
+  font-size: 24px;
+  width: 779px;
+  white-space: nowrap;
+  padding-bottom: 6px;
   span {
     color: #379070;
   }
@@ -40,24 +42,16 @@ const TotalValue = styled(Value)`
 const Description = styled('div')`
   font-family: Overpass;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12px;
   color: #adbbcd;
-  margin-top: 10px;
+  margin-top: 3px;
+  font-family: Urbanist;
 `
 
 const USD = styled('span')`
-  font-size: 22px;
+  font-size: 24px;
   color: #adbbcd !important;
   margin-left: 20px;
-  ${mq.small`
-    font-size: 28px;
-  `}
-`
-
-const Input = styled(DefaultInput)`
-  display: inline-block;
-  width: 4em;
-  margin: 5px 0;
 `
 
 const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {

@@ -6,13 +6,12 @@ import { Link } from 'react-router-dom'
 import mq from 'mediaQuery'
 
 const TabLink = styled(Link)`
-  font-size: 14px;
+  font-size: 18px;
   background: ${({ active }) => (active ? '#5ED6AB' : 'transparent')};
   color: ${({ active }) => (active ? 'white!important' : '#B1B1B1 !important')};
   transform: scale(${({ active }) => (active ? '1.08' : '1')});
   transition: background 0.1s ease-out, transform 0.3s ease-out;
-  padding: 5px 20px;
-  margin: 0 10px;
+  padding: 5px 23px;
   border-radius: 10px;
   overflow: hidden;
   ${mq.small`

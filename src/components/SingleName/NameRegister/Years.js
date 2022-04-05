@@ -1,20 +1,21 @@
 import React from 'react'
 import styled from '@emotion/styled/macro'
 import { useTranslation } from 'react-i18next'
+import CircleMinus from 'components/Icons/CircleMinus'
 import mq from 'mediaQuery'
+import CirclePlus from 'components/Icons/CirclePlus'
 
 const YearsContainer = styled('div')`
+  font-family: Urbanist;
   ${mq.medium`
     max-width: 220px;
   `}
 `
 
 const Stepper = styled('div')`
-  display: grid;
-  grid-template-columns:
-    30px auto
-    30px;
+  display: flex;
   border-bottom: 1px solid #5ed6ab;
+  width: 160px;
 `
 
 const Icon = styled('div')`
@@ -58,18 +59,28 @@ const Amount = styled('div')`
     font-weight: 100;
     color: #47c799;
     border: none;
-    max-width: 65px;
+    max-width: 26px;
     outline: 0;
-    text-align: center;
+    text-align: right;
+    margin-right: 12px;
   }
 `
 
 const Description = styled('div')`
   font-family: Overpass;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12px;
   color: #adbbcd;
-  margin-top: 10px;
+  margin-top: 3px;
+  text-align: center;
+`
+
+const CircleIconContainer = styled('div')`
+  color: #379070;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const Years = ({ years, setYears }) => {
@@ -80,7 +91,9 @@ const Years = ({ years, setYears }) => {
   return (
     <YearsContainer>
       <Stepper>
-        <Icon onClick={decrementYears}>-</Icon>
+        <CircleIconContainer onClick={decrementYears}>
+          <CircleMinus size={24} />
+        </CircleIconContainer>
         <Amount>
           <input
             type="text"
@@ -98,9 +111,9 @@ const Years = ({ years, setYears }) => {
           {t('pricer.yearUnit')}
           {currentLanguage === 'en' && years > 1 && 's'}
         </Amount>
-        <Icon onClick={incrementYears} emphasize={years < 2}>
-          +
-        </Icon>
+        <CircleIconContainer onClick={incrementYears}>
+          <CirclePlus size={24} />
+        </CircleIconContainer>
       </Stepper>
       <Description>{t('pricer.registrationPeriodLabel')}</Description>
     </YearsContainer>

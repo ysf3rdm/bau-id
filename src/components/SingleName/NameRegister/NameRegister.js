@@ -33,7 +33,7 @@ import useNetworkInfo from '../../NetworkInformation/useNetworkInfo'
 import { sendNotification } from './notification'
 import PremiumPriceOracle from './PremiumPriceOracle'
 const NameRegisterContainer = styled('div')`
-  padding: 20px 40px;
+  padding: 15px 27px;
 `
 
 const PremiumWarning = styled('div')`

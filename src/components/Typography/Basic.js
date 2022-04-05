@@ -5,21 +5,17 @@ export const H2 = styled('h2')`
   font-size: 18px;
   font-weight: 500;
   color: #adbbcd;
-
   ${mq.medium`
     font-size: 22px;
   `}
 `
 
 export const Title = styled('h2')`
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 100;
   padding: 0;
   margin: 0;
   color: #379070;
-  ${mq.medium`
-    font-size: 28px;
-  `}
 `
 
 export const HR = styled('hr')`

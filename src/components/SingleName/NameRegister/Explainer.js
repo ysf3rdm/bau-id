@@ -22,24 +22,20 @@ const Steps = styled('section')`
 `
 
 const Header = styled('div')`
+  margin-top: 36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 36px;
 
   h2 {
     font-family: Overpass;
     font-weight: 300;
-    font-size: 18px;
+    font-size: 24px;
     letter-spacing: 0;
     margin: 0;
     margin-bottom: 5px;
-
-    ${mq.medium`
-      font-size: 24px;
-      color: #2B2B2B;
-      letter-spacing: 0;
-    `}
+    font-family: Urbanist;
   }
 
   p {
@@ -49,6 +45,7 @@ const Header = styled('div')`
     font-size: 14px;
     color: #adbbcd;
     letter-spacing: 0;
+    font-family: Urbanist;
   }
 `
 

@@ -9,34 +9,22 @@ import { ReactComponent as ChainDefault } from '../Icons/chain.svg'
 import { useTranslation } from 'react-i18next'
 
 const PricingContainer = styled('div')`
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
   margin-bottom: 20px;
-  ${mq.medium`
-    grid-template-columns:
-      minmax(min-content, 200px) minmax(min-content, min-content)
-      minmax(200px, 1fr);
-  `}
 `
 const Chain = styled(ChainDefault)`
   display: none;
-
   ${mq.medium`
     display: block;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-top: 9px;
+    margin-left: 34px;
+    margin-right: 24px;
   `}
 `
 
-const OrangeExclamation = styled(DefaultOrangeExclamation)`
-  height: 14px;
-  width: 14px;
-  margin-right: 2px;
-`
-
 const Prompt = styled('div')`
-  color: #ffa600;
+  color: #ff9052;
+  font-size: 11px;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -63,8 +51,7 @@ function PricerInner({
     <>
       {years <= 1 && (
         <Prompt>
-          <OrangeExclamation />
-          <div>{t('register.increaseRegistrationPeriod')}</div>
+          <div>*{t('register.increaseRegistrationPeriod')}</div>
         </Prompt>
       )}
       <PricingContainer className={className} ref={reference}>

@@ -7,8 +7,10 @@ import priceCalculator from './PriceCalculator'
 
 const PriceContainer = styled('div')`
   width: 100%;
+  text-align: center;
+  font-family: Urbanist;
   ${mq.medium`
-    width: auto
+    width: 130px
   `}
 `
 
@@ -18,8 +20,12 @@ const Value = styled('div')`
   font-size: 22px;
   color: #47c799;
   border-bottom: 1px solid #5ed6ab;
+  height: 38px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
   ${mq.small`
-    font-size: 28px;
+    font-size: 24px;
   `}
 
   span {
@@ -30,9 +36,10 @@ const Value = styled('div')`
 const Description = styled('div')`
   font-family: Overpass;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12px;
   color: #adbbcd;
-  margin-top: 10px;
+  margin-top: 3px;
+  text-align: center;
 `
 
 const USD = styled('span')`
