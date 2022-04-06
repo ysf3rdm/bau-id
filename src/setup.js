@@ -38,13 +38,8 @@ export const setSubDomainFavourites = () => {
 
 export const isSupportedNetwork = networkId => {
   switch (networkId) {
-    case 1:
-    case 3:
-    case 4:
-    case 5:
     case 56:
     case 97:
-    case 1337:
       return true
     default:
       return false
@@ -76,7 +71,6 @@ export const getProvider = async reconnect => {
       )
       return provider
     }
-
     const safe = await safeInfo()
     if (safe) {
       const provider = await setupSafeApp(safe)
@@ -90,6 +84,8 @@ export const getProvider = async reconnect => {
       provider = await connect()
       return provider
     }
+
+    const networkId = await getNetworkId()
 
     const { providerObject } = await setup({
       reloadOnAccountsChange: false,

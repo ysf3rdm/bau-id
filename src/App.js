@@ -1,4 +1,4 @@
-import React, { Fragment, lazy, useEffect } from 'react'
+import React, { Fragment, lazy, useEffect, useState } from 'react'
 import {
   HashRouter,
   BrowserRouter,
@@ -22,6 +22,8 @@ const Faq = lazy(() => import('./routes/Faq'))
 const Address = lazy(() => import('./routes/AddressPage'))
 
 const Renew = lazy(() => import('./routes/Renew'))
+
+const ErrorPage = lazy(() => import('./routes/ErrorPage'))
 
 import { NetworkError, Error404 } from './components/Error/Errors'
 import DefaultLayout from './components/Layout/DefaultLayout'
@@ -63,9 +65,9 @@ const App = () => {
     setupAnalytics()
   }, [])
 
-  // if (globalError.network) {
-  //   return <NetworkError message={globalError.network} />
-  // }
+  if (globalError.network) {
+    return <NetworkError message={globalError.network} />
+  }
 
   return (
     <Router>
@@ -81,6 +83,7 @@ const App = () => {
         <Route path="/address/:address/:domainType" component={Address} />
         <Route path="/address/:address" component={Address} />
         <Route path="/renew" component={Renew} />
+        <Route path="/error" component={ErrorPage} />
         <Route path="*" component={Error404} />
       </Switch>
     </Router>
