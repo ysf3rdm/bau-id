@@ -29,7 +29,7 @@ const Header = styled('div')`
   margin-bottom: 36px;
 
   h2 {
-    font-family: Overpass;
+    font-family: Urbanist;
     font-weight: 300;
     font-size: 24px;
     letter-spacing: 0;
@@ -41,7 +41,7 @@ const Header = styled('div')`
   p {
     margin: 0;
     font-weight: 400;
-    font-family: Overpass;
+    font-family: Urbanist;
     font-size: 14px;
     color: #adbbcd;
     letter-spacing: 0;

@@ -5,7 +5,7 @@ injectGlobal`
     box-sizing: border-box;
   }
   body {
-    font-family: Overpass;
+    font-family: Urbanist;
     background: #F0F6FA;
     margin: 0;
   }

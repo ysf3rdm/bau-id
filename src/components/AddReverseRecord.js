@@ -43,7 +43,7 @@ const AddReverseRecordContainer = styled('div')`
   padding: 10px 15px;
 
   ${mq.medium`
-    margin: 20px 40px 20px;
+    margin: 20px 27px 20px;
   `}
 `
 
@@ -53,7 +53,7 @@ const SetReverseContainer = styled('div')`
 `
 
 const Message = styled('div')`
-  font-family: Overpass Mono;
+  font-family: Urbanist Mono;
   font-weight: 700;
   font-size: 14px;
   color: ${p => (p.nameSet ? '#747f8c' : '#adbbcd')};
@@ -87,7 +87,7 @@ const Check = styled(DefaultCheck)`
 `
 
 const Explanation = styled('div')`
-  font-family: Overpass;
+  font-family: Urbanist;
   font-weight: 300;
   font-size: 14px;
   color: #2b2b2b;

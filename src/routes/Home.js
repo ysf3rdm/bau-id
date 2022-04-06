@@ -200,7 +200,7 @@ const LogoLarge = styled(motion.img)`
 `
 
 const PermanentRegistrarLogo = styled(motion.h1)`
-  font-family: Overpass;
+  font-family: Urbanist;
   font-weight: 800;
   font-size: 18px;
   text-transform: uppercase;

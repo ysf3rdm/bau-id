@@ -15,7 +15,7 @@ const PriceContainer = styled('div')`
 `
 
 const Value = styled('div')`
-  font-family: Overpass;
+  font-family: Urbanist;
   font-weight: 100;
   font-size: 22px;
   color: #47c799;
@@ -34,7 +34,7 @@ const Value = styled('div')`
 `
 
 const Description = styled('div')`
-  font-family: Overpass;
+  font-family: Urbanist;
   font-weight: 300;
   font-size: 12px;
   color: #adbbcd;

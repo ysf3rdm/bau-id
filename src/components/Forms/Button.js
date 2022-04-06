@@ -92,10 +92,10 @@ function getButtonDefaultStyles(p) {
     color: white;
     background: #5ED6AB;
     padding: 10px 25px;
-    border-radius: 25px;
+    border-radius: 13px;
     font-size: 14px;
     font-weight: 700;
-    font-family: Overpass;
+    font-family: Urbanist;
     text-transform: capitalize;
     letter-spacing: 1.5px;
     transition: 0.2s all;

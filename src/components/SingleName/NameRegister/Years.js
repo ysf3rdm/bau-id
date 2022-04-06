@@ -19,7 +19,7 @@ const Stepper = styled('div')`
 `
 
 const Icon = styled('div')`
-  font-family: Overpass;
+  font-family: Urbanist;
   font-size: 28px;
   font-weight: 100;
   background: transparent;
@@ -45,7 +45,7 @@ const Amount = styled('div')`
   width: 150px;
   padding: 0 5px;
   display: flex;
-  font-family: Overpass;
+  font-family: Urbanist;
   font-size: 28px;
   font-weight: 100;
   color: #379070;
@@ -54,7 +54,7 @@ const Amount = styled('div')`
 
   input {
     background: transparent;
-    font-family: Overpass;
+    font-family: Urbanist;
     font-size: 28px;
     font-weight: 100;
     color: #47c799;
@@ -67,7 +67,7 @@ const Amount = styled('div')`
 `
 
 const Description = styled('div')`
-  font-family: Overpass;
+  font-family: Urbanist;
   font-weight: 300;
   font-size: 12px;
   color: #adbbcd;

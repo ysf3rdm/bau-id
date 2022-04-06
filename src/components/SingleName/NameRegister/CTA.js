@@ -22,7 +22,7 @@ import { useAccount } from '../../QueryAccount'
 const CTAContainer = styled('div')`
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: end;
 `
 
 const Pencil = styled(DefaultPencil)`
@@ -30,8 +30,10 @@ const Pencil = styled(DefaultPencil)`
 `
 
 const Prompt = styled('span')`
-  color: #ffa600;
+  font-family: Urbanist;
+  color: #ff9052;
   margin-right: 10px;
+  font-size: 11px;
 `
 
 const OrangeExclamation = styled(DefaultOrangeExclamation)`
@@ -156,10 +158,7 @@ function getCTA({
           <>
             {hasSufficientBalance ? (
               <>
-                <Prompt>
-                  <OrangeExclamation />
-                  {t('register.buttons.warning')}
-                </Prompt>
+                <Prompt>*{t('register.buttons.warning')}</Prompt>
                 <Button
                   style={{
                     color: '#5ED6AB',
@@ -174,12 +173,9 @@ function getCTA({
               </>
             ) : (
               <>
-                <Prompt>
-                  <OrangeExclamation />
-                  {t('register.buttons.insufficient')}
-                </Prompt>
+                <Prompt>*{t('register.buttons.insufficient')}</Prompt>
                 <Button data-testid="register-button" type="disabled">
-                  {t('register.buttons.register')}
+                  *
                 </Button>
               </>
             )}

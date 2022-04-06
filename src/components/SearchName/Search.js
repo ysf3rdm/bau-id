@@ -33,7 +33,7 @@ const SearchForm = styled('form')`
     border: none;
     border-radius: 0;
     font-size: 18px;
-    font-family: Overpass;
+    font-family: Urbanist;
     font-weight: 100;
     ${mq.medium`
       width: calc(100% - 162px);
@@ -58,7 +58,7 @@ const SearchForm = styled('form')`
     ${p => (p && p.hasSearch ? 'background: #5284ff;' : 'background: #c7d3e3;')}
     color: white;
     font-size: 22px;
-    font-family: Overpass;
+    font-family: Urbanist;
     height: 90px;
     width: 162px;
     border: none;
