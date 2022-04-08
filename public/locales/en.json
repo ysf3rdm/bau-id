@@ -177,7 +177,7 @@
       "insufficient": "Insufficient balance on your wallet. Fill in your wallet and reload the page.",
       "manage": "Manage name",
       "register": "Register",
-      "request": "Request to register",
+      "request": "register",
       "setreverserecord": "Set as Primary SID Name",
       "warning": "Click register to move to the 3rd step"
     },
