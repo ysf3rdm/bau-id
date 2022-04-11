@@ -1,8 +1,8 @@
-name: Space ID App S3 Deploy - Staging
+name: Space ID App S3 Deploy - Production
 
 on:
   push:
-    branches: [dev]
+    branches: [prod]
 
 jobs:
   build-and-deploy:
@@ -23,9 +23,9 @@ jobs:
         uses: reggionick/s3-deploy@v3
         with:
           folder: 'build'
-          bucket: 'app-stg-space-id'
+          bucket: 'app-prd-space-id'
           bucket-region: 'us-west-2'
-          dist-id: 'EJ14VENBD6DQ3'
+          dist-id: 'E2G0DJ759WT58R'
           invalidation: /
           delete-removed: true
           no-cache: false
