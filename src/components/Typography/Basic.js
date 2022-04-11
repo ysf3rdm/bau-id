@@ -16,6 +16,9 @@ export const Title = styled('h2')`
   padding: 0;
   margin: 0;
   color: #379070;
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `
 
 export const HR = styled('hr')`

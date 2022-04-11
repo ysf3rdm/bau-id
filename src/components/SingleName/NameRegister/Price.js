@@ -31,6 +31,11 @@ const Value = styled('div')`
   span {
     color: #379070;
   }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    height: 29px;
+  }
 `
 
 const Description = styled('div')`
@@ -54,7 +59,6 @@ const USD = styled('span')`
 const Price = ({
   loading,
   price,
-  premiumOnlyPrice,
   ethUsdPrice,
   ethUsdPremiumPrice,
   underPremium

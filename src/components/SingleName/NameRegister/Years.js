@@ -16,28 +16,8 @@ const Stepper = styled('div')`
   display: flex;
   border-bottom: 1px solid #5ed6ab;
   width: 160px;
-`
-
-const Icon = styled('div')`
-  font-family: Urbanist;
-  font-size: 28px;
-  font-weight: 100;
-  background: transparent;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-self: center;
-  transition: 0.2s;
-  border: solid #379070 1px;
-  color: #379070;
-
-  &:hover {
-    border: solid #379070 1px;
-    color: #379070;
-    cursor: pointer;
+  @media (max-width: 768px) {
+    width: 139px;
   }
 `
 
@@ -63,6 +43,13 @@ const Amount = styled('div')`
     outline: 0;
     text-align: right;
     margin-right: 12px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    input {
+      font-size: 18px;
+    }
   }
 `
 

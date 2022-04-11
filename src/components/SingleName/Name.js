@@ -36,6 +36,9 @@ const SingleNameContainer = styled('div')`
   font-size: 24px;
   margin-bottom: 11px;
   margin-left: 12px;
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `
 
 const Favourite = styled(DefaultFavourite)``
@@ -162,14 +165,7 @@ function Name({ details: domain, name, pathname, type, refetch }) {
             )}
           </RightBar>
         </TopBar>
-        {!smallBP && (
-          <Tabs
-            pathname={pathname}
-            tab={preferredTab}
-            domain={domain}
-            parent={domain.parent}
-          />
-        )}
+
         {isDNSRegistrationOpen(domain) ? (
           <DNSNameRegister
             domain={domain}

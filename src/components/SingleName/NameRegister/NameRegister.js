@@ -34,6 +34,9 @@ import { sendNotification } from './notification'
 import PremiumPriceOracle from './PremiumPriceOracle'
 const NameRegisterContainer = styled('div')`
   padding: 15px 27px;
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+  }
 `
 
 const PremiumWarning = styled('div')`

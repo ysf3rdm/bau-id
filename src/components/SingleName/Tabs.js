@@ -21,6 +21,10 @@ const TabLink = styled(Link)`
     background: #5ed6ab;
     color: white !important;
   }
+  @media (max-width: 768px) {
+    padding: 5px 22px;
+    font-size: 14px;
+  }
 `
 
 const TabContainer = styled('div')`
