@@ -32,13 +32,12 @@ const TabContainer = styled('div')`
   justify-content: flex-start;
   border-radius: 4px;
   margin-left: 20px;
-  margin-top: 20px;
 
-  ${mq.small`
+  @media (max-width: 768px) {
+    margin-top: 16px;
     margin-right: 0;
-    margin: 0;
-    margin-left: 20px;
-  `}
+    margin-left: 0;
+  }
 `
 function getDetailsActive(domain, pathname, tab) {
   const { name } = domain

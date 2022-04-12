@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 
-import { useMediaMin } from 'mediaQuery'
+import { useMediaMax, useMediaMin } from 'mediaQuery'
 import { EMPTY_ADDRESS } from '../../utils/records'
 import { Title } from '../Typography/Basic'
 import TopBar from '../Basic/TopBar'
@@ -39,6 +39,12 @@ const SingleNameContainer = styled('div')`
   @media (max-width: 768px) {
     font-size: 18px;
   }
+`
+
+const TitleContainer = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `
 
 const Favourite = styled(DefaultFavourite)``
@@ -89,7 +95,7 @@ const NAME_QUERY = gql`
 
 function Name({ details: domain, name, pathname, type, refetch }) {
   const { t } = useTranslation()
-  const smallBP = useMediaMin('small')
+  const mediumBP = useMediaMax('medium')
   const percentDone = 0
 
   const {
@@ -126,26 +132,30 @@ function Name({ details: domain, name, pathname, type, refetch }) {
       <SingleNameContainer>Names</SingleNameContainer>
       <NameContainer state={containerState} key={key}>
         <TopBar percentDone={percentDone}>
-          <Title>
-            {domain?.decrypted
-              ? name
-              : '[unknown' +
-                domain.name?.split('.')[0].slice(1, 11) +
-                ']' +
-                '.' +
-                domain.parent}
-            <Copy
-              value={
-                domain?.decrypted
-                  ? name
-                  : '[unknown' +
-                    domain.name?.split('.')[0].slice(1, 11) +
-                    ']' +
-                    '.' +
-                    domain.parent
-              }
-            />
-          </Title>
+          <TitleContainer>
+            <Title>
+              {domain?.decrypted
+                ? name
+                : '[unknown' +
+                  domain.name?.split('.')[0].slice(1, 11) +
+                  ']' +
+                  '.' +
+                  domain.parent}
+              <Copy
+                value={
+                  domain?.decrypted
+                    ? name
+                    : '[unknown' +
+                      domain.name?.split('.')[0].slice(1, 11) +
+                      ']' +
+                      '.' +
+                      domain.parent
+                }
+              />
+            </Title>
+            {mediumBP && <Favourite domain={domain} />}
+          </TitleContainer>
+
           <RightBar>
             {!!ownerType && (
               <Owner data-testid="owner-type">
@@ -154,15 +164,13 @@ function Name({ details: domain, name, pathname, type, refetch }) {
                   : t('c.Controller')}
               </Owner>
             )}
-            <Favourite domain={domain} />
-            {smallBP && (
-              <Tabs
-                pathname={pathname}
-                tab={preferredTab}
-                domain={domain}
-                parent={domain.parent}
-              />
-            )}
+            {!mediumBP && <Favourite domain={domain} />}
+            <Tabs
+              pathname={pathname}
+              tab={preferredTab}
+              domain={domain}
+              parent={domain.parent}
+            />
           </RightBar>
         </TopBar>
 
