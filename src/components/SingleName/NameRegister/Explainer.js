@@ -47,6 +47,17 @@ const Header = styled('div')`
     letter-spacing: 0;
     font-family: Urbanist;
   }
+
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 18px;
+    }
+    p {
+      margin-top: 6px;
+    }
+    margin-top: 12px;
+    display: block;
+  }
 `
 
 const NotifyButton = styled(Button)`
@@ -57,6 +68,10 @@ const NotifyButton = styled(Button)`
   &:hover {
     border-color: #5ed6ab;
     color: #5ed6ab;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 12px;
   }
 `
 
@@ -103,6 +118,7 @@ const Explainer = ({ step, waitPercentComplete, waitTime }) => {
           }
           title={t('register.step1.title')}
           text={t('register.step1.text') + ' ' + t('register.step1.text2')}
+          step={step}
         />
         <Step
           number={2}
@@ -121,6 +137,7 @@ const Explainer = ({ step, waitPercentComplete, waitTime }) => {
             .humanize()}` //add back localization of moment*/
           }
           text={t('register.step2.text')}
+          step={step}
         />
         <Step
           number={3}
@@ -129,6 +146,7 @@ const Explainer = ({ step, waitPercentComplete, waitTime }) => {
           }
           title={t('register.step3.title')}
           text={t('register.step3.text')}
+          step={step}
         />
       </Steps>
     </>

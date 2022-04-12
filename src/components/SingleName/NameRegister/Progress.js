@@ -4,6 +4,9 @@ import styled from '@emotion/styled/macro'
 
 const ProgressContainer = styled('div')`
   margin-bottom: 40px;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 const statesIndex = {

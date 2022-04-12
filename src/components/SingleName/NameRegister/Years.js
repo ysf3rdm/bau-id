@@ -56,7 +56,7 @@ const Amount = styled('div')`
 const Description = styled('div')`
   font-family: Urbanist;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 14px;
   color: #adbbcd;
   margin-top: 3px;
   text-align: center;

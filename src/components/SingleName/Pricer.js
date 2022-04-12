@@ -13,13 +13,15 @@ const PricingContainer = styled('div')`
   margin-bottom: 20px;
 `
 const Chain = styled(ChainDefault)`
-  display: none;
-  ${mq.medium`
-    display: block;
-    margin-top: 9px;
-    margin-left: 34px;
-    margin-right: 24px;
-  `}
+  display: block;
+  margin-top: 9px;
+  margin-left: 34px;
+  margin-right: 24px;
+  flex: none;
+  @media (max-width: 768px) {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
 `
 
 const Prompt = styled('div')`

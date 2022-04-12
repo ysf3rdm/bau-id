@@ -31,18 +31,19 @@ const TotalValue = styled(Value)`
   font-weight: 300;
   color: #47c799;
   font-size: 24px;
-  width: 779px;
-  white-space: nowrap;
   padding-bottom: 6px;
   span {
     color: #379070;
+  }
+  @media (max-width: 768px) {
+    font-size: 18px;
   }
 `
 
 const Description = styled('div')`
   font-family: Urbanist;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 14px;
   color: #adbbcd;
   margin-top: 3px;
   font-family: Urbanist;
@@ -52,6 +53,9 @@ const USD = styled('span')`
   font-size: 24px;
   color: #adbbcd !important;
   margin-left: 20px;
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `
 
 const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {

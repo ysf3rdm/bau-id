@@ -46,6 +46,8 @@ const LeftLink = styled(Link)`
   margin-right: 20px;
 `
 
+const RevealConfirmedContainer = styled('div')``
+
 function getCTA({
   step,
   incrementStep,
@@ -206,7 +208,7 @@ function getCTA({
       />
     ),
     REVEAL_CONFIRMED: (
-      <>
+      <RevealConfirmedContainer>
         <AddToCalendar
           css={css`
             margin-right: 20px;
@@ -241,7 +243,7 @@ function getCTA({
           <Pencil />
           {t('register.buttons.setreverserecord')}
         </Button>
-      </>
+      </RevealConfirmedContainer>
     )
   }
   return CTAs[step]
