@@ -5,7 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 const HOVER_TIMEOUT = 1000
 
 const CopyContainer = styled('span')`
-  margin: 0 5px;
+  margin: 3px 10px 0px 10px;
   position: relative;
   &:hover {
     cursor: pointer;

@@ -33,7 +33,9 @@ import {
   DetailsItem,
   DetailsKey,
   DetailsValue as DefaultDetailsValue,
-  DetailsContent
+  DetailsContent,
+  DetailsKeyValueContainer,
+  DetailsContentContainer
 } from './DetailsItem'
 import DefaultSaveCancel from './SaveCancel'
 import DefaultInput from '../Forms/Input'
@@ -115,6 +117,10 @@ const DetailsValue = styled(DefaultDetailsValue)`
       align-items: center;
       flex-direction: row;
   `}
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `
 
 const ExpiryDate = styled('span')`
@@ -132,11 +138,11 @@ const Input = styled(DefaultInput)`
 const Action = styled(motion.div)`
   margin-left: 0;
   margin-top: 20px;
-  ${mq.small`
-     margin-left: auto;
-  align-self: center;
-  margin-top: -10px;
-  `}
+  @media (min-width: 768px) {
+    margin-top: -10px;
+    margin-left: auto;
+    align-self: center;
+  }
 `
 
 const PendingTx = styled(DefaultPendingTx)`
@@ -718,22 +724,23 @@ function ViewOnly({
   }
   return (
     <DetailsEditableContainer>
-      <DetailsContent>
-        <DetailsKey>{t(`c.${keyName}`)}</DetailsKey>
-        <DetailsValue data-testid={`details-value-${keyName.toLowerCase()}`}>
-          {type === 'address' ? (
-            <AddressLink address={value} ariaLabel={t(`c.${keyName}`)}>
-              <SingleNameBlockies address={value} imageSize={24} />
-              {value}
-            </AddressLink>
-          ) : type === 'date' ? (
-            formatDate(value)
-          ) : (
-            value
-          )}
-          {copyToClipboard && <CopyToClipboard value={value} />}
-        </DetailsValue>
-
+      <DetailsContentContainer>
+        <DetailsKeyValueContainer>
+          <DetailsKey>{t(`c.${keyName}`)}</DetailsKey>
+          <DetailsValue data-testid={`details-value-${keyName.toLowerCase()}`}>
+            {type === 'address' ? (
+              <AddressLink address={value} ariaLabel={t(`c.${keyName}`)}>
+                <SingleNameBlockies address={value} imageSize={24} />
+                {value}
+              </AddressLink>
+            ) : type === 'date' ? (
+              formatDate(value)
+            ) : (
+              value
+            )}
+            {copyToClipboard && <CopyToClipboard value={value} />}
+          </DetailsValue>
+        </DetailsKeyValueContainer>
         <Action>
           {editButton ? (
             <Tooltip
@@ -768,7 +775,7 @@ function ViewOnly({
             />
           )}
         </Action>
-      </DetailsContent>
+      </DetailsContentContainer>
     </DetailsEditableContainer>
   )
 }

@@ -31,11 +31,8 @@ import DefaultAddressLink from '../Links/AddressLink'
 import { ReactComponent as DefaultOrangeExclamation } from '../Icons/OrangeExclamation.svg'
 
 const Details = styled('section')`
-  padding: 20px;
+  padding: 35px 27px;
   transition: 0.4s;
-  ${mq.small`
-    padding: 40px;
-  `}
 `
 
 const Loader = styled(DefaultLoader)`

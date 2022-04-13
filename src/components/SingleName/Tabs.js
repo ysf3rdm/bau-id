@@ -14,9 +14,7 @@ const TabLink = styled(Link)`
   padding: 5px 23px;
   border-radius: 10px;
   overflow: hidden;
-  ${mq.small`
-    padding: 10px 30px;
-  `}
+  padding: 5px 28px;
   &:hover {
     background: #5ed6ab;
     color: white !important;

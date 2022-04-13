@@ -75,8 +75,9 @@ function getButtonStyles({ type }) {
       `
     case 'disabled':
       return `
-        border: 2px solid #dfdfdf;
-        background: #dfdfdf;
+        border: 2px solid #B1B1B1;
+        background: transparent;
+        color: #B1B1B1;
         &:hover {
           cursor: default
         }
