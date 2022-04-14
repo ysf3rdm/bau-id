@@ -4,7 +4,7 @@ import mq from 'mediaQuery'
 const TopBar = styled('div')`
   margin-left: 27px;
   margin-right: 27px;
-  padding: 23px 20px 16px 0px;
+  padding: 23px 0px 16px 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -11,19 +11,11 @@ const SortContainer = styled('ul')`
 `
 
 const SortButton = styled('li')`
+  font-family: Urbanist;
+  font-weight: 600;
   color: #379070;
-  font-size: 18px;
-  padding: 0 10px 5px;
-  border-bottom: 1px #d2d2d2 solid;
-
-  &:hover {
-    border-bottom: none;
-  }
-  &.active {
-    cursor: pointer;
-    color: #379070;
-    border-bottom: 1px #379070 solid;
-  }
+  font-size: 24px;
+  text-decoration: underline;
 `
 
 export default function Sorting({
@@ -36,25 +28,6 @@ export default function Sorting({
 
   return (
     <SortContainer className={className}>
-      {/* <SortButton
-        className={
-          activeSort === 'alphabetical' || activeSort === 'alphabeticalDesc'
-            ? 'active'
-            : ''
-        }
-        onClick={() => {
-          switch (activeSort) {
-            case 'alphabetical':
-              return setActiveSort('alphabeticalDesc')
-            case 'alphabeticalDesc':
-              return setActiveSort('alphabetical')
-            default:
-              return setActiveSort('alphabetical')
-          }
-        }}
-      >
-        {t('address.sort.alphabetical')}
-      </SortButton> */}
       {activeFilter === 'registrant' && (
         <SortButton
           className={activeSort.type === 'expiryDate' ? 'active' : ''}

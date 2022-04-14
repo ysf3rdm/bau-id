@@ -5,7 +5,7 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 
 const EtherScanLinkContainer = styled('a')`
-  display: inline-block;
+  display: flex;
   align-items: center;
   text-overflow: ellipsis;
 
@@ -14,12 +14,7 @@ const EtherScanLinkContainer = styled('a')`
     transition: 0.1s;
     opacity: 0;
     flex-shrink: 0;
-  }
-
-  &:hover {
-    svg {
-      opacity: 1;
-    }
+    opacity: 1;
   }
 `
 
@@ -42,7 +37,7 @@ const EtherScanLink = ({ children, address, className }) => {
       href={`https://testnet.bscscan.com/address/${address}`}
       className={className}
     >
-      {children}
+      <div>{children}</div>
       <ExternalLinkIcon />
     </EtherScanLinkContainer>
   )

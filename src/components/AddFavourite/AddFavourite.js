@@ -103,6 +103,7 @@ const AddFavourite = ({ domain, isFavourite, isSubDomain }) => {
   )
 }
 
-const AddFavouriteContainer = styled('div')``
+const AddFavouriteContainer = styled('div')`
+`
 
 export default AddFavourite

@@ -37,7 +37,7 @@ const Warning = styled('div')`
 `
 
 const AddReverseRecordContainer = styled('div')`
-  background: #d7ece3;
+  background: #D7ECE3;
   border-radius: 13px;
   margin: 20px 30px 20px;
   padding: 10px 15px;
@@ -48,8 +48,7 @@ const AddReverseRecordContainer = styled('div')`
 `
 
 const SetReverseContainer = styled('div')`
-  margin-top: 15px;
-  padding: 10px;
+  padding: 10px 0px;
 `
 
 const Message = styled('div')`
@@ -88,14 +87,15 @@ const Check = styled(DefaultCheck)`
 
 const Explanation = styled('div')`
   font-family: Urbanist;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 14px;
-  color: #2b2b2b;
+  color: #379070;
   letter-spacing: 0;
   line-height: 25px;
   margin-bottom: 10px;
   max-width: 768px;
   hyphens: auto;
+  line-height: 16.8px;
 
   strong {
     color: red;
@@ -105,7 +105,8 @@ const Explanation = styled('div')`
 `
 
 const EditableNotSet = styled('div')`
-  color: #47c799;
+  color: #379070;
+  font-size: 16px;
 `
 
 const ButtonsContainer = styled('div')`
@@ -121,6 +122,38 @@ export const SINGLE_NAME = gql`
     networkId
   }
 `
+
+const colourStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    border: 0,
+    borderRadius: 8,
+    backgroundColor: '#F0F7F4',
+    color: '#379070'
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    color: "#379070",
+    fontSize: state.selectProps.myFontSize,
+  }),
+  singleValue: (provided, state) => ({
+    ...provided,
+    color: '#379070',
+    fontSize: state.selectProps.myFontSize
+  }),
+  clearIndicator: (provided, state) => ({
+    ...provided,
+    color: '#379070'
+  }),
+  dropdownIndicator: (provided, state) => ({
+    ...provided,
+    color: '#379070'
+  }),
+  placeholder: (provided, state) => ({
+    ...provided,
+    color: '#379070'
+  })
+};
 
 function AddReverseRecord({ account, currentAddress }) {
   const { t } = useTranslation()
@@ -287,6 +320,7 @@ function AddReverseRecord({ account, currentAddress }) {
                 value={newName}
                 onChange={handleSelect}
                 options={options}
+                styles={colourStyles}
               />
             ) : (
               <Warning>

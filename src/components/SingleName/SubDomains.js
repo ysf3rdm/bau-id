@@ -20,9 +20,13 @@ const SubDomainsContainer = styled('div')`
 `
 
 const SubDomainH2 = styled(H2)`
-  padding: 20px 0 50px;
+  padding: 20px 0 20px 0px;
+  font-family: 'Urbanist';
+  font-weight: 400;
+  font-size: 24px;
   text-align: center;
-  color: #ccd4da;
+  color: #B1B1B1;
+  font-style: italic;
 `
 
 function SubDomainsFromWeb3({ domain, canAddSubdomain }) {

@@ -9,15 +9,15 @@ import {
 } from 'utils/dates'
 
 const ExpiryDateContainer = styled('div')`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 100;
   order: 1;
   margin-right: 23px;
+  color: ${({ isExpiredSoon }) => (isExpiredSoon ? 'red' : '#B1B1B1')};
   @media (max-width: 768px) {
     font-size: 12px;
     margin-right: 0px;
   }
-  color: ${({ isExpiredSoon }) => (isExpiredSoon ? 'red' : '#adbbcd')};
 `
 
 const ExpiryDate = ({ expiryDate, domain, name }) => {

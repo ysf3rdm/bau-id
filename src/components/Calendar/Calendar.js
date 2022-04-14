@@ -21,6 +21,7 @@ const Button = styled(DefaultButton)`
   display: flex;
   align-items: center;
   padding: 0;
+  color: #379070;
 
   &:hover {
     border: none;

@@ -23,30 +23,22 @@ import AddFavourite from '../AddFavourite/AddFavourite'
 import warningImage from '../../assets/warning.svg'
 
 const ChildDomainItemContainer = styled('div')`
-  padding: 30px 0;
-  border-bottom: 1px dashed #d3d3d3;
+  padding: 16px 0;
+  border-bottom: 1px solid #5ED6AB;
   &:last-child {
     border: none;
   }
 `
 
 const DomainLink = styled(Link)`
-  display: grid;
-  grid-template-columns: 250px auto 50px;
-  grid-gap: 10px;
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   background-color: ${props => (props.warning ? 'hsla(37,91%,55%,0.1)' : '')};
   color: #2b2b2b;
   font-size: 22px;
   font-weight: 100;
   align-items: center;
-
-  ${p =>
-    !p.showBlockies &&
-    mq.small`
-        grid-template-columns: 1fr minmax(150px, 350px) 35px 23px;
-        grid-template-rows: 50px
-      `}
 
   span {
     align-self: center;
@@ -56,7 +48,7 @@ const DomainLink = styled(Link)`
     display: inherit;
     margin: 0;
     font-weight: 100;
-    font-size: 28px;
+    font-size: 24px;
     color: #379070;
   }
 
@@ -109,6 +101,20 @@ const WarningContainer = styled.div`
     color: #2c46a6;
   }
 `
+
+const LeftContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const CheckboxContainer = styled.div(`
+  order: 3;
+`)
+
+const AddFavoriteContainer = styled.div(`
+  order: 2;
+  margin-right: 20px;
+`)
 
 export default function ChildDomainItem({
   name,
@@ -185,64 +191,71 @@ export default function ChildDomainItem({
               <SingleNameBlockies imageSize={24} address={owner} />
             )}
             <h3>{label}</h3>
-            {canDeleteSubdomain ? (
-              <Bin
-                data-testid={'delete-name'}
-                onClick={e => {
-                  e.preventDefault()
-                  mutate()
-                }}
-              />
-            ) : (
-              <>
-                <ExpiryDate name={name} expiryDate={expiryDate} />
-                <AddFavourite
-                  domain={{ name }}
-                  isSubDomain={false}
-                  isFavourite={isFavourite}
+            <LeftContainer>
+              {canDeleteSubdomain ? (
+                <Bin
+                  data-testid={'delete-name'}
+                  onClick={e => {
+                    e.preventDefault()
+                    mutate()
+                  }}
                 />
-              </>
-            )}
-            {!isDecrypted && (
-              <Tooltip
-                text="<p>This name is only partially decoded. If you know the name, you can search for it in the search bar to decrypt it and renew</p>"
-                position="top"
-                border={true}
-                offset={{ left: 0, top: 10 }}
-              >
-                {({ tooltipElement, showTooltip, hideTooltip }) => {
-                  return (
-                    <div style={{ position: 'relative' }}>
-                      <QuestionMark
-                        onMouseOver={() => {
-                          showTooltip()
-                        }}
-                        onMouseLeave={() => {
-                          hideTooltip()
-                        }}
-                      />
-                      &nbsp;
-                      {tooltipElement}
-                    </div>
-                  )
-                }}
-              </Tooltip>
-            )}
-            {checkedBoxes && isDecrypted && (
-              <Checkbox
-                testid={`checkbox-${name}`}
-                checked={checkedBoxes[name]}
-                onClick={e => {
-                  e.preventDefault()
-                  setCheckedBoxes(prevState => {
-                    return { ...prevState, [name]: !prevState[name] }
-                  })
-                  if (checkedBoxes[name]) {
-                    setSelectAll(false)
-                  }
-                }}
-              />
-            )}
+              ) : (
+                <>
+                  <ExpiryDate name={name} expiryDate={expiryDate} />
+                  <AddFavoriteContainer>
+                    <AddFavourite
+                      domain={{ name }}
+                      isSubDomain={false}
+                      isFavourite={isFavourite}
+                    />
+                  </AddFavoriteContainer>
+                  
+                </>
+              )}
+              {!isDecrypted && (
+                <Tooltip
+                  text="<p>This name is only partially decoded. If you know the name, you can search for it in the search bar to decrypt it and renew</p>"
+                  position="top"
+                  border={true}
+                  offset={{ left: 0, top: 10 }}
+                >
+                  {({ tooltipElement, showTooltip, hideTooltip }) => {
+                    return (
+                      <div style={{ position: 'relative' }}>
+                        <QuestionMark
+                          onMouseOver={() => {
+                            showTooltip()
+                          }}
+                          onMouseLeave={() => {
+                            hideTooltip()
+                          }}
+                        />
+                        &nbsp;
+                        {tooltipElement}
+                      </div>
+                    )
+                  }}
+                </Tooltip>
+              )}
+              {checkedBoxes && isDecrypted && (
+                <CheckboxContainer>
+                  <Checkbox
+                    testid={`checkbox-${name}`}
+                    checked={checkedBoxes[name]}
+                    onClick={e => {
+                      e.preventDefault()
+                      setCheckedBoxes(prevState => {
+                        return { ...prevState, [name]: !prevState[name] }
+                      })
+                      if (checkedBoxes[name]) {
+                        setSelectAll(false)
+                      }
+                    }}
+                  />
+                </CheckboxContainer>
+              )}
+            </LeftContainer>
           </DomainLink>
         </React.Fragment>
       )}

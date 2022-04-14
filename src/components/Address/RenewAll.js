@@ -47,7 +47,6 @@ const RenewContainer = styled('div')`
 `
 
 const RenewSelected = styled(DefaultButton)`
-  margin-right: 20px;
   align-self: flex-start;
 `
 
