@@ -24,7 +24,7 @@ import warningImage from '../../assets/warning.svg'
 
 const ChildDomainItemContainer = styled('div')`
   padding: 16px 0;
-  border-bottom: 1px solid #5ED6AB;
+  border-bottom: 1px solid #5ed6ab;
   &:last-child {
     border: none;
   }
@@ -76,6 +76,10 @@ const DomainLink = styled(Link)`
       grid-row-start: auto;
     `}
   }
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 `
 
 const WarningImg = styled('img')`
@@ -102,13 +106,27 @@ const WarningContainer = styled.div`
   }
 `
 
+const ControlContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
 const LeftContainer = styled.div`
   display: flex;
   align-items: center;
 `
 
+const RightContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
 const CheckboxContainer = styled.div(`
   order: 3;
+  @media(max-width: 768px) {
+    margin-left: 21px;
+  }
 `)
 
 const AddFavoriteContainer = styled.div(`
@@ -136,6 +154,7 @@ export default function ChildDomainItem({
 
   let { t } = useTranslation()
   const smallBP = useMediaMin('small')
+  const mediumBp = useMediaMin('medium')
   const isDecrypted = checkIsDecrypted(name)
   let label = isDecrypted ? `${name}` : truncateUndecryptedName(name)
   if (isMigrated === false)
@@ -190,7 +209,35 @@ export default function ChildDomainItem({
             {showBlockies && smallBP && (
               <SingleNameBlockies imageSize={24} address={owner} />
             )}
-            <h3>{label}</h3>
+            <RightContainer>
+              <h3>{label}</h3>
+              {!mediumBp && (
+                <ControlContainer>
+                  <AddFavourite
+                    domain={{ name }}
+                    isSubDomain={false}
+                    isFavourite={isFavourite}
+                  />
+                  {checkedBoxes && isDecrypted && (
+                    <CheckboxContainer>
+                      <Checkbox
+                        testid={`checkbox-${name}`}
+                        checked={checkedBoxes[name]}
+                        onClick={e => {
+                          e.preventDefault()
+                          setCheckedBoxes(prevState => {
+                            return { ...prevState, [name]: !prevState[name] }
+                          })
+                          if (checkedBoxes[name]) {
+                            setSelectAll(false)
+                          }
+                        }}
+                      />
+                    </CheckboxContainer>
+                  )}
+                </ControlContainer>
+              )}
+            </RightContainer>
             <LeftContainer>
               {canDeleteSubdomain ? (
                 <Bin
@@ -203,14 +250,15 @@ export default function ChildDomainItem({
               ) : (
                 <>
                   <ExpiryDate name={name} expiryDate={expiryDate} />
-                  <AddFavoriteContainer>
-                    <AddFavourite
-                      domain={{ name }}
-                      isSubDomain={false}
-                      isFavourite={isFavourite}
-                    />
-                  </AddFavoriteContainer>
-                  
+                  {mediumBp && (
+                    <AddFavoriteContainer>
+                      <AddFavourite
+                        domain={{ name }}
+                        isSubDomain={false}
+                        isFavourite={isFavourite}
+                      />
+                    </AddFavoriteContainer>
+                  )}
                 </>
               )}
               {!isDecrypted && (
@@ -238,7 +286,7 @@ export default function ChildDomainItem({
                   }}
                 </Tooltip>
               )}
-              {checkedBoxes && isDecrypted && (
+              {checkedBoxes && isDecrypted && mediumBp && (
                 <CheckboxContainer>
                   <Checkbox
                     testid={`checkbox-${name}`}

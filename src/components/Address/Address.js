@@ -14,7 +14,7 @@ import {
 } from '../../graphql/queries'
 import { decryptName, checkIsDecrypted } from '../../api/labels'
 
-import mq from 'mediaQuery'
+import mq, { useMediaMin } from 'mediaQuery'
 
 import AddressContainer from '../Basic/MainContainer'
 import DefaultTopBar from '../Basic/TopBar'
@@ -48,12 +48,21 @@ const DEFAULT_RESULTS_PER_PAGE = 25
 
 const TopBar = styled(DefaultTopBar)`
   justify-content: space-between;
+  @media (max-width: 768px) {
+    display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 23px 0px 16px 0px;
+  }
 `
 
 const Title = styled(DefaultTitle)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `
 
 const EtherScanLink = styled(DefaultEtherScanLink)`
@@ -216,6 +225,9 @@ export default function Address({
   let [checkedBoxes, setCheckedBoxes] = useState({})
   let [years, setYears] = useState(1)
   const [selectAll, setSelectAll] = useState(false)
+
+  const mediumBP = useMediaMin('medium')
+
   useResetState(
     setYears,
     setCheckedBoxes,
@@ -280,10 +292,11 @@ export default function Address({
     'labelName',
     true
   )
+
   if (globalError.invalidCharacter || !decryptedDomains) {
     return <InvalidCharacterError message={globalError.invalidCharacter} />
   }
-  // let sortedDomains = decryptedDomains.sort(getSortFunc(activeSort))
+
   let domains = decryptedDomains
   const selectedNames = Object.entries(checkedBoxes)
     .filter(([key, value]) => value)
@@ -292,15 +305,6 @@ export default function Address({
   const allNames = domains
     .filter(d => d.domain.labelName)
     .map(d => d.domain.name)
-
-  const selectAllNames = () => {
-    const obj = allNames.reduce((acc, name) => {
-      acc[name] = true
-      return acc
-    }, {})
-
-    setCheckedBoxes(obj)
-  }
 
   const hasNamesExpiringSoon = !!domains.find(domain =>
     calculateIsExpiredSoon(domain.expiryDate)
@@ -335,7 +339,14 @@ export default function Address({
         <TopBar>
           <TopBarSubContainer>
             <SingleNameBlockies address={address} />
-            <Title>{address}</Title>
+            {mediumBP ? (
+              <Title>{address}</Title>
+            ) : (
+              <Title>{`${address.substring(0, 6)}....${address.substring(
+                address.length - 5,
+                address.length - 1
+              )}`}</Title>
+            )}
           </TopBarSubContainer>
           {etherScanAddr && (
             <EtherScanLink address={address}>

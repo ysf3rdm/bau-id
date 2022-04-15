@@ -37,9 +37,9 @@ const Warning = styled('div')`
 `
 
 const AddReverseRecordContainer = styled('div')`
-  background: #D7ECE3;
+  background: #d7ece3;
   border-radius: 13px;
-  margin: 20px 30px 20px;
+  margin: 20px;
   padding: 10px 15px;
 
   ${mq.medium`
@@ -133,8 +133,8 @@ const colourStyles = {
   }),
   option: (provided, state) => ({
     ...provided,
-    color: "#379070",
-    fontSize: state.selectProps.myFontSize,
+    color: '#379070',
+    fontSize: state.selectProps.myFontSize
   }),
   singleValue: (provided, state) => ({
     ...provided,
@@ -153,7 +153,7 @@ const colourStyles = {
     ...provided,
     color: '#379070'
   })
-};
+}
 
 function AddReverseRecord({ account, currentAddress }) {
   const { t } = useTranslation()

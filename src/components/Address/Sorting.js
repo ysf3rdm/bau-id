@@ -16,6 +16,9 @@ const SortButton = styled('li')`
   color: #379070;
   font-size: 24px;
   text-decoration: underline;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `
 
 export default function Sorting({
