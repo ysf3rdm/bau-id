@@ -49,14 +49,11 @@ export const RecordsItem = styled(DetailsItem)`
 `
 
 export const RecordsContent = styled('div')`
-  display: grid;
+  display: flex;
   width: 100%;
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  ${mq.medium`
-    display: flex;
-  `}
 `
 
 export const RecordsKey = styled(DetailsKey)`
@@ -64,24 +61,24 @@ export const RecordsKey = styled(DetailsKey)`
   margin-bottom: 0;
   max-width: 100%;
   margin-right: 10px;
-  ${mq.medium`
-    width: 200px;
-    margin-right: 0px;
-  `}
+  width: 200px;
+  margin-right: 0px;
 `
 
 export const RecordsSubKey = styled('div')`
   font-family: Urbanist Mono;
   font-weight: 500;
-  font-size: 14px;
   color: #adbbcd;
+  display: flex;
+  justify-content: center;
   letter-spacing: 0;
-
-  ${mq.small`
-    font-size: 16px;
-    max-width: 220px;
-    min-width: 180px;
-  `}
+  font-szie: 16px;
+  max-width: 220px;
+  min-width: 180px;
+  @media (max-width: 768px) {
+    max-width: auto;
+    min-width: 80px;
+  }
 `
 
 export const RecordsValue = styled(DetailsValue)`

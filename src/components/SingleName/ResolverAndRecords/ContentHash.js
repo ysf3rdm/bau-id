@@ -67,12 +67,10 @@ export const RecordsSubKey = styled('div')`
   font-size: 14px;
   color: #adbbcd;
   letter-spacing: 0;
-
-  ${mq.small`
-    font-size: 16px;
-    max-width: 220px;
-    min-width: 180px;
-  `}
+  display: flex;
+  justify-content: center;
+  min-width: 180px;
+  max-width: 220px;
 `
 
 export const RecordsValue = styled(DetailsValue)`

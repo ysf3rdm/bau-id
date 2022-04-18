@@ -162,6 +162,7 @@ const useChangedValidRecord = (
   newValueRef.current = newValue
 
   useEffect(() => {
+    console.log('newValue', newValue)
     if (newValue) {
       new Promise(async () => {
         const isValid = await throttledValidate(
