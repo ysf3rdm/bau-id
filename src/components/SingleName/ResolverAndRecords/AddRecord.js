@@ -12,12 +12,7 @@ import Button from '../../Forms/Button'
 import { DetailsKey } from '../DetailsItem'
 import DetailsItemInput from '../DetailsItemInput'
 import DefaultSelect from '../../Forms/Select'
-import DefaultAddressInput from '@siddomains/react-ens-address'
 import { asyncThrottle } from 'utils/utils'
-
-const AddressInput = styled(DefaultAddressInput)`
-  margin-bottom: 10px;
-`
 
 const ToggleAddRecord = styled('span')`
   font-family: Urbanist;
@@ -112,17 +107,6 @@ export const RecordsKey = styled(DetailsKey)`
   ${mq.medium`
     width: 200px;
     margin-right: 0px;
-  `}
-`
-const UploadBtn = styled(Button)`
-  flex-direction: row;
-  margin-bottom: 5px;
-  width: 100%;
-  background: #5284ff;
-  ${mq.small`
-    margin-left: 20px;
-    margin-bottom: 20px;
-    max-width: 150px;
   `}
 `
 
@@ -227,13 +211,6 @@ function Editable({
 
   const handleSubmit = e => {
     e.preventDefault()
-  }
-
-  const args = {
-    type: selectedRecord && selectedRecord.value ? selectedRecord.value : null,
-    value: newValue,
-    contentType: domain.contentType,
-    selectedKey: selectedKey && selectedKey.value
   }
 
   useChangedValidRecord(

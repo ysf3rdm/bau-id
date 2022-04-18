@@ -27,6 +27,9 @@ export function validateRecord({ key, value, contractFn, addr }) {
       if (key === 'ETH') {
         return addressUtils.isAddress(value)
       }
+      if (key === 'EVM') {
+        return addressUtils.isAddress(value)
+      }
       if (key.match(/_LEGACY/)) {
         return false
       }

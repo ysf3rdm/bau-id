@@ -285,8 +285,10 @@ const addOrUpdateRecord = (updateFn, addFn, updatedRecords) => record => {
 const validateAllRecords = (updatedRecords, validRecords) =>
   updatedRecords.length === validRecords.length
 
-const singleValidator = validRecords => record =>
-  validRecords.some(el => el.key === record.key && el.val === record.val)
+const singleValidator = validRecords => record => {
+  return validRecords.some(el => el.key === record.key && el.val === record.val)
+}
+  
 
 const singleValidating = validatingRecords => record =>
   validatingRecords.some(el => el.key === record.key && el.val === record.val)
