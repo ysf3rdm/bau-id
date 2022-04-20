@@ -14,7 +14,8 @@ export const DetailsItem = styled('div')`
 export const DetailsKeyValueContainer = styled('div')`
   display: flex;
   align-items: center;
-  @media (max-width: 768px) {}
+  @media (max-width: 768px) {
+  }
 `
 
 export const DetailsKey = styled('div')`
@@ -32,6 +33,9 @@ export const DetailsKey = styled('div')`
   min-width: 180px;
   @media (max-width: 768px) {
     font-size: 18px;
+    width: 146px;
+    min-width: 146px;
+    max-width: 146px;
   }
 `
 
@@ -58,6 +62,7 @@ export const DetailsValue = styled('div')`
 
   @media (max-width: 768px) {
     font-size: 18px;
+    white-space: normal;
   }
 `
 /* Container element for key/value */
@@ -70,6 +75,10 @@ export const DetailsContent = styled('div')`
   transition: 0.3s;
   flex-direction: row;
   align-items: center;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 `
 
 export const DetailsContentContainer = styled('div')`
@@ -85,4 +94,9 @@ export const DetailsContentContainer = styled('div')`
   @media (max-width: 768px) {
     display: block;
   }
+`
+
+export const DetailsContentSubContainer = styled('div')`
+  display: flex;
+  align-items: center;
 `

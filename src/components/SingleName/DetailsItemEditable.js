@@ -35,6 +35,7 @@ import {
   DetailsValue as DefaultDetailsValue,
   DetailsContent,
   DetailsKeyValueContainer,
+  DetailsContentSubContainer,
   DetailsContentContainer
 } from './DetailsItem'
 import DefaultSaveCancel from './SaveCancel'
@@ -113,7 +114,6 @@ const DetailsValue = styled(DefaultDetailsValue)`
   ${p =>
     p.expiryDate &&
     mq.medium`
-      margin-top: -16px;
       align-items: center;
       flex-direction: row;
   `}
@@ -452,7 +452,7 @@ const Editable = ({
     >
       <DetailsContent editing={editing}>
         {showLabel && (
-          <>
+          <DetailsContentSubContainer>
             <DetailsKey>{t(`c.${keyName}`)}</DetailsKey>
             <DetailsValue
               editing={editing}
@@ -513,7 +513,7 @@ const Editable = ({
               )}
               {copyToClipboard && <CopyToClipboard value={value} />}
             </DetailsValue>
-          </>
+          </DetailsContentSubContainer>
         )}
         {editing ? null : pending && !confirmed ? (
           <PendingTx

@@ -24,6 +24,9 @@ const Container = styled('div')`
 const Owner = styled('div')`
   color: #ccd4da;
   margin-right: 20px;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 const RightBar = styled('div')`

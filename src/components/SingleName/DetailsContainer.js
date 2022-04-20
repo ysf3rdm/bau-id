@@ -33,6 +33,9 @@ import { ReactComponent as DefaultOrangeExclamation } from '../Icons/OrangeExcla
 const Details = styled('section')`
   padding: 35px 27px;
   transition: 0.4s;
+  @media (max-width: 768px) {
+    padding: 20px 27px;
+  }
 `
 
 const Loader = styled(DefaultLoader)`
