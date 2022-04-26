@@ -21,71 +21,6 @@ import HamburgerIcon from 'components/Icons/HamburgerIcon'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
 import MobileMenu from 'components/Menu/MobileMenu'
 
-const HeroTop = styled('div')`
-  display: flex;
-  padding: 20px 60px;
-  justify-content: space-between;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100px;
-  align-items: center;
-  font-family: 'CocoSharp';
-  ${mq.xLarge`
-    padding: 20px 100px;
-  `}
-`
-
-const NoAccounts = styled(NoAccountsDefault)`
-  margin-top: 0;
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-`
-
-const HamburgerIconContainer = styled('div')`
-  display: flex;
-  align-items: center;
-  display: flex;
-  position: absolute;
-  top: 5px;
-  right: 28px;
-  height: 100px;
-  ${mq.lg`
-    display: none;
-  `}
-`
-
-const NetworkStatus = styled('div')`
-  color: white;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  text-transform: capitalize;
-  display: flex;
-  align-items: center;
-  z-index: 1;
-  letter-spacing: 0.08em;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-
-  &:before {
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translate(-5px, -50%);
-    content: '';
-    display: block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #fff;
-  }
-`
-
 const Nav = styled('div')`
   display: none;
   justify-content: center;
@@ -122,20 +57,6 @@ const ExternalLink = styled('a')`
   &:first-child {
     margin-left: 0;
   }
-`
-
-const Hero = styled('section')`
-  background: url(${bg});
-  background-size: cover;
-  padding: 60px 20px 20px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  ${mq.medium`
-    padding: 0 20px 0;
-  `}
 `
 
 const SearchContainer = styled('div')`
@@ -228,33 +149,6 @@ export const GET_ACCOUNT = gql`
   }
 `
 
-const TextLogoContainer = styled.div`
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  top: 30px;
-  color: #25ffb1;
-  font-weight: 700;
-  font-size: 40px;
-  letter-spacing: 5px;
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  z-index: 0;
-  @media (max-width: 768px) {
-    justify-content: flex-start;
-    margin-left: 28px;
-  }
-`
-
-const SmallLogoIconContainer = styled.div`
-  margin-right: 13px;
-  margin-top: 3px;
-  ${mq.medium`
-    display: none;
-  `}
-`
-
 const animation = {
   initial: {
     scale: 0,
@@ -305,60 +199,82 @@ export default ({ match }) => {
   }
 
   return (
-    <Hero>
-      <TextLogoContainer>
-        <SmallLogoIconContainer>
+    <section
+      style={{ background: `url(${bg})` }}
+      className="pt-[60px] px-5 pb-5 bg-cover relative flex justify-center items-center h-[100vh]"
+    >
+      <div className="flex items-center justify-start md:justify-center top-[30px] text-[#25ffb1] absolute font-bold font-[40px] tracking-[5px] w-full text-center z-0 ml-7 md:ml-0">
+        <div className="mr-[13px] mt-[3px] hidden md:block">
           <SmallLogoIcon />
-        </SmallLogoIconContainer>
+        </div>
         <div>SPACE ID</div>
-      </TextLogoContainer>
+      </div>
 
-      <HeroTop>
-        <NetworkStatus>
+      <div className="h-[100px] flex py-[20px] px-[60px] xl:px-[100px] justify-between absolute left-0 top-0 w-full items-center">
+        <div className="text-white font-bold font-[16px] leading-[19px] capitalize hidden md:flex items-center z-[1] tracking-[0.08em] before:absolute before:right-[100%] before:top-[50%] before:translate-x-[-5px] before:translate-y-[-50%] before:block before:w-[6px] before:h-[6px] before:rounded-[50%] before:bg-white">
           {!isSafeApp && (
-            <NoAccounts
-              active={isReadOnly ? false : true}
-              onClick={isReadOnly ? connectProvider : disconnectProvider}
-              buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
-            />
+            <div className="mt-0 w-full md:w-auto">
+              <NoAccountsDefault
+                active={isReadOnly ? false : true}
+                onClick={isReadOnly ? connectProvider : disconnectProvider}
+                buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
+              />
+            </div>
           )}
-        </NetworkStatus>
+        </div>
 
-        <Nav>
+        <div className="hidden lg:flex justify-center items-center z-[1] font-bold">
           {accounts?.length > 0 && !isReadOnly && (
-            <NavLink
-              active={url === '/address/' + accounts[0]}
-              to={'/address/' + accounts[0]}
-            >
-              {t('c.mynames')}
-            </NavLink>
+            <div className="ml-4 text-right tracking-[0.08em] min-w-[100px] first:ml-0">
+              <Link
+                style={{ color: '#25ffb1' }}
+                active={url === '/address/' + accounts[0]}
+                to={'/address/' + accounts[0]}
+              >
+                {t('c.mynames')}
+              </Link>
+            </div>
           )}
-          <NavLink to="/favourites">{t('c.favourites')}</NavLink>
-          <ExternalLink href={aboutPageURL()}>{t('c.about')}</ExternalLink>
-        </Nav>
-      </HeroTop>
-      <HamburgerIconContainer onClick={() => menuOpen()}>
+          <div className="ml-4 text-right tracking-[0.08em] min-w-[100px] font-bold first:ml-0">
+            <Link style={{ color: '#25ffb1' }} to="/favourites">
+              {t('c.favourites')}
+            </Link>
+          </div>
+          <a
+            className="text-right ml-4 text-[#25ffb1] min-w-[100px] font-bold font-[16px] leading-[19px] first:ml-0"
+            href={aboutPageURL()}
+          >
+            {t('c.about')}
+          </a>
+        </div>
+      </div>
+      <div
+        className="flex lg:hidden items-center flex absolute top-[5px] right-7 height-[100px]"
+        onClick={() => menuOpen()}
+      >
         <HamburgerIcon
           style={{
             color: '#25ffb1'
           }}
         />
-      </HamburgerIconContainer>
-      <SearchContainer>
+      </div>
+      <div className="my-0 mx-auto flex flex-col min-w-[100%] md:min-w-[60%]">
         <>
-          <LogoLarge
+          <img
+            className="w-[50%] my-0 mx-auto w-[120px]"
             initial={animation.initial}
             animate={animation.animate}
             src={ENSLogo}
             alt="SID logo"
           />
-          <PermanentRegistrarLogo
+          <h1
+            className=""
             initial={animation.initial}
             animate={animation.animate}
           />
           <Search />
         </>
-      </SearchContainer>
+      </div>
       {isMenuOpen && (
         <MobileMenu
           accounts={accounts}
@@ -370,6 +286,6 @@ export default ({ match }) => {
           menuOpen={menuOpen}
         />
       )}
-    </Hero>
+    </section>
   )
 }
