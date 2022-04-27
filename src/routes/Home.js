@@ -21,67 +21,6 @@ import HamburgerIcon from 'components/Icons/HamburgerIcon'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
 import MobileMenu from 'components/Menu/MobileMenu'
 
-const Nav = styled('div')`
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  a {
-    font-weight: 700;
-    color: white;
-  }
-  ${mq.lg`
-    display: flex;
-  `}
-`
-
-const NavLink = styled(Link)`
-  margin-left: 16px;
-  text-align: right;
-  color: #25ffb1 !important;
-  letter-spacing: 0.08em;
-  min-width: 100px !important;
-  &:first-child {
-    margin-left: 0;
-  }
-`
-
-const ExternalLink = styled('a')`
-  text-align: right;
-  margin-left: 16px;
-  color: #25ffb1 !important;
-  min-width: 100px !important;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  &:first-child {
-    margin-left: 0;
-  }
-`
-
-const SearchContainer = styled('div')`
-  margin: 0 auto 0;
-  display: flex;
-  flex-direction: column;
-  min-width: 100%;
-  ${mq.medium`
-    min-width: 60%;
-  `}
-  > h2 {
-    color: white;
-    font-size: 38px;
-    font-weight: 100;
-    margin-bottom: 10px;
-  }
-
-  > h3 {
-    color: white;
-    font-weight: 100;
-    font-size: 24px;
-    margin-top: 0;
-  }
-`
-
 const Search = styled(SearchDefault)`
   min-width: 90%;
   border-radius: 16px;
@@ -112,26 +51,6 @@ const Search = styled(SearchDefault)`
     border-radius: 0 6px 6px 0;
     background: rgba(147, 196, 178, 0.08);
   }
-`
-
-const LogoLarge = styled(motion.img)`
-  width: 50%;
-  margin: 0 auto 0;
-  width: 120px;
-`
-
-const PermanentRegistrarLogo = styled(motion.h1)`
-  font-family: Urbanist;
-  font-weight: 800;
-  font-size: 18px;
-  text-transform: uppercase;
-  color: #4258d3;
-  letter-spacing: 1.8px;
-  text-align: right;
-  line-height: 24px;
-  margin-top: 10px;
-  margin-bottom: 50px;
-  text-align: center;
 `
 
 export const HOME_DATA = gql`
@@ -171,10 +90,7 @@ export default ({ match }) => {
     data: { accounts }
   } = useQuery(GET_ACCOUNT)
 
-  const {
-    // data: { network, displayName, isReadOnly, isSafeApp }
-    data
-  } = useQuery(HOME_DATA, {
+  const { data } = useQuery(HOME_DATA, {
     variables: {
       address: accounts?.[0]
     }
@@ -204,10 +120,10 @@ export default ({ match }) => {
       className="pt-[60px] px-5 pb-5 bg-cover relative flex justify-center items-center h-[100vh]"
     >
       <div className="flex items-center justify-start md:justify-center top-[30px] text-[#25ffb1] absolute font-bold font-[40px] tracking-[5px] w-full text-center z-0 ml-7 md:ml-0">
-        <div className="mr-[13px] mt-[3px] hidden md:block">
+        <div className="mr-[17px] md:mr-[13px] md:mt-[3px] block md:hidden">
           <SmallLogoIcon />
         </div>
-        <div>SPACE ID</div>
+        <div className="text-[34px] font-bold">SPACE ID</div>
       </div>
 
       <div className="h-[100px] flex py-[20px] px-[60px] xl:px-[100px] justify-between absolute left-0 top-0 w-full items-center">
@@ -249,7 +165,7 @@ export default ({ match }) => {
         </div>
       </div>
       <div
-        className="flex lg:hidden items-center flex absolute top-[5px] right-7 height-[100px]"
+        className="flex lg:hidden items-center flex absolute top-[40px] right-7 height-[100px]"
         onClick={() => menuOpen()}
       >
         <HamburgerIcon
@@ -261,7 +177,7 @@ export default ({ match }) => {
       <div className="my-0 mx-auto flex flex-col min-w-[100%] md:min-w-[60%]">
         <>
           <img
-            className="w-[50%] my-0 mx-auto w-[120px]"
+            className="w-[50%] my-0 mx-auto w-[120px] mb-[50px]"
             initial={animation.initial}
             animate={animation.animate}
             src={ENSLogo}
@@ -272,6 +188,9 @@ export default ({ match }) => {
             initial={animation.initial}
             animate={animation.animate}
           />
+          {/* <div className='min-w-[90%] rounded-[16px] bg-[#93c4b214] border-[3px] border-[#25ffb1] h-[54px]'>
+            <SearchDefault />
+          </div> */}
           <Search />
         </>
       </div>

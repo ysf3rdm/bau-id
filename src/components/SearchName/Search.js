@@ -3,6 +3,7 @@ import styled from '@emotion/styled/macro'
 import { useTranslation } from 'react-i18next'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
+import cn from 'classnames'
 
 import { parseSearchTerm } from '../../utils/utils'
 import '../../api/subDomainRegistrar'
@@ -10,6 +11,8 @@ import { withRouter } from 'react-router'
 import searchIcon from '../../assets/search.svg'
 import mq from 'mediaQuery'
 import LanguageSwitcher from '../LanguageSwitcher'
+
+import './search.scss'
 
 const SearchForm = styled('form')`
   display: flex;
@@ -97,8 +100,8 @@ function Search({ history, className, style }) {
   }
   const hasSearch = inputValue && inputValue.length > 0 && isENSReady
   return (
-    <SearchForm
-      className={className}
+    <form
+      className={cn(`flex relative mainForm`, className)}
       style={style}
       action="#"
       hasSearch={hasSearch}
@@ -155,7 +158,7 @@ function Search({ history, className, style }) {
           />
         </svg>
       </button>
-    </SearchForm>
+    </form>
   )
 }
 
