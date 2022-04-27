@@ -14,68 +14,6 @@ import LanguageSwitcher from '../LanguageSwitcher'
 
 import './search.scss'
 
-const SearchForm = styled('form')`
-  display: flex;
-  position: relative;
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translate(0, -50%);
-    display: block;
-    width: 27px;
-    height: 27px;
-    background: url(${searchIcon}) no-repeat;
-  }
-
-  input {
-    padding: 20px 0 20px 55px;
-    width: 100%;
-    border: none;
-    border-radius: 0;
-    font-size: 18px;
-    font-family: Urbanist;
-    font-weight: 100;
-    ${mq.medium`
-      width: calc(100% - 162px);
-      font-size: 28px;
-    `}
-
-    &:focus {
-      outline: 0;
-    }
-
-    &::-webkit-input-placeholder {
-      /* Chrome/Opera/Safari */
-      color: #ccd4da;
-    }
-
-    @media (max-width: 768px) {
-      background: transparent !important;
-    }
-  }
-
-  button {
-    ${p => (p && p.hasSearch ? 'background: #5284ff;' : 'background: #c7d3e3;')}
-    color: white;
-    font-size: 22px;
-    font-family: Urbanist;
-    height: 90px;
-    width: 162px;
-    border: none;
-    display: none;
-    ${mq.medium`
-      display: block;
-    `}
-
-    &:hover {
-      ${p => (p && p.hasSearch ? 'cursor: pointer;' : 'cursor: default;')}
-    }
-  }
-`
-
 const SEARCH_QUERY = gql`
   query searchQuery {
     isENSReady @client

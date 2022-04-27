@@ -1,10 +1,11 @@
 import React, { createRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import styled from '@emotion/styled/macro'
 
 import { useOnClickOutside } from 'components/hooks'
 import RotatingSmallCaret from '../Icons/RotatingSmallCaret'
+
+import './LanguageSwitcher.scss'
 
 const LANGUAGES = [
   {
@@ -61,77 +62,6 @@ function getLang(lang) {
   return LANGUAGES.find(l => l.value === lang)
 }
 
-const ActiveLanguage = styled('div')`
-  color: #adbbcd;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  padding: 0 6px;
-  align-items: center;
-  span {
-    margin-right: 10px;
-    color: #ffffff;
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-`
-
-const LanguageSwitcherContainer = styled('div')`
-  background: white;
-  position: relative;
-  background: rgba(147, 196, 178, 0.08);
-`
-
-const Dropdown = styled(motion.div)`
-  position: absolute;
-  background: white;
-  top: 100%;
-  right: 0;
-  margin-top: 10px;
-  border-radius: 8px;
-  box-shadow: -4px 18px 70px 0 rgba(108, 143, 167, 0.32);
-  width: 230px;
-  z-index: 2;
-  max-height: 180px;
-  overflow-y: auto;
-  li {
-    color: #adbbcd;
-    padding: 20px 30px;
-    border-bottom: 1px solid #dfdfdf;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    &:hover {
-      color: #2b2b2b;
-      cursor: pointer;
-      div {
-        /* ball */
-        background: #5284ff;
-      }
-    }
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-`
-
-const Ball = styled('div')`
-  border-radius: 50%;
-  background: white;
-  width: 10px;
-  height: 10px;
-  box-shadow: 0 0 0 3px white, 0 0 0 4px #5284ff;
-  ${p =>
-    p.selected &&
-    `
-    background: #5284ff;
-  `}
-`
-
 function saveLanguageToLocalStorage(value) {
   window.localStorage.setItem('language', value)
 }
@@ -159,21 +89,23 @@ export default function LanguageSwitcher() {
   }
 
   return (
-    <LanguageSwitcherContainer>
-      <ActiveLanguage
+    <div className="relative bg-[#93c4b214]">
+      <div
+        className="text-[#adbbcd] uppercase flex justify-enter h-full py-0 px-[6px] items-center hover:cursor-pointer"
         ref={togglerRef}
         onClick={() => setShowDropdown(show => !show)}
       >
-        <span>{languageSelected.value}</span>
+        <span className="mr-0 text-white">{languageSelected.value}</span>
         <RotatingSmallCaret
           start="top"
           rotated={showDropdown ? 1 : 0}
           highlight={1}
         />
-      </ActiveLanguage>
+      </div>
       {showDropdown && (
         <AnimatePresence>
-          <Dropdown
+          <motion.div
+            className="absolute bg-white top-[100%] right-0 mt-[10px] rounded-[8px] shadow-dropdown w-[230px] z-[2] max-h-[180px] overflow-y-auto dropdown-container"
             ref={dropdownRef}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -186,13 +118,21 @@ export default function LanguageSwitcher() {
                   onClick={() => changeLanguage(language)}
                 >
                   {language.label}
-                  <Ball selected={languageSelected.value === language.value} />
+                  <div
+                    className="rounded-[50%] bg-white w-[10px] h-[10px] shadow-ball"
+                    style={{
+                      background:
+                        languageSelected.value === language.value
+                          ? '#5284ff'
+                          : 'inherit'
+                    }}
+                  />
                 </li>
               )
             })}
-          </Dropdown>
+          </motion.div>
         </AnimatePresence>
       )}
-    </LanguageSwitcherContainer>
+    </div>
   )
 }

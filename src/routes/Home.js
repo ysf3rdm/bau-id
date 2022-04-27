@@ -21,6 +21,8 @@ import HamburgerIcon from 'components/Icons/HamburgerIcon'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
 import MobileMenu from 'components/Menu/MobileMenu'
 
+import './Home.scss'
+
 const Search = styled(SearchDefault)`
   min-width: 90%;
   border-radius: 16px;
@@ -188,9 +190,6 @@ export default ({ match }) => {
             initial={animation.initial}
             animate={animation.animate}
           />
-          {/* <div className='min-w-[90%] rounded-[16px] bg-[#93c4b214] border-[3px] border-[#25ffb1] h-[54px]'>
-            <SearchDefault />
-          </div> */}
           <Search />
         </>
       </div>
