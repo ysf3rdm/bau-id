@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styled from '@emotion/styled/macro'
 import NoAccounts from './NoAccounts'
 
 export default ({
@@ -11,7 +10,6 @@ export default ({
   active,
   width
 }) => {
-  let [showModal, setShowModal] = useState(active)
   return (
     <div className={className}>
       <NoAccounts

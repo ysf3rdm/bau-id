@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from '@emotion/styled/macro'
 
-export default function SmallLogoIcon({ size = 36 }) {
+export default function SmallLogoIcon({ size = 36, className }) {
   return (
-    <div>
+    <div className={className}>
       <svg
         width={size}
         viewBox="0 0 36 36"

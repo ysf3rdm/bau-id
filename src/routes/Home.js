@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 import mq from 'mediaQuery'
 
+import { GET_REVERSE_RECORD } from 'graphql/queries'
+
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
 
 import SearchDefault from '../components/SearchName/Search'
@@ -21,39 +23,9 @@ import HamburgerIcon from 'components/Icons/HamburgerIcon'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
 import MobileMenu from 'components/Menu/MobileMenu'
 
+import UnstyledBlockies from 'components/Blockies'
+
 import './Home.scss'
-
-const Search = styled(SearchDefault)`
-  min-width: 90%;
-  border-radius: 16px;
-  background: rgba(147, 196, 178, 0.08);
-  border: 3px solid #25ffb1;
-  // overflow: hidden;
-  height: 54px;
-  ${mq.medium`
-    min-width: 780px;
-  `}
-
-  input {
-    width: 100%;
-    border-radius: 0px;
-    background: rgba(147, 196, 178, 0.08);
-    box-sizing: border-box;
-    color: #25ffb1;
-    &::placeholder {
-      color: rgba(147, 255, 216, 0.5);
-    }
-    ${mq.medium`
-      border-radius: 6px 0 0 6px;
-      font-size: 20px;
-    `}
-  }
-
-  button {
-    border-radius: 0 6px 6px 0;
-    background: rgba(147, 196, 178, 0.08);
-  }
-`
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -116,32 +88,70 @@ export default ({ match }) => {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  const {
+    data: { getReverseRecord } = {},
+    loading: reverseRecordLoading
+  } = useQuery(GET_REVERSE_RECORD, {
+    variables: {
+      address: accounts?.[0]
+    },
+    skip: !accounts?.length
+  })
+
   return (
     <section
       style={{ background: `url(${bg})` }}
-      className="pt-[60px] px-5 pb-5 bg-cover relative flex justify-center items-center h-[100vh]"
+      className="pt-[60px] px-5 pb-5 bg-cover relative flex justify-center h-[100vh]"
     >
-      <div className="flex items-center justify-start md:justify-center top-[30px] text-[#25ffb1] absolute font-bold font-[40px] tracking-[5px] w-full text-center z-0 ml-7 md:ml-0">
+      {/* <div className="flex items-center justify-start md:justify-center top-[30px] text-[#25ffb1] absolute font-bold font-[40px] tracking-[5px] w-full text-center z-0 ml-7 md:ml-0">
         <div className="mr-[17px] md:mr-[13px] md:mt-[3px] block md:hidden">
           <SmallLogoIcon />
         </div>
         <div className="text-[34px] font-bold">SPACE ID</div>
-      </div>
+      </div> */}
 
-      <div className="h-[100px] flex py-[20px] px-[60px] xl:px-[100px] justify-between absolute left-0 top-0 w-full items-center">
-        <div className="text-white font-bold font-[16px] leading-[19px] capitalize hidden md:flex items-center z-[1] tracking-[0.08em] before:absolute before:right-[100%] before:top-[50%] before:translate-x-[-5px] before:translate-y-[-50%] before:block before:w-[6px] before:h-[6px] before:rounded-[50%] before:bg-white">
+      <div className="h-[100px] flex py-[20px] px-[48px] xl:px-[48px] justify-between absolute left-0 top-0 items-center w-full">
+        <div className="text-[#1EEFA4] flex items-center">
+          <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+          <div className="font-semibold text-[18px] ml-[31px]">
+            About SpaceID
+          </div>
+        </div>
+
+        <div>
           {!isSafeApp && (
-            <div className="mt-0 w-full md:w-auto">
+            <div className="mt-0 w-full md:w-auto flex items-center">
               <NoAccountsDefault
                 active={isReadOnly ? false : true}
                 onClick={isReadOnly ? connectProvider : disconnectProvider}
-                buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
+                buttonText={isReadOnly ? t('c.connect') : network}
               />
+              {accounts && accounts[0] && (
+                <div className="flex items-center ml-4">
+                  {!reverseRecordLoading &&
+                  getReverseRecord &&
+                  getReverseRecord.avatar ? (
+                    <img
+                      src={imageUrl(
+                        getReverseRecord.avatar,
+                        displayName,
+                        network
+                      )}
+                    />
+                  ) : (
+                    <UnstyledBlockies
+                      className="rounded-full"
+                      address={accounts[0]}
+                      imageSize={45}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        <div className="hidden lg:flex justify-center items-center z-[1] font-bold">
+        {/* <div className="hidden lg:flex justify-center items-center z-[1] font-bold">
           {accounts?.length > 0 && !isReadOnly && (
             <div className="ml-4 text-right tracking-[0.08em] min-w-[100px] first:ml-0">
               <Link
@@ -164,7 +174,7 @@ export default ({ match }) => {
           >
             {t('c.about')}
           </a>
-        </div>
+        </div> */}
       </div>
       <div
         className="flex lg:hidden items-center flex absolute top-[40px] right-7 height-[100px]"
@@ -176,21 +186,17 @@ export default ({ match }) => {
           }}
         />
       </div>
-      <div className="my-0 mx-auto flex flex-col min-w-[100%] md:min-w-[60%]">
+      <div className="my-0 mx-auto min-w-[100%] md:min-w-[60%] mt-[30vh]">
         <>
-          <img
-            className="w-[50%] my-0 mx-auto w-[120px] mb-[50px]"
-            initial={animation.initial}
-            animate={animation.animate}
-            src={ENSLogo}
-            alt="SID logo"
-          />
+          <div className="flex justify-center text-[72px] text-[#1EEFA4] font-bold font-urbanist tracking-widest">
+            SPACE ID
+          </div>
           <h1
             className=""
             initial={animation.initial}
             animate={animation.animate}
           />
-          <Search />
+          <SearchDefault className="w-[512px] mx-auto" />
         </>
       </div>
       {isMenuOpen && (
