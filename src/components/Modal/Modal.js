@@ -4,23 +4,6 @@ import styled from '@emotion/styled/macro'
 import GlobalState from '../../globalState'
 import mq from 'mediaQuery'
 
-const ModalContainer = styled('div')`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-  ${mq.small`
-    padding: 20px;
-  `};
-`
-
 const ModalContent = styled('div')`
   background: white;
   padding: 20px;
@@ -44,14 +27,22 @@ const ModalContent = styled('div')`
       : null};
 `
 
-function Modal({ small, children, closeModal }) {
+function Modal({ small, children, closeModal, width = '40%' }) {
   const modalRoot = document.getElementById('modal-root')
   return ReactDOM.createPortal(
-    <ModalContainer show onClick={closeModal}>
-      <ModalContent onClick={event => event.stopPropagation()} small={small}>
+    <div
+      className="fixed left-0 top-0 w-full h-full p-0 flex justify-center items-center bg-black/50"
+      show
+      onClick={closeModal}
+    >
+      <div
+        className={`bg-[#0E4549] pt-6 pb-[36px] px-[40px] overflow-y-auto h-auto rounded-[24px] w-[${width}]`}
+        onClick={event => event.stopPropagation()}
+        small={small}
+      >
         {children}
-      </ModalContent>
-    </ModalContainer>,
+      </div>
+    </div>,
     modalRoot
   )
 }

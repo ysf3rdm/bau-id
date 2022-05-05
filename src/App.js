@@ -30,7 +30,6 @@ import DefaultLayout from './components/Layout/DefaultLayout'
 import { pageview, setupAnalytics } from './utils/analytics'
 import useReactiveVarListeners from './hooks/useReactiveVarListeners'
 import { GET_ERRORS } from './graphql/queries'
-
 //If we are targeting an IPFS build we need to use HashRouter
 const Router =
   process.env.REACT_APP_IPFS === 'True' ? HashRouter : BrowserRouter
@@ -65,9 +64,9 @@ const App = () => {
     setupAnalytics()
   }, [])
 
-  if (globalError.network) {
-    return <NetworkError message={globalError.network} />
-  }
+  // if (globalError.network) {
+  //   return <NetworkError message={globalError.network} />
+  // }
 
   return (
     <Router>

@@ -14,7 +14,8 @@ module.exports = {
         dropdown: '-4px 18px 70px 0 rgba(108, 143, 167, 0.32)'
       },
       fontFamily: {
-        urbanist: ['Urbanist']
+        urbanist: ['Urbanist'],
+        cocoSharp: ['CocoSharp']
       }
     }
   },

@@ -23,6 +23,11 @@ import RoundedIcon from 'components/Icons/RoundedIcon'
 
 import './Home.scss'
 import LanguageSwitcher from 'components/LanguageSwitcher'
+import Modal from 'components/Modal/Modal'
+
+import { GET_ERRORS } from 'graphql/queries'
+
+import useReactiveVarListeners from 'hooks/useReactiveVarListeners'
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -56,6 +61,11 @@ export default ({ match }) => {
   const dispatch = useDispatch()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  useReactiveVarListeners()
+  const {
+    data: { globalError }
+  } = useQuery(GET_ERRORS)
 
   const {
     data: { accounts }
@@ -100,14 +110,19 @@ export default ({ match }) => {
       style={{ background: `url(${bg})` }}
       className="pt-[60px] px-5 pb-5 bg-cover relative flex justify-center h-[100vh]"
     >
-      {/* <div className="flex items-center justify-start md:justify-center top-[30px] text-[#25ffb1] absolute font-bold font-[40px] tracking-[5px] w-full text-center z-0 ml-7 md:ml-0">
-        <div className="mr-[17px] md:mr-[13px] md:mt-[3px] block md:hidden">
-          <SmallLogoIcon />
-        </div>
-        <div className="text-[34px] font-bold">SPACE ID</div>
-      </div> */}
-
-      {/* Header component in the home page */}
+      {globalError.network && (
+        <Modal width="574px">
+          <div className="text-[white]">
+            <div className="text-[28px] font-cocoSharp text-center">
+              Unsupported Network :(
+            </div>
+            <div className="text-urbanist font-semibold text-center mt-4">
+              Please change your dapp browser to Binance Smart Chain Mainnet to
+              continue.
+            </div>
+          </div>
+        </Modal>
+      )}
       <div className="h-[100px] flex py-[20px] px-[48px] xl:px-[48px] justify-between absolute left-0 top-0 items-center w-full">
         <div className="text-[#1EEFA4] flex items-center">
           <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
@@ -116,7 +131,7 @@ export default ({ match }) => {
           </div>
         </div>
 
-        <div>
+        <div className="relative">
           {!isSafeApp && (
             <div className="mt-0 w-full md:w-auto flex items-center">
               <NoAccountsDefault
@@ -147,6 +162,32 @@ export default ({ match }) => {
               )}
             </div>
           )}
+          {/* <div className="absolute w-[266px] h-[208px] bg-[#0E4549] right-0 top-[60px] rounded-[24px]">
+            <div>
+              {accounts && accounts[0] && (
+                <div className="flex items-center ml-4">
+                  {!reverseRecordLoading &&
+                  getReverseRecord &&
+                  getReverseRecord.avatar ? (
+                    <img
+                      src={imageUrl(
+                        getReverseRecord.avatar,
+                        displayName,
+                        network
+                      )}
+                    />
+                  ) : (
+                    <UnstyledBlockies
+                      className="rounded-full"
+                      address={accounts[0]}
+                      imageSize={45}
+                    />
+                  )}
+                  <div>{accounts[0]}</div>
+                </div>
+              )}
+            </div>
+          </div> */}
         </div>
       </div>
 
