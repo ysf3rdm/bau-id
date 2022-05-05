@@ -108,8 +108,8 @@ export default function LanguageSwitcher() {
       </div>
       {showDropdown && (
         <AnimatePresence>
-          <motion.div
-            className="absolute bg-[#071A2F] bottom-0 right-0 mt-[10px] rounded-[8px] shadow-dropdown w-[230px] z-[2] max-h-[180px] overflow-y-auto dropdown-container border border-[##1EEFA4]"
+          <motion.ul
+            className="w-[140px] list-none absolute bg-[#071A2F] bottom-[35px] right-0 mt-[10px] rounded-[12px] shadow-dropdown z-[2] max-h-[120px] overflow-y-auto dropdown-container border border-[#1EEFA4]"
             ref={dropdownRef}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -118,23 +118,15 @@ export default function LanguageSwitcher() {
             {LANGUAGES.map(language => {
               return (
                 <li
+                  className="text-[#30DB9E] text-[16px] font-urbanist px-4 py-3"
                   key={language.value}
                   onClick={() => changeLanguage(language)}
                 >
                   {language.label}
-                  <div
-                    className="rounded-[50%] bg-white w-[10px] h-[10px] shadow-ball"
-                    style={{
-                      background:
-                        languageSelected.value === language.value
-                          ? '#5284ff'
-                          : 'inherit'
-                    }}
-                  />
                 </li>
               )
             })}
-          </motion.div>
+          </motion.ul>
         </AnimatePresence>
       )}
     </div>

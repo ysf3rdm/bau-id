@@ -1,22 +1,23 @@
-.dropdown-container {
-  li {
-    color: #adbbcd;
-    padding: 20px 30px;
-    border-bottom: 1px solid #dfdfdf;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    &:hover {
-      color: #2b2b2b;
-      cursor: pointer;
-      div {
-        /* ball */
-        background: #5284ff;
-      }
-    }
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-}
+// .dropdown-container {
+//   li {
+//     color: #30DB9E;
+//     font-family: ;
+//     padding: 20px 30px;
+//     border-bottom: 1px solid #dfdfdf;
+//     list-style: none;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     &:hover {
+//       color: #2b2b2b;
+//       cursor: pointer;
+//       div {
+//         /* ball */
+//         background: #5284ff;
+//       }
+//     }
+//     &:last-child {
+//       border-bottom: none;
+//     }
+//   }
+// }
