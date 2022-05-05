@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useQuery } from '@apollo/client'
-import { Link } from 'react-router-dom'
-import styled from '@emotion/styled/macro'
-import { motion } from 'framer-motion'
+import { useQuery, gql } from '@apollo/client'
 import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
-import mq from 'mediaQuery'
 
 import { GET_REVERSE_RECORD } from 'graphql/queries'
 
@@ -14,18 +10,19 @@ import { getAccounts, getHomeData } from 'app/slices/accountSlice'
 import SearchDefault from '../components/SearchName/Search'
 import NoAccountsDefault from '../components/NoAccounts/NoAccountsModal'
 import bg from '../assets/heroBG.jpg'
-import MaskGroup from '../assets/mask-group.png'
-import ENSLogo from '../components/HomePage/images/ENSLogo.svg'
-import { aboutPageURL } from '../utils/utils'
 import { connectProvider, disconnectProvider } from '../utils/providerUtils'
-import { gql } from '@apollo/client'
+import {} from '@apollo/client'
 import HamburgerIcon from 'components/Icons/HamburgerIcon'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
 import MobileMenu from 'components/Menu/MobileMenu'
 
 import UnstyledBlockies from 'components/Blockies'
+import TwitterIcon from 'components/Icons/TwitterIcon'
+import DiscordIcon from 'components/DiscordIcon'
+import RoundedIcon from 'components/Icons/RoundedIcon'
 
 import './Home.scss'
+import LanguageSwitcher from 'components/LanguageSwitcher'
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -110,6 +107,7 @@ export default ({ match }) => {
         <div className="text-[34px] font-bold">SPACE ID</div>
       </div> */}
 
+      {/* Header component in the home page */}
       <div className="h-[100px] flex py-[20px] px-[48px] xl:px-[48px] justify-between absolute left-0 top-0 items-center w-full">
         <div className="text-[#1EEFA4] flex items-center">
           <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
@@ -150,32 +148,20 @@ export default ({ match }) => {
             </div>
           )}
         </div>
-
-        {/* <div className="hidden lg:flex justify-center items-center z-[1] font-bold">
-          {accounts?.length > 0 && !isReadOnly && (
-            <div className="ml-4 text-right tracking-[0.08em] min-w-[100px] first:ml-0">
-              <Link
-                style={{ color: '#25ffb1' }}
-                active={url === '/address/' + accounts[0]}
-                to={'/address/' + accounts[0]}
-              >
-                {t('c.mynames')}
-              </Link>
-            </div>
-          )}
-          <div className="ml-4 text-right tracking-[0.08em] min-w-[100px] font-bold first:ml-0">
-            <Link style={{ color: '#25ffb1' }} to="/favourites">
-              {t('c.favourites')}
-            </Link>
-          </div>
-          <a
-            className="text-right ml-4 text-[#25ffb1] min-w-[100px] font-bold font-[16px] leading-[19px] first:ml-0"
-            href={aboutPageURL()}
-          >
-            {t('c.about')}
-          </a>
-        </div> */}
       </div>
+
+      {/* Footer component in the home page */}
+      <div className="h-[44px] flex py-[20px] px-[64px] xl:px-[48px] justify-between absolute left-0 bottom-0 items-center w-full bg-[#071A2F]">
+        <div className="flex items-center">
+          <TwitterIcon className="mr-2 text-[#30DB9E]" />
+          <DiscordIcon className="mr-2 text-[#30DB9E]" />
+          <RoundedIcon />
+        </div>
+        <div>
+          <LanguageSwitcher />
+        </div>
+      </div>
+
       <div
         className="flex lg:hidden items-center flex absolute top-[40px] right-7 height-[100px]"
         onClick={() => menuOpen()}
@@ -186,6 +172,7 @@ export default ({ match }) => {
           }}
         />
       </div>
+
       <div className="my-0 mx-auto min-w-[100%] md:min-w-[60%] mt-[30vh]">
         <>
           <div className="flex justify-center text-[72px] text-[#1EEFA4] font-bold font-urbanist tracking-widest">

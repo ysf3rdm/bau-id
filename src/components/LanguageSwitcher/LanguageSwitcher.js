@@ -6,6 +6,7 @@ import { useOnClickOutside } from 'components/hooks'
 import RotatingSmallCaret from '../Icons/RotatingSmallCaret'
 
 import './LanguageSwitcher.scss'
+import LanguageEarthIcon from 'components/Icons/LanguageEarthIcon'
 
 const LANGUAGES = [
   {
@@ -89,23 +90,26 @@ export default function LanguageSwitcher() {
   }
 
   return (
-    <div className="relative bg-[#93c4b214]">
+    <div className="relative">
       <div
         className="text-[#adbbcd] uppercase flex justify-enter h-full py-0 px-[6px] items-center hover:cursor-pointer"
         ref={togglerRef}
         onClick={() => setShowDropdown(show => !show)}
       >
-        <span className="mr-0 text-white">{languageSelected.value}</span>
-        <RotatingSmallCaret
+        <span className="mr-0 text-[#30DB9E] font-semibold font-urbanist text-[16px] mr-1">
+          {languageSelected.value}
+        </span>
+        <LanguageEarthIcon />
+        {/* <RotatingSmallCaret
           start="top"
           rotated={showDropdown ? 1 : 0}
           highlight={1}
-        />
+        /> */}
       </div>
       {showDropdown && (
         <AnimatePresence>
           <motion.div
-            className="absolute bg-white top-[100%] right-0 mt-[10px] rounded-[8px] shadow-dropdown w-[230px] z-[2] max-h-[180px] overflow-y-auto dropdown-container"
+            className="absolute bg-[#071A2F] bottom-0 right-0 mt-[10px] rounded-[8px] shadow-dropdown w-[230px] z-[2] max-h-[180px] overflow-y-auto dropdown-container border border-[##1EEFA4]"
             ref={dropdownRef}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
