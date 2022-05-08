@@ -61,6 +61,7 @@ export default ({ match }) => {
   const dispatch = useDispatch()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [avatarPopup, setAvatarPopup] = useState(false)
 
   useReactiveVarListeners()
   const {
@@ -105,6 +106,10 @@ export default ({ match }) => {
     skip: !accounts?.length
   })
 
+  const showAvatarPopup = () => {
+    setAvatarPopup(!avatarPopup)
+  }
+
   return (
     <section
       style={{ background: `url(${bg})` }}
@@ -140,7 +145,12 @@ export default ({ match }) => {
                 buttonText={isReadOnly ? t('c.connect') : network}
               />
               {accounts && accounts[0] && (
-                <div className="flex items-center ml-4">
+                <div
+                  className="flex items-center ml-4 cursor-pointer"
+                  onClick={() => {
+                    showAvatarPopup()
+                  }}
+                >
                   {!reverseRecordLoading &&
                   getReverseRecord &&
                   getReverseRecord.avatar ? (
@@ -162,10 +172,10 @@ export default ({ match }) => {
               )}
             </div>
           )}
-          {/* <div className="absolute w-[266px] h-[208px] bg-[#0E4549] right-0 top-[60px] rounded-[24px]">
-            <div>
-              {accounts && accounts[0] && (
-                <div className="flex items-center ml-4">
+          {accounts && accounts[0] && avatarPopup && (
+            <div className="absolute w-[266px] h-[208px] bg-[#0E4549] right-0 top-[60px] rounded-[24px] p-4">
+              <div>
+                <div className="flex items-center ml-4 border-b-[2px] border-[#7E9195] pb-4">
                   {!reverseRecordLoading &&
                   getReverseRecord &&
                   getReverseRecord.avatar ? (
@@ -183,11 +193,31 @@ export default ({ match }) => {
                       imageSize={45}
                     />
                   )}
-                  <div>{accounts[0]}</div>
+                  <div className="font-semibold text-[20px] font-urbanist text-white ml-4">{`${accounts[0].substring(
+                    0,
+                    6
+                  )}....${accounts[0].substring(
+                    accounts[0].length - 6,
+                    accounts[0].length
+                  )}`}</div>
                 </div>
-              )}
+              </div>
+              <div
+                className="font-semibold text-white font-urbanist text-[18px] text-center py-4"
+                onClick={showAvatarPopup}
+              >
+                <div className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]">
+                  Change Wallet
+                </div>
+                <div
+                  className="h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
+                  onClick={disconnectProvider}
+                >
+                  Disconnet
+                </div>
+              </div>
             </div>
-          </div> */}
+          )}
         </div>
       </div>
 
