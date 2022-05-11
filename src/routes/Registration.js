@@ -4,8 +4,8 @@ import React from 'react'
 export default function Registration() {
   return (
     <div className="pt-[20vh]">
-      <div>
-        <div className="text-[28px] text-[#1EEFA4] font-cocoSharp py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center">
+      <div className="flex justify-center">
+        <div className="text-[28px] text-[#1EEFA4] font-cocoSharp py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
           pepepefrog.bnb
         </div>
       </div>
