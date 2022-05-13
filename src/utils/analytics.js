@@ -44,13 +44,6 @@ export const setupAnalytics = () => {
   setUtm()
 }
 
-export const pageview = () => {
-  const page = window.location.pathname + window.location.search
-  if (isProduction() || isDev()) {
-    ReactGA.pageview(page)
-  }
-}
-
 export const trackReferral = async ({
   labels, // labels array
   transactionId, //hash

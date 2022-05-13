@@ -30,7 +30,6 @@ function Search({ history, className, style }) {
   let input
 
   const handleParse = e => {
-    console.log(e.target.value)
     if (!e.target.value) {
       setShowPopup(false)
     }
@@ -41,10 +40,9 @@ function Search({ history, className, style }) {
         .join('.')
     )
   }
-  const hasSearch = inputValue && inputValue.length > 0 && isENSReady
+  const hasSearch = inputValue && inputValue.length > 0
 
   const gotoDetailPage = () => {
-    console.log('owner', result.Owner)
     if (result.Owner) {
       history.push(`/address/${result.Owner}`)
     } else {
@@ -62,7 +60,6 @@ function Search({ history, className, style }) {
         onSubmit={async e => {
           e.preventDefault()
           if (!hasSearch) return
-          console.log('inputValue', inputValue)
 
           const params = {
             ChainID: 97,
@@ -75,30 +72,8 @@ function Search({ history, className, style }) {
             })
             .then(res => {
               setResult(res.data)
-              console.log('data', res.data)
               setShowPopup(true)
             })
-          // const type = await parseSearchTerm(inputValue)
-          // let searchTerm
-          // if (input && input.value) {
-          //   searchTerm = inputValue.toLowerCase()
-          // }
-          // if (!searchTerm || searchTerm.length < 1) {
-          //   return
-          // }
-
-          // if (type === 'address') {
-          //   history.push(`/address/${searchTerm}`)
-          //   return
-          // }
-
-          // input.value = ''
-          // if (type === 'supported' || type === 'short') {
-          //   history.push(`/name/${searchTerm}`)
-          //   return
-          // } else {
-          //   history.push(`/search/${searchTerm}`)
-          // }
         }}
       >
         <TwoPoints className="absolute text-[#1EEFA4] left-4 top-[11px]" />

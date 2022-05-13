@@ -1,47 +1,35 @@
-import React, { Fragment, lazy, useEffect, useState } from 'react'
-import {
-  HashRouter,
-  BrowserRouter,
-  Route as DefaultRoute,
-  Switch
-} from 'react-router-dom'
+import React, { Fragment, lazy, useEffect } from 'react'
+import { BrowserRouter, Route as DefaultRoute, Switch } from 'react-router-dom'
+
 import { useQuery } from '@apollo/client'
 
+// Load components
 const TestRegistrar = lazy(() => import('./routes/TestRegistrar'))
-
+const Registration = lazy(() => import('./routes/Registration'))
 const Home = lazy(() => import('./routes/Home'))
-
 const SearchResults = lazy(() => import('./routes/SearchResults'))
-
 const SingleName = lazy(() => import('./routes/SingleName'))
-
-const Favourites = lazy(() => import('./routes/Favourites'))
-
+const Favorites = lazy(() => import('./routes/Favorites'))
 const Faq = lazy(() => import('./routes/Faq'))
-
 const Address = lazy(() => import('./routes/AddressPage'))
-
 const Renew = lazy(() => import('./routes/Renew'))
-
 const ErrorPage = lazy(() => import('./routes/ErrorPage'))
 
-import { NetworkError, Error404 } from './components/Error/Errors'
+import { Error404 } from './components/Error/Errors'
+
 import DefaultLayout from './components/Layout/DefaultLayout'
-import { pageview, setupAnalytics } from './utils/analytics'
+import HomePageLayout from 'components/Layout/HomePageLayout'
+
 import useReactiveVarListeners from './hooks/useReactiveVarListeners'
 import { GET_ERRORS } from './graphql/queries'
-//If we are targeting an IPFS build we need to use HashRouter
-const Router =
-  process.env.REACT_APP_IPFS === 'True' ? HashRouter : BrowserRouter
 
-const HomePageLayout = ({ children }) => <Fragment>{children}</Fragment>
+// const HomePageLayout = ({ children }) => <Fragment>{children}</Fragment>
 
 const Route = ({
   component: Component,
   layout: Layout = DefaultLayout,
   ...rest
 }) => {
-  pageview()
   return (
     <DefaultRoute
       {...rest}
@@ -60,20 +48,20 @@ const App = () => {
     data: { globalError }
   } = useQuery(GET_ERRORS)
 
-  useEffect(() => {
-    setupAnalytics()
-  }, [])
-
-  // if (globalError.network) {
-  //   return <NetworkError message={globalError.network} />
-  // }
+  console.log('globalError', globalError)
 
   return (
-    <Router>
+    <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home} layout={HomePageLayout} />
+        <Route
+          exact
+          path="/register"
+          component={Registration}
+          layout={HomePageLayout}
+        />
         <Route path="/test-registrar" component={TestRegistrar} />
-        <Route path="/favourites" component={Favourites} />
+        <Route path="/favorites" component={Favorites} />
         <Route path="/faq" component={Faq} />
         <Route path="/my-bids" component={SearchResults} />
         <Route path="/how-it-works" component={SearchResults} />
@@ -85,7 +73,7 @@ const App = () => {
         <Route path="/error" component={ErrorPage} />
         <Route path="*" component={Error404} />
       </Switch>
-    </Router>
+    </BrowserRouter>
   )
 }
 export default App
