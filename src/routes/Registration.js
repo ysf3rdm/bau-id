@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import cn from 'classnames'
 import Increase from 'components/Increase'
 import EditIcon from 'components/Icons/EditIcon'
@@ -14,13 +15,17 @@ const progresses = [
 ]
 
 export default function Registration() {
-  const [step, setStep] = useState(1)
-  const [subStep, setSubStep] = useState(4)
+  const [step, setStep] = useState(0)
+  const [subStep, setSubStep] = useState(1)
+  const { domain } = useParams()
+
+  console.log('domain', domain)
+
   return (
     <div className="pt-[20vh]">
       <div className="flex justify-center">
         <div className="text-[28px] text-[#1EEFA4] font-cocoSharp py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
-          pepepefrog.bnb
+          {domain}.bnb
         </div>
       </div>
 

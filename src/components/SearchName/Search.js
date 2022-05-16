@@ -46,7 +46,7 @@ function Search({ history, className, style }) {
     if (result.Owner) {
       history.push(`/address/${result.Owner}`)
     } else {
-      history.push(`/search/${result.name}`)
+      history.push(`/register/${result.name}`)
     }
   }
 
@@ -98,10 +98,7 @@ function Search({ history, className, style }) {
         {/* <LanguageSwitcher /> */}
       </form>
       {showPopup && (
-        <div
-          className="absolute top-[55px] shadow-popup flex w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between"
-          onBlur={() => setShow}
-        >
+        <div className="absolute top-[55px] shadow-popup flex w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between">
           <div className="flex items-center">
             <FaceIcon
               className={cn(result.Owner ? 'text-[#ED7E17]' : 'text-[#30DB9E]')}

@@ -56,7 +56,7 @@ const App = () => {
         <Route exact path="/" component={Home} layout={HomePageLayout} />
         <Route
           exact
-          path="/register"
+          path="/register/:domain"
           component={Registration}
           layout={HomePageLayout}
         />

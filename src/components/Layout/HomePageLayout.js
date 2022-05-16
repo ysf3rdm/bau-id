@@ -7,11 +7,9 @@ import { GET_REVERSE_RECORD } from 'graphql/queries'
 
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
 
-import SearchDefault from 'components/SearchName/Search'
 import NoAccountsDefault from 'components/NoAccounts/NoAccounts'
 import bg from 'assets/heroBG.jpg'
 import { connectProvider, disconnectProvider } from 'utils/providerUtils'
-import HamburgerIcon from 'components/Icons/HamburgerIcon'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
 import MobileMenu from 'components/Menu/MobileMenu'
 
@@ -41,17 +39,6 @@ export const GET_ACCOUNT = gql`
     accounts
   }
 `
-
-const animation = {
-  initial: {
-    scale: 0,
-    opacity: 0
-  },
-  animate: {
-    opacity: 1,
-    scale: 1
-  }
-}
 
 export default ({ children }) => {
   const { t } = useTranslation()
@@ -116,8 +103,9 @@ export default ({ children }) => {
         <Modal width="574px">
           <div className="text-[white]">
             <div className="text-[28px] font-cocoSharp text-center">
-              Unsupported Network :(
+              Unsupported Network :(```
             </div>
+            /
             <div className="text-urbanist font-semibold text-center mt-4">
               Please change your dapp browser to Binance Smart Chain Mainnet to
               continue.
