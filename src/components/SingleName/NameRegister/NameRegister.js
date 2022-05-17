@@ -32,12 +32,6 @@ import ProgressRecorder from './ProgressRecorder'
 import useNetworkInfo from '../../NetworkInformation/useNetworkInfo'
 import { sendNotification } from './notification'
 import PremiumPriceOracle from './PremiumPriceOracle'
-const NameRegisterContainer = styled('div')`
-  padding: 15px 27px;
-  @media (max-width: 768px) {
-    padding: 15px 20px;
-  }
-`
 
 const PremiumWarning = styled('div')`
   background-color: #fef6e9;
@@ -259,89 +253,96 @@ const NameRegister = ({
   }
 
   return (
-    <NameRegisterContainer>
-      {step === 'PRICE_DECISION' && (
-        <Pricer
-          name={domain.label}
-          duration={duration}
-          years={years}
-          setYears={setYears}
-          ethUsdPriceLoading={ethUsdPriceLoading}
-          ethUsdPremiumPrice={currentPremium}
-          ethUsdPrice={ethUsdPrice}
-          gasPrice={gasPrice}
-          loading={rentPriceLoading}
-          price={getRentPrice}
-          premiumOnlyPrice={getPremiumPrice}
-          underPremium={underPremium}
-          displayGas={true}
-        />
-      )}
-      {showPremiumWarning ? (
-        <PremiumWarning>
-          <h2>{t('register.premiumWarning.title')}</h2>
-          <p>
-            {getPriceCurve === 'exponential'
-              ? t('register.premiumWarning.exponentialWarningDescripiton')
-              : t('register.premiumWarning.description')}
-          </p>
-          <LineGraph
-            startDate={releasedDate}
-            currentDate={now}
-            targetDate={targetDate}
-            endDate={zeroPremiumDate}
-            targetPremium={targetPremium}
+    <div className="mt-[60px]">
+      <div className="flex justify-center">
+        <div className="text-[28px] text-[#1EEFA4] font-cocoSharp py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
+          {domain.name}
+        </div>
+      </div>
+      <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
+        {step === 'PRICE_DECISION' && (
+          <Pricer
+            name={domain.label}
+            duration={duration}
+            years={years}
+            setYears={setYears}
+            ethUsdPriceLoading={ethUsdPriceLoading}
+            ethUsdPremiumPrice={currentPremium}
             ethUsdPrice={ethUsdPrice}
-            handleTooltip={handleTooltip}
-            underPremium={underPremium}
-            oracle={oracle}
+            gasPrice={gasPrice}
+            loading={rentPriceLoading}
             price={getRentPrice}
-            now={now}
             premiumOnlyPrice={getPremiumPrice}
+            underPremium={underPremium}
+            displayGas={true}
           />
+        )}
+        {showPremiumWarning ? (
+          <PremiumWarning>
+            <h2>{t('register.premiumWarning.title')}</h2>
+            <p>
+              {getPriceCurve === 'exponential'
+                ? t('register.premiumWarning.exponentialWarningDescripiton')
+                : t('register.premiumWarning.description')}
+            </p>
+            <LineGraph
+              startDate={releasedDate}
+              currentDate={now}
+              targetDate={targetDate}
+              endDate={zeroPremiumDate}
+              targetPremium={targetPremium}
+              ethUsdPrice={ethUsdPrice}
+              handleTooltip={handleTooltip}
+              underPremium={underPremium}
+              oracle={oracle}
+              price={getRentPrice}
+              now={now}
+              premiumOnlyPrice={getPremiumPrice}
+            />
 
-          <Premium
-            handlePremium={handlePremium}
-            targetPremium={targetPremium}
-            name={domain.name}
-            invalid={invalid}
-            targetDate={targetDate}
-          />
-        </PremiumWarning>
-      ) : (
-        ''
-      )}
-      <Explainer
-        step={step}
-        waitTime={waitTime}
-        waitPercentComplete={waitPercentComplete}
-      />
-      <Progress step={step} waitPercentComplete={waitPercentComplete} />
-      <CTA
-        hasSufficientBalance={hasSufficientBalance}
-        waitTime={waitTime}
-        incrementStep={incrementStep}
-        decrementStep={decrementStep}
-        secret={secret}
-        step={step}
-        label={domain.label}
-        duration={duration}
-        secondsPassed={secondsPassed}
-        timerRunning={timerRunning}
-        setTimerRunning={setTimerRunning}
-        setCommitmentTimerRunning={setCommitmentTimerRunning}
-        commitmentTimerRunning={commitmentTimerRunning}
-        setBlockCreatedAt={setBlockCreatedAt}
-        refetch={refetch}
-        refetchIsMigrated={refetchIsMigrated}
-        isAboveMinDuration={isAboveMinDuration}
-        readOnly={readOnly}
-        price={getRentPrice}
-        years={years}
-        premium={currentPremium}
-        ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
-      />
-    </NameRegisterContainer>
+            <Premium
+              handlePremium={handlePremium}
+              targetPremium={targetPremium}
+              name={domain.name}
+              invalid={invalid}
+              targetDate={targetDate}
+            />
+          </PremiumWarning>
+        ) : (
+          ''
+        )}
+        {/* <Explainer
+          step={step}
+          waitTime={waitTime}
+          waitPercentComplete={waitPercentComplete}
+        /> */}
+        <Progress step={step} waitPercentComplete={waitPercentComplete} />
+        <CTA
+          hasSufficientBalance={hasSufficientBalance}
+          waitTime={waitTime}
+          incrementStep={incrementStep}
+          decrementStep={decrementStep}
+          secret={secret}
+          step={step}
+          label={domain.label}
+          duration={duration}
+          secondsPassed={secondsPassed}
+          timerRunning={timerRunning}
+          setTimerRunning={setTimerRunning}
+          setCommitmentTimerRunning={setCommitmentTimerRunning}
+          commitmentTimerRunning={commitmentTimerRunning}
+          setBlockCreatedAt={setBlockCreatedAt}
+          refetch={refetch}
+          refetchIsMigrated={refetchIsMigrated}
+          isAboveMinDuration={isAboveMinDuration}
+          readOnly={readOnly}
+          price={getRentPrice}
+          years={years}
+          premium={currentPremium}
+          ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
+        />
+      </div>
+    </div>
   )
 }
 

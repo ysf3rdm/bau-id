@@ -19,35 +19,6 @@ import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
 import { ReactComponent as DefaultOrangeExclamation } from '../../Icons/OrangeExclamation.svg'
 import { useAccount } from '../../QueryAccount'
 
-const CTAContainer = styled('div')`
-  display: flex;
-  justify-content: flex-end;
-  align-items: end;
-`
-
-const Pencil = styled(DefaultPencil)`
-  margin-right: 5px;
-`
-
-const Prompt = styled('span')`
-  font-family: Urbanist;
-  color: #ff9052;
-  margin-right: 10px;
-  font-size: 11px;
-`
-
-const OrangeExclamation = styled(DefaultOrangeExclamation)`
-  margin-right: 5px;
-  height: 12px;
-  width: 12px;
-`
-
-const LeftLink = styled(Link)`
-  margin-right: 20px;
-`
-
-const RevealConfirmedContainer = styled('div')``
-
 function getCTA({
   step,
   incrementStep,
@@ -86,25 +57,18 @@ function getCTA({
         {mutate =>
           isAboveMinDuration && !readOnly ? (
             hasSufficientBalance ? (
-              <Button
-                style={{
-                  color: '#5ED6AB',
-                  background: 'none',
-                  border: '2px solid #5ED6AB'
-                }}
-                data-testid="request-register-button"
-                onClick={mutate}
-              >
-                {t('register.buttons.request')}
-              </Button>
+              <button data-testid="request-register-button" onClick={mutate} className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px]">
+                Register
+              </button>
             ) : (
               <>
-                <Prompt>
-                  <OrangeExclamation />
-                  {t('register.buttons.insufficient')}
-                </Prompt>
+                <span className="text-[#ff9052] mr-[10px] text-[11px]">
+                  <DefaultOrangeExclamation className="h-[12px] w-[12px] mr-[5px]" />
+                  Insufficient balance on your wallet. Fill in your wallet and
+                  reload the page.
+                </span>
                 <Button data-testid="request-register-button" type="disabled">
-                  {t('register.buttons.request')}
+                  register
                 </Button>
               </>
             )
@@ -127,14 +91,14 @@ function getCTA({
                       hideTooltip()
                     }}
                   >
-                    {t('register.buttons.request')}
+                    register
                   </Button>
                 )
               }}
             </Tooltip>
           ) : (
             <Button data-testid="request-register-button" type="disabled">
-              {t('register.buttons.request')}
+              register
             </Button>
           )
         }
@@ -143,7 +107,7 @@ function getCTA({
     COMMIT_SENT: <PendingTx txHash={txHash} />,
     COMMIT_CONFIRMED: (
       <Button data-testid="disabled-register-button" type="disabled">
-        {t('register.buttons.register')}
+        Register
       </Button>
     ),
     AWAITING_REGISTER: (
@@ -160,7 +124,7 @@ function getCTA({
           <>
             {hasSufficientBalance ? (
               <>
-                <Prompt>*{t('register.buttons.warning')}</Prompt>
+                <Prompt>*Click register to move to the 3rd step</Prompt>
                 <Button
                   style={{
                     color: '#5ED6AB',
@@ -170,12 +134,15 @@ function getCTA({
                   data-testid="register-button"
                   onClick={mutate}
                 >
-                  {t('register.buttons.register')}
+                  Register
                 </Button>
               </>
             ) : (
               <>
-                <Prompt>*{t('register.buttons.insufficient')}</Prompt>
+                <Prompt>
+                  *Insufficient balance on your wallet. Fill in your wallet and
+                  reload the page.
+                </Prompt>
                 <Button data-testid="register-button" type="disabled">
                   *
                 </Button>
@@ -208,7 +175,7 @@ function getCTA({
       />
     ),
     REVEAL_CONFIRMED: (
-      <RevealConfirmedContainer>
+      <div>
         <AddToCalendar
           css={css`
             margin-right: 20px;
@@ -220,15 +187,16 @@ function getCTA({
             .add(duration, 'seconds')
             .subtract(30, 'days')}
         />
-        <LeftLink
+        <Link
+          className="mr-[20px]"
           onClick={async () => {
             await Promise.all([refetch(), refetchIsMigrated()])
             history.push(`/name/${label}.bnb`)
           }}
           data-testid="manage-name-button"
         >
-          {t('register.buttons.manage')}
-        </LeftLink>
+          Manage name
+        </Link>
         <Button
           style={{
             color: '#5ED6AB',
@@ -240,10 +208,10 @@ function getCTA({
             history.push(`/address/${account}`)
           }}
         >
-          <Pencil />
-          {t('register.buttons.setreverserecord')}
+          <DefaultPencil className="mr-[5px]" />
+          Set as Primary SID Name
         </Button>
-      </RevealConfirmedContainer>
+      </div>
     )
   }
   return CTAs[step]
@@ -283,7 +251,7 @@ const CTA = ({
   }, [step])
 
   return (
-    <CTAContainer>
+    <div className="mt-8 flex justify-center items-end">
       {getCTA({
         step,
         incrementStep,
@@ -309,7 +277,7 @@ const CTA = ({
         ethUsdPrice,
         account
       })}
-    </CTAContainer>
+    </div>
   )
 }
 
