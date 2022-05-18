@@ -3,6 +3,7 @@ import styled from '@emotion/styled/macro'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@apollo/client'
 import moment from 'moment'
+import axios from 'axios'
 import { gql } from '@apollo/client'
 
 import {
@@ -69,6 +70,7 @@ const NameRegister = ({
   const [commitmentExpirationDate, setCommitmentExpirationDate] = useState(
     false
   )
+  const [signature, setSignature] = useState('')
   const {
     data: { getEthPrice: ethUsdPrice } = {},
     loading: ethUsdPriceLoading
@@ -84,6 +86,31 @@ const NameRegister = ({
     fetchPolicy: 'no-cache'
   })
   const account = useAccount()
+
+  useEffect(() => {
+    const fetchSignature = async () => {
+      const params = {
+        name: domain.label,
+        owner: account,
+        duration: new Date().getTime(),
+        resolver: '0xf24DE185899Ac1cFee32970A490A4cCf721f7125', // Is it Fixed one
+        addr: account, //Eth wallet of user connected with metamask
+        ChainID: 97
+      }
+      const result = await axios.post(
+        'https://space-id-348516.uw.r.appspot.com/sign',
+        params
+      )
+      console.log('result', result)
+      if (result?.data?.signature) {
+        setSignature(result.data.signature)
+      }
+
+      console.log('step', step)
+    }
+    fetchSignature()
+  }, [])
+
   const { data: { getBalance } = {} } = useQuery(GET_BALANCE, {
     variables: { address: account },
     fetchPolicy: 'no-cache'
@@ -260,7 +287,7 @@ const NameRegister = ({
         </div>
       </div>
       <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
-        {step === 'PRICE_DECISION' && (
+        {step === 'AWAITING_REGISTER' && (
           <Pricer
             name={domain.label}
             duration={duration}
@@ -277,7 +304,7 @@ const NameRegister = ({
             displayGas={true}
           />
         )}
-        {showPremiumWarning ? (
+        {/* {showPremiumWarning ? (
           <PremiumWarning>
             <h2>{t('register.premiumWarning.title')}</h2>
             <p>
@@ -310,14 +337,15 @@ const NameRegister = ({
           </PremiumWarning>
         ) : (
           ''
-        )}
+        )} */}
         {/* <Explainer
           step={step}
           waitTime={waitTime}
           waitPercentComplete={waitPercentComplete}
         /> */}
-        <Progress step={step} waitPercentComplete={waitPercentComplete} />
+        {/* <Progress step={step} waitPercentComplete={waitPercentComplete} /> */}
         <CTA
+          signature={signature}
           hasSufficientBalance={hasSufficientBalance}
           waitTime={waitTime}
           incrementStep={incrementStep}

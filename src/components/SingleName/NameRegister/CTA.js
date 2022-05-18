@@ -40,7 +40,8 @@ function getCTA({
   history,
   t,
   ethUsdPrice,
-  account
+  account,
+  signature
 }) {
   const CTAs = {
     PRICE_DECISION: (
@@ -57,7 +58,11 @@ function getCTA({
         {mutate =>
           isAboveMinDuration && !readOnly ? (
             hasSufficientBalance ? (
-              <button data-testid="request-register-button" onClick={mutate} className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px]">
+              <button
+                data-testid="request-register-button"
+                onClick={mutate}
+                className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px]"
+              >
                 Register
               </button>
             ) : (
@@ -113,29 +118,25 @@ function getCTA({
     AWAITING_REGISTER: (
       <Mutation
         mutation={REGISTER}
-        variables={{ label, duration, secret }}
+        variables={{ label, duration, signature }}
         onCompleted={data => {
-          const txHash = Object.values(data)[0]
-          setTxHash(txHash)
-          incrementStep()
+          console.log('register result:', data)
+          // const txHash = Object.values(data)[0]
+          // setTxHash(txHash)
+          // incrementStep()
         }}
       >
         {mutate => (
           <>
             {hasSufficientBalance ? (
               <>
-                <Prompt>*Click register to move to the 3rd step</Prompt>
-                <Button
-                  style={{
-                    color: '#5ED6AB',
-                    background: 'none',
-                    border: '2px solid #5ED6AB'
-                  }}
-                  data-testid="register-button"
+                <button
+                  data-testid="request-register-button"
                   onClick={mutate}
+                  className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px]"
                 >
                   Register
-                </Button>
+                </button>
               </>
             ) : (
               <>
@@ -235,7 +236,8 @@ const CTA = ({
   price,
   years,
   premium,
-  ethUsdPrice
+  ethUsdPrice,
+  signature
 }) => {
   const { t } = useTranslation()
   const history = useHistory()
@@ -275,7 +277,8 @@ const CTA = ({
         history,
         t,
         ethUsdPrice,
-        account
+        account,
+        signature
       })}
     </div>
   )
