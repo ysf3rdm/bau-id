@@ -15,10 +15,9 @@ const resolvers = {
     },
     async getEthPrice(_, {}) {
       try {
-        console.log('calling getEthPrice')
-        // const registrar = getRegistrar()
-        // const result = await registrar.getEthPrice()
-        return 291.17
+        const registrar = getRegistrar()
+        const result = await registrar.getEthPrice()
+        return result
       } catch (err) {
         console.log('await registrar.error----------------', err)
       }
