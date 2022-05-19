@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery } from '@apollo/client'
 import moment from 'moment'
 import axios from 'axios'
+import { ethers } from '@siddomains/ui'
 import { gql } from '@apollo/client'
 
 import {
@@ -240,7 +241,10 @@ const NameRegister = ({
   const { releasedDate, zeroPremiumDate, startingPremiumInUsd } = oracle
 
   if (!registrationOpen) return <NotAvailable domain={domain} />
-  if (ethUsdPriceLoading || gasPriceLoading) return <></>
+  console.log('ethUsdPriceLoading', ethUsdPriceLoading)
+  console.log('ethUsdPrice', ethUsdPrice)
+
+  if (ethUsdPriceLoading || gasPriceLoading) return <>Loading...</>
 
   if (!targetDate) {
     setTargetDate(zeroPremiumDate)
@@ -304,46 +308,6 @@ const NameRegister = ({
             displayGas={true}
           />
         )}
-        {/* {showPremiumWarning ? (
-          <PremiumWarning>
-            <h2>{t('register.premiumWarning.title')}</h2>
-            <p>
-              {getPriceCurve === 'exponential'
-                ? t('register.premiumWarning.exponentialWarningDescripiton')
-                : t('register.premiumWarning.description')}
-            </p>
-            <LineGraph
-              startDate={releasedDate}
-              currentDate={now}
-              targetDate={targetDate}
-              endDate={zeroPremiumDate}
-              targetPremium={targetPremium}
-              ethUsdPrice={ethUsdPrice}
-              handleTooltip={handleTooltip}
-              underPremium={underPremium}
-              oracle={oracle}
-              price={getRentPrice}
-              now={now}
-              premiumOnlyPrice={getPremiumPrice}
-            />
-
-            <Premium
-              handlePremium={handlePremium}
-              targetPremium={targetPremium}
-              name={domain.name}
-              invalid={invalid}
-              targetDate={targetDate}
-            />
-          </PremiumWarning>
-        ) : (
-          ''
-        )} */}
-        {/* <Explainer
-          step={step}
-          waitTime={waitTime}
-          waitPercentComplete={waitPercentComplete}
-        /> */}
-        {/* <Progress step={step} waitPercentComplete={waitPercentComplete} /> */}
         <CTA
           signature={signature}
           hasSufficientBalance={hasSufficientBalance}

@@ -169,7 +169,7 @@ export function useGasPrice(enabled = true) {
       const run = async () => {
         const provider = await getProvider()
         const blockDetails = await provider.getBlock('latest')
-        console.log(blockDetails)
+        console.log('blockDetails', blockDetails)
         if (blockDetails.baseFeePerGas) {
           const baseFeeWei = ethers.utils.formatUnits(
             blockDetails.baseFeePerGas,

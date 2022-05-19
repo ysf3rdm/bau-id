@@ -140,10 +140,10 @@ function getCTA({
               </>
             ) : (
               <>
-                <Prompt>
+                <span>
                   *Insufficient balance on your wallet. Fill in your wallet and
                   reload the page.
-                </Prompt>
+                </span>
                 <Button data-testid="register-button" type="disabled">
                   *
                 </Button>

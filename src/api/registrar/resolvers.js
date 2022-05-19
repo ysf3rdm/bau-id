@@ -14,13 +14,20 @@ const resolvers = {
       return registrar.getPriceCurve()
     },
     async getEthPrice(_, {}) {
-      const registrar = getRegistrar()
-      return registrar.getEthPrice()
+      try {
+        console.log('calling getEthPrice')
+        // const registrar = getRegistrar()
+        // const result = await registrar.getEthPrice()
+        return 291.17
+      } catch (err) {
+        console.log('await registrar.error----------------', err)
+      }
     },
     async getRentPrice(_, { label, duration }) {
       const registrar = getRegistrar()
-      const rent = await registrar.getRentPrice(label, duration)
-      return rent
+      const rentPrice = await registrar.getRentPrice(label, duration)
+      console.log('rentPrice', rentPrice)
+      return rentPrice[0]
     },
     async getRentPrices(_, { labels, duration }) {
       const registrar = getRegistrar()
@@ -35,12 +42,14 @@ const resolvers = {
       return registrar.getTimeUntilPremium(expires, amount)
     },
 
+    //Working
     async getMinimumCommitmentAge() {
       try {
         const registrar = getRegistrar()
         const minCommitmentAge = await registrar.getMinimumCommitmentAge()
         return parseInt(minCommitmentAge)
       } catch (e) {
+        console.log('error from here: please check!')
         console.log(e)
       }
     },
@@ -70,9 +79,6 @@ const resolvers = {
       return sendHelper(tx)
     },
     async register(_, { label, duration, signature }) {
-      console.log('label', label)
-      console.log('duration', duration)
-      console.log('signature', signature)
       const registrar = getRegistrar()
       const tx = await registrar.register(label, duration, signature)
 
