@@ -1,11 +1,8 @@
 import React, { useState, useReducer, useEffect } from 'react'
-import styled from '@emotion/styled/macro'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@apollo/client'
 import moment from 'moment'
 import axios from 'axios'
-import { ethers } from '@siddomains/ui'
-import { gql } from '@apollo/client'
 
 import {
   CHECK_COMMITMENT,
@@ -23,24 +20,13 @@ import { registerMachine, registerReducer } from './registerReducer'
 import { calculateDuration, yearInSeconds } from 'utils/dates'
 
 import Loader from 'components/Loader'
-import Explainer from './Explainer'
 import CTA from './CTA'
-import Progress from './Progress'
 import NotAvailable from './NotAvailable'
 import Pricer from '../Pricer'
-import LineGraph from './LineGraph'
-import Premium from './Premium'
 import ProgressRecorder from './ProgressRecorder'
 import useNetworkInfo from '../../NetworkInformation/useNetworkInfo'
 import { sendNotification } from './notification'
 import PremiumPriceOracle from './PremiumPriceOracle'
-
-const PremiumWarning = styled('div')`
-  background-color: #fef6e9;
-  color: black;
-  padding: 1em;
-  margin-bottom: 1em;
-`
 
 const NameRegister = ({
   domain,
@@ -57,7 +43,7 @@ const NameRegister = ({
     registerReducer,
     registerMachine.initialState
   )
-  let now, showPremiumWarning, currentPremium, underPremium
+  let now, currentPremium, underPremium
   const incrementStep = () => dispatch('NEXT')
   const decrementStep = () => dispatch('PREVIOUS')
   const [years, setYears] = useState(false)
@@ -79,7 +65,6 @@ const NameRegister = ({
   const { data: { getPriceCurve } = {} } = useQuery(GET_PRICE_CURVE)
   const { loading: gasPriceLoading, price: gasPrice } = useGasPrice()
   const { block } = useBlock()
-  const [invalid, setInvalid] = useState(false)
   const { data: { waitBlockTimestamp } = {} } = useQuery(WAIT_BLOCK_TIMESTAMP, {
     variables: {
       waitUntil
@@ -140,7 +125,6 @@ const NameRegister = ({
       fetchPolicy: 'no-cache'
     }
   )
-  let i = 0
 
   ProgressRecorder({
     checkCommitment,
@@ -231,11 +215,10 @@ const NameRegister = ({
   const oneMonthInSeconds = 2419200
   const twentyEightDaysInYears = oneMonthInSeconds / yearInSeconds
   const isAboveMinDuration = parsedYears > twentyEightDaysInYears
-  const waitPercentComplete = (secondsPassed / waitTime) * 100
 
   const expiryDate = moment(domain.expiryTime)
   const oracle = new PremiumPriceOracle(expiryDate, getPriceCurve)
-  const { releasedDate, zeroPremiumDate, startingPremiumInUsd } = oracle
+  const { releasedDate, zeroPremiumDate } = oracle
 
   if (!registrationOpen) return <NotAvailable domain={domain} />
 
@@ -249,33 +232,8 @@ const NameRegister = ({
   }
 
   if (block) {
-    showPremiumWarning = now.isBetween(releasedDate, zeroPremiumDate)
     currentPremium = oracle.getTargetAmountByDaysPast(oracle.getDaysPast(now))
     underPremium = now.isBetween(releasedDate, zeroPremiumDate)
-  }
-  const handleTooltip = tooltipItem => {
-    let delimitedParsedValue = tooltipItem.yLabel
-    if (targetPremium !== delimitedParsedValue) {
-      setTargetDate(oracle.getTargetDateByAmount(delimitedParsedValue))
-      setTargetPremium(delimitedParsedValue.toFixed(2))
-    }
-  }
-
-  const handlePremium = target => {
-    const { value } = target
-    const parsedValue = value.replace('$', '')
-    if (
-      !isNaN(parsedValue) &&
-      parseInt(parsedValue || 0) <= startingPremiumInUsd
-    ) {
-      if (targetPremium !== parsedValue) {
-        setTargetDate(oracle.getTargetDateByAmount(parsedValue))
-        setTargetPremium(parsedValue)
-      }
-      setInvalid(false)
-    } else {
-      setInvalid(true)
-    }
   }
 
   return (
