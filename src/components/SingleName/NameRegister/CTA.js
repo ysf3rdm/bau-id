@@ -16,6 +16,8 @@ import AddToCalendar from '../../Calendar/RenewalCalendar'
 import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
 import { useAccount } from '../../QueryAccount'
 
+import InsufficientBalanceModal from '../../Modal/InsufficientBalanceModal'
+
 function getCTA({
   step,
   incrementStep,
@@ -31,7 +33,8 @@ function getCTA({
   history,
   ethUsdPrice,
   account,
-  signature
+  signature,
+  setShowSufficientBalanceModal
 }) {
   const CTAs = {
     AWAITING_REGISTER: (
@@ -47,29 +50,18 @@ function getCTA({
       >
         {mutate => (
           <>
-            {hasSufficientBalance ? (
-              <>
-                <button
-                  data-testid="request-register-button"
-                  onClick={() => {
-                    if (hasSufficientBalance) mutate()
-                  }}
-                  className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px]"
-                >
-                  Register
-                </button>
-              </>
-            ) : (
-              <>
-                <span>
-                  *Insufficient balance on your wallet. Fill in your wallet and
-                  reload the page.
-                </span>
-                <Button data-testid="register-button" type="disabled">
-                  *
-                </Button>
-              </>
-            )}
+            <>
+              <button
+                data-testid="request-register-button"
+                onClick={() => {
+                  if (hasSufficientBalance) mutate()
+                  else setShowSufficientBalanceModal(true)
+                }}
+                className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px]"
+              >
+                Register
+              </button>
+            </>
           </>
         )}
       </Mutation>
@@ -164,6 +156,9 @@ const CTA = ({
   const history = useHistory()
   const account = useAccount()
   const [txHash, setTxHash] = useState(undefined)
+  const [showSufficientBalanceModal, setShowSufficientBalanceModal] = useState(
+    false
+  )
 
   useEffect(() => {
     return () => {
@@ -175,6 +170,11 @@ const CTA = ({
 
   return (
     <div className="mt-8 flex justify-center items-end">
+      {showSufficientBalanceModal && (
+        <InsufficientBalanceModal
+          closeModal={() => setShowSufficientBalanceModal(false)}
+        />
+      )}
       {getCTA({
         step,
         incrementStep,
@@ -199,7 +199,8 @@ const CTA = ({
         t,
         ethUsdPrice,
         account,
-        signature
+        signature,
+        setShowSufficientBalanceModal
       })}
     </div>
   )
