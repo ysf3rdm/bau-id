@@ -93,7 +93,7 @@ const NameRegister = ({
       const params = {
         name: domain.label,
         owner: account,
-        duration: new Date().getTime(),
+        duration: calculateDuration(years),
         resolver: '0xf24DE185899Ac1cFee32970A490A4cCf721f7125', // Is it Fixed one
         addr: account, //Eth wallet of user connected with metamask
         ChainID: 97
@@ -102,12 +102,9 @@ const NameRegister = ({
         'https://space-id-348516.uw.r.appspot.com/sign',
         params
       )
-      console.log('result', result)
       if (result?.data?.signature) {
         setSignature(result.data.signature)
       }
-
-      console.log('step', step)
     }
     fetchSignature()
   }, [])
@@ -241,8 +238,6 @@ const NameRegister = ({
   const { releasedDate, zeroPremiumDate, startingPremiumInUsd } = oracle
 
   if (!registrationOpen) return <NotAvailable domain={domain} />
-  console.log('ethUsdPriceLoading', ethUsdPriceLoading)
-  console.log('ethUsdPrice', ethUsdPrice)
 
   if (ethUsdPriceLoading || gasPriceLoading) return <>Loading...</>
 
