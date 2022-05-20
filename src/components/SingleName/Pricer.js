@@ -3,34 +3,7 @@ import styled from '@emotion/styled/macro'
 import Years from './NameRegister/Years'
 import Price from './NameRegister/Price'
 import EthRegistrationGasPrice from './NameRegister/EthRegistrationGasPrice'
-import { ReactComponent as DefaultOrangeExclamation } from '../Icons/OrangeExclamation.svg'
-import mq from 'mediaQuery'
-import { ReactComponent as ChainDefault } from '../Icons/chain.svg'
 import { useTranslation } from 'react-i18next'
-
-const PricingContainer = styled('div')`
-  display: flex;
-  margin-bottom: 20px;
-`
-const Chain = styled(ChainDefault)`
-  display: block;
-  margin-top: 9px;
-  margin-left: 34px;
-  margin-right: 24px;
-  flex: none;
-  @media (max-width: 768px) {
-    margin-left: 14px;
-    margin-right: 14px;
-  }
-`
-
-const Prompt = styled('div')`
-  color: #ff9052;
-  font-size: 11px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-`
 
 function PricerInner({
   years,
@@ -51,14 +24,11 @@ function PricerInner({
   const { t } = useTranslation()
   return (
     <>
-      {years <= 1 && (
-        <Prompt>
-          <div>*{t('register.increaseRegistrationPeriod')}</div>
-        </Prompt>
-      )}
-      <PricingContainer className={className} ref={reference}>
+      <div className="flex items-center" ref={reference}>
         <Years years={years} setYears={setYears} />
-        <Chain />
+        <span className="text-white font-bold font-urbanist text-[18px] flex pt-2 mr-[13px]">
+          =
+        </span>
         <Price
           price={price}
           premiumOnlyPrice={premiumOnlyPrice}
@@ -69,7 +39,7 @@ function PricerInner({
           ethUsdPremiumPrice={ethUsdPremiumPrice}
           underPremium={underPremium}
         />
-      </PricingContainer>
+      </div>
       {displayGas && gasPrice && (
         <div>
           <EthRegistrationGasPrice

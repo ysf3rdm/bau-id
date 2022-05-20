@@ -71,7 +71,6 @@ class TestRegistrar extends Component {
           {({ loading, error, data }) => {
             if (loading) return <div>Loading web3</div>
             const { web3, people } = data
-            console.log(data)
             return (
               <Fragment>
                 <div>
@@ -79,7 +78,6 @@ class TestRegistrar extends Component {
                     ? `Your EVM address is ${web3.accounts[0]}`
                     : 'Unlock metamask!'}
                 </div>
-                <div>{console.log(people)}</div>
                 <RegisterSubdomain />
               </Fragment>
             )
@@ -89,7 +87,6 @@ class TestRegistrar extends Component {
           {({ data, loading }) => {
             const { pendingTransactions } = data
             if (loading) return <div>Loading pending txs</div>
-            console.log(data)
             return (
               <div>
                 <h2>Pending Transactions</h2>
@@ -108,7 +105,6 @@ class TestRegistrar extends Component {
           {({ data, loading }) => {
             const { transactionHistory } = data
             if (loading) return <div>Loading pending txs</div>
-            console.log(data)
             return (
               <div>
                 <h2>Transaction History</h2>

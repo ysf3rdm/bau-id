@@ -1,65 +1,11 @@
-import React, { useState } from 'react'
-import styled from '@emotion/styled/macro'
-import { useTranslation, Trans } from 'react-i18next'
-import mq from 'mediaQuery'
+import React from 'react'
 import EthVal from 'ethval'
-import DefaultInput from '../../Forms/Input'
 const GWEI = 1000000000
 const COMMIT_GAS_WEI = 42000
 const REGISTER_GAS_WEI = 240000
 const TOGAL_GAS_WEI = COMMIT_GAS_WEI + REGISTER_GAS_WEI
 
-const PriceContainer = styled('div')`
-  width: 100%;
-  font-size: 24px;
-  ${mq.medium`
-    width: auto
-  `}
-  margin:5px 0;
-`
-
-const Value = styled('div')`
-  font-family: Urbanist;
-  font-weight: 100;
-  font-size: 24px;
-  color: #2b2b2b;
-  border-bottom: 1px solid #5ed6ab;
-  font-family: Urbanist;
-`
-
-const TotalValue = styled(Value)`
-  font-weight: 300;
-  color: #47c799;
-  font-size: 24px;
-  padding-bottom: 6px;
-  span {
-    color: #379070;
-  }
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
-`
-
-const Description = styled('div')`
-  font-family: Urbanist;
-  font-weight: 300;
-  font-size: 14px;
-  color: #adbbcd;
-  margin-top: 3px;
-  font-family: Urbanist;
-`
-
-const USD = styled('span')`
-  font-size: 24px;
-  color: #adbbcd !important;
-  margin-left: 20px;
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
-`
-
 const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
-  const { t } = useTranslation()
   const ethVal = new EthVal(`${price || 0}`).toEth()
   const registerGasSlow = new EthVal(`${TOGAL_GAS_WEI * gasPrice.slow}`).toEth()
   const registerGasFast = new EthVal(`${TOGAL_GAS_WEI * gasPrice.fast}`).toEth()
@@ -73,29 +19,27 @@ const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
     totalInUsdSlow = totalSlow.mul(ethUsdPrice)
     totalInUsdFast = totalFast.mul(ethUsdPrice)
   }
+
+  // totalInUsdFast
   return (
-    <PriceContainer>
-      <TotalValue>
-        {ethVal.toFixed(3)}
-        <span> BNBT + at most </span> {registerGasFast.toFixed(3)}
-        <span> BNBT gas</span>
-        <span>fee = at most</span> {totalFast.toFixed(3)}
-        <span> BNBT</span>
-        {ethVal && ethUsdPrice && (
-          <USD>
-            {' '}
-            ${totalInUsdFast.toFixed(2)}
-            USD
-          </USD>
-        )}
-      </TotalValue>
-      <Description>
-        {t('pricer.totalDescription', {
-          gasPriceToGweiSlow: gasPriceToGweiSlow.toFixed(0),
-          gasPriceToGweiFast: gasPriceToGweiFast.toFixed(0)
-        })}
-      </Description>
-    </PriceContainer>
+    <div>
+      <div className="text-white py-[25px] border-y border-white border-dashed mt-6 px-6">
+        <div className="flex justify-between">
+          <div className="font-semibild text-[14px]">Registeration Fee</div>
+          <div className="font-bold text-[16px]">{ethVal.toFixed(3)} BNBT</div>
+        </div>
+        <div className="flex justify-between mt-[14px]">
+          <div className="font-semibild text-[14px]">Gas Fee</div>
+          <div className="font-bold text-[16px]">
+            {registerGasFast.toFixed(3)} BNBT
+          </div>
+        </div>
+      </div>
+      <div className="text-center text-white mt-6">
+        <div className="text-[14px]">Total Cost</div>
+        <div className="font-bold text-[36px]">${totalInUsdFast.toFixed(2)}</div>
+      </div>
+    </div>
   )
 }
 

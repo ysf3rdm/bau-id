@@ -53,6 +53,7 @@ function fromPromise(promise, operation) {
       .catch(e => {
         console.error('fromPromise error: ', e)
         observer.error.bind(observer)
+        throw e
       })
   })
 }

@@ -46,7 +46,8 @@ function Search({ history, className, style }) {
     if (result.Owner) {
       history.push(`/address/${result.Owner}`)
     } else {
-      history.push(`/register/${result.name}`)
+      // history.push(`/register/${result.name}`)
+      history.push(`/name/${result.name}.bnb/register`)
     }
   }
 

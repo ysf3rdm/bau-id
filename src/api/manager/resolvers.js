@@ -169,47 +169,53 @@ export const handleMultipleTransactions = async (
 }
 
 async function getRegistrarEntry(name) {
-  const registrar = getRegistrar()
-  const nameArray = name.split('.')
-  if (nameArray.length > 3 || nameArray[1] !== 'bnb') {
-    return {}
-  }
+  try {
+    const registrar = getRegistrar()
+    const nameArray = name.split('.')
+    if (nameArray.length > 3 || nameArray[1] !== 'bnb') {
+      return {}
+    }
 
-  const entry = await registrar.getEntry(nameArray[0])
-  const {
-    registrant,
-    deedOwner,
-    state,
-    registrationDate,
-    migrationStartDate,
-    currentBlockDate,
-    transferEndDate,
-    gracePeriodEndDate,
-    revealDate,
-    value,
-    highestBid,
-    expiryTime,
-    isNewRegistrar,
-    available
-  } = entry
+    const entry = await registrar.getEntry(nameArray[0])
 
-  return {
-    name: `${name}`,
-    state: modeNames[state],
-    stateError: null, // This is only used for dnssec errors
-    registrationDate,
-    gracePeriodEndDate: gracePeriodEndDate || null,
-    migrationStartDate: migrationStartDate || null,
-    currentBlockDate: currentBlockDate || null,
-    transferEndDate: transferEndDate || null,
-    revealDate,
-    value,
-    highestBid,
-    registrant,
-    deedOwner,
-    isNewRegistrar: !!isNewRegistrar,
-    available,
-    expiryTime: expiryTime || null
+    const {
+      registrant,
+      deedOwner,
+      state,
+      registrationDate,
+      migrationStartDate,
+      currentBlockDate,
+      transferEndDate,
+      gracePeriodEndDate,
+      revealDate,
+      value,
+      highestBid,
+      expiryTime,
+      isNewRegistrar,
+      available
+    } = entry
+
+    return {
+      name: `${name}`,
+      state: modeNames[state],
+      stateError: null, // This is only used for dnssec errors
+      registrationDate,
+      gracePeriodEndDate: gracePeriodEndDate || null,
+      migrationStartDate: migrationStartDate || null,
+      currentBlockDate: currentBlockDate || null,
+      transferEndDate: transferEndDate || null,
+      revealDate,
+      value,
+      highestBid,
+      registrant,
+      deedOwner,
+      isNewRegistrar: !!isNewRegistrar,
+      available,
+      expiryTime: expiryTime || null
+    }
+  } catch (err) {
+    console.log('error here;')
+    console.log(err)
   }
 }
 

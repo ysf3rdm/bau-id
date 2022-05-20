@@ -16,10 +16,8 @@ const progresses = [
 
 export default function Registration() {
   const [step, setStep] = useState(0)
-  const [subStep, setSubStep] = useState(1)
+  const [subStep, setSubStep] = useState(2)
   const { domain } = useParams()
-
-  console.log('domain', domain)
 
   return (
     <div className="pt-[20vh]">
@@ -39,7 +37,7 @@ export default function Registration() {
                   {' '}
                   Registration Year{' '}
                 </div>
-              </div>
+              </div> 
 
               <span className="text-white font-bold font-urbanist text-[18px] flex pt-2 mr-[13px]">
                 =

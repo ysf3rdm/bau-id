@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import styled from '@emotion/styled/macro'
 import moment from 'moment'
 import { css } from 'emotion'
 import { useHistory } from 'react-router-dom'
@@ -9,178 +8,60 @@ import { useTranslation } from 'react-i18next'
 import EthVal from 'ethval'
 
 import { trackReferral } from '../../../utils/analytics'
-import { COMMIT, REGISTER } from '../../../graphql/mutations'
+import { REGISTER } from '../../../graphql/mutations'
 
-import Tooltip from 'components/Tooltip/Tooltip'
 import PendingTx from '../../PendingTx'
 import Button from '../../Forms/Button'
 import AddToCalendar from '../../Calendar/RenewalCalendar'
 import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
-import { ReactComponent as DefaultOrangeExclamation } from '../../Icons/OrangeExclamation.svg'
 import { useAccount } from '../../QueryAccount'
 
-const CTAContainer = styled('div')`
-  display: flex;
-  justify-content: flex-end;
-  align-items: end;
-`
-
-const Pencil = styled(DefaultPencil)`
-  margin-right: 5px;
-`
-
-const Prompt = styled('span')`
-  font-family: Urbanist;
-  color: #ff9052;
-  margin-right: 10px;
-  font-size: 11px;
-`
-
-const OrangeExclamation = styled(DefaultOrangeExclamation)`
-  margin-right: 5px;
-  height: 12px;
-  width: 12px;
-`
-
-const LeftLink = styled(Link)`
-  margin-right: 20px;
-`
-
-const RevealConfirmedContainer = styled('div')``
+import InsufficientBalanceModal from '../../Modal/InsufficientBalanceModal'
 
 function getCTA({
   step,
   incrementStep,
-  secret,
   duration,
   label,
   hasSufficientBalance,
   txHash,
-  setTxHash,
-  setCommitmentTimerRunning,
-  commitmentTimerRunning,
-  isAboveMinDuration,
   refetch,
   refetchIsMigrated,
-  readOnly,
   price,
   years,
   premium,
   history,
-  t,
   ethUsdPrice,
-  account
+  account,
+  signature,
+  setShowSufficientBalanceModal
 }) {
   const CTAs = {
-    PRICE_DECISION: (
-      <Mutation
-        mutation={COMMIT}
-        variables={{ label, secret, commitmentTimerRunning }}
-        onCompleted={data => {
-          const txHash = Object.values(data)[0]
-          setTxHash(txHash)
-          setCommitmentTimerRunning(true)
-          incrementStep()
-        }}
-      >
-        {mutate =>
-          isAboveMinDuration && !readOnly ? (
-            hasSufficientBalance ? (
-              <Button
-                style={{
-                  color: '#5ED6AB',
-                  background: 'none',
-                  border: '2px solid #5ED6AB'
-                }}
-                data-testid="request-register-button"
-                onClick={mutate}
-              >
-                {t('register.buttons.request')}
-              </Button>
-            ) : (
-              <>
-                <Prompt>
-                  <OrangeExclamation />
-                  {t('register.buttons.insufficient')}
-                </Prompt>
-                <Button data-testid="request-register-button" type="disabled">
-                  {t('register.buttons.request')}
-                </Button>
-              </>
-            )
-          ) : readOnly ? (
-            <Tooltip
-              text="<p>You are not connected to a web3 browser. Please connect to a web3 browser and try again</p>"
-              position="top"
-              border={true}
-              offset={{ left: -30, top: 10 }}
-            >
-              {({ showTooltip, hideTooltip }) => {
-                return (
-                  <Button
-                    data-testid="request-register-button"
-                    type="disabled"
-                    onMouseOver={() => {
-                      showTooltip()
-                    }}
-                    onMouseLeave={() => {
-                      hideTooltip()
-                    }}
-                  >
-                    {t('register.buttons.request')}
-                  </Button>
-                )
-              }}
-            </Tooltip>
-          ) : (
-            <Button data-testid="request-register-button" type="disabled">
-              {t('register.buttons.request')}
-            </Button>
-          )
-        }
-      </Mutation>
-    ),
-    COMMIT_SENT: <PendingTx txHash={txHash} />,
-    COMMIT_CONFIRMED: (
-      <Button data-testid="disabled-register-button" type="disabled">
-        {t('register.buttons.register')}
-      </Button>
-    ),
     AWAITING_REGISTER: (
       <Mutation
         mutation={REGISTER}
-        variables={{ label, duration, secret }}
+        variables={{ label, duration, signature }}
         onCompleted={data => {
-          const txHash = Object.values(data)[0]
-          setTxHash(txHash)
-          incrementStep()
+          console.log('register result:', data)
+        }}
+        onError={err => {
+          console.log('err', err)
         }}
       >
         {mutate => (
           <>
-            {hasSufficientBalance ? (
-              <>
-                <Prompt>*{t('register.buttons.warning')}</Prompt>
-                <Button
-                  style={{
-                    color: '#5ED6AB',
-                    background: 'none',
-                    border: '2px solid #5ED6AB'
-                  }}
-                  data-testid="register-button"
-                  onClick={mutate}
-                >
-                  {t('register.buttons.register')}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Prompt>*{t('register.buttons.insufficient')}</Prompt>
-                <Button data-testid="register-button" type="disabled">
-                  *
-                </Button>
-              </>
-            )}
+            <>
+              <button
+                data-testid="request-register-button"
+                onClick={() => {
+                  if (hasSufficientBalance) mutate()
+                  else setShowSufficientBalanceModal(true)
+                }}
+                className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px]"
+              >
+                Register
+              </button>
+            </>
           </>
         )}
       </Mutation>
@@ -208,7 +89,7 @@ function getCTA({
       />
     ),
     REVEAL_CONFIRMED: (
-      <RevealConfirmedContainer>
+      <div>
         <AddToCalendar
           css={css`
             margin-right: 20px;
@@ -220,15 +101,16 @@ function getCTA({
             .add(duration, 'seconds')
             .subtract(30, 'days')}
         />
-        <LeftLink
+        <Link
+          className="mr-[20px]"
           onClick={async () => {
             await Promise.all([refetch(), refetchIsMigrated()])
             history.push(`/name/${label}.bnb`)
           }}
           data-testid="manage-name-button"
         >
-          {t('register.buttons.manage')}
-        </LeftLink>
+          Manage name
+        </Link>
         <Button
           style={{
             color: '#5ED6AB',
@@ -240,10 +122,10 @@ function getCTA({
             history.push(`/address/${account}`)
           }}
         >
-          <Pencil />
-          {t('register.buttons.setreverserecord')}
+          <DefaultPencil className="mr-[5px]" />
+          Set as Primary SID Name
         </Button>
-      </RevealConfirmedContainer>
+      </div>
     )
   }
   return CTAs[step]
@@ -267,12 +149,16 @@ const CTA = ({
   price,
   years,
   premium,
-  ethUsdPrice
+  ethUsdPrice,
+  signature
 }) => {
   const { t } = useTranslation()
   const history = useHistory()
   const account = useAccount()
   const [txHash, setTxHash] = useState(undefined)
+  const [showSufficientBalanceModal, setShowSufficientBalanceModal] = useState(
+    false
+  )
 
   useEffect(() => {
     return () => {
@@ -283,7 +169,12 @@ const CTA = ({
   }, [step])
 
   return (
-    <CTAContainer>
+    <div className="mt-8 flex justify-center items-end">
+      {showSufficientBalanceModal && (
+        <InsufficientBalanceModal
+          closeModal={() => setShowSufficientBalanceModal(false)}
+        />
+      )}
       {getCTA({
         step,
         incrementStep,
@@ -307,9 +198,11 @@ const CTA = ({
         history,
         t,
         ethUsdPrice,
-        account
+        account,
+        signature,
+        setShowSufficientBalanceModal
       })}
-    </CTAContainer>
+    </div>
   )
 }
 
