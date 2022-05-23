@@ -103,9 +103,8 @@ export default ({ children }) => {
         <Modal width="574px">
           <div className="text-[white]">
             <div className="text-[28px] font-cocoSharp text-center">
-              Unsupported Network :(```
+              Unsupported Network :(
             </div>
-            /
             <div className="text-urbanist font-semibold text-center mt-4">
               Please change your dapp browser to Binance Smart Chain Mainnet to
               continue.
