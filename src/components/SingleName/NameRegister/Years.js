@@ -7,8 +7,14 @@ const Years = ({ years, setYears }) => {
   return (
     <div>
       <div>
-        <Increase className="mr-[13px]" years={years} decrementYears={decrementYears} incrementYears={incrementYears} setYears={setYears} />
-        <div className="text-center text-white font-semibold mt-1">
+        <Increase
+          className="mr-[13px]"
+          years={years}
+          decrementYears={decrementYears}
+          incrementYears={incrementYears}
+          setYears={setYears}
+        />
+        <div className="text-center text-white font-semibold mt-1 text-[14px]">
           {' '}
           Registration Year{' '}
         </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import SearchDefault from 'components/SearchName/Search'
+import Search from 'components/SearchName/Search'
 
 const animation = {
   initial: {
@@ -24,7 +24,7 @@ export default () => {
           initial={animation.initial}
           animate={animation.animate}
         />
-        <SearchDefault className="w-[512px] mx-auto" />
+        <Search className="w-[512px] mx-auto" />
       </>
     </div>
   )

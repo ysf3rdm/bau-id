@@ -29,6 +29,8 @@ export const globalErrorReactive = makeVar({
   invalidCharacter: null
 })
 
+export const loadingWalletReactive = makeVar(false)
+
 export const transactionHistoryReactive = makeVar({ transactionHistory: [] })
 
 export const namesReactive = makeVar([])

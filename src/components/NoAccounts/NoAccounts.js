@@ -1,4 +1,5 @@
 import React from 'react'
+import AnimationSpin from 'components/AnimationSpin'
 
 export default function NoAccounts({
   colour = '#ffffff',
@@ -6,6 +7,7 @@ export default function NoAccounts({
   onClick,
   buttonText,
   active,
+  loadingWallet,
   width
 }) {
   return (
@@ -17,8 +19,13 @@ export default function NoAccounts({
       width={width}
       className="bg-[#0ea59c]/[0.85] px-[26px] py-[7px] rounded-[16px] backdrop-blur-[10px] cursor-pointer"
     >
-      <span className="text-white text-[18px] font-semibold font-urbanist">
-        {buttonText}
+      <span className="text-white text-[18px] font-semibold font-urbanist uppercase flex items-center">
+        {buttonText}{' '}
+        {loadingWallet && (
+          <div className="ml-2">
+            <AnimationSpin />
+          </div>
+        )}
       </span>
     </div>
   )

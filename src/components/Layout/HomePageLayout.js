@@ -31,6 +31,7 @@ export const HOME_DATA = gql`
     displayName(address: $address)
     isReadOnly
     isSafeApp
+    loadingWallet
   }
 `
 
@@ -74,7 +75,7 @@ export default ({ children }) => {
     }
   }, [data])
 
-  const { network, displayName, isReadOnly, isSafeApp } = data
+  const { network, displayName, isReadOnly, isSafeApp, loadingWallet } = data
 
   const menuOpen = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -94,10 +95,20 @@ export default ({ children }) => {
     setAvatarPopup(!avatarPopup)
   }
 
+  const changeToBSCChain = async () => {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x61' }] // chainId must be in hexadecimal numbers
+    })
+    window.location.reload()
+  }
+
+  console.log('loadingWallet', loadingWallet)
+
   return (
     <section
       style={{ background: `url(${bg})` }}
-      className="pt-[60px] px-5 pb-5 bg-cover relative flex justify-center h-[100vh]"
+      className="pt-[60px] px-5 pb-5 bg-cover relative flex justify-center min-h-[100vh]"
     >
       {globalError.network && (
         <Modal width="574px">
@@ -108,6 +119,14 @@ export default ({ children }) => {
             <div className="text-urbanist font-semibold text-center mt-4">
               Please change your dapp browser to Binance Smart Chain Mainnet to
               continue.
+            </div>
+            <div className="flex justify-center">
+              <button
+                onClick={() => changeToBSCChain()}
+                className="mt-[36px] bg-[#30DB9E] rounded-full text-[14px] font-[urbanist] py-2 px-[36px] text-[#134757] font-semibold"
+              >
+                Switch to BSC
+              </button>
             </div>
           </div>
         </Modal>
@@ -124,8 +143,8 @@ export default ({ children }) => {
           {!isSafeApp && (
             <div className="mt-0 w-full md:w-auto flex items-center">
               <NoAccountsDefault
-                active={isReadOnly ? false : true}
-                onClick={isReadOnly ? connectProvider : disconnectProvider}
+                onClick={connectProvider}
+                loadingWallet={loadingWallet}
                 buttonText={isReadOnly ? t('c.connect') : network}
               />
               {accounts && accounts[0] && (
@@ -157,7 +176,7 @@ export default ({ children }) => {
             </div>
           )}
           {accounts && accounts[0] && avatarPopup && (
-            <div className="absolute w-[266px] h-[208px] bg-[#0E4549] right-0 top-[60px] rounded-[24px] p-4">
+            <div className="absolute w-[266px] h-auto bg-[#0E4549] right-0 top-[60px] rounded-[24px] p-4">
               <div>
                 <div className="flex items-center border-b-[2px] border-[#7E9195] pb-4 flex justify-between">
                   {!reverseRecordLoading &&
@@ -187,12 +206,12 @@ export default ({ children }) => {
                 </div>
               </div>
               <div
-                className="font-semibold text-white font-urbanist text-[18px] text-center py-4"
+                className="font-semibold text-white font-urbanist text-[18px] text-center pt-4"
                 onClick={showAvatarPopup}
               >
-                <div className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]">
+                {/* <div className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]">
                   Change Wallet
-                </div>
+                </div> */}
                 <div
                   className="h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
                   onClick={disconnectProvider}

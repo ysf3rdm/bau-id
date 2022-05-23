@@ -1,46 +1,22 @@
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 import cn from 'classnames'
 import axios from 'axios'
+import { Formik } from 'formik'
 
-import { parseSearchTerm } from '../../utils/utils'
 import '../../api/subDomainRegistrar'
 import { withRouter } from 'react-router'
 
 import './search.scss'
 import TwoPoints from 'components/Icons/TwoPoints'
 import SearchIcon from 'components/Icons/SearchIcon'
-import FaceIcon from 'components/Icons/FaceIcon'
-
-const SEARCH_QUERY = gql`
-  query searchQuery {
-    isENSReady @client
-  }
-`
+import FaceCryIcon from 'components/Icons/FaceCryIcon'
+import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
 
 function Search({ history, className, style }) {
-  const [inputValue, setInputValue] = useState(null)
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
-  const {
-    data: { isENSReady }
-  } = useQuery(SEARCH_QUERY)
-  let input
-
-  const handleParse = e => {
-    if (!e.target.value) {
-      setShowPopup(false)
-    }
-    setInputValue(
-      e.target.value
-        .split('.')
-        .map(term => term.trim())
-        .join('.')
-    )
-  }
-  const hasSearch = inputValue && inputValue.length > 0
 
   const gotoDetailPage = () => {
     if (result.Owner) {
@@ -53,20 +29,20 @@ function Search({ history, className, style }) {
 
   return (
     <div className={cn('relative', className)}>
-      <form
-        className={cn(`flex relative`)}
-        style={style}
-        action="#"
-        hasSearch={hasSearch}
-        onSubmit={async e => {
-          e.preventDefault()
-          if (!hasSearch) return
-
+      <Formik
+        initialValues={{ searchKey: '' }}
+        validate={values => {
+          const errors = {}
+          if (values.searchKey.length < 3) {
+            errors.searchKey = 'Name length must be at least 3 characters'
+          }
+          return errors
+        }}
+        onSubmit={(values, { setSubmitting }) => {
           const params = {
             ChainID: 97,
-            name: inputValue
+            name: values.searchKey
           }
-
           axios
             .post(`https://space-id-348516.uw.r.appspot.com/nameof`, {
               ...params
@@ -77,33 +53,63 @@ function Search({ history, className, style }) {
             })
         }}
       >
-        <TwoPoints className="absolute text-[#1EEFA4] left-4 top-[11px]" />
-        <input
-          className="w-full bg-[#104151]/[0.25] py-[10px] px-[36px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px]"
-          placeholder="Explore the space"
-          ref={el => (input = el)}
-          onChange={handleParse}
-          autoCapitalize="off"
-        />
-        <button
-          className="absolute right-4 top-[14px]"
-          type="submit"
-          disabled={!hasSearch}
-          data-testid={'home-search-button'}
-        >
-          <SearchIcon className="text-[#1EEFA4]" />
-        </button>
-        <div className="text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute right-[44px] top-[10px]">
-          .bnb
-        </div>
-        {/* <LanguageSwitcher /> */}
-      </form>
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit
+          /* and other goodies */
+        }) => (
+          <form
+            className={cn(`relative`)}
+            style={style}
+            onSubmit={handleSubmit}
+          >
+            <TwoPoints className="absolute text-[#1EEFA4] left-4 top-[11px]" />
+            <div>
+              <input
+                className="w-full bg-[#104151]/[0.25] py-[10px] px-[36px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px]"
+                placeholder="Explore the space"
+                onChange={e => {
+                  setShowPopup(false)
+                  handleChange(e)
+                }}
+                type="text"
+                name="searchKey"
+                onBlur={handleBlur}
+                value={values.searchKey}
+                autoCapitalize="off"
+              />
+            </div>
+            {errors.searchKey && touched.searchKey && (
+              <div className="text-[#ED7E17] text-[12px] font-semibold mt-1 ml-3">
+                {errors.searchKey}
+              </div>
+            )}
+            <button
+              className="absolute right-4 top-[14px]"
+              type="submit"
+              data-testid={'home-search-button'}
+            >
+              <SearchIcon className="text-[#1EEFA4]" />
+            </button>
+            <div className="text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute right-[44px] top-[10px]">
+              .bnb
+            </div>
+          </form>
+        )}
+      </Formik>
       {showPopup && (
         <div className="absolute top-[55px] shadow-popup flex w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between">
           <div className="flex items-center">
-            <FaceIcon
-              className={cn(result.Owner ? 'text-[#ED7E17]' : 'text-[#30DB9E]')}
-            />
+            {result.Owner ? (
+              <FaceCryIcon className="text-[#ED7E17]" />
+            ) : (
+              <FaceHappyIcon className="text-[#30DB9E]" />
+            )}
+
             <span
               className={cn(
                 'ml-2 text-[16px] font-semibold',

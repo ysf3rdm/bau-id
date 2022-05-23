@@ -25,11 +25,11 @@ const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
     <div>
       <div className="text-white py-[25px] border-y border-white border-dashed mt-6 px-6">
         <div className="flex justify-between">
-          <div className="font-semibild text-[14px]">Registeration Fee</div>
+          <div className="font-semibold text-[14px]">Registeration Fee</div>
           <div className="font-bold text-[16px]">{ethVal.toFixed(3)} BNBT</div>
         </div>
         <div className="flex justify-between mt-[14px]">
-          <div className="font-semibild text-[14px]">Gas Fee</div>
+          <div className="font-semibold text-[14px]">Gas Fee</div>
           <div className="font-bold text-[16px]">
             {registerGasFast.toFixed(3)} BNBT
           </div>
@@ -37,7 +37,9 @@ const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
       </div>
       <div className="text-center text-white mt-6">
         <div className="text-[14px]">Total Cost</div>
-        <div className="font-bold text-[36px]">${totalInUsdFast.toFixed(2)}</div>
+        <div className="font-bold text-[36px]">
+          ${totalInUsdFast.toFixed(2)}
+        </div>
       </div>
     </div>
   )

@@ -37,7 +37,7 @@ const Price = ({
           </span>
         )}
       </div>
-      <div className="text-center text-white font-semibold mt-1">
+      <div className="text-center text-white font-semibold mt-1 text-[14px]">
         Registration Fee
       </div>
     </div>

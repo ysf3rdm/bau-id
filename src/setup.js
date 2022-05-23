@@ -18,7 +18,8 @@ import {
   networkReactive,
   reverseRecordReactive,
   subDomainFavouritesReactive,
-  web3ProviderReactive
+  web3ProviderReactive,
+  loadingWalletReactive
 } from './apollo/reactiveVars'
 import { setupAnalytics } from './utils/analytics'
 import { getReverseRecord } from './apollo/sideEffects'
@@ -49,6 +50,7 @@ export const isSupportedNetwork = networkId => {
 export const getProvider = async reconnect => {
   try {
     let provider
+    loadingWalletReactive(true)
     if (
       process.env.REACT_APP_STAGE === 'local' &&
       process.env.REACT_APP_ENS_ADDRESS
@@ -69,11 +71,13 @@ export const getProvider = async reconnect => {
           ...JSON.parse(process.env.REACT_APP_LABELS)
         })
       )
+      loadingWalletReactive(false)
       return provider
     }
     const safe = await safeInfo()
     if (safe) {
       const provider = await setupSafeApp(safe)
+      loadingWalletReactive(false)
       return provider
     }
 
@@ -82,6 +86,7 @@ export const getProvider = async reconnect => {
       reconnect
     ) {
       provider = await connect()
+      loadingWalletReactive(false)
       return provider
     }
 
@@ -93,9 +98,13 @@ export const getProvider = async reconnect => {
       enforceReload: false
     })
     provider = providerObject
+    loadingWalletReactive(false)
     return provider
   } catch (e) {
-    if (e.message.match(/Unsupported network/)) {
+    if (
+      e.message.match(/Unsupported network/) ||
+      e.message.match(/call revert exception/)
+    ) {
       globalErrorReactive({
         ...globalErrorReactive(),
         network: 'Unsupported Network'
@@ -113,6 +122,7 @@ export const getProvider = async reconnect => {
     provider = providerObject
     return provider
   } catch (e) {
+    loadingWalletReactive(false)
     console.error('getProvider readOnly error: ', e)
   }
 }

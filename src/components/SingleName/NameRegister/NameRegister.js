@@ -222,7 +222,7 @@ const NameRegister = ({
 
   if (!registrationOpen) return <NotAvailable domain={domain} />
 
-  if (ethUsdPriceLoading || gasPriceLoading) return <>Loading...</>
+  if (ethUsdPriceLoading || gasPriceLoading) return <></>
 
   if (!targetDate) {
     setTargetDate(zeroPremiumDate)
@@ -237,9 +237,9 @@ const NameRegister = ({
   }
 
   return (
-    <div className="mt-[60px]">
+    <div className="mt-[calc((100vh-625px)/2-44px)]">
       <div className="flex justify-center">
-        <div className="text-[28px] text-[#1EEFA4] font-cocoSharp py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
+        <div className="font-bold text-[28px] text-[#1EEFA4] font-cocoSharp py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
           {domain.name}
         </div>
       </div>
@@ -261,32 +261,32 @@ const NameRegister = ({
             displayGas={true}
           />
         )}
-        <CTA
-          signature={signature}
-          hasSufficientBalance={hasSufficientBalance}
-          waitTime={waitTime}
-          incrementStep={incrementStep}
-          decrementStep={decrementStep}
-          secret={secret}
-          step={step}
-          label={domain.label}
-          duration={duration}
-          secondsPassed={secondsPassed}
-          timerRunning={timerRunning}
-          setTimerRunning={setTimerRunning}
-          setCommitmentTimerRunning={setCommitmentTimerRunning}
-          commitmentTimerRunning={commitmentTimerRunning}
-          setBlockCreatedAt={setBlockCreatedAt}
-          refetch={refetch}
-          refetchIsMigrated={refetchIsMigrated}
-          isAboveMinDuration={isAboveMinDuration}
-          readOnly={readOnly}
-          price={getRentPrice}
-          years={years}
-          premium={currentPremium}
-          ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
-        />
       </div>
+      <CTA
+        signature={signature}
+        hasSufficientBalance={hasSufficientBalance}
+        waitTime={waitTime}
+        incrementStep={incrementStep}
+        decrementStep={decrementStep}
+        secret={secret}
+        step={step}
+        label={domain.label}
+        duration={duration}
+        secondsPassed={secondsPassed}
+        timerRunning={timerRunning}
+        setTimerRunning={setTimerRunning}
+        setCommitmentTimerRunning={setCommitmentTimerRunning}
+        commitmentTimerRunning={commitmentTimerRunning}
+        setBlockCreatedAt={setBlockCreatedAt}
+        refetch={refetch}
+        refetchIsMigrated={refetchIsMigrated}
+        isAboveMinDuration={isAboveMinDuration}
+        readOnly={readOnly}
+        price={getRentPrice}
+        years={years}
+        premium={currentPremium}
+        ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
+      />
     </div>
   )
 }

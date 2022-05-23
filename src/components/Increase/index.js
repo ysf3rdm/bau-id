@@ -6,7 +6,7 @@ export default function Increase({
   className,
   decrementYears,
   incrementYears,
-  years,
+  years
 }) {
   return (
     <div
@@ -18,7 +18,10 @@ export default function Increase({
       <button
         disabled={years < 1}
         onClick={decrementYears}
-        className="w-[24px] h-[24px] bg-[#7E9195] flex justify-center items-center text-white rounded-[4px] cursor-pointer"
+        className={cn(
+          'w-[24px] h-[24px] flex justify-center items-center text-white rounded-[4px] cursor-pointer',
+          years > 1 ? 'bg-[#0EA59C]/50' : 'bg-[#7E9195]'
+        )}
       >
         -
       </button>
