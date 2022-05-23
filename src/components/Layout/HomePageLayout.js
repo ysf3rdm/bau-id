@@ -102,7 +102,7 @@ export default ({ children }) => {
       {globalError.network && (
         <Modal width="574px">
           <div className="text-[white]">
-            <div className="text-[28px] font-cocoSharp text-center">
+            <div className="text-[28px] font-cocoSharp text-center font-bold">
               Unsupported Network :(
             </div>
             <div className="text-urbanist font-semibold text-center mt-4">
@@ -159,7 +159,7 @@ export default ({ children }) => {
           {accounts && accounts[0] && avatarPopup && (
             <div className="absolute w-[266px] h-[208px] bg-[#0E4549] right-0 top-[60px] rounded-[24px] p-4">
               <div>
-                <div className="flex items-center ml-4 border-b-[2px] border-[#7E9195] pb-4">
+                <div className="flex items-center border-b-[2px] border-[#7E9195] pb-4 flex justify-between">
                   {!reverseRecordLoading &&
                   getReverseRecord &&
                   getReverseRecord.avatar ? (
@@ -174,7 +174,7 @@ export default ({ children }) => {
                     <UnstyledBlockies
                       className="rounded-full"
                       address={accounts[0]}
-                      imageSize={45}
+                      imageSize={64}
                     />
                   )}
                   <div className="font-semibold text-[20px] font-urbanist text-white ml-4">{`${accounts[0].substring(
@@ -197,7 +197,7 @@ export default ({ children }) => {
                   className="h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
                   onClick={disconnectProvider}
                 >
-                  Disconnet
+                  Disconnect
                 </div>
               </div>
             </div>
