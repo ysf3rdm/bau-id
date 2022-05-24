@@ -38,6 +38,11 @@ export default {
           return loadingWalletReactive()
         }
       },
+      loadingRegister: {
+        read() {
+          return registerLoadingReactive()
+        }
+      },
       network: {
         read() {
           const network = networkReactive()

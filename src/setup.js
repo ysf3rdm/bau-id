@@ -155,6 +155,7 @@ export const setWeb3Provider = async provider => {
 
     networkIdReactive(networkId)
     networkReactive(await getNetwork())
+    loadingWalletReactive(false)
   })
 
   provider?.on('accountsChanged', async accounts => {
@@ -197,6 +198,7 @@ export default async reconnect => {
     setupAnalytics()
 
     isAppReadyReactive(true)
+    loadingWalletReactive(false)
   } catch (e) {
     console.error('setup error: ', e)
   }

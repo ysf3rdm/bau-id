@@ -103,8 +103,6 @@ export default ({ children }) => {
     window.location.reload()
   }
 
-  console.log('loadingWallet', loadingWallet)
-
   return (
     <section
       style={{ background: `url(${bg})` }}

@@ -5,7 +5,6 @@ import Increase from 'components/Increase'
 import EditIcon from 'components/Icons/EditIcon'
 import AnimationSpin from 'components/AnimationSpin'
 import SuccessfulTickIcon from 'components/Icons/SuccessfulTickIcon'
-import InsufficientBalanceModal from 'components/Modal/InsufficientBalanceModal'
 
 const progresses = [
   { id: 1, name: 'Confirm Payment' },
@@ -37,7 +36,7 @@ export default function Registration() {
                   {' '}
                   Registration Year{' '}
                 </div>
-              </div> 
+              </div>
 
               <span className="text-white font-bold font-urbanist text-[18px] flex pt-2 mr-[13px]">
                 =

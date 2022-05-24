@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@apollo/client'
+import cn from 'classnames'
 import moment from 'moment'
 import axios from 'axios'
 
@@ -28,6 +29,9 @@ import useNetworkInfo from '../../NetworkInformation/useNetworkInfo'
 import { sendNotification } from './notification'
 import PremiumPriceOracle from './PremiumPriceOracle'
 
+import EditIcon from 'components/Icons/EditIcon'
+import SuccessfulTickIcon from 'components/Icons/SuccessfulTickIcon'
+
 const NameRegister = ({
   domain,
   waitTime,
@@ -43,6 +47,7 @@ const NameRegister = ({
     registerReducer,
     registerMachine.initialState
   )
+  const [customStep, setCustomStep] = useState('PENDING')
   let now, currentPremium, underPremium
   const incrementStep = () => dispatch('NEXT')
   const decrementStep = () => dispatch('PREVIOUS')
@@ -222,7 +227,8 @@ const NameRegister = ({
 
   if (!registrationOpen) return <NotAvailable domain={domain} />
 
-  if (ethUsdPriceLoading || gasPriceLoading) return <></>
+  if (ethUsdPriceLoading || gasPriceLoading)
+    return <Loader withWrap={true} large />
 
   if (!targetDate) {
     setTargetDate(zeroPremiumDate)
@@ -236,57 +242,116 @@ const NameRegister = ({
     underPremium = now.isBetween(releasedDate, zeroPremiumDate)
   }
 
+  const successRegister = () => {
+    console.log('calling')
+    setCustomStep('SUCCESS')
+  }
+
   return (
     <div className="mt-[calc((100vh-625px)/2-44px)]">
       <div className="flex justify-center">
-        <div className="font-bold text-[28px] text-[#1EEFA4] font-cocoSharp py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
+        <div className="font-bold text-[28px] text-[#1EEFA4] py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
           {domain.name}
         </div>
       </div>
-      <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
-        {step === 'AWAITING_REGISTER' && (
-          <Pricer
-            name={domain.label}
+
+      {/* Register Process Screen if the user doesn't have any domain */}
+      {customStep === 'PENDING' && (
+        <div>
+          <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
+            {step === 'AWAITING_REGISTER' && (
+              <Pricer
+                name={domain.label}
+                duration={duration}
+                years={years}
+                setYears={setYears}
+                ethUsdPriceLoading={ethUsdPriceLoading}
+                ethUsdPremiumPrice={currentPremium}
+                ethUsdPrice={ethUsdPrice}
+                gasPrice={gasPrice}
+                loading={rentPriceLoading}
+                price={getRentPrice}
+                premiumOnlyPrice={getPremiumPrice}
+                underPremium={underPremium}
+                displayGas={true}
+              />
+            )}
+          </div>
+          <CTA
+            signature={signature}
+            hasSufficientBalance={hasSufficientBalance}
+            waitTime={waitTime}
+            incrementStep={incrementStep}
+            decrementStep={decrementStep}
+            secret={secret}
+            step={step}
+            label={domain.label}
             duration={duration}
-            years={years}
-            setYears={setYears}
-            ethUsdPriceLoading={ethUsdPriceLoading}
-            ethUsdPremiumPrice={currentPremium}
-            ethUsdPrice={ethUsdPrice}
-            gasPrice={gasPrice}
-            loading={rentPriceLoading}
+            secondsPassed={secondsPassed}
+            timerRunning={timerRunning}
+            setTimerRunning={setTimerRunning}
+            setCommitmentTimerRunning={setCommitmentTimerRunning}
+            commitmentTimerRunning={commitmentTimerRunning}
+            setBlockCreatedAt={setBlockCreatedAt}
+            refetch={refetch}
+            refetchIsMigrated={refetchIsMigrated}
+            isAboveMinDuration={isAboveMinDuration}
+            readOnly={readOnly}
             price={getRentPrice}
-            premiumOnlyPrice={getPremiumPrice}
-            underPremium={underPremium}
-            displayGas={true}
+            years={years}
+            premium={currentPremium}
+            ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
+            successRegister={successRegister}
           />
-        )}
-      </div>
-      <CTA
-        signature={signature}
-        hasSufficientBalance={hasSufficientBalance}
-        waitTime={waitTime}
-        incrementStep={incrementStep}
-        decrementStep={decrementStep}
-        secret={secret}
-        step={step}
-        label={domain.label}
-        duration={duration}
-        secondsPassed={secondsPassed}
-        timerRunning={timerRunning}
-        setTimerRunning={setTimerRunning}
-        setCommitmentTimerRunning={setCommitmentTimerRunning}
-        commitmentTimerRunning={commitmentTimerRunning}
-        setBlockCreatedAt={setBlockCreatedAt}
-        refetch={refetch}
-        refetchIsMigrated={refetchIsMigrated}
-        isAboveMinDuration={isAboveMinDuration}
-        readOnly={readOnly}
-        price={getRentPrice}
-        years={years}
-        premium={currentPremium}
-        ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
-      />
+        </div>
+      )}
+      {customStep === 'SUCCESS' && (
+        <div className="max-w-[436px]">
+          <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
+            <div className="flex justify-center">
+              <EditIcon />
+            </div>
+            <div className="font-semibold text-[24px] text-white text-center mt-2">
+              Registration in progress...
+            </div>
+            <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
+              Please be patient as the process might take a few minutes. You may
+              click <span className="text-[#ED7E18]">here</span> to learn more
+              about the registration process.
+            </div>
+            <div className="mt-8">
+              <div className="text-center">
+                <div className="font-semibold text-[16px] text-[#30DB9E]">
+                  Confirm Payment
+                </div>
+                <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-[16px] text-[#30DB9E]">
+                  Successful registration. Name published
+                </div>
+                <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-x-[24px] mt-10">
+              <button
+                className={cn(
+                  'py-2 border rounded-[16px] font-semibold border-[#30DB9E] text-[#30DB9E]'
+                )}
+              >
+                Manage profile
+              </button>
+              <button
+                className={cn(
+                  'rounded-[16px] py-2 font-semibild bg-[#30DB9E] text-[#071A2F]'
+                )}
+              >
+                Register another
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

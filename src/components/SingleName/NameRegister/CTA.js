@@ -15,8 +15,11 @@ import Button from '../../Forms/Button'
 import AddToCalendar from '../../Calendar/RenewalCalendar'
 import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
 import { useAccount } from '../../QueryAccount'
+import { registerLoadingReactive } from 'apollo/reactiveVars'
 
 import InsufficientBalanceModal from '../../Modal/InsufficientBalanceModal'
+import { useReactiveVarListeners } from 'hooks/useReactiveVarListeners'
+import AnimationSpin from '../../AnimationSpin/index'
 
 function getCTA({
   step,
@@ -34,7 +37,10 @@ function getCTA({
   ethUsdPrice,
   account,
   signature,
-  setShowSufficientBalanceModal
+  setShowSufficientBalanceModal,
+  successRegister,
+  setRegistering,
+  registering
 }) {
   const CTAs = {
     AWAITING_REGISTER: (
@@ -42,9 +48,11 @@ function getCTA({
         mutation={REGISTER}
         variables={{ label, duration, signature }}
         onCompleted={data => {
-          console.log('register result:', data)
+          successRegister()
+          setRegistering(false)
         }}
         onError={err => {
+          setRegistering(false)
           console.log('err', err)
         }}
       >
@@ -53,13 +61,20 @@ function getCTA({
             <>
               <button
                 data-testid="request-register-button"
-                onClick={() => {
-                  if (hasSufficientBalance) mutate()
-                  else setShowSufficientBalanceModal(true)
+                onClick={async () => {
+                  if (hasSufficientBalance) {
+                    setRegistering(true)
+                    mutate()
+                  } else setShowSufficientBalanceModal(true)
                 }}
-                className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px]"
+                className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center"
               >
-                Register
+                Register{' '}
+                {registering && (
+                  <div className="ml-2">
+                    <AnimationSpin />
+                  </div>
+                )}
               </button>
             </>
           </>
@@ -150,12 +165,14 @@ const CTA = ({
   years,
   premium,
   ethUsdPrice,
-  signature
+  signature,
+  successRegister
 }) => {
   const { t } = useTranslation()
   const history = useHistory()
   const account = useAccount()
   const [txHash, setTxHash] = useState(undefined)
+  const [registering, setRegistering] = useState(false)
   const [showSufficientBalanceModal, setShowSufficientBalanceModal] = useState(
     false
   )
@@ -200,7 +217,10 @@ const CTA = ({
         ethUsdPrice,
         account,
         signature,
-        setShowSufficientBalanceModal
+        setShowSufficientBalanceModal,
+        successRegister,
+        setRegistering,
+        registering
       })}
     </div>
   )
