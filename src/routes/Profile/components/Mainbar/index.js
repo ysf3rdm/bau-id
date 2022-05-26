@@ -1,5 +1,6 @@
 import React from 'react'
 import AddressList from './AddressList'
+import Mainboard from './Mainboard'
 
 export default function Mainbar() {
   return (
@@ -11,6 +12,7 @@ export default function Mainbar() {
         </div>
       </div>
       <AddressList className="mt-[14px]" />
+      <Mainboard />
     </div>
   )
 }

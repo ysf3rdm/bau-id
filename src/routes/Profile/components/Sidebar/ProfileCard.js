@@ -3,11 +3,11 @@ import SmileFace from '../../../../assets/images/profile/smileface.png'
 
 export default function ProfileCard() {
   return (
-    <div className="flex min-w-[320px] account-profile-bg rounded-[16px] p-4 items-center">
-      <div className="mr-4">
+    <div className="flex 1400px:min-w-[320px] account-profile-bg rounded-[16px] p-4 items-center">
+      <div className="mr-4 flex-none w-[40px] xl:w-[64px]">
         <img src={SmileFace} />
       </div>
-      <div>
+      <div className="pr-10">
         <div className="text-white font-semibold text-[18px]">
           (Unconnected)
         </div>

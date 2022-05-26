@@ -4,8 +4,11 @@ module.exports = {
     screens: {
       sm: '640px',
       md: '768px',
+      '900px': '900px',
       lg: '1024px',
+      '1200px': '1200px',
       xl: '1280px',
+      '1400px': '1400px',
       '2xl': '1536px'
     },
     extend: {
