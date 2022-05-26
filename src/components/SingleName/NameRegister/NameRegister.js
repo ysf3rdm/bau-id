@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery } from '@apollo/client'
 import cn from 'classnames'
 import moment from 'moment'
+import { useHistory } from 'react-router'
 import axios from 'axios'
 
 import {
@@ -76,6 +77,9 @@ const NameRegister = ({
     },
     fetchPolicy: 'no-cache'
   })
+
+  const history = useHistory()
+
   const account = useAccount()
 
   useEffect(() => {
@@ -97,7 +101,7 @@ const NameRegister = ({
       }
     }
     fetchSignature()
-  }, [])
+  }, [years])
 
   const { data: { getBalance } = {} } = useQuery(GET_BALANCE, {
     variables: { address: account },
@@ -243,9 +247,14 @@ const NameRegister = ({
   }
 
   const successRegister = () => {
-    console.log('calling')
     setCustomStep('SUCCESS')
   }
+
+  const registerAnother = () => {
+    history.push('/')
+  }
+
+  const manageProfile = () => history.push('/profile')
 
   return (
     <div className="mt-[calc((100vh-625px)/2-44px)]">
@@ -338,6 +347,7 @@ const NameRegister = ({
                 className={cn(
                   'py-2 border rounded-[16px] font-semibold border-[#30DB9E] text-[#30DB9E]'
                 )}
+                onClick={() => manageProfile()}
               >
                 Manage profile
               </button>
@@ -345,6 +355,9 @@ const NameRegister = ({
                 className={cn(
                   'rounded-[16px] py-2 font-semibild bg-[#30DB9E] text-[#071A2F]'
                 )}
+                onClick={() => {
+                  registerAnother()
+                }}
               >
                 Register another
               </button>

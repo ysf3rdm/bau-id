@@ -12,6 +12,7 @@ const SingleName = lazy(() => import('./routes/SingleName'))
 const Favorites = lazy(() => import('./routes/Favorites'))
 const Faq = lazy(() => import('./routes/Faq'))
 const Address = lazy(() => import('./routes/AddressPage'))
+const Profile = lazy(() => import('./routes/Profile'))
 const Renew = lazy(() => import('./routes/Renew'))
 const ErrorPage = lazy(() => import('./routes/ErrorPage'))
 
@@ -60,13 +61,23 @@ const App = () => {
           component={Registration}
           layout={HomePageLayout}
         />
+        <Route
+          exact
+          path="/profile"
+          component={Profile}
+          layout={HomePageLayout}
+        />
         <Route path="/test-registrar" component={TestRegistrar} />
         <Route path="/favorites" component={Favorites} />
         <Route path="/faq" component={Faq} />
         <Route path="/my-bids" component={SearchResults} />
         <Route path="/how-it-works" component={SearchResults} />
         <Route path="/search/:searchTerm" component={SearchResults} />
-        <Route path="/name/:name" component={SingleName} layout={HomePageLayout}/>
+        <Route
+          path="/name/:name"
+          component={SingleName}
+          layout={HomePageLayout}
+        />
         <Route path="/address/:address/:domainType" component={Address} />
         <Route path="/address/:address" component={Address} />
         <Route path="/renew" component={Renew} />

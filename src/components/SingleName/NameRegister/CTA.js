@@ -62,6 +62,7 @@ function getCTA({
               <button
                 data-testid="request-register-button"
                 onClick={async () => {
+                  console.log('signature', signature)
                   if (hasSufficientBalance) {
                     setRegistering(true)
                     mutate()

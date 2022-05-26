@@ -9,3 +9,12 @@ body {
   padding: 0;
   font-family: Urbanist;
 }
+
+.account-profile-bg {
+  background: linear-gradient(
+    180deg,
+    #1b7679 -5.51%,
+    #0f2a42 62.63%,
+    #020d17 100%
+  );
+}
