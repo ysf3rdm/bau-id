@@ -2,6 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import ProfileCard from './ProfileCard'
 import WidgetFunction from './WidgetFunction'
+import DomainPanel from './DomainPanel'
 
 export default function Sidebar({ className }) {
   return (
@@ -13,7 +14,8 @@ export default function Sidebar({ className }) {
     >
       <div>
         <ProfileCard />
-        <WidgetFunction className="mt-4" />
+        <WidgetFunction className="mt-4 mb-4" />
+        <DomainPanel />
       </div>
       <div className="text-[#30DB9E] text-center text-[12px]">
         Learn how to manage your name

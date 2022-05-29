@@ -130,12 +130,15 @@ export default ({ children }) => {
         </Modal>
       )}
       <div className="h-[100px] flex py-[20px] px-[48px] xl:px-[48px] justify-between absolute left-0 top-0 items-center w-full">
-        <div className="text-[#1EEFA4] flex items-center">
+        <a
+          href="https://space.id/"
+          className="text-[#1EEFA4] flex items-center cursor-pointer visited:text-[#1EEFA4]"
+        >
           <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
           <div className="font-semibold text-[18px] ml-[31px]">
             About SpaceID
           </div>
-        </div>
+        </a>
 
         <div className="relative">
           {!isSafeApp && (
@@ -225,9 +228,15 @@ export default ({ children }) => {
       {/* Footer component in the home page */}
       <div className="h-[44px] flex py-[20px] px-[64px] xl:px-[48px] justify-between absolute left-0 bottom-0 items-center w-full bg-[#071A2F]">
         <div className="flex items-center">
-          <TwitterIcon className="mr-2 text-[#30DB9E]" />
-          <DiscordIcon className="mr-2 text-[#30DB9E]" />
-          <RoundedIcon />
+          <a target="_blank" href="https://twitter.com/SpaceIDProtocol">
+            <TwitterIcon className="mr-2 text-[#30DB9E]" />
+          </a>
+          <a target="_blank" href="https://discord.com/invite/2qrrf79K2A">
+            <DiscordIcon className="mr-2 text-[#30DB9E]" />
+          </a>
+          <a target="_blank" href="https://medium.com/@SpaceIDProtocol">
+            <RoundedIcon />
+          </a>
         </div>
         <div>
           <LanguageSwitcher />

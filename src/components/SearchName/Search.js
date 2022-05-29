@@ -35,6 +35,11 @@ function Search({ history, className, style }) {
           const errors = {}
           if (values.searchKey.length < 3) {
             errors.searchKey = 'Name length must be at least 3 characters'
+          } else if (
+            !new RegExp(/^[a-z0-9\p{Emoji}]*$/u).test(values.searchKey)
+          ) {
+            errors.searchKey =
+              'Name can only contain lowercase letters, numbers and emojis'
           }
           return errors
         }}
@@ -84,7 +89,7 @@ function Search({ history, className, style }) {
               />
             </div>
             {errors.searchKey && touched.searchKey && (
-              <div className="text-[#ED7E17] text-[12px] font-semibold mt-1 ml-3">
+              <div className="text-[#ED7E17] text-[16px] font-semibold mt-1 ml-3">
                 {errors.searchKey}
               </div>
             )}
