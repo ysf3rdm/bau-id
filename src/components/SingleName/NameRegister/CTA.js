@@ -40,7 +40,8 @@ function getCTA({
   setShowSufficientBalanceModal,
   successRegister,
   setRegistering,
-  registering
+  registering,
+  goBack
 }) {
   const CTAs = {
     AWAITING_REGISTER: (
@@ -58,7 +59,7 @@ function getCTA({
       >
         {mutate => (
           <>
-            <>
+            <div className="flex justify-between px-[48px] w-full">
               <button
                 data-testid="request-register-button"
                 onClick={async () => {
@@ -68,7 +69,7 @@ function getCTA({
                     mutate()
                   } else setShowSufficientBalanceModal(true)
                 }}
-                className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center"
+                className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
               >
                 Register{' '}
                 {registering && (
@@ -77,7 +78,13 @@ function getCTA({
                   </div>
                 )}
               </button>
-            </>
+              <button
+                onClick={goBack}
+                className="border-[#30DB9E] border text-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
+              >
+                Go Back
+              </button>
+            </div>
           </>
         )}
       </Mutation>
@@ -186,8 +193,12 @@ const CTA = ({
     }
   }, [step])
 
+  const goBack = () => {
+    history.push('/')
+  }
+
   return (
-    <div className="mt-8 flex justify-center items-end">
+    <div className="mt-8 flex justify-between items-end">
       {showSufficientBalanceModal && (
         <InsufficientBalanceModal
           closeModal={() => setShowSufficientBalanceModal(false)}
@@ -221,7 +232,8 @@ const CTA = ({
         setShowSufficientBalanceModal,
         successRegister,
         setRegistering,
-        registering
+        registering,
+        goBack
       })}
     </div>
   )
