@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
 
-const tabData = ['domains', 'bids', 'xxxxx']
+const tabData = ['domains', 'bids']
 
 export default function Tab({ defaultValue, handleChange }) {
   const [inActive, setInActive] = useState(defaultValue ?? 0)

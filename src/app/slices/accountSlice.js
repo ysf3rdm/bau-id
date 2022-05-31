@@ -5,7 +5,8 @@ const initialState = {
   isReadOnly: false,
   isSafeApp: false,
   network: '',
-  displayName: ''
+  displayName: '',
+  profileEditMode: false
 }
 
 export const accountsSlice = createSlice({
@@ -21,11 +22,18 @@ export const accountsSlice = createSlice({
       state.isSafeApp = payload.isSafeApp
       state.network = payload.network
       state.displayName = payload.displayName
+    },
+    toggleEditMode: (state, { payload }) => {
+      state.profileEditMode = payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { getAccounts, getHomeData } = accountsSlice.actions
+export const {
+  getAccounts,
+  getHomeData,
+  toggleEditMode
+} = accountsSlice.actions
 
 export default accountsSlice.reducer
