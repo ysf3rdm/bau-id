@@ -5,9 +5,12 @@ import { Searchbar } from 'components/Input'
 import { BarIcon } from 'components/Icons'
 import ArrowIcon from 'components/Icons/ArrowIcon'
 
-const active = 0
-
-export default function DomainList({ className, domainsList }) {
+export default function DomainList({
+  className,
+  domainsList,
+  clickHandle,
+  selectedDomain
+}) {
   return (
     <div className={cn('', className)}>
       <div className="flex justify-between items-center">
@@ -18,14 +21,19 @@ export default function DomainList({ className, domainsList }) {
         <div className="mt-4 relative">
           {domainsList.map((item, index) => (
             <div
+              onClick={() => {
+                clickHandle(item, index)
+              }}
               className={cn(
                 'mb-5 w-full py-2 px-4 relative cursor-pointer',
-                active === index ? 'bg-[#1EEFA4] rounded-[16px]' : ''
+                item.name === selectedDomain?.name
+                  ? 'bg-[#1EEFA4] rounded-[16px]'
+                  : ''
               )}
             >
               <div
                 className={cn(
-                  active === index
+                  item.name === selectedDomain?.name
                     ? 'text-[#071A2F] text-[20px]'
                     : 'text-[#30DB9E]',
                   'font-semibold text-[16px]'
@@ -36,12 +44,16 @@ export default function DomainList({ className, domainsList }) {
               <div
                 className={
                   ('text-[14px]',
-                  cn(active === index ? 'text-[#2A9971]' : 'text-[#BDCED1]'))
+                  cn(
+                    item.name === selectedDomain?.name
+                      ? 'text-[#2A9971]'
+                      : 'text-[#BDCED1]'
+                  ))
                 }
               >
                 expires {item.expires_at}
               </div>
-              {active === index && (
+              {item.name === selectedDomain?.name && (
                 <div className="absolute right-4 top-[calc(50%-7px)]">
                   <ArrowIcon />
                 </div>
