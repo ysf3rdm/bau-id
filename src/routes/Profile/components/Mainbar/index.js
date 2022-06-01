@@ -10,7 +10,6 @@ export default function Mainbar() {
   const dispatch = useDispatch()
 
   const toggleOn = param => {
-    console.log('param', param)
     dispatch(toggleEditMode(param))
   }
 
