@@ -1,7 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { toggleSubDomainEditMode } from 'app/slices/uiSlice'
 
 export default function AddressList({ className }) {
+  const subDomainEditMode = useSelector(state => state.ui.subDomainEditMode)
+  const dispatch = useDispatch()
+
+  const toggleSubDomainEditModeHandle = () => {
+    dispatch(toggleSubDomainEditMode(!subDomainEditMode))
+  }
+
   return (
     <div
       className={cn(
@@ -29,8 +39,21 @@ export default function AddressList({ className }) {
           </p>
         </div>
       </div>
-      <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white ml-4 mt-3 xl:mt-0">
-        <p className="text-[#B1D6D3] text-[14px] font-semibold">Visit</p>
+      <div
+        onClick={() => toggleSubDomainEditModeHandle()}
+        className={cn(
+          'rounded-[89px] px-[43px] py-2 text-center text-white ml-4 mt-3 xl:mt-0 cursor-pointer',
+          subDomainEditMode ? 'bg-[#30DB9E]' : 'bg-[rgba(204,252,255,0.2)]'
+        )}
+      >
+        <p
+          className={cn(
+            'text-[14px] font-semibold',
+            subDomainEditMode ? 'text-white' : 'text-[#B1D6D3]'
+          )}
+        >
+          Visit
+        </p>
         <p className="font-semibold text-[18px] font-urbanist">Subdomain</p>
       </div>
     </div>

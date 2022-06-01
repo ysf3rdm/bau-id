@@ -1,4 +1,6 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+
 import { Address } from 'components/Addresses'
 
 import EmailImg from 'assets/images/profile/email.png'
@@ -10,9 +12,12 @@ import DiscordImg from 'assets/images/profile/discord.png'
 import GithubImg from 'assets/images/profile/github.png'
 import TelegramImg from 'assets/images/profile/telegram.png'
 
+import { toggleEditMode } from 'app/slices/accountSlice'
+
 import EVMImg from 'assets/images/profile/evm.png'
 import BTCImg from 'assets/images/profile/btc.png'
 import LTCImg from 'assets/images/profile/ltc.png'
+import { AddNewButton } from 'components/Button'
 
 const haveAddresses = true
 const haveProfile = true
@@ -101,6 +106,8 @@ const addressesData = [
 ]
 
 export default function Mainboard() {
+  const editOn = useSelector(state => state.account.profileEditMode)
+
   return (
     <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] xl:h-[calc(100%-200px)] mt-[14px] py-4 px-[22px]">
       {/* Addresses panel */}
@@ -116,8 +123,10 @@ export default function Mainboard() {
                 description={data.description}
                 imageUrl={data.imageUrl}
                 bgColorClass={data.bgColorClass}
+                canEdit={editOn}
               />
             ))}
+            {editOn && <AddNewButton />}
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-x-[4]">
@@ -140,8 +149,10 @@ export default function Mainboard() {
                 description={data.description}
                 imageUrl={data.imageUrl}
                 bgColorClass={data.bgColorClass}
+                canEdit={editOn}
               />
             ))}
+            {editOn && <AddNewButton />}
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-x-[4]">
