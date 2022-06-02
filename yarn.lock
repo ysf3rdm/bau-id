@@ -3583,7 +3583,7 @@
   version "0.3.3"
   resolved "https://registry.npmjs.org/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.3.tgz"
 
-"@siddomains/address-encoder@^0.0.3":
+"@siddomains/address-encoder@^0.0.3", "@siddomains/address-encoder@^0.1.7":
   version "0.0.3"
   resolved "https://registry.npmjs.org/@siddomains/address-encoder/-/address-encoder-0.0.3.tgz"
   integrity sha512-ATJhczgXvMK6RtG1l1eiXUkNDUPJNancsXxk5UBXC4wzXpb9mCpaw+zjWUue4CBPP1b2zco1v8lyfDIDpfPRYw==
@@ -3610,6 +3610,11 @@
     ethers "^4.0.32"
     lodash "^4.17.13"
 
+"@siddomains/resolver@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@siddomains/resolver/-/resolver-0.1.1.tgz#5ee3921fe9d5a10814ff6635710dbd7af3b024b0"
+  integrity sha512-cZYaHJN9iXNXeLvaMPDm3p6ymNklDzQ11reIfLMvLi0zP0UGERM+YXCqwzAZkoKulysVWX0iUbihl64/NrJJew==
+
 "@siddomains/sid-contracts@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@siddomains/sid-contracts/-/sid-contracts-0.1.2.tgz#ea1d381e3f8d7851e14588e658802178c5fe7efa"
@@ -3619,6 +3624,30 @@
     "@ensdomains/solsha1" "0.0.3"
     "@openzeppelin/contracts" "^4.1.0"
     dns-packet "^5.3.0"
+
+"@siddomains/sid@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@siddomains/sid/-/sid-0.1.2.tgz#b4dde2c5c8b131f2a7a86246861996121123fbd2"
+  integrity sha512-qGH/GDgug8JBKxEkhvDs9D1c3qbn7VVybArm2TasA/ksyhZWv0ZftBBnf2H7A9zZzqxF1a76mXCzA1AaeNiz+w==
+  dependencies:
+    bluebird "^3.5.2"
+    eth-ens-namehash "^2.0.8"
+    solc "^0.4.20"
+    testrpc "0.0.1"
+
+"@siddomains/sidjs@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@siddomains/sidjs/-/sidjs-0.1.2.tgz#a0d5fbd4a80a5f23237f16d438cb1656fa62a796"
+  integrity sha512-g3tZCtxn3GOsaWOYJzMoesJbLF3AcpfaOF3X5eNxwQubSQNIdM4CXcUN8qy+XQMM3Yun4mdZkhJcCwwjDv9HqA==
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+    "@siddomains/address-encoder" "^0.1.7"
+    "@siddomains/resolver" "0.1.1"
+    "@siddomains/sid" "0.1.2"
+    content-hash "^2.5.2"
+    eth-ens-namehash "^2.0.8"
+    ethers "^5.0.13"
+    js-sha3 "^0.8.0"
 
 "@siddomains/ui@1.3.34":
   version "1.3.34"
@@ -9817,7 +9846,7 @@ ethereumjs-wallet@0.6.5:
     utf8 "^3.0.0"
     uuid "^3.3.2"
 
-ethers@3.0.22, ethers@4.0.0-beta.14, ethers@4.0.47, ethers@^4.0.0-beta.1, ethers@^4.0.32, ethers@^5.0.1, ethers@^5.0.17, ethers@^5.0.2, ethers@^5.0.30, ethers@^5.4.7, ethers@^5.5.4:
+ethers@3.0.22, ethers@4.0.0-beta.14, ethers@4.0.47, ethers@^4.0.0-beta.1, ethers@^4.0.32, ethers@^5.0.1, ethers@^5.0.13, ethers@^5.0.17, ethers@^5.0.2, ethers@^5.0.30, ethers@^5.4.7, ethers@^5.5.4:
   version "5.6.4"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.6.4.tgz#23629e9a7d4bc5802dfb53d4da420d738744b53c"
   integrity sha512-62UIfxAQXdf67TeeOaoOoPctm5hUlYgfd0iW3wxfj7qRYKDcvvy0f+sJ3W2/Pyx77R8dblvejA8jokj+lS+ATQ==

@@ -42,9 +42,10 @@ export default function Sidebar({ className }) {
       params
     )
     const data = result?.data?.map(item => {
+      const date = new Date(item?.expires)
       return {
         name: item?.name,
-        expires_at: '2022.2.22'
+        expires_at: `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`
       }
     })
     setDomainList(data)
