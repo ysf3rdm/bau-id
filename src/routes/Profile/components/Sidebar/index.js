@@ -3,6 +3,7 @@ import { useLazyQuery, useQuery } from '@apollo/client'
 import { useSelector, useDispatch } from 'react-redux'
 import cn from 'classnames'
 import axios from 'axios'
+
 import { useAccount } from 'components/QueryAccount'
 import { getNetworkId } from '@siddomains/ui'
 
@@ -20,17 +21,6 @@ export default function Sidebar({ className }) {
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
   const account = useAccount()
 
-  // const { data, loading, error, refetch } = useQuery(GET_SINGLE_NAME, {
-  //   variables: { name },
-  //   fetchPolicy: 'no-cache',
-  //   context: {
-  //     queryDeduplication: false
-  //   }
-  // })
-  const [fetchDomainDetailInfo, { called, loading, data }] = useLazyQuery(
-    GET_SINGLE_NAME
-  )
-
   const fetchDomainsList = async () => {
     const networkId = await getNetworkId()
     const params = {
@@ -44,15 +34,19 @@ export default function Sidebar({ className }) {
     const data = result?.data?.map(item => {
       const date = new Date(item?.expires)
       return {
-        name: item?.name,
-        expires_at: `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`
+        expires_at: `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`,
+        ...item
       }
     })
+    if (data.length > 0) {
+      dispatch(setSelectedDomain(data[0]))
+    }
+
     setDomainList(data)
   }
 
   useEffect(() => {
-    if (account) {
+    if (account && account !== '0x0000000000000000000000000000000000000000') {
       fetchDomainsList()
     }
     fetchDomainsList()
@@ -60,15 +54,8 @@ export default function Sidebar({ className }) {
 
   const selectDomain = async (domain, index) => {
     console.log('domain clicked: ', domain)
-    await fetchDomainDetailInfo({ variables: { name: domain.name } })
+    dispatch(setSelectedDomain(domain))
   }
-
-  useEffect(() => {
-    if (data) {
-      console.log('data', data)
-      dispatch(setSelectedDomain(data.singleName))
-    }
-  }, [data, called, loading])
 
   return (
     <div
