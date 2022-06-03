@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import SID, { getSidAddress } from '@siddomains/sidjs'
 import { ethers } from '@siddomains/ui'
-import { getNetworkId } from '@siddomains/ui'
+import { getNetworkId, getAccount } from '@siddomains/ui'
 import { NoPermissionEdit } from 'components/ErrorModals'
 import { useAccount } from 'components/QueryAccount'
 import Mainbar from './components/Mainbar'
@@ -21,12 +21,12 @@ export default function Profile() {
   }, [account])
 
   const sidSetup = async () => {
-    console.log('sidSetuping now.....')
     try {
       const networkId = await getNetworkId()
+      const account = await getAccount()
+      console.log('account', account)
       const infura = 'https://data-seed-prebsc-1-s1.binance.org:8545/'
       const provider = new ethers.providers.JsonRpcProvider(infura)
-      console.log('provider', provider)
       const tSid = new SID({ provider, sidAddress: getSidAddress(networkId) })
       setSid(tSid)
       // const address = await sid.name('test.bnb').getAddress() // 0x123

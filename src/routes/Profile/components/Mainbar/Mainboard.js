@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { useQuery } from '@apollo/client'
+import { getNamehash, emptyAddress } from '@siddomains/ui'
+import { formatsByCoinType } from '@siddomains/address-encoder'
 
+import union from 'lodash/union'
 import { Address } from 'components/Addresses'
+import {
+  GET_RESOLVER_FROM_SUBGRAPH,
+  GET_ADDRESSES,
+  GET_TEXT_RECORDS
+} from 'graphql/queries'
 
 import EmailImg from 'assets/images/profile/email.png'
 import WebsiteImg from 'assets/images/profile/website.png'
@@ -14,13 +23,20 @@ import TelegramImg from 'assets/images/profile/telegram.png'
 
 import { toggleEditMode } from 'app/slices/accountSlice'
 
+import TEXT_PLACEHOLDER_RECORDS from 'constants/textRecords'
+
 import EVMImg from 'assets/images/profile/evm.png'
 import BTCImg from 'assets/images/profile/btc.png'
 import LTCImg from 'assets/images/profile/ltc.png'
 import { AddNewButton } from 'components/Button'
 
+import COIN_LIST from 'constants/coinList'
+import { convertToETHAddressDisplayFormat } from '../../../../utils/utils'
+
 const haveAddresses = true
 const haveProfile = true
+
+const COIN_PLACEHOLDER_RECORDS = ['ETH', ...COIN_LIST.slice(0, 3)]
 
 const profileData = [
   {
@@ -105,8 +121,155 @@ const addressesData = [
   }
 ]
 
-export default function Mainboard() {
+function isContentHashEmpty(hash) {
+  return hash?.startsWith('undefined') || parseInt(hash, 16) === 0
+}
+
+const useGetRecords = domain => {
+  const { data: dataResolver } = useQuery(GET_RESOLVER_FROM_SUBGRAPH, {
+    variables: {
+      id: getNamehash(domain.name + '.bnb')
+    }
+  })
+
+  const resolver =
+    dataResolver && dataResolver.domain && dataResolver.domain.resolver
+
+  const coinList =
+    resolver &&
+    resolver.coinTypes &&
+    resolver.coinTypes
+      .map(c => {
+        return formatsByCoinType[c] && formatsByCoinType[c].name
+      })
+      .filter(c => c)
+
+  const { loading: addressesLoading, data: dataAddresses } = useQuery(
+    GET_ADDRESSES,
+    {
+      variables: {
+        name: domain.name + '.bnb',
+        keys: union(coinList, COIN_PLACEHOLDER_RECORDS)
+      },
+      fetchPolicy: 'network-only'
+    }
+  )
+  const { loading: textRecordsLoading, data: dataTextRecords } = useQuery(
+    GET_TEXT_RECORDS,
+    {
+      variables: {
+        name: domain.name + 'bnb',
+        keys: union(resolver && resolver.texts, TEXT_PLACEHOLDER_RECORDS)
+      },
+      fetchPolicy: 'network-only'
+    }
+  )
+  return {
+    dataAddresses,
+    dataTextRecords,
+    recordsLoading: addressesLoading || textRecordsLoading
+  }
+}
+
+const processRecords = (records, placeholder) => {
+  const nonDuplicatePlaceholderRecords = placeholder.filter(
+    record => !records.find(r => record === r.key)
+  )
+
+  const recordsSansEmpty = records.map(record => {
+    if (record.value === emptyAddress) {
+      return { ...record, value: '' }
+    }
+    return record
+  })
+
+  return [
+    ...recordsSansEmpty,
+    ...nonDuplicatePlaceholderRecords.map(record => ({
+      key: record,
+      value: ''
+    }))
+  ]
+}
+
+const getInitialTextRecords = (dataTextRecords, domain) => {
+  const textRecords =
+    dataTextRecords && dataTextRecords.getTextRecords
+      ? processRecords(dataTextRecords.getTextRecords, TEXT_PLACEHOLDER_RECORDS)
+      : processRecords([], TEXT_PLACEHOLDER_RECORDS)
+
+  return textRecords?.map(textRecord => ({
+    contractFn: 'setText',
+    ...textRecord
+  }))
+}
+
+const getInitialCoins = dataAddresses => {
+  const addresses =
+    dataAddresses && dataAddresses.getAddresses
+      ? processRecords(dataAddresses.getAddresses, COIN_PLACEHOLDER_RECORDS)
+      : processRecords([], COIN_PLACEHOLDER_RECORDS)
+
+  return addresses?.map(address => ({
+    contractFn: 'setAddr(bytes32,uint256,bytes)',
+    ...address
+  }))
+}
+
+const getInitialContent = domain => {
+  return {
+    contractFn: 'setContenthash',
+    key: 'CONTENT',
+    value: isContentHashEmpty(domain.content) ? '' : domain.content
+  }
+}
+
+const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
+  console.log('dataAddresses', dataAddresses)
+  const initialTextRecords = getInitialTextRecords(dataTextRecords, domain)
+  var initialCoins = getInitialCoins(dataAddresses)
+  console.log('initialCoins', initialCoins)
+
+  initialCoins[0].key = 'EVM'
+  const initialContent = getInitialContent(domain)
+
+  return [...initialTextRecords, ...initialCoins, initialContent]
+}
+
+const useInitRecords = (
+  domain,
+  dataAddresses,
+  dataTextRecords,
+  setInitialRecords
+) => {
+  useEffect(() => {
+    console.log(
+      'getInitialRecords(domain, dataAddresses, dataTextRecords)',
+      getInitialRecords(domain, dataAddresses, dataTextRecords)
+    )
+    setInitialRecords(getInitialRecords(domain, dataAddresses, dataTextRecords))
+  }, [domain, dataAddresses, dataTextRecords])
+}
+
+export default function Mainboard({ selectedDomain }) {
   const editOn = useSelector(state => state.account.profileEditMode)
+
+  const { dataAddresses, dataTextRecords, recordsLoading } = useGetRecords(
+    selectedDomain
+  )
+
+  const [initialRecords, setInitialRecords] = useState([])
+
+  useEffect(() => {
+    console.log('initialRecords', initialRecords)
+  }, [initialRecords])
+
+  useInitRecords(
+    selectedDomain,
+    dataAddresses,
+    dataTextRecords,
+    setInitialRecords
+  )
 
   return (
     <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] xl:h-[calc(100%-200px)] mt-[14px] py-4 px-[22px]">
@@ -117,7 +280,7 @@ export default function Mainboard() {
         </p>
         {haveAddresses ? (
           <div className="grid grid-cols-2 1200px:grid-cols-3 gap-x-4 gap-y-3">
-            {addressesData.map((data, index) => (
+            {/* {addressesData.map((data, index) => (
               <Address
                 title={data.title}
                 description={data.description}
@@ -125,7 +288,20 @@ export default function Mainboard() {
                 bgColorClass={data.bgColorClass}
                 canEdit={editOn}
               />
-            ))}
+            ))} */}
+            {initialRecords
+              .filter(
+                item => item.contractFn === 'setAddr(bytes32,uint256,bytes)'
+              )
+              .map((item, index) => (
+                <Address
+                  title={item.key}
+                  description={convertToETHAddressDisplayFormat(item.value)}
+                  imageUrl={EVMImg}
+                  bgColorClass="bg-[rgba(50,126,164,0.6)]"
+                  canEdit={editOn}
+                />
+              ))}
             {editOn && <AddNewButton />}
           </div>
         ) : (
@@ -147,7 +323,7 @@ export default function Mainboard() {
               <Address
                 title={data.title}
                 description={data.description}
-                imageUrl={data.imageUrl}
+                imageUrl={EVMImg}
                 bgColorClass={data.bgColorClass}
                 canEdit={editOn}
               />
