@@ -43,7 +43,7 @@ export default function Mainbar({ sid, selectedDomain }) {
         sid={sid}
         selectedDomain={selectedDomain}
       />
-      <Mainboard />
+      {selectedDomain && <Mainboard selectedDomain={{ ...selectedDomain }} />}
     </div>
   )
 }

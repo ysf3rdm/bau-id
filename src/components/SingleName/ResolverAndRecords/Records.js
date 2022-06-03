@@ -288,7 +288,6 @@ const validateAllRecords = (updatedRecords, validRecords) =>
 const singleValidator = validRecords => record => {
   return validRecords.some(el => el.key === record.key && el.val === record.val)
 }
-  
 
 const singleValidating = validatingRecords => record =>
   validatingRecords.some(el => el.key === record.key && el.val === record.val)
@@ -305,6 +304,10 @@ const useInitRecords = (
   setInitialRecords
 ) => {
   useEffect(() => {
+    console.log(
+      'getInitialRecords(domain, dataAddresses, dataTextRecords)',
+      getInitialRecords(domain, dataAddresses, dataTextRecords)
+    )
     setInitialRecords(getInitialRecords(domain, dataAddresses, dataTextRecords))
   }, [domain, dataAddresses, dataTextRecords])
 }
