@@ -1,11 +1,10 @@
 import React from 'react'
 
-export default function AnimationSpin({ className }) {
+export default function AnimationSpin({ className, size = 20 }) {
   return (
     <div className={className}>
       <svg
-        width="20"
-        height="20"
+        width={size}
         viewBox="0 0 20 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

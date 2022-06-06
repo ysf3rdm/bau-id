@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import { useQuery, gql } from '@apollo/client'
 import { useTranslation } from 'react-i18next'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { GET_REVERSE_RECORD } from 'graphql/queries'
 
@@ -44,6 +45,8 @@ export const GET_ACCOUNT = gql`
 export default ({ children }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
+
+  const history = useHistory()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [avatarPopup, setAvatarPopup] = useState(false)
@@ -101,6 +104,10 @@ export default ({ children }) => {
       params: [{ chainId: '0x61' }] // chainId must be in hexadecimal numbers
     })
     window.location.reload()
+  }
+
+  const moveToProfile = () => {
+    history.push('/profile')
   }
 
   return (
@@ -210,6 +217,12 @@ export default ({ children }) => {
                 className="font-semibold text-white font-urbanist text-[18px] text-center pt-4"
                 onClick={showAvatarPopup}
               >
+                <div
+                  className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
+                  onClick={moveToProfile}
+                >
+                  Manage Account
+                </div>
                 {/* <div className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]">
                   Change Wallet
                 </div> */}

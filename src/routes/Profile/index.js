@@ -23,14 +23,10 @@ export default function Profile() {
   const sidSetup = async () => {
     try {
       const networkId = await getNetworkId()
-      const account = await getAccount()
-      console.log('account', account)
       const infura = 'https://data-seed-prebsc-1-s1.binance.org:8545/'
       const provider = new ethers.providers.JsonRpcProvider(infura)
       const tSid = new SID({ provider, sidAddress: getSidAddress(networkId) })
       setSid(tSid)
-      // const address = await sid.name('test.bnb').getAddress() // 0x123
-      // console.log(`address of ${name} is ${address}`)
     } catch (error) {
       console.log('error', error)
     }
@@ -43,7 +39,6 @@ export default function Profile() {
         <Sidebar className="mr-[32px]" />
         <Mainbar sid={sid} selectedDomain={selectedDomain} />
       </div>
-
       {haveNoPermissionToEdit && <NoPermissionEdit />}
     </div>
   )

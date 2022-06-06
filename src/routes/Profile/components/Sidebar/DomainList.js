@@ -18,7 +18,7 @@ export default function DomainList({
         <BarIcon />
       </div>
       {domainsList.length > 0 ? (
-        <div className="mt-4 relative max-h-[60vh] overflow-y-auto">
+        <div className="mt-4 relative max-h-[45vh] overflow-y-auto">
           {domainsList.map((item, index) => (
             <div
               onClick={() => {

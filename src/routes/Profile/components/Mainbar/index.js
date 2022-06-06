@@ -1,22 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 import AddressList from './AddressList'
 import Mainboard from './Mainboard'
+import AnimationSpin from 'components/AnimationSpin'
 import EditButton from '../../../../components/Button/EditButton'
 import { toggleEditMode } from 'app/slices/accountSlice'
 
 export default function Mainbar({ sid, selectedDomain }) {
   const editOn = useSelector(state => state.account.profileEditMode)
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
 
   const toggleOn = param => {
     dispatch(toggleEditMode(param))
   }
 
-  if (selectedDomain) {
-    console.log(selectedDomain?.expires_at.split(',')[0])
+  if (loading) {
+    return (
+      <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm p-5 relative min-w-[840px] flex justify-center items-center">
+        <AnimationSpin size={60} />
+      </div>
+    )
   }
+
   return (
     <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm p-5 relative">
       {selectedDomain && (
@@ -33,11 +40,11 @@ export default function Mainbar({ sid, selectedDomain }) {
         </div>
       )}
 
-      <EditButton
+      {/* <EditButton
         className="absolute top-[20px] right-[20px]"
         isON={editOn}
         handleClick={toggleOn}
-      />
+      /> */}
       <AddressList
         className="mt-[14px]"
         sid={sid}
