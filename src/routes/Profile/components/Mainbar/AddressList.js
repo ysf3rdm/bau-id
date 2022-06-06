@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
 import { useSelector, useDispatch } from 'react-redux'
 
+import AnimationSpin from 'components/AnimationSpin'
+
 import { toggleSubDomainEditMode } from 'app/slices/uiSlice'
 import { convertToETHAddressDisplayFormat } from '../../../../utils/utils'
 
@@ -12,9 +14,15 @@ export default function AddressList({ className, sid, selectedDomain }) {
   const subDomainEditMode = useSelector(state => state.ui.subDomainEditMode)
   const dispatch = useDispatch()
 
+  const [loading, setLoading] = useState(false)
+
   const toggleSubDomainEditModeHandle = () => {
     dispatch(toggleSubDomainEditMode(!subDomainEditMode))
   }
+
+  useState(() => {
+    setLoading(true)
+  }, [])
 
   const fetchInfo = async () => {
     console.log('sid', sid)
@@ -26,6 +34,7 @@ export default function AddressList({ className, sid, selectedDomain }) {
     setResolverAddress(resolver)
     const tSidAddress = await nameUI.getAddress()
     setSidAddress(tSidAddress)
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -33,6 +42,14 @@ export default function AddressList({ className, sid, selectedDomain }) {
       fetchInfo()
     }
   }, [sid, selectedDomain])
+
+  if (loading) {
+    return (
+      <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] px-8 py-4 flex justify-center items-center min-w-[994px]">
+        <AnimationSpin size={60} />
+      </div>
+    )
+  }
 
   return (
     <div
