@@ -25,7 +25,8 @@ export async function setup({
     ensAddress
   }
   if (enforceReadOnly) {
-    option.infura = INFURA_ID
+    // FIXME determine network ID
+    option.infura = 'https://data-seed-prebsc-1-s1.binance.org:8545/'
   }
   console.log('enforceReadOnly', enforceReadOnly)
   const {

@@ -3169,7 +3169,32 @@
     ethers "^5.0.13"
     js-sha3 "^0.8.0"
 
-"@siddomains/ui@1.3.34", "@siddomains/ui@^1.0.1", "@siddomains/ui@^1.3.7":
+"@siddomains/ui@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@siddomains/ui/-/ui-1.4.1.tgz#170e045e64426360679a064b218b4dcbc648f5e3"
+  integrity sha512-RWdVWFYlVUF7hLHvQMBoIcMwWFbNCQaRPYoSBTUxK6uauqB7TPGCvwl8rDaO/74aWMaNnhBxSDcnosMB5h+KtQ==
+  dependencies:
+    "@0xproject/utils" "^2.0.2"
+    "@babel/plugin-proposal-class-properties" "^7.8.3"
+    "@babel/runtime" "^7.4.4"
+    "@ensdomains/address-encoder" "^0.2.14"
+    "@ensdomains/content-hash" "^2.5.7"
+    "@ensdomains/contracts" "^0.0.1"
+    "@ensdomains/dnsprovejs" "^0.4.1"
+    "@ensdomains/dnssecoraclejs" "^0.2.7"
+    "@ensdomains/dnssecoraclejs-017" "npm:@ensdomains/dnssecoraclejs@0.1.7"
+    "@ensdomains/eth-ens-namehash" "^2.0.15"
+    "@ensdomains/mock" "^2.0.47"
+    "@ethvault/iframe-provider" "0.1.9"
+    "@siddomains/sid-contracts" "^0.1.2"
+    base58check "^2.0.0"
+    bech32 "^1.1.3"
+    bs58 "^4.0.1"
+    cross-fetch "^3.0.2"
+    dns-packet "^5.2.1"
+    js-sha3 "^0.8.0"
+
+"@siddomains/ui@^1.0.1", "@siddomains/ui@^1.3.7":
   version "1.3.34"
   resolved "https://registry.yarnpkg.com/@siddomains/ui/-/ui-1.3.34.tgz#8b9dbe0b68706a1d4b31546fa5c6c0ed179ba1fd"
   integrity sha512-1KBMVIT6rcfneMwOtMyt0I/R+WH4VmRID+N9prkXpdAyGtm383OomPna9Sacs4+e3J6tDvWjKNwB2rLrbkbCvA==
