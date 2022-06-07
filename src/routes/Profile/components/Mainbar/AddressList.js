@@ -23,20 +23,26 @@ export default function AddressList({ className, sid, selectedDomain }) {
   }
 
   const fetchInfo = async () => {
-    loadingRegisteration(true)
-    setLoadingControllerAddress(true)
-    setLoadingSidAddress(true)
-    const nameUI = sid.name(`${selectedDomain.name}.bnb`)
+    try {
+      const nameUI = sid.name(`${selectedDomain.name}.bnb`)
+      const resolver = await nameUI.getResolver()
+      setResolverAddress(resolver)
+      setLoadingResolverAddress(false)
+    } catch (err) {
+      console.log('err')
+      console.log(err)
+    }
+  }
 
+  const fetchControllerAddress = async () => {
+    const nameUI = sid.name(`${selectedDomain.name}.bnb`)
     const address = await nameUI.getOwner()
     setControllerAddress(address)
-    loadingControllerAddress(false)
     setLoadingControllerAddress(false)
+  }
 
-    const resolver = await nameUI.getResolver()
-    setResolverAddress(resolver)
-    setLoadingResolverAddress(false)
-
+  const fetchSidAddress = async () => {
+    const nameUI = sid.name(`${selectedDomain.name}.bnb`)
     const tSidAddress = await nameUI.getAddress()
     setSidAddress(tSidAddress)
     setLoadingRegisteration(false)
@@ -44,7 +50,13 @@ export default function AddressList({ className, sid, selectedDomain }) {
 
   useEffect(() => {
     if (sid && selectedDomain) {
+      setLoadingRegisteration(true)
+      setLoadingControllerAddress(true)
+      setLoadingResolverAddress(true)
+
       fetchInfo()
+      fetchControllerAddress()
+      fetchSidAddress()
     }
   }, [sid, selectedDomain])
 

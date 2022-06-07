@@ -226,7 +226,6 @@ const getInitialContent = domain => {
 }
 
 const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
-  console.log('dataAddresses', dataAddresses)
   const initialTextRecords = getInitialTextRecords(dataTextRecords, domain)
   var initialCoins = getInitialCoins(dataAddresses)
 
@@ -243,10 +242,6 @@ const useInitRecords = (
   setInitialRecords
 ) => {
   useEffect(() => {
-    console.log(
-      'getInitialRecords(domain, dataAddresses, dataTextRecords)',
-      getInitialRecords(domain, dataAddresses, dataTextRecords)
-    )
     setInitialRecords(getInitialRecords(domain, dataAddresses, dataTextRecords))
   }, [domain, dataAddresses, dataTextRecords])
 }
@@ -259,10 +254,6 @@ export default function Mainboard({ selectedDomain }) {
   )
 
   const [initialRecords, setInitialRecords] = useState([])
-
-  useEffect(() => {
-    console.log('initialRecords', initialRecords)
-  }, [initialRecords])
 
   useInitRecords(
     selectedDomain,
