@@ -257,7 +257,7 @@ const NameRegister = ({
   const manageProfile = () => history.push('/profile')
 
   return (
-    <div className="mt-[calc((100vh-625px)/2-44px)]">
+    <div className="max-w-[448px] mx-auto pb-[40px]">
       <div className="flex justify-center">
         <div className="font-bold text-[28px] text-[#1EEFA4] py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
           {domain.name}
