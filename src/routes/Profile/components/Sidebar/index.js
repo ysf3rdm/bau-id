@@ -53,7 +53,6 @@ export default function Sidebar({ className }) {
   }, [account])
 
   const selectDomain = async (domain, index) => {
-    console.log('domain clicked: ', domain)
     dispatch(setSelectedDomain(domain))
   }
 

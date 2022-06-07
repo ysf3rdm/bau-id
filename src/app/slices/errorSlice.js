@@ -9,7 +9,6 @@ export const errorSlice = createSlice({
   initialState,
   reducers: {
     getError: (state, { payload }) => {
-      console.log('payload', payload)
       state.error = payload
     }
   }

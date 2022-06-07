@@ -27,14 +27,17 @@ export async function setup({
   if (enforceReadOnly) {
     option.infura = INFURA_ID
   }
+  console.log('enforceReadOnly', enforceReadOnly)
   const {
     ens: ensInstance,
     registrar: registrarInstance,
     providerObject
   } = await setupENS(option)
+  console.log('called', ens)
   ens = ensInstance
   registrar = registrarInstance
   ensRegistryAddress = ensAddress
+  console.log('setting up to true')
   isENSReadyReactive(true)
   return { ens, registrar, providerObject }
 }

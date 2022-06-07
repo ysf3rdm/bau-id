@@ -49,8 +49,6 @@ const App = () => {
     data: { globalError }
   } = useQuery(GET_ERRORS)
 
-  console.log('globalError', globalError)
-
   return (
     <BrowserRouter>
       <Switch>

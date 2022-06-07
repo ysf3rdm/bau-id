@@ -39,31 +39,20 @@ function SingleName({
     }
   })
 
+  console.log('loading', loading)
+
   useEffect(() => {
     let normalisedName
+    console.log('isENSReady', isENSReady)
     if (isENSReady) {
       try {
-        // This is under the assumption that validateName never returns false
         normalisedName = validateName(searchTerm)
         setNormalisedName(normalisedName)
         document.title = searchTerm
       } catch {
         document.title = 'Error finding name'
       } finally {
-        parseSearchTerm(normalisedName || searchTerm).then(_type => {
-          if (_type === 'supported' || _type === 'tld' || _type === 'search') {
-            setValid(true)
-
-            setType(_type)
-          } else {
-            if (_type === 'invalid') {
-              setType('domainMalformed')
-            } else {
-              setType(_type)
-            }
-            setValid(false)
-          }
-        })
+        setValid(true)
       }
     }
   }, [searchTerm, isENSReady])

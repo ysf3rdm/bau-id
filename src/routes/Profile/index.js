@@ -33,8 +33,8 @@ export default function Profile() {
   }
 
   return (
-    <div className="mt-[40px]">
-      <div className="flex">
+    <div className="mt-[10px] pb-[54px]">
+      <div className="flex justify-center">
         {/* SideBar Component */}
         <Sidebar className="mr-[32px]" />
         <Mainbar sid={sid} selectedDomain={selectedDomain} />

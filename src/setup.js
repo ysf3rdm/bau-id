@@ -75,6 +75,7 @@ export const getProvider = async reconnect => {
       return provider
     }
     const safe = await safeInfo()
+    console.log('safe', safe)
     if (safe) {
       const provider = await setupSafeApp(safe)
       loadingWalletReactive(false)
@@ -89,9 +90,6 @@ export const getProvider = async reconnect => {
       loadingWalletReactive(false)
       return provider
     }
-
-    const networkId = await getNetworkId()
-
     const { providerObject } = await setup({
       reloadOnAccountsChange: false,
       enforceReadOnly: true,
@@ -101,10 +99,8 @@ export const getProvider = async reconnect => {
     loadingWalletReactive(false)
     return provider
   } catch (e) {
-    if (
-      e.message.match(/Unsupported network/) ||
-      e.message.match(/call revert exception/)
-    ) {
+    console.log('e', e.message)
+    if (e.message.match(/Unsupported network/)) {
       globalErrorReactive({
         ...globalErrorReactive(),
         network: 'Unsupported Network'
@@ -167,6 +163,7 @@ export const setWeb3Provider = async provider => {
 
 export default async reconnect => {
   try {
+    console.log('reconnecting now')
     setFavourites()
     setSubDomainFavourites()
     const provider = await getProvider(reconnect)

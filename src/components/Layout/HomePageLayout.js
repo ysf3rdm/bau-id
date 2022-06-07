@@ -113,7 +113,7 @@ export default ({ children }) => {
   return (
     <section
       style={{ background: `url(${bg})` }}
-      className="pt-[60px] px-5 pb-5 bg-cover relative flex justify-center min-h-[100vh]"
+      className="bg-cover relative min-h-[100vh]"
     >
       {globalError.network && (
         <Modal width="574px">
@@ -136,14 +136,14 @@ export default ({ children }) => {
           </div>
         </Modal>
       )}
-      <div className="h-[100px] flex py-[20px] px-[48px] xl:px-[48px] justify-between absolute left-0 top-0 items-center w-full">
+      <div className="h-[100px] flex py-[20px] px-[48px] xl:px-[48px] justify-between items-center w-full">
         <a
           href="https://space.id/"
           className="text-[#1EEFA4] flex items-center cursor-pointer visited:text-[#1EEFA4]"
         >
           <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
           <div className="font-semibold text-[18px] ml-[31px]">
-            About SpaceID
+            About <span className="uppercase">Space ID</span>
           </div>
         </a>
 
