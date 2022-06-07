@@ -181,7 +181,6 @@ const Domain = ({
   setSelectAll,
   hasInvalidCharacter
 }) => {
-  console.log('DomainItem: ', Array.from(domain.name))
   const mediumBP = useMediaMax('medium')
   if (loading) {
     return (

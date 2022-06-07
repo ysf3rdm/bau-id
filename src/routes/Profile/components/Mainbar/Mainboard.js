@@ -154,6 +154,7 @@ const useGetRecords = domain => {
       fetchPolicy: 'network-only'
     }
   )
+
   const { loading: textRecordsLoading, data: dataTextRecords } = useQuery(
     GET_TEXT_RECORDS,
     {
@@ -228,7 +229,6 @@ const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
   console.log('dataAddresses', dataAddresses)
   const initialTextRecords = getInitialTextRecords(dataTextRecords, domain)
   var initialCoins = getInitialCoins(dataAddresses)
-  console.log('initialCoins', initialCoins)
 
   initialCoins[0].key = 'EVM'
   const initialContent = getInitialContent(domain)

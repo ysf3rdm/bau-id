@@ -14,27 +14,32 @@ export default function AddressList({ className, sid, selectedDomain }) {
   const subDomainEditMode = useSelector(state => state.ui.subDomainEditMode)
   const dispatch = useDispatch()
 
-  const [loading, setLoading] = useState(false)
+  const [loadingRegisteration, setLoadingRegisteration] = useState(true)
+  const [loadingControllerAddress, setLoadingControllerAddress] = useState(true)
+  const [loadingResolverAddress, setLoadingResolverAddress] = useState(true)
 
   const toggleSubDomainEditModeHandle = () => {
     dispatch(toggleSubDomainEditMode(!subDomainEditMode))
   }
 
-  useState(() => {
-    setLoading(true)
-  }, [])
-
   const fetchInfo = async () => {
-    console.log('sid', sid)
-    console.log('selectedDomain', selectedDomain)
+    loadingRegisteration(true)
+    setLoadingControllerAddress(true)
+    setLoadingSidAddress(true)
     const nameUI = sid.name(`${selectedDomain.name}.bnb`)
+
     const address = await nameUI.getOwner()
     setControllerAddress(address)
+    loadingControllerAddress(false)
+    setLoadingControllerAddress(false)
+
     const resolver = await nameUI.getResolver()
     setResolverAddress(resolver)
+    setLoadingResolverAddress(false)
+
     const tSidAddress = await nameUI.getAddress()
     setSidAddress(tSidAddress)
-    setLoading(false)
+    setLoadingRegisteration(false)
   }
 
   useEffect(() => {
@@ -42,14 +47,6 @@ export default function AddressList({ className, sid, selectedDomain }) {
       fetchInfo()
     }
   }, [sid, selectedDomain])
-
-  if (loading) {
-    return (
-      <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] px-8 py-4 flex justify-center items-center min-w-[994px]">
-        <AnimationSpin size={60} />
-      </div>
-    )
-  }
 
   return (
     <div
@@ -61,33 +58,33 @@ export default function AddressList({ className, sid, selectedDomain }) {
       <div className="grid grid-cols-1 gap-y-3 1200px:grid-cols-3 gap-x-4 px-4 xl:border-r border-[rgba(204,252,255,0.2)]">
         <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white">
           <p className="text-[#B1D6D3] text-[14px] font-semibold">Registrant</p>
-          <p className="font-semibold text-[18px] font-urbanist">
-            <span>
-              {sidAddress
-                ? convertToETHAddressDisplayFormat(sidAddress)
-                : '0x0000...000000'}
-            </span>
-          </p>
+          {loadingRegisteration ? (
+            <AnimationSpin className="flex justify-center mt-1" />
+          ) : (
+            <p className="font-semibold text-[18px] font-urbanist">
+              {convertToETHAddressDisplayFormat(sidAddress)}
+            </p>
+          )}
         </div>
         <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white">
           <p className="text-[#B1D6D3] text-[14px] font-semibold">Controller</p>
-          <p className="font-semibold text-[18px] font-urbanist">
-            <span>
-              {controllerAddress
-                ? convertToETHAddressDisplayFormat(controllerAddress)
-                : '0x0000...000000'}
-            </span>
-          </p>
+          {loadingControllerAddress ? (
+            <AnimationSpin className="flex justify-center mt-1" />
+          ) : (
+            <p className="font-semibold text-[18px] font-urbanist">
+              {convertToETHAddressDisplayFormat(controllerAddress)}
+            </p>
+          )}
         </div>
         <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white">
           <p className="text-[#B1D6D3] text-[14px] font-semibold">Resolver</p>
-          <p className="font-semibold text-[18px] font-urbanist">
-            <span>
-              {resolverAddress
-                ? convertToETHAddressDisplayFormat(resolverAddress)
-                : '0x0000...000000'}
-            </span>
-          </p>
+          {loadingResolverAddress ? (
+            <AnimationSpin className="flex justify-center mt-1" />
+          ) : (
+            <p className="font-semibold text-[18px] font-urbanist">
+              {convertToETHAddressDisplayFormat(resolverAddress)}
+            </p>
+          )}
         </div>
       </div>
       <div

@@ -14,7 +14,6 @@ export const accountsSlice = createSlice({
   initialState,
   reducers: {
     getAccounts: (state, { payload }) => {
-      console.log('payload', payload)
       state.accounts = payload
     },
     getHomeData: (state, { payload }) => {

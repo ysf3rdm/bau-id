@@ -25,7 +25,6 @@ const resolvers = {
     async getRentPrice(_, { label, duration }) {
       const registrar = getRegistrar()
       const rentPrice = await registrar.getRentPrice(label, duration)
-      console.log('rentPrice', rentPrice)
       return rentPrice[0]
     },
     async getRentPrices(_, { labels, duration }) {
@@ -78,10 +77,8 @@ const resolvers = {
       return sendHelper(tx)
     },
     async register(_, { label, duration, signature }) {
-      console.log('register function has been called')
       const registrar = getRegistrar()
       const tx = await registrar.register(label, duration, signature)
-      console.log('tx', tx)
       return sendHelper(tx)
     },
     async reclaim(_, { name, address }) {

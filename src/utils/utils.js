@@ -138,7 +138,6 @@ export const parseSearchTerm = async term => {
   } catch (e) {
     return 'invalid'
   }
-  console.log('** parseSearchTerm', { ens })
   const address = await ens.getOwner(tld)
   return _parseSearchTerm(term, true)
 }
@@ -272,7 +271,6 @@ export function normaliseOrMark(data, name, nested = false) {
       normalised = normalize(domain[name])
     } catch (e) {
       if (e.message.match(/Illegal char/)) {
-        console.log('domain: ', { ...domain, hasInvalidCharacter: true })
         return { ...data, hasInvalidCharacter: true }
       }
 

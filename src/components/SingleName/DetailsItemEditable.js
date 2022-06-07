@@ -666,7 +666,6 @@ const Editable = ({
               <SaveCancel
                 stopEditing={stopEditing}
                 mutation={() => {
-                  console.log('come to SaveCancel')
                   const variables = getVariables(keyName, {
                     domain,
                     variableName,
