@@ -372,12 +372,13 @@ const NameRegister = ({
 const NameRegisterDataWrapper = props => {
   const { data, loading, error } = useQuery(GET_MINIMUM_COMMITMENT_AGE)
 
+  console.log('data', data)
+
   if (loading) return <Loader withWrap={true} large />
   if (error) {
     console.log(error)
   }
-  const { getMinimumCommitmentAge } = data
-  return <NameRegister waitTime={getMinimumCommitmentAge} {...props} />
+  return <NameRegister waitTime={data?.getMinimumCommitmentAge} {...props} />
 }
 
 export default NameRegisterDataWrapper

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import Search from 'components/SearchName/Search'
 
 const animation = {
@@ -13,6 +14,9 @@ const animation = {
 }
 
 export default () => {
+  const searchingDomainName = useSelector(
+    state => state.domain.searchingDomainName
+  )
   return (
     <div className="my-0 mx-auto min-w-[100%] md:min-w-[60%] mt-[30vh]">
       <>
@@ -24,7 +28,10 @@ export default () => {
           initial={animation.initial}
           animate={animation.animate}
         />
-        <Search className="w-[512px] mx-auto" />
+        <Search
+          className="w-[512px] mx-auto"
+          searchingDomainName={searchingDomainName}
+        />
       </>
     </div>
   )

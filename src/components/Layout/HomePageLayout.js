@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { useQuery, gql } from '@apollo/client'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -25,6 +26,8 @@ import Modal from 'components/Modal/Modal'
 import { GET_ERRORS } from 'graphql/queries'
 
 import useReactiveVarListeners from 'hooks/useReactiveVarListeners'
+import { Search } from 'components/SearchName/Search'
+import InnerSearch from 'components/SearchName/InnerSearch'
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -45,7 +48,8 @@ export const GET_ACCOUNT = gql`
 export default ({ children }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-
+  const location = useLocation()
+  console.log('location', location)
   const history = useHistory()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -150,6 +154,8 @@ export default ({ children }) => {
         <div className="relative">
           {!isSafeApp && (
             <div className="mt-0 w-full md:w-auto flex items-center">
+              {location.pathname !== '/' && <InnerSearch className="mr-4" />}
+
               <NoAccountsDefault
                 onClick={connectProvider}
                 loadingWallet={loadingWallet}
