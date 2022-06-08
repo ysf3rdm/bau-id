@@ -1,36 +1,54 @@
-import React, { useState } from 'react'
-import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
 import axios from 'axios'
 import { Formik } from 'formik'
-
-import '../../api/subDomainRegistrar'
 import { withRouter } from 'react-router'
+import { useDispatch } from 'react-redux'
 
-import './search.scss'
 import TwoPoints from 'components/Icons/TwoPoints'
 import SearchIcon from 'components/Icons/SearchIcon'
 import FaceCryIcon from 'components/Icons/FaceCryIcon'
 import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
+import { setSearchDomainName } from 'app/slices/domainSlice'
 
-function Search({ history, className, style }) {
+import '../../api/subDomainRegistrar'
+import './search.scss'
+
+function Search({ history, className, style, searchingDomainName }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
+  const dispatch = useDispatch()
 
   const gotoDetailPage = () => {
     if (result.Owner) {
       history.push(`/address/${result.Owner}`)
     } else {
-      // history.push(`/register/${result.name}`)
       history.push(`/name/${result.name}.bnb/register`)
     }
   }
 
+  useEffect(() => {
+    if (searchingDomainName) {
+      dispatch(setSearchDomainName(''))
+      const params = {
+        ChainID: 97,
+        name: searchingDomainName
+      }
+      axios
+        .post(`https://space-id-348516.uw.r.appspot.com/nameof`, {
+          ...params
+        })
+        .then(res => {
+          setResult(res.data)
+          setShowPopup(true)
+        })
+    }
+  }, [searchingDomainName])
+
   return (
     <div className={cn('relative', className)}>
       <Formik
-        initialValues={{ searchKey: '' }}
+        initialValues={{ searchKey: searchingDomainName ?? '' }}
         validate={values => {
           const errors = {}
           if (values.searchKey.length < 3) {
@@ -65,7 +83,6 @@ function Search({ history, className, style }) {
           handleChange,
           handleBlur,
           handleSubmit
-          /* and other goodies */
         }) => (
           <form
             className={cn(`relative`)}
@@ -151,12 +168,18 @@ function Search({ history, className, style }) {
 
 const SearchWithRouter = withRouter(Search)
 
-const SearchContainer = ({ searchDomain, className, style }) => {
+const SearchContainer = ({
+  searchDomain,
+  className,
+  style,
+  searchingDomainName
+}) => {
   return (
     <SearchWithRouter
       searchDomain={searchDomain}
       className={className}
       style={style}
+      searchingDomainName={searchingDomainName}
     />
   )
 }
