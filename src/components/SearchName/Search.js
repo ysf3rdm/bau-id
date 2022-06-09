@@ -12,7 +12,6 @@ import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
 import { setSearchDomainName } from 'app/slices/domainSlice'
 
 import '../../api/subDomainRegistrar'
-import './search.scss'
 
 function Search({ history, className, style, searchingDomainName }) {
   const [showPopup, setShowPopup] = useState(false)
@@ -92,7 +91,7 @@ function Search({ history, className, style, searchingDomainName }) {
             <TwoPoints className="absolute text-[#1EEFA4] left-4 top-[11px]" />
             <div>
               <input
-                className="w-full bg-[#104151]/[0.25] py-[10px] px-[36px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px]"
+                className="w-full bg-[#104151]/[0.25] py-[10px] px-[36px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent"
                 placeholder="Explore the space"
                 onChange={e => {
                   setShowPopup(false)
@@ -102,7 +101,6 @@ function Search({ history, className, style, searchingDomainName }) {
                 name="searchKey"
                 onBlur={handleBlur}
                 value={values.searchKey}
-                autoCapitalize="off"
               />
             </div>
             {errors.searchKey && touched.searchKey && (
