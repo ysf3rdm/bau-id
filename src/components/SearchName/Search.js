@@ -9,10 +9,9 @@ import TwoPoints from 'components/Icons/TwoPoints'
 import SearchIcon from 'components/Icons/SearchIcon'
 import FaceCryIcon from 'components/Icons/FaceCryIcon'
 import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
-import { setSearchDomainName } from 'app/slices/domainSlice'
+import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
 
 import '../../api/subDomainRegistrar'
-import './search.scss'
 
 function Search({ history, className, style, searchingDomainName }) {
   const [showPopup, setShowPopup] = useState(false)
@@ -21,7 +20,9 @@ function Search({ history, className, style, searchingDomainName }) {
 
   const gotoDetailPage = () => {
     if (result.Owner) {
-      history.push(`/address/${result.Owner}`)
+      // history.push(`/address/${result.Owner}`)
+      dispatch(setSelectedDomain({ ...result, expires_at: '2023.3.6' }))
+      history.push(`/profile`)
     } else {
       history.push(`/name/${result.name}.bnb/register`)
     }
@@ -92,7 +93,7 @@ function Search({ history, className, style, searchingDomainName }) {
             <TwoPoints className="absolute text-[#1EEFA4] left-4 top-[11px]" />
             <div>
               <input
-                className="w-full bg-[#104151]/[0.25] py-[10px] px-[36px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px]"
+                className="w-full bg-[#104151]/[0.25] py-[10px] px-[36px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent"
                 placeholder="Explore the space"
                 onChange={e => {
                   setShowPopup(false)
@@ -102,7 +103,6 @@ function Search({ history, className, style, searchingDomainName }) {
                 name="searchKey"
                 onBlur={handleBlur}
                 value={values.searchKey}
-                autoCapitalize="off"
               />
             </div>
             {errors.searchKey && touched.searchKey && (
