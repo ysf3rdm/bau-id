@@ -9,7 +9,7 @@ import TwoPoints from 'components/Icons/TwoPoints'
 import SearchIcon from 'components/Icons/SearchIcon'
 import FaceCryIcon from 'components/Icons/FaceCryIcon'
 import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
-import { setSearchDomainName } from 'app/slices/domainSlice'
+import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
 
 import '../../api/subDomainRegistrar'
 
@@ -20,7 +20,9 @@ function Search({ history, className, style, searchingDomainName }) {
 
   const gotoDetailPage = () => {
     if (result.Owner) {
-      history.push(`/address/${result.Owner}`)
+      // history.push(`/address/${result.Owner}`)
+      dispatch(setSelectedDomain({ ...result, expires_at: '2023.3.6' }))
+      history.push(`/profile`)
     } else {
       history.push(`/name/${result.name}.bnb/register`)
     }

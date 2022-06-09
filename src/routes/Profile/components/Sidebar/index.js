@@ -39,7 +39,9 @@ export default function Sidebar({ className }) {
       }
     })
     if (data.length > 0) {
-      dispatch(setSelectedDomain(data[0]))
+      if (!selectedDomain) {
+        dispatch(setSelectedDomain(data[0]))
+      }
     }
 
     setDomainList(data)
