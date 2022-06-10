@@ -26,8 +26,9 @@ import Modal from 'components/Modal/Modal'
 import { GET_ERRORS } from 'graphql/queries'
 
 import useReactiveVarListeners from 'hooks/useReactiveVarListeners'
+// import { Search } from 'components/SearchName/Search'
+// import InnerSearch from 'components/SearchName/InnerSearch'
 import { Search } from 'components/SearchName/Search'
-import InnerSearch from 'components/SearchName/InnerSearch'
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -154,7 +155,9 @@ export default ({ children }) => {
         <div className="relative">
           {!isSafeApp && (
             <div className="mt-0 w-full md:w-auto flex items-center">
-              {location.pathname !== '/' && <InnerSearch className="mr-4" />}
+              {location.pathname !== '/' && (
+                <Search className="mr-4 w-[400px]" errorShowing={false} />
+              )}
 
               <NoAccountsDefault
                 onClick={connectProvider}

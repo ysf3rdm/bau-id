@@ -29,7 +29,7 @@ export default () => {
           animate={animation.animate}
         />
         <Search
-          className="w-[512px] mx-auto"
+          className="w-[600px] mx-auto"
           searchingDomainName={searchingDomainName}
         />
       </>

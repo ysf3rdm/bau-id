@@ -13,12 +13,19 @@ import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
 
 import '../../api/subDomainRegistrar'
 
-function Search({ history, className, style, searchingDomainName }) {
+function Search({
+  history,
+  className,
+  style,
+  searchingDomainName,
+  errorShowing = true
+}) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
   const dispatch = useDispatch()
 
   const gotoDetailPage = () => {
+    setShowPopup(false)
     if (result.Owner) {
       // history.push(`/address/${result.Owner}`)
       dispatch(setSelectedDomain({ ...result, expires_at: '2023.3.6' }))
@@ -90,10 +97,16 @@ function Search({ history, className, style, searchingDomainName }) {
             style={style}
             onSubmit={handleSubmit}
           >
-            <TwoPoints className="absolute text-[#1EEFA4] left-4 top-[11px]" />
+            <button
+              className="absolute left-4 top-[14px]"
+              type="submit"
+              data-testid={'home-search-button'}
+            >
+              <SearchIcon className="text-[#1EEFA4]" />
+            </button>
             <div>
               <input
-                className="w-full bg-[#104151]/[0.25] py-[10px] px-[36px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent"
+                className="w-full bg-[#104151]/[0.25] py-[10px] px-[40px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent"
                 placeholder="Explore the space"
                 onChange={e => {
                   setShowPopup(false)
@@ -105,38 +118,34 @@ function Search({ history, className, style, searchingDomainName }) {
                 value={values.searchKey}
               />
             </div>
-            {errors.searchKey && touched.searchKey && (
+            {errorShowing && errors.searchKey && touched.searchKey && (
               <div className="text-[#ED7E17] text-[16px] font-semibold mt-1 ml-3">
                 {errors.searchKey}
               </div>
             )}
-            <button
-              className="absolute right-4 top-[14px]"
-              type="submit"
-              data-testid={'home-search-button'}
-            >
-              <SearchIcon className="text-[#1EEFA4]" />
-            </button>
-            <div className="text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute right-[44px] top-[10px]">
+            <div className="text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute right-[110px] top-[10px]">
               .bnb
             </div>
+            <button
+              type="submit"
+              className="bg-[#1EEFA4] text-semibold text-[14px] font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
+            >
+              Search
+            </button>
           </form>
         )}
       </Formik>
       {showPopup && (
-        <div className="absolute top-[55px] shadow-popup flex w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between">
+        <div className="absolute top-[55px] shadow-popup flex w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-[10]">
           <div className="flex items-center">
             {result.Owner ? (
-              <FaceCryIcon className="text-[#ED7E17]" />
+              <FaceCryIcon className="text-[#30DB9E]" />
             ) : (
               <FaceHappyIcon className="text-[#30DB9E]" />
             )}
 
             <span
-              className={cn(
-                'ml-2 text-[16px] font-semibold',
-                result.Owner ? 'text-[#ED7E17]' : 'text-[#30DB9E]'
-              )}
+              className={cn('ml-2 text-[16px] font-semibold text-[#30DB9E]')}
             >
               {result.name}.bnb
             </span>
@@ -145,16 +154,16 @@ function Search({ history, className, style, searchingDomainName }) {
             <div
               className={cn(
                 'text-[12px]',
-                result.Owner ? 'text-[#ED7E17]' : 'text-[#30DB9E]'
+                result.Owner ? 'text-[#ED7E17]' : 'text-[#2980E8]'
               )}
             >
-              {result.Owner ? 'Unavailable' : 'Available'}
+              {result.Owner ? 'Unavailable' : 'available'}
             </div>
             <div
               onClick={gotoDetailPage}
               className={cn(
                 'cursor-pointer w-[100px] justify-center flex items-center h-[28px] text-white text-center rounded-[8px] font-urbanist font-semibold ml-3',
-                result.Owner ? 'bg-[#ED7E17]' : 'bg-[#30DB9E]'
+                result.Owner ? 'bg-[#ED7E17]' : 'bg-[#2980E8]'
               )}
             >
               {result.Owner ? <span>View</span> : <span>Register</span>}

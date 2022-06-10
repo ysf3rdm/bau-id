@@ -14,12 +14,6 @@ function InnerSearch({ history, className, style }) {
   const dispatch = useDispatch()
   const gotoSearchPage = () => {
     history.push('/')
-    // if (result.Owner) {
-    //   history.push(`/address/${result.Owner}`)
-    // } else {
-    //   // history.push(`/register/${result.name}`)
-    //   history.push(`/name/${result.name}.bnb/register`)
-    // }
   }
 
   return (
@@ -64,9 +58,9 @@ function InnerSearch({ history, className, style }) {
             >
               <SearchIcon className="text-[rgba(204,252,255,0.3)]" />
             </button>
-            <div>
+            <div className="w-full">
               <input
-                className="w-full bg-[#104151]/[0.25] py-2 px-[36px] text-[#BDCED1] w-[275px] text-[18px] border border-[rgba(204,252,255,0.3)] rounded-[18px]"
+                className="w-full bg-[#104151]/[0.25] py-2 px-[36px] text-[#BDCED1] text-[18px] border border-[rgba(204,252,255,0.3)] rounded-[18px]"
                 placeholder=""
                 onChange={e => {
                   handleChange(e)
