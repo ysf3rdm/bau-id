@@ -67,6 +67,7 @@ function Search({
             errors.searchKey =
               'Name can only contain lowercase letters, numbers and emojis'
           }
+          console.log(errors)
           return errors
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -118,11 +119,14 @@ function Search({
                 value={values.searchKey}
               />
             </div>
-            {errorShowing && errors.searchKey && touched.searchKey && (
-              <div className="text-[#ED7E17] text-[16px] font-semibold mt-1 ml-3">
-                {errors.searchKey}
-              </div>
-            )}
+            {errorShowing &&
+              errors.searchKey &&
+              touched.searchKey &&
+              values.searchKey.length > 0 && (
+                <div className="text-[#ED7E17] text-[16px] font-semibold mt-1 ml-3">
+                  {errors.searchKey}
+                </div>
+              )}
             <div className="text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute right-[110px] top-[10px]">
               .bnb
             </div>

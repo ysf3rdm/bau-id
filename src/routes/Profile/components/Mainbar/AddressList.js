@@ -68,7 +68,7 @@ export default function AddressList({ className, sid, selectedDomain }) {
       )}
     >
       <div className="grid grid-cols-1 gap-y-3 1200px:grid-cols-3 gap-x-4 px-4 xl:border-r border-[rgba(204,252,255,0.2)]">
-        <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white">
+        <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white 1200px:w-[224px]">
           <p className="text-[#B1D6D3] text-[14px] font-semibold">Registrant</p>
           {loadingRegisteration ? (
             <AnimationSpin className="flex justify-center mt-1" />
@@ -78,7 +78,7 @@ export default function AddressList({ className, sid, selectedDomain }) {
             </p>
           )}
         </div>
-        <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white">
+        <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white 1200px:w-[224px]">
           <p className="text-[#B1D6D3] text-[14px] font-semibold">Controller</p>
           {loadingControllerAddress ? (
             <AnimationSpin className="flex justify-center mt-1" />
@@ -88,7 +88,7 @@ export default function AddressList({ className, sid, selectedDomain }) {
             </p>
           )}
         </div>
-        <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white">
+        <div className="bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white 1200px:w-[224px]">
           <p className="text-[#B1D6D3] text-[14px] font-semibold">Resolver</p>
           {loadingResolverAddress ? (
             <AnimationSpin className="flex justify-center mt-1" />
@@ -102,7 +102,7 @@ export default function AddressList({ className, sid, selectedDomain }) {
       <div
         onClick={() => toggleSubDomainEditModeHandle()}
         className={cn(
-          'rounded-[89px] px-[43px] py-2 text-center text-white ml-4 mt-3 xl:mt-0 cursor-pointer',
+          'rounded-[89px] px-[43px] py-2 text-center text-white mx-4 mt-3 xl:mt-0 cursor-pointer',
           subDomainEditMode ? 'bg-[#30DB9E]' : 'bg-[rgba(204,252,255,0.2)]'
         )}
       >

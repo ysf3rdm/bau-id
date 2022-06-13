@@ -33,7 +33,6 @@ export default function Sidebar({ className }) {
     )
     const data = result?.data?.map(item => {
       const date = new Date(item?.expires)
-      console.log('date', item?.expires)
       return {
         expires_at: `${date.getFullYear()}.${date.getMonth() +
           1}.${date.getDate()}`,
@@ -70,7 +69,7 @@ export default function Sidebar({ className }) {
       <div>
         <ProfileCard className="mb-4" />
         {/* <WidgetFunction className="mt-4 mb-4" /> */}
-        <DomainPanel />
+        {/* <DomainPanel /> */}
         <DomainList
           className="mt-4"
           domainsList={domainList}

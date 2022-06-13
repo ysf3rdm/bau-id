@@ -1,5 +1,6 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from '@apollo/client'
 import cn from 'classnames'
 import moment from 'moment'
@@ -19,6 +20,11 @@ import {
 import { useInterval, useGasPrice, useBlock } from 'components/hooks'
 import { useAccount } from '../../QueryAccount'
 import { registerMachine, registerReducer } from './registerReducer'
+import {
+  startRegistering,
+  errorRegistering,
+  successRegistering
+} from 'app/slices/registerSlice'
 import { calculateDuration, yearInSeconds } from 'utils/dates'
 
 import Loader from 'components/Loader'
@@ -32,6 +38,7 @@ import PremiumPriceOracle from './PremiumPriceOracle'
 
 import EditIcon from 'components/Icons/EditIcon'
 import SuccessfulTickIcon from 'components/Icons/SuccessfulTickIcon'
+import AnimationSpin from 'components/AnimationSpin'
 
 const NameRegister = ({
   domain,
@@ -44,11 +51,12 @@ const NameRegister = ({
   const { t } = useTranslation()
   const [secret, setSecret] = useState(false)
   const { networkId } = useNetworkInfo()
+  const dispatchSlice = useDispatch()
   const [step, dispatch] = useReducer(
     registerReducer,
     registerMachine.initialState
   )
-  const [customStep, setCustomStep] = useState('PENDING')
+  const [customStep, setCustomStep] = useState('START')
   let now, currentPremium, underPremium
   const incrementStep = () => dispatch('NEXT')
   const decrementStep = () => dispatch('PREVIOUS')
@@ -247,6 +255,7 @@ const NameRegister = ({
   }
 
   const successRegister = () => {
+    dispatchSlice(successRegistering())
     setCustomStep('SUCCESS')
   }
 
@@ -265,7 +274,7 @@ const NameRegister = ({
       </div>
 
       {/* Register Process Screen if the user doesn't have any domain */}
-      {customStep === 'PENDING' && (
+      {customStep === 'START' && (
         <div>
           <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
             {step === 'AWAITING_REGISTER' && (
@@ -287,6 +296,7 @@ const NameRegister = ({
             )}
           </div>
           <CTA
+            setCustomStep={setCustomStep}
             signature={signature}
             hasSufficientBalance={hasSufficientBalance}
             waitTime={waitTime}
@@ -314,15 +324,23 @@ const NameRegister = ({
           />
         </div>
       )}
-      {customStep === 'SUCCESS' && (
+
+      {(customStep === 'SUCCESS' || customStep === 'PENDING') && (
         <div className="max-w-[436px]">
           <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
             <div className="flex justify-center">
               <EditIcon />
             </div>
-            <div className="font-semibold text-[24px] text-white text-center mt-2">
-              Registration in progress...
-            </div>
+            {customStep === 'PENDING' ? (
+              <div className="font-semibold text-[24px] text-white text-center mt-2">
+                Registration in progress...
+              </div>
+            ) : (
+              <div className="font-semibold text-[24px] text-white text-center mt-2">
+                Registration completed!
+              </div>
+            )}
+
             <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
               Please be patient as the process might take a few minutes. You may
               click <span className="text-[#ED7E18]">here</span> to learn more
@@ -333,13 +351,28 @@ const NameRegister = ({
                 <div className="font-semibold text-[16px] text-[#30DB9E]">
                   Confirm Payment
                 </div>
-                <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                {customStep === 'PENDING' ? (
+                  <AnimationSpin className="flex justify-center mt-1" />
+                ) : (
+                  <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                )}
               </div>
-              <div className="text-center">
-                <div className="font-semibold text-[16px] text-[#30DB9E]">
+              <div className="text-center mt-1">
+                <div
+                  className={cn(
+                    'font-semibold text-[16px]',
+                    customStep === 'PENDING'
+                      ? 'text-[#7E9195]'
+                      : 'text-[#30DB9E]'
+                  )}
+                >
                   Successful registration. Name published
                 </div>
-                <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                {customStep === 'PENDING' ? (
+                  <AnimationSpin className="flex justify-center mt-1" />
+                ) : (
+                  <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                )}
               </div>
             </div>
             <div className="grid grid-cols-2 gap-x-[24px] mt-10">
@@ -371,8 +404,6 @@ const NameRegister = ({
 
 const NameRegisterDataWrapper = props => {
   const { data, loading, error } = useQuery(GET_MINIMUM_COMMITMENT_AGE)
-
-  console.log('data', data)
 
   if (loading) return <Loader withWrap={true} large />
   if (error) {

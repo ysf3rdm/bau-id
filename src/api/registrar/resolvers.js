@@ -77,9 +77,24 @@ const resolvers = {
       return sendHelper(tx)
     },
     async register(_, { label, duration, signature }) {
-      const registrar = getRegistrar()
-      const tx = await registrar.register(label, duration, signature)
-      return sendHelper(tx)
+      console.log('register has been called')
+      try {
+        const registrar = getRegistrar()
+        const tx = await registrar.register(label, duration, signature)
+        return sendHelper(tx)
+      } catch (err) {
+        console.log('err', err)
+        console.log('err message', err.message)
+        if (
+          err.message.includes(
+            'MetaMask Tx Signature: User denied transaction signature.'
+          )
+        ) {
+          console.log('user denined to register')
+          return { err }
+        }
+        return err
+      }
     },
     async reclaim(_, { name, address }) {
       const registrar = getRegistrar()

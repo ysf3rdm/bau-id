@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { Mutation } from '@apollo/client/react/components'
 import { useTranslation } from 'react-i18next'
 import EthVal from 'ethval'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { trackReferral } from '../../../utils/analytics'
 import { REGISTER } from '../../../graphql/mutations'
@@ -15,11 +16,11 @@ import Button from '../../Forms/Button'
 import AddToCalendar from '../../Calendar/RenewalCalendar'
 import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
 import { useAccount } from '../../QueryAccount'
-import { registerLoadingReactive } from 'apollo/reactiveVars'
 
 import InsufficientBalanceModal from '../../Modal/InsufficientBalanceModal'
-import { useReactiveVarListeners } from 'hooks/useReactiveVarListeners'
 import AnimationSpin from '../../AnimationSpin/index'
+
+import { startRegistering, errorRegistering } from 'app/slices/registerSlice'
 
 function getCTA({
   step,
@@ -41,7 +42,9 @@ function getCTA({
   successRegister,
   setRegistering,
   registering,
-  goBack
+  goBack,
+  setCustomStep,
+  startRegisterFuc
 }) {
   const CTAs = {
     AWAITING_REGISTER: (
@@ -49,12 +52,18 @@ function getCTA({
         mutation={REGISTER}
         variables={{ label, duration, signature }}
         onCompleted={data => {
-          successRegister()
-          setRegistering(false)
-        }}
-        onError={err => {
-          setRegistering(false)
-          console.log('err', err)
+          console.log('data error', data?.register)
+          console.log('data error', data?.register?.err)
+          if (data?.register?.err) {
+            // this is the error case
+            setCustomStep('START')
+            errorRegistering()
+            setRegistering(false)
+          } else {
+            // This is the success case
+            successRegister()
+            setRegistering(false)
+          }
         }}
       >
         {mutate => (
@@ -64,6 +73,8 @@ function getCTA({
                 data-testid="request-register-button"
                 onClick={async () => {
                   if (hasSufficientBalance) {
+                    startRegisterFuc()
+                    setCustomStep('PENDING')
                     setRegistering(true)
                     mutate()
                   } else setShowSufficientBalanceModal(true)
@@ -154,6 +165,7 @@ function getCTA({
 }
 
 const CTA = ({
+  setCustomStep,
   step,
   incrementStep,
   secret,
@@ -180,6 +192,7 @@ const CTA = ({
   const account = useAccount()
   const [txHash, setTxHash] = useState(undefined)
   const [registering, setRegistering] = useState(false)
+  const dispatch = useDispatch()
   const [showSufficientBalanceModal, setShowSufficientBalanceModal] = useState(
     false
   )
@@ -194,6 +207,10 @@ const CTA = ({
 
   const goBack = () => {
     history.push('/')
+  }
+
+  const startRegisterFuc = () => {
+    dispatch(startRegistering())
   }
 
   return (
@@ -232,7 +249,9 @@ const CTA = ({
         successRegister,
         setRegistering,
         registering,
-        goBack
+        goBack,
+        setCustomStep,
+        startRegisterFuc
       })}
     </div>
   )
