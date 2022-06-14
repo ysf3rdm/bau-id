@@ -4,8 +4,6 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled/macro'
 import { useTranslation } from 'react-i18next'
 
-const BlockiesContainer = styled('span')``
-
 const Blockies = ({
   address,
   imageSize = 42,
@@ -28,12 +26,10 @@ const Blockies = ({
   var style = {
     backgroundImage: 'url(' + imgURL + ')',
     backgroundSize: 'cover',
-    width: imageSize + 'px',
-    height: imageSize + 'px',
     display: 'inline-block'
   }
 
-  return <BlockiesContainer className={className} style={style} />
+  return <div className={className} style={style} />
 }
 
 Blockies.propTypes = {

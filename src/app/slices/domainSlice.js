@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   selectedDomain: null,
-  searchingDomainName: ''
+  searchingDomainName: '',
+  domains: []
 }
 
 export const domainSlice = createSlice({
@@ -14,11 +15,18 @@ export const domainSlice = createSlice({
     },
     setSearchDomainName: (state, { payload }) => {
       state.searchingDomainName = payload
+    },
+    setAllDomains: (state, { payload }) => {
+      state.domains = payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setSelectedDomain, setSearchDomainName } = domainSlice.actions
+export const {
+  setSelectedDomain,
+  setSearchDomainName,
+  setAllDomains
+} = domainSlice.actions
 
 export default domainSlice.reducer

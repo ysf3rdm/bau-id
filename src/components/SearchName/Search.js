@@ -100,7 +100,6 @@ function Search({
           >
             <button
               className="absolute left-4 top-[14px]"
-              type="submit"
               data-testid={'home-search-button'}
             >
               <SearchIcon className="text-[#1EEFA4]" />

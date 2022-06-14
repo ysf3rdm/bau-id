@@ -13,7 +13,7 @@ import DomainPanel from './DomainPanel'
 import DomainList from './DomainList'
 import { GET_SINGLE_NAME } from 'graphql/queries'
 
-import { setSelectedDomain } from 'app/slices/domainSlice'
+import { setSelectedDomain, setAllDomains } from 'app/slices/domainSlice'
 
 export default function Sidebar({ className }) {
   const [domainList, setDomainList] = useState([])
@@ -44,7 +44,7 @@ export default function Sidebar({ className }) {
         dispatch(setSelectedDomain(data[0]))
       }
     }
-
+    dispatch(setAllDomains(data))
     setDomainList(data)
   }
 
@@ -67,7 +67,7 @@ export default function Sidebar({ className }) {
       )}
     >
       <div>
-        <ProfileCard className="mb-4" />
+        <ProfileCard className="mb-4" account={account} />
         {/* <WidgetFunction className="mt-4 mb-4" /> */}
         {/* <DomainPanel /> */}
         <DomainList

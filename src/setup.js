@@ -75,7 +75,6 @@ export const getProvider = async reconnect => {
       return provider
     }
     const safe = await safeInfo()
-    console.log('safe', safe)
     if (safe) {
       const provider = await setupSafeApp(safe)
       loadingWalletReactive(false)
@@ -163,7 +162,6 @@ export const setWeb3Provider = async provider => {
 
 export default async reconnect => {
   try {
-    console.log('reconnecting now')
     setFavourites()
     setSubDomainFavourites()
     const provider = await getProvider(reconnect)

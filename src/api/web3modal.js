@@ -17,7 +17,7 @@ const PORTIS_ID = '57e5d6ca-e408-4925-99c4-e7da3bdb8bf5'
 let provider
 const option = {
   network: 'mainnet', // optional
-  cacheProvider: true, // optional
+  cacheProvider: false, // optional
   theme: {
     background: '#D7ECE3',
     main: '#379070',
@@ -67,7 +67,6 @@ let web3Modal
 export const connect = async () => {
   try {
     const Web3Modal = (await import('@ensdomains/web3modal')).default
-
     web3Modal = new Web3Modal(option)
     provider = await web3Modal.connect()
 
@@ -85,6 +84,7 @@ export const connect = async () => {
 }
 
 export const disconnect = async function() {
+  console.log(web3Modal)
   if (web3Modal) {
     await web3Modal.clearCachedProvider()
   }
