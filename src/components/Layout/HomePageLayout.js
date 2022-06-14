@@ -182,11 +182,13 @@ export default ({ children }) => {
                       )}
                     />
                   ) : (
-                    <UnstyledBlockies
-                      className="rounded-full"
-                      address={accounts[0]}
-                      imageSize={45}
-                    />
+                    <div className="w-[44px] h-[44px]">
+                      <UnstyledBlockies
+                        className="rounded-full w-full h-full"
+                        address={accounts[0]}
+                        imageSize={45}
+                      />
+                    </div>
                   )}
                 </div>
               )}
@@ -207,11 +209,13 @@ export default ({ children }) => {
                       )}
                     />
                   ) : (
-                    <UnstyledBlockies
-                      className="rounded-full"
-                      address={accounts[0]}
-                      imageSize={64}
-                    />
+                    <div className="w-[64px] h-[64px]">
+                      <UnstyledBlockies
+                        className="rounded-full w-full h-full"
+                        address={accounts[0]}
+                        imageSize={64}
+                      />
+                    </div>
                   )}
                   <div className="font-semibold text-[20px] font-urbanist text-white ml-4">{`${accounts[0].substring(
                     0,

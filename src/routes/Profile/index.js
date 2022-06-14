@@ -11,11 +11,15 @@ import Sidebar from './components/Sidebar'
 export default function Profile() {
   const haveNoPermissionToEdit = false
   const [sid, setSid] = useState(null)
+  const [isAccountConnected, setIsAccountConnected] = useState(false)
   const account = useAccount()
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
 
   useEffect(() => {
-    if (account && account !== '0x0000000000000000000000000000000000000000') {
+    const tAccountConnected =
+      account !== '0x0000000000000000000000000000000000000000'
+    setIsAccountConnected(tAccountConnected)
+    if (tAccountConnected) {
       sidSetup()
     }
   }, [account])
@@ -38,7 +42,11 @@ export default function Profile() {
       <div className="flex justify-center">
         {/* SideBar Component */}
         <Sidebar className="mr-[32px]" />
-        <Mainbar sid={sid} selectedDomain={selectedDomain} />
+        <Mainbar
+          isAccountConnected={isAccountConnected}
+          sid={sid}
+          selectedDomain={selectedDomain}
+        />
       </div>
       {haveNoPermissionToEdit && <NoPermissionEdit />}
     </div>
