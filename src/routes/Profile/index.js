@@ -46,6 +46,7 @@ export default function Profile() {
           isAccountConnected={isAccountConnected}
           sid={sid}
           selectedDomain={selectedDomain}
+          account={account}
         />
       </div>
       {haveNoPermissionToEdit && <NoPermissionEdit />}
