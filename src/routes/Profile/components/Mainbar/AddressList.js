@@ -12,6 +12,8 @@ import { useEditable } from 'components/hooks'
 import { refetchTilUpdatedSingle } from 'utils/graphql'
 import { RECLAIM, SET_OWNER } from 'graphql/mutations'
 
+import getENS, { getRegistrar } from 'apollo/mutations/ens'
+
 export default function AddressList({
   className,
   sid,
@@ -62,10 +64,10 @@ export default function AddressList({
   }
 
   const fetchRegistrantAddress = async () => {
-    const nameUI = sid.name(`${selectedDomain.name}.bnb`)
-    const tSidAddress = await nameUI.getAddress()
-    setRegistrantAddress(tSidAddress)
-    if (tSidAddress === account) setIsRegsitrant(true)
+    const registrar = getRegistrar()
+    const entry = await registrar.getEntry(selectedDomain.name)
+    setRegistrantAddress(entry.registrant)
+    if (entry.registrant === account) setIsRegsitrant(true)
     setLoadingRegisteration(false)
   }
 
