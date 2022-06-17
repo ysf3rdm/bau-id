@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import cn from 'classnames'
 import last from 'lodash/last'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled/macro'
@@ -7,21 +8,11 @@ import { GET_TRANSACTION_HISTORY } from '../graphql/queries'
 
 import Loader from './Loader'
 
-const PendingContainer = styled('div')`
-  display: flex;
-`
-
-const Text = styled('span')`
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-right: 10px;
-`
 const Pending = ({ className, children = 'Tx pending' }) => (
-  <PendingContainer className={className}>
-    <Text>{children}</Text>
+  <div className={cn('flex justify-center items-center', className)}>
+    <span className="text-[12px] uppercase mr-[10px]">{children}</span>
     <Loader />
-  </PendingContainer>
+  </div>
 )
 
 function MultiplePendingTx(props) {

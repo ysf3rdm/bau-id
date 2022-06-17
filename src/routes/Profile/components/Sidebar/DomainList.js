@@ -13,12 +13,12 @@ export default function DomainList({
 }) {
   return (
     <div className={cn('', className)}>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-be tween items-center">
         <Searchbar className="mr-[14px]" />
         <BarIcon />
       </div>
       {domainsList.length > 0 ? (
-        <div className="mt-4 relative max-h-[45vh] overflow-y-auto">
+        <div className="mt-4 relative max-h-[60vh] overflow-y-auto">
           {domainsList.map((item, index) => (
             <div
               onClick={() => {

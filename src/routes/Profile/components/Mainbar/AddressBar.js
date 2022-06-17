@@ -1,8 +1,9 @@
 import React from 'react'
 
 import AnimationSpin from 'components/AnimationSpin'
-
+import PendingTx from 'components/PendingTx'
 import { convertToETHAddressDisplayFormat } from 'utils/utils'
+import { refetchTilUpdatedSingle } from 'utils/graphql'
 
 export default function AddressBar({
   loading,
@@ -10,7 +11,12 @@ export default function AddressBar({
   label,
   canEdit,
   clickHandler,
-  clickHandlerLabel
+  clickHandlerLabel,
+  pending,
+  refetchAddress,
+  fetchAddress,
+  setConfirmed,
+  txHash
 }) {
   return (
     <div className="cursor-pointer group relative bg-[rgba(204,252,255,0.2)] rounded-[89px] px-[43px] py-2 text-center text-white 1200px:w-[224px]">
@@ -26,9 +32,28 @@ export default function AddressBar({
       {loading ? (
         <AnimationSpin className="flex justify-center mt-1" />
       ) : (
-        <p className="font-semibold text-[18px] font-urbanist">
-          {convertToETHAddressDisplayFormat(address)}
-        </p>
+        <div>
+          {pending ? (
+            <PendingTx
+              txHash={txHash}
+              onConfirmed={async () => {
+                refetchTilUpdatedSingle({
+                  refetch: refetchAddress,
+                  interval: 300,
+                  keyToCompare: 'registrant',
+                  prevData: address
+                })
+                await fetchAddress()
+                setConfirmed()
+              }}
+              className="mt-1"
+            />
+          ) : (
+            <p className="font-semibold text-[18px] font-urbanist">
+              {convertToETHAddressDisplayFormat(address)}
+            </p>
+          )}
+        </div>
       )}
     </div>
   )

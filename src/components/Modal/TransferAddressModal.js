@@ -1,29 +1,35 @@
 import React, { useEffect } from 'react'
 import { useFormik } from 'formik'
-import { ethers } from '@siddomains/ui'
+import { ethers, getWeb3 } from '@siddomains/ui'
 import Modal from './Modal'
-
-const validate = values => {
-  const errors = {}
-  if (!ethers.utils.isAddress(values.address)) {
-    errors.address = 'Address is not valid.'
-  }
-  return errors
-}
 
 export default function TransferAddressModal({
   show,
   saveHandler,
   closeModal,
   title,
-  account
+  address
 }) {
   const formik = useFormik({
     initialValues: {
       chain: 'BSC',
       address: ''
     },
-    validate,
+    validate: async values => {
+      let isContractAddress = true
+      if (title === 'Resolver') {
+        let provider = await getWeb3()
+        const bytecode = await provider.getCode(values.address)
+        isContractAddress = bytecode !== '0x'
+      }
+      const errors = {}
+      if (!ethers.utils.isAddress(values.address)) {
+        errors.address = 'Address is not valid.'
+      } else if (!isContractAddress) {
+        errors.address = 'Only Contract address is valid'
+      }
+      return errors
+    },
     onSubmit: values => {
       saveHandler(values)
     }
@@ -39,14 +45,22 @@ export default function TransferAddressModal({
           showingCrossIcon={true}
           className="pt-[34px] pb-[36px] px-[40px]"
           closeModal={closeModal}
+          cannotCloseFromOutside={true}
         >
           <div className="text-[white]">
             <div className="text-[28px] font-bold font-cocoSharp text-center">
-              {title === 'registrant' ? 'Transfer Registrant' : `Set ${title}`}
+              {title === 'Registrant' ? 'Transfer Registrant' : `Set ${title}`}
             </div>
+            {title === 'Resolver' && (
+              <div className="text-[#ED7E17] text-[12px] mt-4">
+                Use the Public Resolver or enter the address of your custom
+                resolver contract
+              </div>
+            )}
+
             <div className="text-urbanist mt-4">
               <div className="font-semibold">From address</div>
-              <div className="text-[14px]">{account}</div>
+              <div className="text-[14px]">{address}</div>
             </div>
           </div>
           {/* Form for submitting transfer Registrant */}
@@ -82,6 +96,12 @@ export default function TransferAddressModal({
                 </div>
               ) : null}
             </div>
+            {title === 'Resolver' && (
+              <div className="text-center text-[#1EEFA4] text-[12px] mt-4">
+                Use Public Resolver
+              </div>
+            )}
+
             <div className="text-[#BCC2D1] text-[14px] mt-4">
               <span className="text-red-800">*</span>Required field must be
               filled in.

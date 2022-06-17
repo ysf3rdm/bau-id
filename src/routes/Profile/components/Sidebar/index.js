@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLazyQuery, useQuery } from '@apollo/client'
+import { EMPTY_ADDRESS } from 'utils/records'
 import { useSelector, useDispatch } from 'react-redux'
 import cn from 'classnames'
 import axios from 'axios'
@@ -49,7 +50,7 @@ export default function Sidebar({ className }) {
   }
 
   useEffect(() => {
-    if (account && account !== '0x0000000000000000000000000000000000000000') {
+    if (account && account !== EMPTY_ADDRESS) {
       fetchDomainsList()
     }
     fetchDomainsList()
@@ -66,12 +67,12 @@ export default function Sidebar({ className }) {
         className
       )}
     >
-      <div>
+      <div className="h-full flex flex-col">
         <ProfileCard className="mb-4" account={account} />
         {/* <WidgetFunction className="mt-4 mb-4" /> */}
         {/* <DomainPanel /> */}
         <DomainList
-          className="mt-4"
+          className="mt-4 h-full flex flex-col"
           domainsList={domainList}
           clickHandle={selectDomain}
           selectedDomain={selectedDomain}
