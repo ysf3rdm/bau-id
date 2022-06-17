@@ -97,6 +97,7 @@ const resolvers = {
       }
     },
     async reclaim(_, { name, address }) {
+      console.log('reclaiming now')
       const registrar = getRegistrar()
       const tx = await registrar.reclaim(name, address)
       return sendHelper(tx)
@@ -151,7 +152,9 @@ const resolvers = {
     },
     async setRegistrant(_, { name, address }) {
       const registrar = getRegistrar()
+      console.log('registrar', registrar)
       const tx = await registrar.transferOwner(name, address)
+      console.log('tx', tx)
       return sendHelper(tx)
     },
     async submitProof(_, { name, parentOwner }) {

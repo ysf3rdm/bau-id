@@ -38,13 +38,7 @@ export function refetchTilUpdated(
   recurseRefetch()
 }
 
-export function refetchTilUpdatedSingle({
-  refetch,
-  interval,
-  keyToCompare,
-  prevData,
-  getterString
-}) {
+export function refetchTilUpdatedSingle({ refetch, interval, prevData }) {
   let maxTries = 10
   let tries = maxTries
   let incrementedInterval = interval
@@ -54,11 +48,9 @@ export function refetchTilUpdatedSingle({
       return setTimeout(() => {
         tries--
         incrementedInterval = interval * (maxTries - tries + 1)
-        refetch().then(({ data }) => {
-          const updated =
-            get(data, getterString)[keyToCompare] !==
-            get(prevData, getterString)[keyToCompare]
-
+        refetch().then(data => {
+          console.log(data)
+          const updated = prevData !== data
           if (updated) return
           return recurseRefetch()
         })

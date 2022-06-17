@@ -7,7 +7,12 @@ import AnimationSpin from 'components/AnimationSpin'
 import EditButton from '../../../../components/Button/EditButton'
 import { toggleEditMode } from 'app/slices/accountSlice'
 
-export default function Mainbar({ sid, selectedDomain, isAccountConnected }) {
+export default function Mainbar({
+  sid,
+  selectedDomain,
+  isAccountConnected,
+  account
+}) {
   const editOn = useSelector(state => state.account.profileEditMode)
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
@@ -51,6 +56,8 @@ export default function Mainbar({ sid, selectedDomain, isAccountConnected }) {
         className="mt-[14px]"
         sid={sid}
         selectedDomain={selectedDomain}
+        canEdit={editOn}
+        account={account}
       />
       {selectedDomain && <Mainboard selectedDomain={{ ...selectedDomain }} />}
     </div>
