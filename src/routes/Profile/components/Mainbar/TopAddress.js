@@ -10,6 +10,10 @@ import NameCard from '../../../../assets/images/profile/name-card.png'
 import Info from 'components/Icons/Info'
 import NotifyIcon from 'components/Icons/NotifyIcon'
 import AnimationSpin from 'components/AnimationSpin'
+import PendingTx from 'components/PendingTx'
+
+//Import GraphQL
+import { refetchTilUpdatedSingle } from 'utils/graphql'
 
 export default function TopAddress({
   className,
