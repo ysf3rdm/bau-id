@@ -106,7 +106,7 @@ function Search({
             </button>
             <div>
               <input
-                className="w-full bg-[#104151]/[0.25] py-[10px] px-[40px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent"
+                className="w-full bg-[#104151]/[0.25] py-[10px] pl-[40px] pr-[150px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent"
                 placeholder="Explore the space"
                 onChange={e => {
                   setShowPopup(false)
@@ -139,8 +139,8 @@ function Search({
         )}
       </Formik>
       {showPopup && (
-        <div className="absolute top-[55px] shadow-popup flex w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-[10]">
-          <div className="flex items-center">
+        <div className="absolute top-[55px] shadow-popup flex w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]">
+          <div className="flex items-center max-w-[calc(100%-170px)]">
             {result.Owner ? (
               <FaceCryIcon className="text-[#30DB9E]" />
             ) : (
@@ -148,7 +148,9 @@ function Search({
             )}
 
             <span
-              className={cn('ml-2 text-[16px] font-semibold text-[#30DB9E]')}
+              className={cn(
+                'ml-2 text-[16px] font-semibold text-[#30DB9E] truncate'
+              )}
             >
               {result.name}.bnb
             </span>

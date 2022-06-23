@@ -25,6 +25,9 @@ import Modal from 'components/Modal/Modal'
 
 import { GET_ERRORS } from 'graphql/queries'
 
+//Import Assets
+import LogoText from '../../assets/images/space-logo-text.png'
+
 import useReactiveVarListeners from 'hooks/useReactiveVarListeners'
 // import { Search } from 'components/SearchName/Search'
 // import InnerSearch from 'components/SearchName/InnerSearch'
@@ -143,12 +146,13 @@ export default ({ children }) => {
       )}
       <div className="h-[100px] flex py-[20px] px-[48px] xl:px-[48px] justify-between items-center w-full">
         <a
-          href="https://space.id/"
+          // href="https://space.id/"
+          href="/"
           className="text-[#1EEFA4] flex items-center cursor-pointer visited:text-[#1EEFA4]"
         >
           <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
           <div className="font-semibold text-[18px] ml-[31px]">
-            About <span className="uppercase">Space ID</span>
+            <img src={LogoText} />
           </div>
         </a>
 
@@ -163,8 +167,10 @@ export default ({ children }) => {
                 onClick={connectProvider}
                 loadingWallet={loadingWallet}
                 buttonText={isReadOnly ? t('c.connect') : network}
+                isReadOnly={isReadOnly}
               />
-              {accounts && accounts[0] && (
+
+              {accounts && accounts[0] && !isReadOnly && (
                 <div
                   className="flex items-center ml-4 cursor-pointer"
                   onClick={() => {
@@ -253,6 +259,9 @@ export default ({ children }) => {
 
       {/* Footer component in the home page */}
       <div className="h-[44px] flex py-[20px] px-[64px] xl:px-[48px] justify-between absolute left-0 bottom-0 items-center w-full bg-[#071A2F]">
+        <a href="https://space.id">
+          <div className="text-[#1EEFA4] text-[16px]">About SPACE ID</div>
+        </a>
         <div className="flex items-center">
           <a target="_blank" href="https://twitter.com/SpaceIDProtocol">
             <TwitterIcon className="mr-2 text-[#30DB9E]" />
@@ -260,12 +269,9 @@ export default ({ children }) => {
           <a target="_blank" href="https://discord.com/invite/2qrrf79K2A">
             <DiscordIcon className="mr-2 text-[#30DB9E]" />
           </a>
-          <a target="_blank" href="https://medium.com/@SpaceIDProtocol">
+          <a target="_blank" href="https://medium.com/@SpaceID">
             <RoundedIcon />
           </a>
-        </div>
-        <div>
-          <LanguageSwitcher />
         </div>
       </div>
 

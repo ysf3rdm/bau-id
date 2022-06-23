@@ -6,65 +6,21 @@ import { getNamehash, emptyAddress } from '@siddomains/ui'
 import { formatsByCoinType } from '@siddomains/address-encoder'
 
 import union from 'lodash/union'
-import { Address } from 'components/Addresses'
 import {
   GET_RESOLVER_FROM_SUBGRAPH,
   GET_ADDRESSES,
   GET_TEXT_RECORDS
 } from 'graphql/queries'
 
-import EmailImg from 'assets/images/profile/email.png'
-import WebsiteImg from 'assets/images/profile/website.png'
-import AvatarImg from 'assets/images/profile/avatar.png'
-import DescriptionImg from 'assets/images/profile/description.png'
-import TwitterImg from 'assets/images/profile/twitter.png'
-import DiscordImg from 'assets/images/profile/discord.png'
-import GithubImg from 'assets/images/profile/github.png'
-import TelegramImg from 'assets/images/profile/telegram.png'
-
-import { toggleEditMode } from 'app/slices/accountSlice'
-
 import TEXT_PLACEHOLDER_RECORDS from 'constants/textRecords'
 
-import EVMImg from 'assets/images/profile/evm.png'
-import BTCImg from 'assets/images/profile/btc.png'
-import LTCImg from 'assets/images/profile/ltc.png'
-import { AddNewButton } from 'components/Button'
-
 import COIN_LIST from 'constants/coinList'
-import { convertToETHAddressDisplayFormat } from '../../../../utils/utils'
 import CopyIcon from 'components/Icons/CopyIcon'
-import Info from 'components/Icons/Info'
 import AnimationSpin from 'components/AnimationSpin'
 
-const haveAddresses = true
-const haveProfile = true
+import { usePrevious } from '../../../../utils/utils'
 
 const COIN_PLACEHOLDER_RECORDS = ['ETH', ...COIN_LIST.slice(0, 3)]
-
-const addressesData = [
-  {
-    id: 1,
-    title: 'EVM',
-    description: '0x0000......000000',
-    imageUrl: EVMImg,
-    bgColorClass: 'bg-[rgba(89,128,201,0.6)]'
-  },
-  {
-    id: 1,
-    title: 'BTC',
-    description: '3FZbgi......tktZc5',
-    imageUrl: BTCImg,
-    bgColorClass: 'bg-[rgba(167,129,80,0.6)]'
-  },
-  {
-    id: 1,
-    title: 'LTC',
-    description: 'MGxNPP......2465zN',
-    imageUrl: BTCImg,
-    bgColorClass: 'bg-[rgba(99,124,165,0.6)]'
-  }
-]
 
 function isContentHashEmpty(hash) {
   return hash?.startsWith('undefined') || parseInt(hash, 16) === 0
@@ -170,6 +126,11 @@ const getInitialContent = domain => {
   }
 }
 
+const getCoins = updatedRecords =>
+  updatedRecords
+    .filter(record => record.contractFn === 'setAddr(bytes32,uint256,bytes)')
+    .sort(record => (record.key === 'ETH' ? -1 : 1))
+
 const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
   const initialTextRecords = getInitialTextRecords(dataTextRecords, domain)
   var initialCoins = getInitialCoins(dataAddresses)
@@ -191,19 +152,33 @@ const useInitRecords = (
   }, [domain, dataAddresses, dataTextRecords])
 }
 
+const useUpdatedRecords = (
+  recordsLoading,
+  initialRecords,
+  setUpdatedRecords
+) => {
+  const prevInitialRecords = usePrevious(initialRecords)
+  useEffect(() => {
+    if (!recordsLoading || prevInitialRecords !== initialRecords) {
+      setUpdatedRecords(initialRecords)
+    }
+  }, [recordsLoading, initialRecords, prevInitialRecords])
+}
+
 export default function MainBoard({
   selectedDomain,
   className,
   resolverAddress,
   loadingResolverAddress
 }) {
-  const editOn = useSelector(state => state.account.profileEditMode)
-
   const { dataAddresses, dataTextRecords, recordsLoading } = useGetRecords(
     selectedDomain
   )
 
+  const [updatedRecords, setUpdatedRecords] = useState([])
   const [initialRecords, setInitialRecords] = useState([])
+
+  useUpdatedRecords(recordsLoading, initialRecords, setUpdatedRecords)
 
   useInitRecords(
     selectedDomain,
@@ -212,9 +187,34 @@ export default function MainBoard({
     setInitialRecords
   )
 
+  async function copyTextToClipboard(text) {
+    if ('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text)
+    } else {
+      return document.execCommand('copy', true, text)
+    }
+  }
+
   const handleResolverAddressCopy = e => {
     e.preventDefault()
-    e.clipboardData.setData('Text', resolverAddress)
+    copyTextToClipboard(resolverAddress)
+      .then(() => {
+        alert('copied')
+      })
+      .catch(err => {
+        alert('err')
+      })
+  }
+
+  const handleBNBAddressCopy = e => {
+    e.preventDefault()
+    copyTextToClipboard(getCoins(updatedRecords)[0]?.value)
+      .then(() => {
+        alert('copied')
+      })
+      .catch(err => {
+        alert('err')
+      })
   }
 
   return (
@@ -225,14 +225,13 @@ export default function MainBoard({
           <div>
             <p className="text-[#B1D6D3] font-bold text-[20px]">BNB Address</p>
             <div className="flex items-center text-[#B1D6D3] text-[18px] mt-1">
-              <p className="mr-2">0xb794f5ea0ba39494ce839613fffba74279579268</p>
-              <span className="cursor-pointer">
+              <p className="mr-2">{getCoins(updatedRecords)[0]?.value}</p>
+              <span className="cursor-pointer" onClick={handleBNBAddressCopy}>
                 <CopyIcon />
               </span>
             </div>
           </div>
           <div className="flex items-center">
-            <Info />
             <button className="text-white py-2 px-[40px] bg-[#7E9195] rounded-full ml-4">
               Edit
             </button>
@@ -258,7 +257,6 @@ export default function MainBoard({
         )}
 
         <div className="flex items-center">
-          <Info />
           <button className="text-white py-2 px-[40px] bg-[#7E9195] rounded-full ml-4">
             Set
           </button>
