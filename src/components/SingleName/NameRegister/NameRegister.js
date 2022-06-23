@@ -38,6 +38,7 @@ import PremiumPriceOracle from './PremiumPriceOracle'
 
 import EditIcon from 'components/Icons/EditIcon'
 import SuccessfulTickIcon from 'components/Icons/SuccessfulTickIcon'
+import FailedIcon from 'components/Icons/FailedIcon'
 import AnimationSpin from 'components/AnimationSpin'
 
 const NameRegister = ({
@@ -259,18 +260,14 @@ const NameRegister = ({
     setCustomStep('SUCCESS')
   }
 
-  const registerAnother = () => {
-    history.push('/')
-  }
-
   const manageProfile = () => history.push('/profile')
 
   return (
     <div className="max-w-[448px] mx-auto pb-[40px]">
       <div className="flex justify-center">
-        <div className="font-bold text-[28px] text-[#1EEFA4] py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-[67px]">
+        <p className="min-w-full max-w-full block text-ellipsis overflow-hidden break-words font-bold text-[28px] text-[#1EEFA4] py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-6">
           {domain.name}
-        </div>
+        </p>
       </div>
 
       {/* Register Process Screen if the user doesn't have any domain */}
@@ -325,7 +322,9 @@ const NameRegister = ({
         </div>
       )}
 
-      {(customStep === 'SUCCESS' || customStep === 'PENDING') && (
+      {(customStep === 'SUCCESS' ||
+        customStep === 'PENDING' ||
+        customStep === 'ERROR') && (
         <div className="max-w-[436px]">
           <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
             <div className="flex justify-center">
@@ -348,13 +347,26 @@ const NameRegister = ({
             </div>
             <div className="mt-8">
               <div className="text-center">
-                <div className="font-semibold text-[16px] text-[#30DB9E]">
+                <div
+                  className={cn(
+                    customStep === 'ERROR'
+                      ? 'text-[#ED7E17]'
+                      : 'text-[#30DB9E]',
+                    'font-semibold text-[16px]'
+                  )}
+                >
                   Confirm Payment
                 </div>
                 {customStep === 'PENDING' ? (
                   <AnimationSpin className="flex justify-center mt-1" />
                 ) : (
-                  <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                  <div>
+                    {customStep === 'ERROR' ? (
+                      <FailedIcon className="text-[#ED7E17] flex justify-center my-2" />
+                    ) : (
+                      <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                    )}
+                  </div>
                 )}
               </div>
               <div className="text-center mt-1">
@@ -363,6 +375,8 @@ const NameRegister = ({
                     'font-semibold text-[16px]',
                     customStep === 'PENDING'
                       ? 'text-[#7E9195]'
+                      : customStep === 'ERROR'
+                      ? 'text-[#ED7E17]'
                       : 'text-[#30DB9E]'
                   )}
                 >
@@ -371,30 +385,46 @@ const NameRegister = ({
                 {customStep === 'PENDING' ? (
                   <AnimationSpin className="flex justify-center mt-1" />
                 ) : (
-                  <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                  <div>
+                    {customStep === 'ERROR' ? (
+                      <FailedIcon className="text-[#ED7E17] flex justify-center my-2" />
+                    ) : (
+                      <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                    )}
+                  </div>
                 )}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-x-[24px] mt-10">
-              <button
-                className={cn(
-                  'py-2 border rounded-[16px] font-semibold border-[#30DB9E] text-[#30DB9E]'
-                )}
-                onClick={() => manageProfile()}
-              >
-                Manage profile
-              </button>
-              <button
-                className={cn(
-                  'rounded-[16px] py-2 font-semibild bg-[#30DB9E] text-[#071A2F]'
-                )}
-                onClick={() => {
-                  registerAnother()
-                }}
-              >
-                Register another
-              </button>
-            </div>
+            {customStep === 'ERROR' && (
+              <div className="text-[#BDCED1] text-[16px] text-center mt-8">
+                Something went wrong in the registration process. You may choose
+                to retry and be redirected back to the payment review page.
+              </div>
+            )}
+
+            {customStep === 'ERROR' ? (
+              <div className="flex justify-center mt-10">
+                <button
+                  className={cn(
+                    'py-2 border rounded-[16px] text-[#071A2F] font-semibold bg-[#30DB9E] border-0 px-[30px]'
+                  )}
+                  onClick={() => setCustomStep('START')}
+                >
+                  Retry
+                </button>
+              </div>
+            ) : (
+              <div className="flex justify-center mt-10">
+                <button
+                  className={cn(
+                    'py-2 border rounded-[16px] text-[#071A2F] font-semibold bg-[#30DB9E] border-0 px-[30px]'
+                  )}
+                  onClick={() => manageProfile()}
+                >
+                  Manage Profile
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

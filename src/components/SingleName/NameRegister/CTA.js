@@ -56,7 +56,7 @@ function getCTA({
           console.log('data error', data?.register?.err)
           if (data?.register?.err) {
             // this is the error case
-            setCustomStep('START')
+            setCustomStep('ERROR')
             errorRegistering()
             setRegistering(false)
           } else {
@@ -69,6 +69,12 @@ function getCTA({
         {mutate => (
           <>
             <div className="flex justify-between px-[48px] w-full">
+              <button
+                onClick={goBack}
+                className="border-[#30DB9E] border text-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
+              >
+                Go Back
+              </button>
               <button
                 data-testid="request-register-button"
                 onClick={async () => {
@@ -87,12 +93,6 @@ function getCTA({
                     <AnimationSpin />
                   </div>
                 )}
-              </button>
-              <button
-                onClick={goBack}
-                className="border-[#30DB9E] border text-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
-              >
-                Go Back
               </button>
             </div>
           </>

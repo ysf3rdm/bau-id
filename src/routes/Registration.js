@@ -117,7 +117,7 @@ export default function Registration() {
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-2 gap-x-[24px] mt-10">
+            <div className="flex justify-center mt-10">
               <button
                 className={cn(
                   'py-2 border rounded-[16px] font-semibold',
@@ -127,16 +127,6 @@ export default function Registration() {
                 )}
               >
                 Manage profile
-              </button>
-              <button
-                className={cn(
-                  'rounded-[16px] py-2 font-semibild',
-                  progresses.length === subStep
-                    ? 'bg-[#30DB9E] text-[#30DB9E]'
-                    : 'bg-[#7E9195] text-[#BDCED1] '
-                )}
-              >
-                Register another
               </button>
             </div>
           </div>
