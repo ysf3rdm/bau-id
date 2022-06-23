@@ -51,7 +51,7 @@ export default function TopAddress({
     <div className={cn('grid grid-cols-2 gap-x-[28px]', className)}>
       <div className="relative">
         <img alt="name-card" src={NameCard} />
-        <div className="top-[calc(50%-30px)] right-[calc(50%-125px)] absolute text-[40px] font-bold text-white">
+        <div className="top-0 right-0 w-full h-full justify-center flex items-center absolute text-[40px] font-bold text-white">
           {selectedDomain?.name}
           <span className="text-[#1EEFA4]">.bnb</span>
         </div>

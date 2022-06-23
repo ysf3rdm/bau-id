@@ -59,3 +59,7 @@ input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 50px #bdced1 inset;
   -webkit-text-fill-color: #bdced1;
 }
+
+.web3modal-modal-card {
+  z-index: 20 !important;
+}
