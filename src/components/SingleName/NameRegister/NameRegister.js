@@ -101,7 +101,7 @@ const NameRegister = ({
         ChainID: 97
       }
       const result = await axios.post(
-        'https://backend.stg.space.id/sign',
+        'https://space-id-348516.uw.r.appspot.com/sign',
         params
       )
       if (result?.data?.signature) {
