@@ -43,7 +43,7 @@ function Search({
         name: searchingDomainName
       }
       axios
-        .post(`https://space-id-348516.uw.r.appspot.com/nameof`, {
+        .post(`https://backend.stg.space.id/nameof`, {
           ...params
         })
         .then(res => {

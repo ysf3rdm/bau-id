@@ -29,7 +29,7 @@ export default function Sidebar({ className }) {
       Address: account
     }
     let result = await axios.post(
-      'https://space-id-348516.uw.r.appspot.com/listname',
+      'https://backend.stg.space.id/listname',
       params
     )
     const data = result?.data?.map(item => {
