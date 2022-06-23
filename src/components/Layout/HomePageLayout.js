@@ -167,9 +167,10 @@ export default ({ children }) => {
                 onClick={connectProvider}
                 loadingWallet={loadingWallet}
                 buttonText={isReadOnly ? t('c.connect') : network}
+                isReadOnly={isReadOnly}
               />
 
-              {accounts && accounts[0] && (
+              {accounts && accounts[0] && !isReadOnly && (
                 <div
                   className="flex items-center ml-4 cursor-pointer"
                   onClick={() => {

@@ -32,6 +32,7 @@ export default function Sidebar({ className }) {
       'https://space-id-348516.uw.r.appspot.com/listname',
       params
     )
+    console.log('domains', result)
     const data = result?.data?.map(item => {
       const date = new Date(item?.expires)
       return {
