@@ -7,7 +7,6 @@ import CopyIcon from 'components/Icons/CopyIcon'
 
 //Import Assets
 import NameCard from '../../../../assets/images/profile/name-card.png'
-import Info from 'components/Icons/Info'
 import NotifyIcon from 'components/Icons/NotifyIcon'
 import AnimationSpin from 'components/AnimationSpin'
 import PendingTx from 'components/PendingTx'
@@ -91,12 +90,12 @@ export default function TopAddress({
 
           <div className="flex items-center mt-4">
             <button
+              disabled={pending}
               className="text-white py-2 px-6 bg-[#7E9195] rounded-full mr-4"
               onClick={transferRegistrantAddress}
             >
               Transfer
             </button>
-            <Info />
           </div>
         </div>
         <div className="flex justify-between items-center">

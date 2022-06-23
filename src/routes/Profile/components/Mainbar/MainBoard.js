@@ -6,7 +6,6 @@ import { getNamehash, emptyAddress } from '@siddomains/ui'
 import { formatsByCoinType } from '@siddomains/address-encoder'
 
 import union from 'lodash/union'
-import { Address } from 'components/Addresses'
 import {
   GET_RESOLVER_FROM_SUBGRAPH,
   GET_ADDRESSES,
@@ -15,13 +14,8 @@ import {
 
 import TEXT_PLACEHOLDER_RECORDS from 'constants/textRecords'
 
-import EVMImg from 'assets/images/profile/evm.png'
-import BTCImg from 'assets/images/profile/btc.png'
-import { AddNewButton } from 'components/Button'
-
 import COIN_LIST from 'constants/coinList'
 import CopyIcon from 'components/Icons/CopyIcon'
-import Info from 'components/Icons/Info'
 import AnimationSpin from 'components/AnimationSpin'
 
 import { usePrevious } from '../../../../utils/utils'
@@ -177,8 +171,6 @@ export default function MainBoard({
   resolverAddress,
   loadingResolverAddress
 }) {
-  const editOn = useSelector(state => state.account.profileEditMode)
-
   const { dataAddresses, dataTextRecords, recordsLoading } = useGetRecords(
     selectedDomain
   )
@@ -240,7 +232,6 @@ export default function MainBoard({
             </div>
           </div>
           <div className="flex items-center">
-            <Info />
             <button className="text-white py-2 px-[40px] bg-[#7E9195] rounded-full ml-4">
               Edit
             </button>
@@ -266,7 +257,6 @@ export default function MainBoard({
         )}
 
         <div className="flex items-center">
-          <Info />
           <button className="text-white py-2 px-[40px] bg-[#7E9195] rounded-full ml-4">
             Set
           </button>

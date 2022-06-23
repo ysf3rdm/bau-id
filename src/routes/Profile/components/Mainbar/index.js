@@ -1,22 +1,15 @@
 //Import packages
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import moment from 'moment'
 import { useMutation } from '@apollo/client'
 
 //Import components
-import AddressList from './AddressList'
 import MainBoard from './MainBoard'
 import AnimationSpin from 'components/AnimationSpin'
-import EditButton from '../../../../components/Button/EditButton'
 import TopAddress from './TopAddress'
 import TransferAddressModal from 'components/Modal/TransferAddressModal'
 
 //Import sdk objects
-import getENS, { getRegistrar } from 'apollo/mutations/ens'
-
-//Import Reducer
-import { toggleEditMode } from 'app/slices/accountSlice'
+import { getRegistrar } from 'apollo/mutations/ens'
 
 //Import graphql quires
 import { SET_REGISTRANT, SET_RESOLVER } from 'graphql/mutations'
@@ -24,12 +17,7 @@ import { SET_REGISTRANT, SET_RESOLVER } from 'graphql/mutations'
 //Import custom hooks
 import { useEditable } from 'components/hooks'
 
-export default function Mainbar({
-  sid,
-  selectedDomain,
-  isAccountConnected,
-  account
-}) {
+export default function Mainbar({ sid, selectedDomain, account }) {
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(true)
   const [loadingRegistration, setLoadingRegistration] = useState(true)
