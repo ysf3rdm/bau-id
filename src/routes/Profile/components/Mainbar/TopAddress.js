@@ -25,7 +25,8 @@ export default function TopAddress({
   fetchAddress,
   address,
   txHash,
-  extendHandler
+  extendHandler,
+  isRegsitrant
 }) {
   async function copyTextToClipboard(text) {
     if ('clipboard' in navigator) {
@@ -93,8 +94,13 @@ export default function TopAddress({
 
           <div className="flex items-center mt-4">
             <button
-              disabled={pending}
-              className="text-white py-2 px-6 bg-[#7E9195] rounded-full mr-4"
+              disabled={pending || !isRegsitrant}
+              className={cn(
+                'py-2 px-6 rounded-full mr-4 font-semibold',
+                pending || !isRegsitrant
+                  ? 'bg-[#7E9195] text-white'
+                  : 'bg-[#30DB9E] text-[#134757]'
+              )}
               onClick={transferRegistrantAddress}
             >
               Transfer

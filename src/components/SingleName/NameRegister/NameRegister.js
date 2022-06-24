@@ -336,15 +336,19 @@ const NameRegister = ({
               </div>
             ) : (
               <div className="font-semibold text-[24px] text-white text-center mt-2">
-                Registration completed!
+                {customStep === 'ERROR' ? (
+                  <span>Registration incompleted :(</span>
+                ) : (
+                  <span>Registration completed!</span>
+                )}
+              </div>
+            )}
+            {customStep === 'PENDING' && (
+              <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
+                Please be patient as the process might take a while.
               </div>
             )}
 
-            <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
-              Please be patient as the process might take a few minutes. You may
-              click <span className="text-[#ED7E18]">here</span> to learn more
-              about the registration process.
-            </div>
             <div className="mt-8">
               <div className="text-center">
                 <div

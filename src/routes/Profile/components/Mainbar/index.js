@@ -47,6 +47,10 @@ export default function Mainbar({ sid, selectedDomain, account }) {
     setLoadingRegistration(false)
   }
 
+  useEffect(() => {
+    setIsRegsitrant(registrantAddress === account)
+  }, [registrantAddress])
+
   const refetchRegistrantAddress = async () => {
     const registrar = getRegistrar()
     const entry = await registrar.getEntry(selectedDomain.name)
@@ -114,6 +118,7 @@ export default function Mainbar({ sid, selectedDomain, account }) {
     <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm p-[40px] relative">
       {selectedDomain && (
         <TopAddress
+          isRegsitrant={isRegsitrant}
           className="pb-8 border-b border-[rgba(204,252,255,0.2)]"
           selectedDomain={selectedDomain}
           registrantAddress={registrantAddress}
