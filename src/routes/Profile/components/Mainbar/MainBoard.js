@@ -4,6 +4,7 @@ import cn from 'classnames'
 import { useQuery } from '@apollo/client'
 import { getNamehash, emptyAddress } from '@siddomains/ui'
 import { formatsByCoinType } from '@siddomains/address-encoder'
+import PendingTx from 'components/PendingTx'
 
 import union from 'lodash/union'
 import {
@@ -19,6 +20,9 @@ import CopyIcon from 'components/Icons/CopyIcon'
 import AnimationSpin from 'components/AnimationSpin'
 
 import { usePrevious } from '../../../../utils/utils'
+
+//Import GraphQL
+import { refetchTilUpdatedSingle } from 'utils/graphql'
 
 const COIN_PLACEHOLDER_RECORDS = ['ETH', ...COIN_LIST.slice(0, 3)]
 
@@ -169,7 +173,14 @@ export default function MainBoard({
   selectedDomain,
   className,
   resolverAddress,
-  loadingResolverAddress
+  loadingResolverAddress,
+  setResolver,
+  pending,
+  setConfirmed,
+  refetchAddress,
+  fetchAddress,
+  txHash,
+  address
 }) {
   const { dataAddresses, dataTextRecords, recordsLoading } = useGetRecords(
     selectedDomain
@@ -244,20 +255,46 @@ export default function MainBoard({
         ) : (
           <div>
             <p className="text-[#B1D6D3] font-bold text-[20px]">Resolver</p>
-            <div className="flex items-center text-[#B1D6D3] text-[18px] mt-1">
-              <p className="mr-2">{resolverAddress}</p>
-              <div
-                className="cursor-pointer"
-                onClick={e => handleResolverAddressCopy(e)}
-              >
-                <CopyIcon />
+            {pending ? (
+              <PendingTx
+                txHash={txHash}
+                onConfirmed={async () => {
+                  refetchTilUpdatedSingle({
+                    refetch: refetchAddress,
+                    interval: 300,
+                    keyToCompare: 'resolver',
+                    prevData: resolverAddress
+                  })
+                  await fetchAddress()
+                  setConfirmed()
+                }}
+                className="mt-1"
+              />
+            ) : (
+              <div>
+                <div className="flex items-center text-[#B1D6D3] text-[18px] mt-1">
+                  <p className="mr-2">{resolverAddress}</p>
+                  <div
+                    className="cursor-pointer"
+                    onClick={e => handleResolverAddressCopy(e)}
+                  >
+                    <CopyIcon />
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
 
         <div className="flex items-center">
-          <button className="text-white py-2 px-[40px] bg-[#7E9195] rounded-full ml-4">
+          <button
+            disabled={pending}
+            className={cn(
+              'text-white py-2 px-[40px] rounded-full ml-4',
+              pending ? 'bg-[#7E9195] cursor-not-allowed' : 'bg-[#2980E8]'
+            )}
+            onClick={setResolver}
+          >
             Set
           </button>
         </div>

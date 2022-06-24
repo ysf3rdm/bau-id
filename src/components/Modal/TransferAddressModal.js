@@ -109,7 +109,7 @@ export default function TransferAddressModal({
             <div className="flex justify-center mt-4">
               <button
                 type="submit"
-                className="w-[160px] bg-[#30DB9E] text-[#134757] rounded-[16px] h-[38px] flex justify-center items-center font-semibold mr-4"
+                className="w-[160px] bg-[#30DB9E] text-[#134757] rounded-[16px] h-[38px] flex justify-center items-center font-semibold"
               >
                 Save
               </button>
