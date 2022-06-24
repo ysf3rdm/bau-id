@@ -20,6 +20,9 @@ module.exports = {
       fontFamily: {
         urbanist: ['Urbanist'],
         cocoSharp: ['CocoSharp']
+      },
+      gridTemplateColumns: {
+        profile: '360px 1fr'
       }
     }
   },

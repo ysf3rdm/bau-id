@@ -64,7 +64,7 @@ export default function Sidebar({ className }) {
   return (
     <div
       className={cn(
-        'bg-[rgba(204,252,255,0.2)] backdrop-blur-sm rounded-[24px] p-[20px] min-h-[calc(100vh-180px)] flex flex-col justify-between',
+        'bg-[rgba(204,252,255,0.2)] backdrop-blur-sm rounded-[24px] p-[20px] min-h-[calc(100vh-180px)] flex flex-col justify-between max-w-[360px]',
         className
       )}
     >

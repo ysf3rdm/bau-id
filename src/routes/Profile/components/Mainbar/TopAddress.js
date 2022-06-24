@@ -6,7 +6,6 @@ import moment from 'moment'
 import CopyIcon from 'components/Icons/CopyIcon'
 
 //Import Assets
-import NameCard from '../../../../assets/images/profile/name-card.png'
 import NotifyIcon from 'components/Icons/NotifyIcon'
 import AnimationSpin from 'components/AnimationSpin'
 import PendingTx from 'components/PendingTx'
@@ -48,11 +47,15 @@ export default function TopAddress({
   }
   return (
     <div className={cn('grid grid-cols-2 gap-x-[28px]', className)}>
-      <div className="relative">
-        <img alt="name-card" src={NameCard} />
-        <div className="top-0 right-0 w-full h-full justify-center flex items-center absolute text-[40px] font-bold text-white">
-          {selectedDomain?.name}
-          <span className="text-[#1EEFA4]">.bnb</span>
+      <div
+        className={`relative w-fit 1400px:w-[432px] h-[272px] flex items-center text-center rounded-[20px] bg-cover`}
+        style={{ backgroundImage: `url(/assets/images/name-card.png)` }}
+      >
+        <div class="w-fit mx-auto px-3">
+          <span className="h-full text-[40px] font-bold text-white break-all">
+            <span className="">{selectedDomain?.name}</span>
+            <span className="text-[#1EEFA4]">.bnb</span>
+          </span>
         </div>
       </div>
       <div className="flex flex-col justify-between py-2">

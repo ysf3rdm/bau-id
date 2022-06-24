@@ -25,7 +25,7 @@ export default function DomainList({
                 clickHandle(item, index)
               }}
               className={cn(
-                'mb-5 w-full py-2 px-4 relative cursor-pointer',
+                'mb-5 w-full py-2 px-4 relative cursor-pointer overflow-hidden break-all',
                 item.name === selectedDomain?.name
                   ? 'bg-[#1EEFA4] rounded-[16px]'
                   : ''
