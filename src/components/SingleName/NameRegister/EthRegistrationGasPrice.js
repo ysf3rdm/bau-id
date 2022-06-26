@@ -9,16 +9,16 @@ const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
   const ethVal = new EthVal(`${price || 0}`).toEth()
   const registerGasSlow = new EthVal(`${TOGAL_GAS_WEI * gasPrice.slow}`).toEth()
   const registerGasFast = new EthVal(`${TOGAL_GAS_WEI * gasPrice.fast}`).toEth()
-  const gasPriceToGweiSlow = new EthVal(`${gasPrice.slow}`).toGwei()
-  const gasPriceToGweiFast = new EthVal(`${gasPrice.fast}`).toGwei()
   const totalSlow = ethVal.add(registerGasSlow)
   const totalFast = ethVal.add(registerGasFast)
   let totalInUsdSlow, totalInUsdFast
-  // No price oracle on Goerli
+  // // No price oracle on Goerli
   if (ethUsdPrice) {
     totalInUsdSlow = totalSlow.mul(ethUsdPrice)
     totalInUsdFast = totalFast.mul(ethUsdPrice)
   }
+  console.log('totalInUSDSlow', totalInUsdSlow)
+  console.log('totalInUsdFast', totalInUsdFast)
 
   // totalInUsdFast
   return (
@@ -38,7 +38,7 @@ const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
       <div className="text-center text-white mt-6">
         <div className="text-[14px]">Total Cost</div>
         <div className="font-bold text-[36px]">
-          ${totalInUsdFast.toFixed(2)}
+          ${totalInUsdFast?.toFixed(2) ?? 0}
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ import { GET_SINGLE_NAME } from 'graphql/queries'
 
 import { setSelectedDomain, setAllDomains } from 'app/slices/domainSlice'
 
-export default function Sidebar({ className }) {
+export default function Sidebar({ className, isReadOnly }) {
   const [domainList, setDomainList] = useState([])
   const dispatch = useDispatch()
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
@@ -32,7 +32,6 @@ export default function Sidebar({ className }) {
       'https://space-id-348516.uw.r.appspot.com/listname',
       params
     )
-    console.log('domains', result)
     const data = result?.data?.map(item => {
       const date = new Date(item?.expires)
       return {
@@ -69,7 +68,11 @@ export default function Sidebar({ className }) {
       )}
     >
       <div className="h-full flex flex-col">
-        <ProfileCard className="mb-4" account={account} />
+        <ProfileCard
+          className="mb-4"
+          account={account}
+          isReadOnly={isReadOnly}
+        />
         {/* <WidgetFunction className="mt-4 mb-4" /> */}
         {/* <DomainPanel /> */}
         <DomainList

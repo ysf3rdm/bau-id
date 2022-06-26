@@ -1,12 +1,21 @@
-import React from 'react'
+// Import packages
+import React, { useState } from 'react'
 import cn from 'classnames'
-import { useDispatch, useSelector } from 'react-redux'
-import { connectProvider, disconnectProvider } from 'utils/providerUtils'
-import { switchWallet } from 'setup'
+import { useSelector } from 'react-redux'
+
+// Import components
+import UnstyledBlockies from 'components/Blockies'
+import ChangePrimaryDomain from 'components/Modal/ChangePrimaryDomain'
+
+//Import graphql queries
+import { GET_REVERSE_RECORD } from 'graphql/queries'
+
+//Import custom functions
+import { connectProvider } from 'utils/providerUtils'
 import { useQuery, gql } from '@apollo/client'
 import { convertToETHAddressDisplayFormat } from 'utils/utils'
-import { GET_REVERSE_RECORD } from 'graphql/queries'
-import UnstyledBlockies from 'components/Blockies'
+
+//Import assets
 import SmileFace from '../../../../assets/images/profile/smileface.png'
 
 export const GET_ACCOUNT = gql`
@@ -15,14 +24,17 @@ export const GET_ACCOUNT = gql`
   }
 `
 
-export default function ProfileCard({ className, account }) {
+export default function ProfileCard({ className, account, isReadOnly }) {
+  const [isShowChangePrimaryModal, setIsShowChangePrimaryModal] = useState(
+    false
+  )
   const domains = useSelector(state => state.domain.domains)
+
+  const primaryDomain = domains.filter(item => item.isPrimary)
 
   const {
     data: { accounts }
   } = useQuery(GET_ACCOUNT)
-
-  console.log('accounts', accounts)
 
   const {
     data: { getReverseRecord } = {},
@@ -67,8 +79,8 @@ export default function ProfileCard({ className, account }) {
         <div className="mr-4 flex-none w-[40px] xl:w-[64px]" />
       )}
 
-      <div className="pr-10">
-        {account !== '0x0000000000000000000000000000000000000000' ? (
+      <div className="w-full">
+        {!isReadOnly ? (
           <div className="text-white font-semibold text-[18px]">
             {convertToETHAddressDisplayFormat(account)}
           </div>
@@ -79,20 +91,38 @@ export default function ProfileCard({ className, account }) {
         )}
 
         <div>
-          <span className="text-white text-[12px]">
-            Domains - {domains.length}
-          </span>
+          <span className="text-white text-[12px]">Primary SPACE ID Name:</span>
         </div>
-        {account ? (
-          <button
-            className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
-            onClick={() => {
-              localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
-              connectProvider()
-            }}
-          >
-            Switch wallet
-          </button>
+        {account && !isReadOnly ? (
+          <div className="flex items-center mt-[5px] justify-between">
+            {primaryDomain && primaryDomain.length === 0 ? (
+              <div>
+                <button
+                  className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
+                  onClick={() => {
+                    // localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
+                    // connectProvider()
+                    setIsShowChangePrimaryModal(true)
+                  }}
+                >
+                  Add Primary domain
+                </button>
+              </div>
+            ) : (
+              <div>
+                <div className="text-[#1EEFA4] text-[14px]">pepefrong.bnb</div>
+                <button
+                  className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
+                  onClick={() => {
+                    localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
+                    connectProvider()
+                  }}
+                >
+                  Change
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <button
             className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
@@ -101,6 +131,12 @@ export default function ProfileCard({ className, account }) {
             Connect wallet
           </button>
         )}
+        <ChangePrimaryDomain
+          show={isShowChangePrimaryModal}
+          saveHandler={() => {}}
+          closeModal={() => setIsShowChangePrimaryModal(false)}
+          domains={domains}
+        />
       </div>
     </div>
   )

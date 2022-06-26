@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
-import { useQuery } from '@apollo/client'
+import { useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled/macro'
 
 import mq from 'mediaQuery'
-import { gql } from '@apollo/client'
 
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
 
@@ -145,10 +144,7 @@ function HeaderContainer() {
     data: { accounts }
   } = useQuery(GET_ACCOUNT)
 
-  const {
-    // data: { network, displayName, isReadOnly, isSafeApp }
-    data
-  } = useQuery(HOME_DATA, {
+  const { data } = useQuery(HOME_DATA, {
     variables: {
       address: accounts?.[0]
     }

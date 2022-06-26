@@ -1,12 +1,25 @@
+// Import packages
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useQuery, gql } from '@apollo/client'
 import SID, { getSidAddress } from '@siddomains/sidjs'
 import { ethers } from '@siddomains/ui'
 import { getNetworkId, getAccount } from '@siddomains/ui'
+
+// Import components
 import { NoPermissionEdit } from 'components/ErrorModals'
 import { useAccount } from 'components/QueryAccount'
 import Mainbar from './components/Mainbar'
 import Sidebar from './components/Sidebar'
+
+export const HOME_DATA = gql`
+  query getHomeData($address: string) @client {
+    network
+    displayName(address: $address)
+    isReadOnly
+    isSafeApp
+  }
+`
 
 export default function Profile() {
   const haveNoPermissionToEdit = false
@@ -14,6 +27,14 @@ export default function Profile() {
   const [isAccountConnected, setIsAccountConnected] = useState(false)
   const account = useAccount()
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
+
+  const { data } = useQuery(HOME_DATA, {
+    variables: {
+      address: account
+    }
+  })
+
+  const { displayName, isReadOnly, isSafeApp, network } = data
 
   useEffect(() => {
     const tAccountConnected =
@@ -40,13 +61,19 @@ export default function Profile() {
   return (
     <div className="mt-[10px] pb-[54px]">
       <div className="flex justify-center">
-        {/* SideBar Component */}
-        <Sidebar className="mr-[32px]" />
+        <Sidebar
+          className="mr-[32px]"
+          isReadOnly={isReadOnly}
+          displayName={displayName}
+          isSafeApp={isSafeApp}
+          network={network}
+        />
         <Mainbar
           isAccountConnected={isAccountConnected}
           sid={sid}
           selectedDomain={selectedDomain}
           account={account}
+          isReadOnly={isReadOnly}
         />
       </div>
       {haveNoPermissionToEdit && <NoPermissionEdit />}

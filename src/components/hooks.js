@@ -160,7 +160,7 @@ export function useInterval(callback, delay) {
   }, [delay])
 }
 
-export function useGasPrice(enabled = true) {
+export function useGasPrice(enabled = true, isReadOnly) {
   const [loading, setLoading] = useState(true)
   const [price, setPrice] = useState({})
 
@@ -189,7 +189,7 @@ export function useGasPrice(enabled = true) {
     } catch (e) {
       console.error('useGasPrice error: ', e)
     }
-  }, [enabled])
+  }, [enabled, isReadOnly])
 
   return {
     loading,

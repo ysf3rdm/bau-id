@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from '@emotion/styled/macro'
+import cn from 'classnames'
 import Years from './NameRegister/Years'
 import Price from './NameRegister/Price'
 import EthRegistrationGasPrice from './NameRegister/EthRegistrationGasPrice'
@@ -24,7 +24,7 @@ function PricerInner({
   const { t } = useTranslation()
   return (
     <>
-      <div className="flex" ref={reference}>
+      <div className={cn('flex', className)} ref={reference}>
         <Years years={years} setYears={setYears} />
         <span className="text-white font-bold font-urbanist text-[18px] flex pt-2 mr-[13px]">
           =
