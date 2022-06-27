@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
 import { useSelector } from 'react-redux'
+import { useMutation } from '@apollo/client'
 
 // Import components
 import UnstyledBlockies from 'components/Blockies'
@@ -9,11 +10,13 @@ import ChangePrimaryDomain from 'components/Modal/ChangePrimaryDomain'
 
 //Import graphql queries
 import { GET_REVERSE_RECORD } from 'graphql/queries'
+import { SET_NAME } from 'graphql/mutations'
 
 //Import custom functions
 import { connectProvider } from 'utils/providerUtils'
 import { useQuery, gql } from '@apollo/client'
 import { convertToETHAddressDisplayFormat } from 'utils/utils'
+import { useEditable } from 'components/hooks'
 
 //Import assets
 import SmileFace from '../../../../assets/images/profile/smileface.png'
@@ -32,9 +35,13 @@ export default function ProfileCard({ className, account, isReadOnly }) {
 
   const primaryDomain = domains.filter(item => item.isPrimary)
 
+  const { actions } = useEditable()
+
   const {
     data: { accounts }
   } = useQuery(GET_ACCOUNT)
+
+  const { startPending } = actions
 
   const {
     data: { getReverseRecord } = {},
@@ -45,6 +52,19 @@ export default function ProfileCard({ className, account, isReadOnly }) {
     },
     skip: !accounts?.length
   })
+
+  const [setName] = useMutation(SET_NAME, {
+    onCompleted: data => {
+      if (Object.values(data)[0]) {
+        startPending(Object.values(data)[0])
+        setIsShowChangePrimaryModal(false)
+      }
+    }
+  })
+
+  const changePrimaryDomain = param => {
+    setName({ variables: { name: param.value } })
+  }
 
   return (
     <div
@@ -133,7 +153,7 @@ export default function ProfileCard({ className, account, isReadOnly }) {
         )}
         <ChangePrimaryDomain
           show={isShowChangePrimaryModal}
-          saveHandler={() => {}}
+          saveHandler={changePrimaryDomain}
           closeModal={() => setIsShowChangePrimaryModal(false)}
           domains={domains}
         />

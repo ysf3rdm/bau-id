@@ -26,7 +26,8 @@ export default function TopAddress({
   address,
   txHash,
   extendHandler,
-  isRegsitrant
+  isRegsitrant,
+  pendingExpirationDate = false
 }) {
   async function copyTextToClipboard(text) {
     if ('clipboard' in navigator) {
@@ -54,7 +55,16 @@ export default function TopAddress({
       >
         <div class="w-fit mx-auto px-3">
           <span className="h-full text-[40px] font-bold text-white break-all">
-            <span className="">{selectedDomain?.name}</span>
+            <span className="">{`${
+              selectedDomain?.name.length > 12
+                ? selectedDomain?.name.substring(0, 4) +
+                  '...' +
+                  selectedDomain?.name.substring(
+                    selectedDomain?.name.length - 4,
+                    selectedDomain?.name.length
+                  )
+                : selectedDomain?.name
+            }`}</span>
             <span className="text-[#1EEFA4]">.bnb</span>
           </span>
         </div>
@@ -66,7 +76,7 @@ export default function TopAddress({
             <AnimationSpin />
           ) : (
             <div>
-              {pending ? (
+              {pendingExpirationDate ? (
                 <PendingTx
                   txHash={txHash}
                   onConfirmed={async () => {
@@ -112,22 +122,44 @@ export default function TopAddress({
             <p className="font-bold text-[20px] text-[#1EEFA4]">
               Expiration Date
             </p>
-            <div className="flex text-[18px] text-white font-semibold items-center mt-2">
-              {/* <p>2023.04.22 at 08:00 (UTC+8:00)</p> */}
-              <p>
-                {moment(
-                  selectedDomain?.expires_at.split(',')[0].replaceAll('.', '-')
-                ).format('YYYY.MM.DD')}
-                <span className="mx-1">at</span>
-                {moment(
-                  selectedDomain?.expires_at.split(',')[0].replaceAll('.', '-')
-                ).format('hh:mm')}
-                <span className="ml-1">(UTC+8:00)</span>
-              </p>
-              <div className="ml-2">
-                <NotifyIcon />
+
+            {pending ? (
+              <PendingTx
+                txHash={txHash}
+                onConfirmed={async () => {
+                  refetchTilUpdatedSingle({
+                    refetch: refetchAddress,
+                    interval: 300,
+                    keyToCompare: 'registrant',
+                    prevData: address
+                  })
+                  await fetchAddress()
+                  setConfirmed()
+                }}
+                className="mt-1"
+              />
+            ) : (
+              <div className="flex text-[18px] text-white font-semibold items-center mt-2">
+                {/* <p>2023.04.22 at 08:00 (UTC+8:00)</p> */}
+                <p>
+                  {moment(
+                    selectedDomain?.expires_at
+                      .split(',')[0]
+                      .replaceAll('.', '-')
+                  ).format('YYYY.MM.DD')}
+                  <span className="mx-1">at</span>
+                  {moment(
+                    selectedDomain?.expires_at
+                      .split(',')[0]
+                      .replaceAll('.', '-')
+                  ).format('hh:mm')}
+                  <span className="ml-1">(UTC+8:00)</span>
+                </p>
+                <div className="ml-2">
+                  <NotifyIcon />
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div>
             <button

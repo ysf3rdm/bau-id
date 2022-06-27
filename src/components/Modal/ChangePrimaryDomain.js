@@ -1,7 +1,7 @@
 // Import packages
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Select, { components } from 'react-select'
-import chroma from 'chroma-js'
+import cn from 'classnames'
 
 // Import components
 import Modal from './Modal'
@@ -64,12 +64,18 @@ export default function ChangePrimaryDomain({
   closeModal,
   domains
 }) {
+  const [selected, setSelected] = useState(null)
   const options = domains.map(item => {
     return {
       value: item.name,
       label: item.name + '.bnb'
     }
   })
+
+  useEffect(() => {
+    setSelected(null)
+  }, [show])
+
   return (
     <div>
       {show && (
@@ -106,6 +112,9 @@ export default function ChangePrimaryDomain({
                     IndicatorSeparator: () => null,
                     IndicatorsContainer
                   }}
+                  onChange={item => {
+                    setSelected(item)
+                  }}
                 />
               </div>
             </div>
@@ -117,7 +126,16 @@ export default function ChangePrimaryDomain({
 
           {/* Footer Actions */}
           <div className="mt-5 flex justify-center">
-            <button className="bg-[#30DB9E] rounded-[16px] py-2 px-[60px] text-[#071A2F] text-[18px] mx-auto font-semibold">
+            <button
+              disabled={!selected}
+              className={cn(
+                'rounded-[16px] py-2 px-[60px] text-[18px] mx-auto font-semibold',
+                selected
+                  ? 'bg-[#30DB9E] text-[#071A2F] cursor-pointer'
+                  : 'bg-[#7E9195] text-white cursor-not-allowed'
+              )}
+              onClick={() => saveHandler(selected)}
+            >
               Save
             </button>
           </div>
