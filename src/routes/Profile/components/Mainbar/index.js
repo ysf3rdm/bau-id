@@ -185,7 +185,7 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
   const extendExpiryDate = () => {
     const variables = {
       duration,
-      label: selectedDomain.name + '.bnb'
+      label: selectedDomain.name
     }
     setMutationQuery(RENEW)
     mutation({ variables })
