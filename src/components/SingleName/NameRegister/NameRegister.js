@@ -97,7 +97,7 @@ const NameRegister = ({
         name: domain.label,
         owner: account,
         duration: calculateDuration(years),
-        resolver: '0x47B4b2cB3e62712b9bb2981827b82EB6630c9076', // FIXME this is not fixed
+        resolver: '0x075d6116Caba19df3211068163BEB64CB231B53C', // FIXME this is not fixed
         addr: account, //Eth wallet of user connected with metamask
         ChainID: 97
       }
