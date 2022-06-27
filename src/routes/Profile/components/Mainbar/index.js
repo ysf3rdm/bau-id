@@ -215,12 +215,18 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
           pending={
             editing ? null : pending && !confirmed && title === 'Registrant'
           }
+          pendingExpirationDate={
+            editing
+              ? null
+              : pending && !confirmed && title === 'Expiration Date'
+          }
           setConfirmed={setConfirmed}
           refetchAddress={refetchRegistrantAddress}
           fetchAddress={fetchRegistrantAddress}
           txHash={txHash}
           address={registrantAddress}
           extendHandler={() => {
+            setTitle('Expiration Date')
             setExtendPeriodShowModal(true)
           }}
         />
