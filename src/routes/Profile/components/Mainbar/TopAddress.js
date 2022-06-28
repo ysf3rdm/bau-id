@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import cn from 'classnames'
 import moment from 'moment'
 
@@ -12,6 +12,7 @@ import PendingTx from 'components/PendingTx'
 
 //Import GraphQL
 import { refetchTilUpdatedSingle } from 'utils/graphql'
+import { Tooltip } from '../../../../components/Tooltip/Tooltip'
 
 export default function TopAddress({
   className,
@@ -29,6 +30,8 @@ export default function TopAddress({
   isRegsitrant,
   pendingExpirationDate = false
 }) {
+  const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
+
   async function copyTextToClipboard(text) {
     if ('clipboard' in navigator) {
       return await navigator.clipboard.writeText(text)
@@ -69,7 +72,7 @@ export default function TopAddress({
           </span>
         </div>
       </div>
-      <div className="flex flex-col justify-between py-2">
+      <div className="flex flex-col justify-between py-2 w-[447px]">
         <div>
           <p className="font-bold text-[24px] text-[#1EEFA4]">Registrant</p>
           {loadingRegistration ? (
@@ -95,27 +98,30 @@ export default function TopAddress({
                 <div className="flex text-[18px] text-white font-semibold items-center mt-2">
                   <p>{registrantAddress}</p>
                   <div className="ml-2" onClick={handleCopyRegistrantAddress}>
-                    <CopyIcon />
+                    <Tooltip message={tooltipMessage}>
+                      <CopyIcon />
+                    </Tooltip>
                   </div>
                 </div>
               )}
             </div>
           )}
-
-          <div className="flex items-center mt-4">
-            <button
-              disabled={pending || !isRegsitrant}
-              className={cn(
-                'py-2 px-6 rounded-full mr-4 font-semibold',
-                pending || !isRegsitrant
-                  ? 'bg-[#7E9195] text-white'
-                  : 'bg-[#30DB9E] text-[#134757]'
-              )}
-              onClick={transferRegistrantAddress}
-            >
-              Transfer
-            </button>
-          </div>
+          {!pending && !loadingRegistration && (
+            <div className="flex items-center mt-4">
+              <button
+                disabled={pending || !isRegsitrant}
+                className={cn(
+                  'py-2 px-6 rounded-full mr-4 font-semibold',
+                  pending || !isRegsitrant
+                    ? 'bg-[#7E9195] text-white'
+                    : 'bg-[#30DB9E] text-[#134757]'
+                )}
+                onClick={transferRegistrantAddress}
+              >
+                Transfer
+              </button>
+            </div>
+          )}
         </div>
         <div className="flex justify-between items-center">
           <div>
@@ -155,9 +161,9 @@ export default function TopAddress({
                   ).format('hh:mm')}
                   <span className="ml-1">(UTC+8:00)</span>
                 </p>
-                <div className="ml-2">
+                {/* <div className="ml-2">
                   <NotifyIcon />
-                </div>
+                </div> */}
               </div>
             )}
           </div>

@@ -20,7 +20,10 @@ const colorStyles = {
       color: '#FFFFFF',
       fontWeight: 600,
       padding: '8px 0px 8px 0px',
-      borderBottom: '1px solid rgba(204,252,255,0.2)'
+      borderBottom: '1px solid rgba(204,252,255,0.2)',
+      maxWidth: '100%',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
     }
   },
   singleValue: styles => {

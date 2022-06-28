@@ -116,26 +116,25 @@ export default function ProfileCard({ className, account, isReadOnly }) {
         {account && !isReadOnly ? (
           <div className="flex items-center mt-[5px] justify-between">
             {primaryDomain && primaryDomain.length === 0 ? (
-              <div>
-                <button
-                  className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
-                  onClick={() => {
-                    // localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
-                    // connectProvider()
-                    setIsShowChangePrimaryModal(true)
-                  }}
-                >
-                  Add Primary domain
-                </button>
-              </div>
+              <button
+                className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
+                onClick={() => {
+                  // localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
+                  // connectProvider()
+                  setIsShowChangePrimaryModal(true)
+                }}
+              >
+                Add Primary domain
+              </button>
             ) : (
-              <div>
-                <div className="text-[#1EEFA4] text-[14px]">pepefrong.bnb</div>
+              <div className="flex justify-between w-full">
+                <div className="text-[#1EEFA4] text-[14px] truncate max-w-[120px]">
+                  {primaryDomain[0].name + '.bnb'}
+                </div>
                 <button
                   className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
                   onClick={() => {
-                    localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
-                    connectProvider()
+                    setIsShowChangePrimaryModal(true)
                   }}
                 >
                   Change
@@ -144,12 +143,7 @@ export default function ProfileCard({ className, account, isReadOnly }) {
             )}
           </div>
         ) : (
-          <button
-            className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
-            onClick={connectProvider}
-          >
-            Connect wallet
-          </button>
+          <div className="text-white">-</div>
         )}
         <ChangePrimaryDomain
           show={isShowChangePrimaryModal}

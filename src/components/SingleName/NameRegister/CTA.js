@@ -1,12 +1,15 @@
+// Import packages
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { css } from 'emotion'
+import { gql, useQuery } from '@apollo/client'
 import { useHistory } from 'react-router-dom'
 import { Mutation } from '@apollo/client/react/components'
 import { useTranslation } from 'react-i18next'
 import EthVal from 'ethval'
 import { useSelector, useDispatch } from 'react-redux'
+import cn from 'classnames'
 
 import { trackReferral } from '../../../utils/analytics'
 import { REGISTER } from '../../../graphql/mutations'
@@ -44,7 +47,9 @@ function getCTA({
   registering,
   goBack,
   setCustomStep,
-  startRegisterFuc
+  startRegisterFuc,
+  readOnly,
+  isReadOnly
 }) {
   const CTAs = {
     AWAITING_REGISTER: (
@@ -77,6 +82,7 @@ function getCTA({
               </button>
               <button
                 data-testid="request-register-button"
+                disabled={isReadOnly}
                 onClick={async () => {
                   if (hasSufficientBalance) {
                     startRegisterFuc()
@@ -85,7 +91,12 @@ function getCTA({
                     mutate()
                   } else setShowSufficientBalanceModal(true)
                 }}
-                className="bg-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
+                className={cn(
+                  'font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center',
+                  isReadOnly
+                    ? 'bg-[#7E9195] text-white cursor-not-allowed'
+                    : 'bg-[#30DB9E]'
+                )}
               >
                 Register{' '}
                 {registering && (
@@ -164,6 +175,15 @@ function getCTA({
   return CTAs[step]
 }
 
+export const HOME_DATA = gql`
+  query getHomeData($address: string) @client {
+    network
+    displayName(address: $address)
+    isReadOnly
+    isSafeApp
+  }
+`
+
 const CTA = ({
   setCustomStep,
   step,
@@ -196,6 +216,16 @@ const CTA = ({
   const [showSufficientBalanceModal, setShowSufficientBalanceModal] = useState(
     false
   )
+
+  const { data } = useQuery(HOME_DATA, {
+    variables: {
+      address: account
+    }
+  })
+
+  const { isReadOnly } = data
+
+  console.log('isReadOnly', isReadOnly)
 
   useEffect(() => {
     return () => {
@@ -251,7 +281,8 @@ const CTA = ({
         registering,
         goBack,
         setCustomStep,
-        startRegisterFuc
+        startRegisterFuc,
+        isReadOnly
       })}
     </div>
   )

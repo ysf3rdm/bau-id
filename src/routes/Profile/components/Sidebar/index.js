@@ -50,11 +50,16 @@ export default function Sidebar({ className, isReadOnly }) {
   }
 
   useEffect(() => {
-    if (account && account !== EMPTY_ADDRESS) {
+    console.log('Hey is ReadOnly', isReadOnly)
+    if (!isReadOnly && account && account !== EMPTY_ADDRESS) {
       fetchDomainsList()
     }
-    fetchDomainsList()
-  }, [account])
+    if (isReadOnly) {
+      setDomainList([])
+      dispatch(setSelectedDomain(null))
+      dispatch(setAllDomains([]))
+    }
+  }, [isReadOnly, account])
 
   const selectDomain = async (domain, index) => {
     dispatch(setSelectedDomain(domain))
@@ -81,9 +86,6 @@ export default function Sidebar({ className, isReadOnly }) {
           clickHandle={selectDomain}
           selectedDomain={selectedDomain}
         />
-      </div>
-      <div className="text-[#30DB9E] text-center text-[12px]">
-        Learn how to manage your name
       </div>
     </div>
   )

@@ -200,7 +200,7 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
   }
 
   return (
-    <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm p-[40px] relative">
+    <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm p-[40px] relative w-[962px]">
       {selectedDomain && (
         <TopAddress
           isRegsitrant={isRegsitrant}
