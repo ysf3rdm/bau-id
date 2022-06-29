@@ -28,7 +28,10 @@ export default function TopAddress({
   txHash,
   extendHandler,
   isRegsitrant,
-  pendingExpirationDate = false
+  pendingExp,
+  refetchExp,
+  fetchExp,
+  expDate
 }) {
   const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
 
@@ -83,7 +86,7 @@ export default function TopAddress({
             <AnimationSpin />
           ) : (
             <div>
-              {pendingExpirationDate ? (
+              {pending ? (
                 <PendingTx
                   txHash={txHash}
                   onConfirmed={async () => {
@@ -133,17 +136,17 @@ export default function TopAddress({
               Expiration Date
             </p>
 
-            {pending ? (
+            {pendingExp ? (
               <PendingTx
                 txHash={txHash}
                 onConfirmed={async () => {
                   refetchTilUpdatedSingle({
-                    refetch: refetchAddress,
+                    refetch: refetchExp,
                     interval: 300,
-                    keyToCompare: 'registrant',
-                    prevData: address
+                    keyToCompare: 'expires',
+                    prevData: expDate
                   })
-                  await fetchAddress()
+                  await fetchExp()
                   setConfirmed()
                 }}
                 className="mt-1"
@@ -173,7 +176,13 @@ export default function TopAddress({
           </div>
           <div>
             <button
-              className="text-[#134757] font-semibold text-[16px] py-2 px-[28px] rounded-full bg-[#30DB9E]"
+              disabled={pendingExp || !isRegsitrant}
+              className={cn(
+                'py-2 px-[28px] rounded-full mr-4 font-semibold',
+                pendingExp || !isRegsitrant
+                  ? 'bg-[#7E9195] text-white'
+                  : 'bg-[#30DB9E] text-[#134757]'
+              )}
               onClick={extendHandler}
             >
               Extend

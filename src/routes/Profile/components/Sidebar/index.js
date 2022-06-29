@@ -18,12 +18,16 @@ import { setSelectedDomain, setAllDomains } from 'app/slices/domainSlice'
 
 export default function Sidebar({ className, isReadOnly }) {
   const [domainList, setDomainList] = useState([])
+  const [networkId, setNetworkID] = useState('')
+
   const dispatch = useDispatch()
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
+  const domains = useSelector(state => state.domain.domains)
   const account = useAccount()
 
   const fetchDomainsList = async () => {
     const networkId = await getNetworkId()
+    setNetworkID(networkId)
     const params = {
       ChainID: networkId,
       Address: account
@@ -50,7 +54,6 @@ export default function Sidebar({ className, isReadOnly }) {
   }
 
   useEffect(() => {
-    console.log('Hey is ReadOnly', isReadOnly)
     if (!isReadOnly && account && account !== EMPTY_ADDRESS) {
       fetchDomainsList()
     }
@@ -77,12 +80,13 @@ export default function Sidebar({ className, isReadOnly }) {
           className="mb-4"
           account={account}
           isReadOnly={isReadOnly}
+          networkId={networkId}
         />
         {/* <WidgetFunction className="mt-4 mb-4" /> */}
         {/* <DomainPanel /> */}
         <DomainList
           className="mt-4 h-full flex flex-col"
-          domainsList={domainList}
+          domainsList={domains}
           clickHandle={selectDomain}
           selectedDomain={selectedDomain}
         />

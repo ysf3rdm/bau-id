@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import moment from 'moment'
 import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 
 //Import components
 import MainBoard from './MainBoard'
@@ -10,12 +11,18 @@ import AnimationSpin from 'components/AnimationSpin'
 import TopAddress from './TopAddress'
 import TransferAddressModal from 'components/Modal/TransferAddressModal'
 import ExtendPeriodModal from 'components/Modal/ExtendPeriodModal'
+import AddressChangeModal from 'components/Modal/AddressChangeModal'
 
 //Import sdk objects
 import { getRegistrar } from 'apollo/mutations/ens'
 
 //Import graphql quires
-import { SET_REGISTRANT, SET_RESOLVER, RENEW } from 'graphql/mutations'
+import {
+  SET_REGISTRANT,
+  SET_RESOLVER,
+  RENEW,
+  ADD_MULTI_RECORDS
+} from 'graphql/mutations'
 import { GET_ETH_PRICE, GET_RENT_PRICE, GET_PRICE_CURVE } from 'graphql/queries'
 
 //Import custom hooks
@@ -44,8 +51,12 @@ export default function Mainbar({
   const [loadingResolverAddress, setLoadingResolverAddress] = useState(true)
   const [transferShowModal, setTransferShowModal] = useState(false)
   const [extendPeriodShowModal, setExtendPeriodShowModal] = useState(false)
+  const [showAddressChangeModal, setShowAddressChangeModal] = useState(false)
   const [mutationQuery, setMutationQuery] = useState(null)
   const [isRegsitrant, setIsRegsitrant] = useState(false)
+  const [updatedRecords, setUpdatedRecords] = useState(false)
+  const [updatingBNBAddress, setUpdatingBNBAddress] = useState('')
+  const [param, setParam] = useState('')
 
   const dispatch = useDispatch()
 
@@ -67,6 +78,7 @@ export default function Mainbar({
 
   const [mutation] = useMutation(mutationQuery ?? SET_REGISTRANT, {
     onCompleted: data => {
+      console.log('consoling here', data)
       const txHash = Object.values(data)[0]
       startPending(txHash)
     }
@@ -77,6 +89,13 @@ export default function Mainbar({
       const txHash = Object.values(data)[0]
       startPending(txHash)
       setExtendPeriodShowModal(false)
+    }
+  })
+
+  const [addMultiRecords] = useMutation(ADD_MULTI_RECORDS, {
+    onCompleted: data => {
+      startPending(Object.values(data)[0])
+      setUpdatingBNBAddress(param)
     }
   })
 
@@ -158,11 +177,13 @@ export default function Mainbar({
 
   const fetchExpiryDate = async () => {
     let data = await refetchExpiryDate()
+    console.log(data)
     if (data.length > 0) {
       const matchedData = data.filter(item => item.name === selectedDomain.name)
       if (matchedData && matchedData.length > 0) {
         dispatch(setSelectedDomain(matchedData[0]))
       }
+      // dispatch(setAllDomains(data));
     }
   }
 
@@ -236,6 +257,20 @@ export default function Mainbar({
     mutationReNew({ variables })
   }
 
+  const changeBNBAddress = param => {
+    setShowAddressChangeModal(false)
+    setTitle('BNBAddress')
+    const variables = [{ ...updatedRecords, value: param.address, key: 'ETH' }]
+    console.log('variables', {
+      name: selectedDomain.name + '.bnb',
+      records: variables
+    })
+    setParam(param.address)
+    addMultiRecords({
+      variables: { name: selectedDomain.name + '.bnb', records: variables }
+    })
+  }
+
   if (loading) {
     return (
       <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm p-5 relative min-w-[840px] flex justify-center items-center">
@@ -257,9 +292,7 @@ export default function Mainbar({
             setTitle('Registrant')
             setTransferShowModal(true)
           }}
-          pending={
-            editing ? null : pending && !confirmed && title === 'Registrant'
-          }
+          pending={pending && title === 'Registrant'}
           setConfirmed={setConfirmed}
           refetchAddress={refetchRegistrantAddress}
           fetchAddress={fetchRegistrantAddress}
@@ -269,17 +302,16 @@ export default function Mainbar({
             setTitle('ExpirationDate')
             setExtendPeriodShowModal(true)
           }}
-          pendingExp={
-            editing ? null : pending && !confirmed && title === 'ExpirationDate'
-          }
+          pendingExp={pending && title === 'ExpirationDate'}
           refetchExp={refetchExpiryDate}
           fetchExp={fetchExpiryDate}
-          expDate={selectedDomain}
+          expDate={selectedDomain.expires}
         />
       )}
 
       {selectedDomain && (
         <MainBoard
+          isRegsitrant={isRegsitrant}
           selectedDomain={{ ...selectedDomain }}
           className="mt-8"
           resolverAddress={resolverAddress}
@@ -288,14 +320,18 @@ export default function Mainbar({
             setTitle('Resolver')
             setTransferShowModal(true)
           }}
-          pending={
-            editing ? null : pending && !confirmed && title === 'Resolver'
-          }
+          pending={pending && title === 'Resolver'}
           setConfirmed={setConfirmed}
           refetchAddress={refetchResolverAddress}
           fetchAddress={fetchResolverAddress}
           txHash={txHash}
           address={resolverAddress}
+          showAddressChangeModalHandle={param => {
+            setUpdatedRecords(param)
+            setShowAddressChangeModal(true)
+          }}
+          pendingBNBAddress={pending && title === 'BNBAddress'}
+          updatingBNBAddress={updatingBNBAddress}
         />
       )}
       <TransferAddressModal
@@ -325,6 +361,11 @@ export default function Mainbar({
         displayGas={true}
         closeModal={() => setExtendPeriodShowModal(false)}
         extendHandler={extendExpiryDate}
+      />
+      <AddressChangeModal
+        show={showAddressChangeModal}
+        closeModal={() => setShowAddressChangeModal(false)}
+        saveHandler={changeBNBAddress}
       />
     </div>
   )
