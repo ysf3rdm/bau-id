@@ -6,7 +6,9 @@ export default function Increase({
   className,
   decrementYears,
   incrementYears,
-  years
+  years,
+  setYears,
+  handleYear
 }) {
   return (
     <div
@@ -25,9 +27,16 @@ export default function Increase({
       >
         -
       </button>
-      <div className="text-white font-bold font-urbanist text-[18px]">
-        {years}
-      </div>
+      <input
+        min="0"
+        onChange={event => {
+          if (event.target.value < 0) return
+          else setYears(event.target.value)
+        }}
+        className="text-white text-center font-bold font-urbanist text-[18px] w-[60%] bg-transparent active:outline-none active:border-0"
+        type="number"
+        value={years}
+      />
       <button
         onClick={incrementYears}
         className="w-[24px] h-[24px] bg-[#0EA59C]/50 flex justify-center items-center text-white rounded-[4px] cursor-pointer"

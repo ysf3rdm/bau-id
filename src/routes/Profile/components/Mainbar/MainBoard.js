@@ -1,12 +1,17 @@
+//Import packages
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import cn from 'classnames'
 import { useQuery } from '@apollo/client'
 import { getNamehash, emptyAddress } from '@siddomains/ui'
 import { formatsByCoinType } from '@siddomains/address-encoder'
-import PendingTx from 'components/PendingTx'
-
 import union from 'lodash/union'
+
+//Import components
+import PendingTx from 'components/PendingTx'
+import { Tooltip } from 'components/Tooltip/Tooltip'
+
+//Import GraphQL Queries
 import {
   GET_RESOLVER_FROM_SUBGRAPH,
   GET_ADDRESSES,
@@ -188,6 +193,7 @@ export default function MainBoard({
 
   const [updatedRecords, setUpdatedRecords] = useState([])
   const [initialRecords, setInitialRecords] = useState([])
+  const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
 
   useUpdatedRecords(recordsLoading, initialRecords, setUpdatedRecords)
 
@@ -210,7 +216,10 @@ export default function MainBoard({
     e.preventDefault()
     copyTextToClipboard(resolverAddress)
       .then(() => {
-        alert('copied')
+        setTooltipMessage('Copied')
+        setTimeout(() => {
+          setTooltipMessage('Copy to clipboard')
+        }, 2000)
       })
       .catch(err => {
         alert('err')
@@ -221,7 +230,10 @@ export default function MainBoard({
     e.preventDefault()
     copyTextToClipboard(getCoins(updatedRecords)[0]?.value)
       .then(() => {
-        alert('copied')
+        setTooltipMessage('Copied')
+        setTimeout(() => {
+          setTooltipMessage('Copy to clipboard')
+        }, 2000)
       })
       .catch(err => {
         alert('err')
@@ -238,7 +250,9 @@ export default function MainBoard({
             <div className="flex items-center text-[#B1D6D3] text-[18px] mt-1">
               <p className="mr-2">{getCoins(updatedRecords)[0]?.value}</p>
               <span className="cursor-pointer" onClick={handleBNBAddressCopy}>
-                <CopyIcon />
+                <Tooltip message={tooltipMessage} delay={1000}>
+                  <CopyIcon />
+                </Tooltip>
               </span>
             </div>
           </div>
@@ -278,7 +292,9 @@ export default function MainBoard({
                     className="cursor-pointer"
                     onClick={e => handleResolverAddressCopy(e)}
                   >
-                    <CopyIcon />
+                    <Tooltip message={tooltipMessage} delay={1000}>
+                      <CopyIcon />
+                    </Tooltip>
                   </div>
                 </div>
               </div>

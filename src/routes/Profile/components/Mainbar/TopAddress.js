@@ -44,7 +44,11 @@ export default function TopAddress({
     e.preventDefault()
     copyTextToClipboard(registrantAddress)
       .then(() => {
-        alert('copied')
+        // alert('copied')
+        setTooltipMessage('Copied')
+        setTimeout(() => {
+          setTooltipMessage('Copy to clipboard')
+        }, 2000)
       })
       .catch(err => {
         alert('err')
@@ -98,7 +102,7 @@ export default function TopAddress({
                 <div className="flex text-[18px] text-white font-semibold items-center mt-2">
                   <p>{registrantAddress}</p>
                   <div className="ml-2" onClick={handleCopyRegistrantAddress}>
-                    <Tooltip message={tooltipMessage}>
+                    <Tooltip message={tooltipMessage} delay={1000}>
                       <CopyIcon />
                     </Tooltip>
                   </div>

@@ -97,6 +97,8 @@ const resolvers = {
       return sendHelper(tx)
     },
     async renew(_, { label, duration }) {
+      console.log('hey renew called here:')
+      console.log('label', label)
       const registrar = getRegistrar()
       const tx = await registrar.renew(label, duration)
       return sendHelper(tx)
@@ -145,6 +147,7 @@ const resolvers = {
       }
     },
     async setRegistrant(_, { name, address }) {
+      console.log('why printing here: cannot understand')
       const registrar = getRegistrar()
       const tx = await registrar.transferOwner(name, address)
       return sendHelper(tx)

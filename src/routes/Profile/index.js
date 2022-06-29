@@ -25,6 +25,8 @@ export default function Profile() {
   const haveNoPermissionToEdit = false
   const [sid, setSid] = useState(null)
   const [isAccountConnected, setIsAccountConnected] = useState(false)
+  const [networkId, setNetworkId] = useState('')
+
   const account = useAccount()
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
 
@@ -48,6 +50,7 @@ export default function Profile() {
   const sidSetup = async () => {
     try {
       const networkId = await getNetworkId()
+      setNetworkId(networkId)
       const infura =
         'https://apis-sj.ankr.com/bc19fe97c68d4a99a059465623e46b3e/bb63faaa8f178d26aac2969443ec7e73/binance/full/test'
       const provider = new ethers.providers.JsonRpcProvider(infura)
@@ -74,6 +77,7 @@ export default function Profile() {
           selectedDomain={selectedDomain}
           account={account}
           isReadOnly={isReadOnly}
+          networkId={networkId}
         />
       </div>
       {haveNoPermissionToEdit && <NoPermissionEdit />}

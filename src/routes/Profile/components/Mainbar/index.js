@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import moment from 'moment'
+import { useSelector, useDispatch } from 'react-redux'
 
 //Import components
 import MainBoard from './MainBoard'
@@ -25,7 +26,16 @@ import { useInterval, useGasPrice, useBlock } from 'components/hooks'
 import { calculateDuration } from 'utils/dates'
 import PremiumPriceOracle from 'components/SingleName/NameRegister/PremiumPriceOracle'
 
-export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
+//Import Redux
+import { setSelectedDomain, setAllDomains } from 'app/slices/domainSlice'
+
+export default function Mainbar({
+  sid,
+  selectedDomain,
+  account,
+  isReadOnly,
+  networkId
+}) {
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(true)
   const [loadingRegistration, setLoadingRegistration] = useState(true)
@@ -36,6 +46,8 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
   const [extendPeriodShowModal, setExtendPeriodShowModal] = useState(false)
   const [mutationQuery, setMutationQuery] = useState(null)
   const [isRegsitrant, setIsRegsitrant] = useState(false)
+
+  const dispatch = useDispatch()
 
   const [years, setYears] = useState(1)
 
@@ -60,6 +72,14 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
     }
   })
 
+  const [mutationReNew] = useMutation(RENEW, {
+    onCompleted: data => {
+      const txHash = Object.values(data)[0]
+      startPending(txHash)
+      setExtendPeriodShowModal(false)
+    }
+  })
+
   const {
     data: { getRentPrice: getPremiumPrice } = {},
     loading: getPremiumPriceLoading
@@ -75,10 +95,6 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
     loadEthUSDPriceData,
     { loading: ethUsdPriceLoading, data: ethUsdPriceData = {} }
   ] = useLazyQuery(GET_ETH_PRICE)
-
-  // const { data: ethUsdPriceData = {}, loading: ethUsdPriceLoading } = useQuery(
-  //   GET_ETH_PRICE
-  // )
 
   const { data: { getPriceCurve } = {} } = useQuery(GET_PRICE_CURVE)
 
@@ -118,6 +134,36 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
     setRegistrantAddress(t_address)
     if (t_address === account) setIsRegsitrant(true)
     setLoadingRegistration(false)
+  }
+
+  const refetchExpiryDate = async () => {
+    const params = {
+      ChainID: networkId,
+      Address: account
+    }
+    let result = await axios.post(
+      'https://space-id-348516.uw.r.appspot.com/listname',
+      params
+    )
+    const data = result?.data?.map(item => {
+      const date = new Date(item?.expires)
+      return {
+        expires_at: `${date.getFullYear()}.${date.getMonth() +
+          1}.${date.getDate()}`,
+        ...item
+      }
+    })
+    return data
+  }
+
+  const fetchExpiryDate = async () => {
+    let data = await refetchExpiryDate()
+    if (data.length > 0) {
+      const matchedData = data.filter(item => item.name === selectedDomain.name)
+      if (matchedData && matchedData.length > 0) {
+        dispatch(setSelectedDomain(matchedData[0]))
+      }
+    }
   }
 
   useEffect(() => {
@@ -187,8 +233,7 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
       duration,
       label: selectedDomain.name
     }
-    setMutationQuery(RENEW)
-    mutation({ variables })
+    mutationReNew({ variables })
   }
 
   if (loading) {
@@ -215,20 +260,21 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
           pending={
             editing ? null : pending && !confirmed && title === 'Registrant'
           }
-          pendingExpirationDate={
-            editing
-              ? null
-              : pending && !confirmed && title === 'Expiration Date'
-          }
           setConfirmed={setConfirmed}
           refetchAddress={refetchRegistrantAddress}
           fetchAddress={fetchRegistrantAddress}
           txHash={txHash}
           address={registrantAddress}
           extendHandler={() => {
-            setTitle('Expiration Date')
+            setTitle('ExpirationDate')
             setExtendPeriodShowModal(true)
           }}
+          pendingExp={
+            editing ? null : pending && !confirmed && title === 'ExpirationDate'
+          }
+          refetchExp={refetchExpiryDate}
+          fetchExp={fetchExpiryDate}
+          expDate={selectedDomain}
         />
       )}
 
@@ -267,7 +313,6 @@ export default function Mainbar({ sid, selectedDomain, account, isReadOnly }) {
         years={years}
         setYears={years => {
           setYears(years)
-          // updateValue(formatDate(expirationDate))
         }}
         ethUsdPriceLoading={ethUsdPriceLoading}
         ethUsdPrice={ethUsdPrice}
