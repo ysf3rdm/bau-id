@@ -185,7 +185,11 @@ export default function MainBoard({
   refetchAddress,
   fetchAddress,
   txHash,
-  address
+  address,
+  isRegsitrant,
+  showAddressChangeModalHandle,
+  pendingBNBAddress,
+  updatingBNBAddress
 }) {
   const { dataAddresses, dataTextRecords, recordsLoading } = useGetRecords(
     selectedDomain
@@ -194,6 +198,7 @@ export default function MainBoard({
   const [updatedRecords, setUpdatedRecords] = useState([])
   const [initialRecords, setInitialRecords] = useState([])
   const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
+  const [bnbAddress, setBNBAddress] = useState('')
 
   useUpdatedRecords(recordsLoading, initialRecords, setUpdatedRecords)
 
@@ -211,6 +216,12 @@ export default function MainBoard({
       return document.execCommand('copy', true, text)
     }
   }
+
+  useEffect(() => {
+    if (updatedRecords.length > 0) {
+      setBNBAddress(getCoins(updatedRecords)[0]?.value)
+    }
+  }, [updatedRecords])
 
   const handleResolverAddressCopy = e => {
     e.preventDefault()
@@ -245,19 +256,48 @@ export default function MainBoard({
       <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] p-5">
         <p className="text-[#B1D6D3] font-bold text-[20px]">Records</p>
         <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] flex items-center justify-between py-[19px] px-6 mt-5">
-          <div>
-            <p className="text-[#B1D6D3] font-bold text-[20px]">BNB Address</p>
-            <div className="flex items-center text-[#B1D6D3] text-[18px] mt-1">
-              <p className="mr-2">{getCoins(updatedRecords)[0]?.value}</p>
-              <span className="cursor-pointer" onClick={handleBNBAddressCopy}>
-                <Tooltip message={tooltipMessage} delay={1000}>
-                  <CopyIcon />
-                </Tooltip>
-              </span>
+          {pendingBNBAddress ? (
+            <PendingTx
+              txHash={txHash}
+              onConfirmed={async () => {
+                console.log('onConfirmed')
+                console.log(updatingBNBAddress)
+                setBNBAddress(updatingBNBAddress)
+                setConfirmed()
+              }}
+              className="mt-1"
+            />
+          ) : (
+            <div>
+              <p className="text-[#B1D6D3] font-bold text-[20px]">
+                BNB Address
+              </p>
+              <div className="flex items-center text-[#B1D6D3] text-[18px] mt-1">
+                <p className="mr-2">
+                  {updatingBNBAddress ? updatingBNBAddress : bnbAddress}
+                </p>
+                <span className="cursor-pointer" onClick={handleBNBAddressCopy}>
+                  <Tooltip message={tooltipMessage} delay={1000}>
+                    <CopyIcon />
+                  </Tooltip>
+                </span>
+              </div>
             </div>
-          </div>
+          )}
+
           <div className="flex items-center">
-            <button className="text-white py-2 px-[40px] bg-[#7E9195] rounded-full ml-4">
+            <button
+              disabled={pendingBNBAddress || !isRegsitrant}
+              className={cn(
+                'py-2 px-[40px] rounded-full ml-4 font-semibold',
+                pendingBNBAddress || !isRegsitrant
+                  ? 'bg-[#7E9195] text-white'
+                  : 'bg-[#30DB9E] text-[#134757]'
+              )}
+              onClick={() =>
+                showAddressChangeModalHandle(getCoins(updatedRecords)[0])
+              }
+            >
               Edit
             </button>
           </div>
@@ -304,10 +344,12 @@ export default function MainBoard({
 
         <div className="flex items-center">
           <button
-            disabled={pending}
+            disabled={pending || !isRegsitrant}
             className={cn(
-              'text-white py-2 px-[40px] rounded-full ml-4',
-              pending ? 'bg-[#7E9195] cursor-not-allowed' : 'bg-[#2980E8]'
+              'py-2 px-[40px] rounded-full mr-4 font-semibold',
+              pending || !isRegsitrant
+                ? 'bg-[#7E9195] text-white'
+                : 'bg-[#30DB9E] text-[#134757]'
             )}
             onClick={setResolver}
           >
