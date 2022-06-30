@@ -218,7 +218,7 @@ export default function Mainbar({
   }
 
   useEffect(() => {
-    if (sid && selectedDomain) {
+    if (sid) {
       setLoading(false)
       setLoadingRegistration(true)
       setLoadingResolverAddress(true)
