@@ -82,7 +82,7 @@ function getCTA({
               </button>
               <button
                 data-testid="request-register-button"
-                disabled={isReadOnly}
+                disabled={isReadOnly || parseFloat(years) < 0.1}
                 onClick={async () => {
                   if (hasSufficientBalance) {
                     startRegisterFuc()
@@ -93,7 +93,7 @@ function getCTA({
                 }}
                 className={cn(
                   'font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center',
-                  isReadOnly
+                  isReadOnly || parseFloat(years) < 0.1
                     ? 'bg-[#7E9195] text-white cursor-not-allowed'
                     : 'bg-[#30DB9E]'
                 )}

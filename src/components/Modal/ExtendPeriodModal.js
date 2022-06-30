@@ -1,5 +1,6 @@
 //Import packages
 import React, { useEffect } from 'react'
+import cn from 'classnames'
 
 //Import components
 import Modal from './Modal'
@@ -22,6 +23,9 @@ export default function ExtendPeriodModal({
   gasPrice,
   extendHandler
 }) {
+  useEffect(() => {
+    console.log('hey years is changing now', years)
+  }, [years])
   return (
     <div>
       {show && (
@@ -57,7 +61,13 @@ export default function ExtendPeriodModal({
                 ethUsdPrice={ethUsdPrice}
               />
               <button
-                className="bg-[#30DB9E] text-[#071A2F] text-[18px] py-2 px-[51px] rounded-full font-semibold flex mx-auto mt-6"
+                className={cn(
+                  'text-[18px] py-2 px-[51px] rounded-full font-semibold flex mx-auto mt-6',
+                  parseFloat(years) < 0.1
+                    ? 'bg-[#7E9195] text-white cursor-not-allowed'
+                    : 'bg-[#30DB9E] text-[#071A2F]'
+                )}
+                disabled={parseFloat(years) < 0.1}
                 onClick={() => {
                   extendHandler(duration)
                 }}

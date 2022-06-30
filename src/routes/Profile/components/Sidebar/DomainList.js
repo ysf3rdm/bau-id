@@ -100,7 +100,7 @@ export default function DomainList({
               <TimeAscendingIcon className="text-[#134757] border-b border-b-[rgba(67,140,136,0.25)] p-1" />
             </div>
             <div onClick={() => handleSortBy('TimeDescending')}>
-              <TimeDecendingIcon className="text-[#134757] border-b border-b-[rgba(67,140,136,0.25)] p-1" />
+              <TimeDecendingIcon className="text-[#134757] p-1" />
             </div>
           </div>
         </div>

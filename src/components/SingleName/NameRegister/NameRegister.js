@@ -421,8 +421,12 @@ const NameRegister = ({
               <div className="flex justify-center mt-10">
                 <button
                   className={cn(
-                    'py-2 border rounded-[16px] text-[#071A2F] font-semibold bg-[#30DB9E] border-0 px-[30px]'
+                    'py-2 border rounded-[16px] font-semibold border-0 px-[30px]',
+                    customStep === 'SUCCESS'
+                      ? 'text-[#071A2F] bg-[#30DB9E]'
+                      : 'bg-[#7E9195] text-white'
                   )}
+                  disabled={customStep !== 'SUCCESS'}
                   onClick={() => manageProfile()}
                 >
                   Manage Profile

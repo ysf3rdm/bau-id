@@ -4,7 +4,7 @@ import {
   getNetworkId,
   isReadOnly
 } from '@siddomains/ui'
-
+import Web3 from 'web3'
 import { setup } from './apollo/mutations/ens'
 import { connect } from './api/web3modal'
 import {
@@ -98,14 +98,11 @@ export const getProvider = async reconnect => {
     loadingWalletReactive(false)
     return provider
   } catch (e) {
-    console.log('e', e.message)
-    if (e.message.match(/Unsupported network/)) {
-      globalErrorReactive({
-        ...globalErrorReactive(),
-        network: 'Unsupported Network'
-      })
-      return
-    }
+    globalErrorReactive({
+      ...globalErrorReactive(),
+      network: 'Unsupported Network'
+    })
+    return
   }
 
   try {
@@ -132,8 +129,8 @@ export const setWeb3Provider = async provider => {
     accountsReactive(accounts)
   }
 
-  provider?.on('chainChanged', async _chainId => {
-    const networkId = await getNetworkId()
+  window.ethereum.on('chainChanged', async _chainId => {
+    const networkId = parseInt(_chainId, 16)
     if (!isSupportedNetwork(networkId)) {
       globalErrorReactive({
         ...globalErrorReactive(),
@@ -168,9 +165,9 @@ export default async reconnect => {
 
     if (!provider) throw 'Please install a wallet'
 
-    const networkId = await getNetworkId()
+    const networkId = window.ethereum.networkVersion
 
-    if (!isSupportedNetwork(networkId)) {
+    if (!isSupportedNetwork(parseInt(networkId))) {
       globalErrorReactive({
         ...globalErrorReactive(),
         network: 'Unsupported Network'
@@ -178,7 +175,7 @@ export default async reconnect => {
       return
     }
 
-    networkIdReactive(await getNetworkId())
+    networkIdReactive(networkId)
     networkReactive(await getNetwork())
 
     await setWeb3Provider(provider)

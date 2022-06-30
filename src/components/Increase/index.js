@@ -28,14 +28,13 @@ export default function Increase({
         -
       </button>
       <input
-        min="0"
+        min="0.1"
         onChange={event => {
-          if (event.target.value < 0) return
-          else setYears(event.target.value)
+          setYears(event.target.value)
         }}
         className="text-white text-center font-bold font-urbanist text-[18px] w-[60%] bg-transparent active:outline-none active:border-0"
         type="number"
-        value={years}
+        value={parseFloat(years)}
       />
       <button
         onClick={incrementYears}
