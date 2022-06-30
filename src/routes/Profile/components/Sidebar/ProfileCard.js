@@ -157,6 +157,7 @@ export default function ProfileCard({
             {pending ? (
               <PendingTx
                 txHash={txHash}
+                labelClassName="text-[12px]"
                 onConfirmed={async () => {
                   refetchTilUpdatedSingle({
                     refetch: refetchPrimaryDomain,

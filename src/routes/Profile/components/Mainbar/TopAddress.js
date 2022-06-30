@@ -136,7 +136,7 @@ export default function TopAddress({
               Expiration Date
             </p>
 
-            {pendingExp ? (
+            {true ? (
               <PendingTx
                 txHash={txHash}
                 onConfirmed={async () => {

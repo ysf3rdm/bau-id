@@ -6,12 +6,21 @@ import styled from '@emotion/styled/macro'
 import { useQuery } from '@apollo/client'
 import { GET_TRANSACTION_HISTORY } from '../graphql/queries'
 
-import Loader from './Loader'
+// import Loader from './Loader'
+import AnimationSpin from './AnimationSpin'
 
-const Pending = ({ className, children = 'Tx pending' }) => (
-  <div className={cn('flex justify-center items-center', className)}>
-    <span className="text-[12px] uppercase mr-[10px]">{children}</span>
-    <Loader />
+const Pending = ({
+  className,
+  children = 'Tx pending',
+  labelClassName = 'text-[18px]'
+}) => (
+  <div className={cn('flex items-center', className)}>
+    <span
+      className={cn('uppercase mr-[10px] text-[#B1D6D3] mt-1', labelClassName)}
+    >
+      {children}
+    </span>
+    <AnimationSpin />
   </div>
 )
 
