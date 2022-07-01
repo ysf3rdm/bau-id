@@ -136,7 +136,7 @@ export default function TopAddress({
               Expiration Date
             </p>
 
-            {true ? (
+            {pendingExp ? (
               <PendingTx
                 txHash={txHash}
                 onConfirmed={async () => {
@@ -176,10 +176,10 @@ export default function TopAddress({
           </div>
           <div>
             <button
-              disabled={pendingExp || !isRegsitrant}
+              disabled={pendingExp}
               className={cn(
                 'py-2 px-[28px] rounded-full mr-4 font-semibold',
-                pendingExp || !isRegsitrant
+                pendingExp
                   ? 'bg-[#7E9195] text-white'
                   : 'bg-[#30DB9E] text-[#134757]'
               )}
