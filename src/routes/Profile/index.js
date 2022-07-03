@@ -62,7 +62,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="mt-[10px] pb-[54px]">
+    <div className="my-[86px]">
       <div className="flex justify-center">
         <Sidebar
           className="mr-[32px]"

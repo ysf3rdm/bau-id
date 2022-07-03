@@ -19,8 +19,8 @@ export default () => {
   )
   return (
     // <div className="my-0 mx-auto min-w-[100%] md:min-w-[60%] mt-[calc((100vh-500px)/2)]">
-    <div className="my-0 mx-auto min-w-[100%] md:min-w-[60%] min-h-[100vh] flex items-center">
-      <div className="w-full">
+    <div className="py-[84px] mx-auto min-w-[100%] md:min-w-[60%] min-h-[100vh] flex items-center justify-center">
+      <div className="min-h-[202px]">
         <div className="flex justify-center text-[50px] md:text-[72px] text-[#1EEFA4] font-bold font-urbanist tracking-widest mb-5">
           SPACE ID
         </div>

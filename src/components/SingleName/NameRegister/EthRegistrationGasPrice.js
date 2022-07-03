@@ -25,7 +25,7 @@ const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
     <div>
       <div className="text-white py-[25px] border-y border-white border-dashed mt-6 px-6">
         <div className="flex justify-between">
-          <div className="font-semibold text-[14px]">Registeration Fee</div>
+          <div className="font-semibold text-[14px]">Registration</div>
           <div className="font-bold text-[16px]">{ethVal.toFixed(3)} BNBT</div>
         </div>
         <div className="flex justify-between mt-[14px]">

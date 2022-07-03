@@ -131,10 +131,35 @@ export default ({ children }) => {
   }
 
   const changeToBSCChain = async () => {
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: '0x61' }] // chainId must be in hexadecimal numbers
-    })
+    try {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x61' }]
+      })
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: '0x61',
+                chainName: 'BSC Testnet',
+                rpcUrls: [
+                  'https://apis-sj.ankr.com/bc19fe97c68d4a99a059465623e46b3e/bb63faaa8f178d26aac2969443ec7e73/binance/full/test'
+                ] /* ... */
+              }
+            ]
+          })
+        } catch (addError) {
+          console.log()
+          // handle "add" error
+        }
+      }
+      // handle other "switch" errors
+    }
+    // https://data-seed-prebsc-1-s1.binance.org:8545/
     window.location.reload()
   }
 
@@ -145,7 +170,7 @@ export default ({ children }) => {
   return (
     <section
       style={{ background: `url(${bg})` }}
-      className="bg-cover relative min-h-[100vh]"
+      className="bg-cover relative min-h-[100vh] flex items-center justify-center"
     >
       {globalError.network && (
         <Modal width="574px">

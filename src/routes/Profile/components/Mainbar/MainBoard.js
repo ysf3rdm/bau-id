@@ -291,8 +291,8 @@ export default function MainBoard({
               className={cn(
                 'py-2 px-[40px] rounded-full ml-4 font-semibold',
                 pendingBNBAddress || !isRegsitrant
-                  ? 'bg-[#7E9195] text-white'
-                  : 'bg-[#30DB9E] text-[#134757]'
+                  ? 'bg-[#7E9195] text-[#BDCED1]'
+                  : 'bg-[#2980E8] text-white'
               )}
               onClick={() =>
                 showAddressChangeModalHandle(getCoins(updatedRecords)[0])

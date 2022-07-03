@@ -263,7 +263,7 @@ const NameRegister = ({
   const manageProfile = () => history.push('/profile')
 
   return (
-    <div className="max-w-[448px] mx-auto pb-[40px] md:pt-[calc((100vh-604px)/2)]">
+    <div className="max-w-[448px] mx-auto">
       <div className="flex justify-center">
         <p className="min-w-full max-w-full block text-ellipsis overflow-hidden break-words font-bold text-[28px] text-[#1EEFA4] py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-6">
           {domain.name}
@@ -443,7 +443,7 @@ const NameRegister = ({
 const NameRegisterDataWrapper = props => {
   const { data, loading, error } = useQuery(GET_MINIMUM_COMMITMENT_AGE)
 
-  if (loading) return <Loader withWrap={true} large />
+  if (loading) return <AnimationSpin size={40} />
   if (error) {
     console.log(error)
   }

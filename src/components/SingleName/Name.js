@@ -3,18 +3,11 @@ import styled from '@emotion/styled/macro'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 import { EMPTY_ADDRESS } from '../../utils/records'
-import { Title } from '../Typography/Basic'
-import TopBar from '../Basic/TopBar'
-import DefaultFavourite from '../AddFavourite/Favourite'
 import NameDetails from './NameDetails'
 import DNSNameRegister from './DNSNameRegister'
 import ShortName from './ShortName'
 import Tabs from './Tabs'
 import { isOwnerOfParentDomain } from '../../utils/utils'
-
-const Container = styled('div')`
-  font-family: Urbanist;
-`
 
 function isRegistrationOpen(available, parent) {
   return parent === 'bnb' && available
@@ -88,11 +81,9 @@ function Name({ details: domain, name, pathname, type, refetch }) {
     containerState = isOwner ? 'Yours' : domain.state
   }
 
-  const key = useRefreshComponent()
-
   return (
-    <Container>
-      <div>
+    <div className="font-urbanist">
+      <div className="h-full min-h-[100vh] flex items-center justify-center">
         {isDNSRegistrationOpen(domain) ? (
           <DNSNameRegister
             domain={domain}
@@ -118,7 +109,7 @@ function Name({ details: domain, name, pathname, type, refetch }) {
           />
         )}
       </div>
-    </Container>
+    </div>
   )
 }
 
