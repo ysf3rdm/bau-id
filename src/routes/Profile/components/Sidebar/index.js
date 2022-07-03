@@ -9,8 +9,7 @@ import { useAccount } from 'components/QueryAccount'
 import { getNetworkId } from '@siddomains/ui'
 
 import ProfileCard from './ProfileCard'
-import WidgetFunction from './WidgetFunction'
-import DomainPanel from './DomainPanel'
+
 import DomainList from './DomainList'
 import { GET_SINGLE_NAME } from 'graphql/queries'
 

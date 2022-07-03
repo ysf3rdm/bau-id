@@ -139,7 +139,7 @@ function Search({
         )}
       </Formik>
       {showPopup && (
-        <div className="absolute top-[55px] shadow-popup flex w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]">
+        <div className="absolute top-[55px] shadow-popup flex w-[calc(100%-56px)] md:w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]">
           <div className="flex items-center max-w-[calc(100%-170px)]">
             {result.Owner ? (
               <FaceCryIcon className="text-[#30DB9E]" />

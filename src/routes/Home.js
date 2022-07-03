@@ -18,21 +18,17 @@ export default () => {
     state => state.domain.searchingDomainName
   )
   return (
-    <div className="my-0 mx-auto min-w-[100%] md:min-w-[60%] mt-[30vh]">
-      <>
-        <div className="flex justify-center text-[72px] text-[#1EEFA4] font-bold font-urbanist tracking-widest">
+    // <div className="my-0 mx-auto min-w-[100%] md:min-w-[60%] mt-[calc((100vh-500px)/2)]">
+    <div className="my-0 mx-auto min-w-[100%] md:min-w-[60%] min-h-[100vh] flex items-center">
+      <div className="w-full">
+        <div className="flex justify-center text-[50px] md:text-[72px] text-[#1EEFA4] font-bold font-urbanist tracking-widest mb-5">
           SPACE ID
         </div>
-        <h1
-          className=""
-          initial={animation.initial}
-          animate={animation.animate}
-        />
         <Search
-          className="w-[600px] mx-auto"
+          className="px-7 md:px-0 md:w-[600px] mx-auto"
           searchingDomainName={searchingDomainName}
         />
-      </>
+      </div>
     </div>
   )
 }

@@ -75,3 +75,9 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+@media only screen and (max-width: 768px) {
+  .menu-mobile-background {
+    background: linear-gradient(180deg, #3d888d 0%, #2e4450 100%);
+  }
+}

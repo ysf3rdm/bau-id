@@ -9,7 +9,8 @@ module.exports = {
       '1200px': '1200px',
       xl: '1280px',
       '1400px': '1400px',
-      '2xl': '1536px'
+      '2xl': '1536px',
+      menu: 'linear-gradient(180deg, #3d888d 0%, #2e4450 100%)'
     },
     extend: {
       boxShadow: {
@@ -23,6 +24,10 @@ module.exports = {
       },
       gridTemplateColumns: {
         profile: '360px 1fr'
+      },
+      transitionProperty: {
+        width: 'width',
+        height: 'height'
       }
     }
   },

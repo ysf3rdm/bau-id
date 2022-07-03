@@ -1,9 +1,8 @@
 import React from 'react'
-import styled from '@emotion/styled/macro'
 
-export default function HamburgerIcon({ size = 25, style }) {
+export default function HamburgerIcon({ size = 25, className }) {
   return (
-    <div style={style}>
+    <div className={className}>
       <svg
         width={size}
         viewBox="0 0 25 23"

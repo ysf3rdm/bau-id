@@ -24,7 +24,7 @@ function Modal({
     >
       <div
         className={cn(
-          `bg-[#0E4549] overflow-y-auto h-auto rounded-[24px] relative`,
+          `bg-[#0E4549] overflow-y-auto h-auto rounded-[24px] relative mx-7 md:mx-0`,
           className
         )}
         style={{ width }}
