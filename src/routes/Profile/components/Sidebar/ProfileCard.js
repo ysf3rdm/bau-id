@@ -13,10 +13,9 @@ import PendingTx from 'components/PendingTx'
 //Import graphql queries
 import { GET_REVERSE_RECORD } from 'graphql/queries'
 import { SET_NAME } from 'graphql/mutations'
-import { refetchTilUpdatedSingle } from 'utils/graphql'
+import { refetchTilUpdatedSingleForPrimaryKey } from 'utils/graphql'
 
 //Import custom functions
-import { connectProvider } from 'utils/providerUtils'
 import { useQuery, gql } from '@apollo/client'
 import { convertToETHAddressDisplayFormat } from 'utils/utils'
 import { useEditable } from 'components/hooks'
@@ -26,6 +25,7 @@ import { setAllDomains } from 'app/slices/domainSlice'
 
 //Import assets
 import SmileFace from '../../../../assets/images/profile/smileface.png'
+import { useEffect } from 'react'
 
 export const GET_ACCOUNT = gql`
   query getAccounts @client {
@@ -52,6 +52,12 @@ export default function ProfileCard({
 
   const { startPending, setConfirmed } = actions
   const { pending, txHash } = state
+
+  useEffect(() => {
+    if (!isReadOnly && domains.length === 0 && account) {
+      fetchPrimaryDomain()
+    }
+  }, [isReadOnly, networkId, account])
 
   const {
     data: { accounts }
@@ -105,6 +111,11 @@ export default function ProfileCard({
     dispatch(setAllDomains(result))
   }
 
+  const refetchForPrimaryDomain = async () => {
+    await fetchPrimaryDomain()
+    setConfirmed()
+  }
+
   return (
     <div
       className={cn(
@@ -139,7 +150,7 @@ export default function ProfileCard({
       )}
 
       <div className="w-full">
-        {!isReadOnly ? (
+        {!isReadOnly && account ? (
           <div className="text-white font-semibold text-[18px]">
             {convertToETHAddressDisplayFormat(account)}
           </div>
@@ -159,17 +170,16 @@ export default function ProfileCard({
                 txHash={txHash}
                 labelClassName="text-[12px]"
                 onConfirmed={async () => {
-                  refetchTilUpdatedSingle({
+                  refetchTilUpdatedSingleForPrimaryKey({
                     refetch: refetchPrimaryDomain,
-                    interval: 300,
+                    refetchForPrimaryDomain: refetchForPrimaryDomain,
+                    interval: 1000,
                     keyToCompare: 'name',
                     prevData:
                       primaryDomain && primaryDomain.length > 0
-                        ? primaryDomain
+                        ? primaryDomain?.[0]
                         : ''
                   })
-                  await fetchPrimaryDomain()
-                  setConfirmed()
                 }}
                 className="mt-1"
               />
@@ -179,8 +189,6 @@ export default function ProfileCard({
                   <button
                     className="bg-[#335264] rounded-full px-[8px] text-white font-semibold text-[12px]"
                     onClick={() => {
-                      // localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
-                      // connectProvider()
                       setIsShowChangePrimaryModal(true)
                     }}
                   >

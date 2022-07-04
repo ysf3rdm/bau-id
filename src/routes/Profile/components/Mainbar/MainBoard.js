@@ -342,7 +342,7 @@ export default function MainBoard({
           </div>
         )}
 
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <button
             disabled={pending || !isRegsitrant}
             className={cn(
@@ -355,7 +355,7 @@ export default function MainBoard({
           >
             Set
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   )

@@ -4,14 +4,16 @@ import { useHistory } from 'react-router'
 import { useLocation } from 'react-router-dom'
 import { useQuery, gql } from '@apollo/client'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
 import { getNetworkId } from '@siddomains/ui'
+import { useSelector, useDispatch } from 'react-redux'
 import cn from 'classnames'
 
 // Import components
 import NoAccountsDefault from 'components/NoAccounts/NoAccounts'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
 import UnstyledBlockies from 'components/Blockies'
+import AnimationSpin from 'components/AnimationSpin'
+import DomainList from 'routes/Profile/components/Sidebar/DomainList'
 import {
   TwitterIcon,
   DiscordIcon,
@@ -24,6 +26,7 @@ import ProfileCard from 'routes/Profile/components/Sidebar/ProfileCard'
 
 // Import graphql quires
 import { GET_REVERSE_RECORD } from 'graphql/queries'
+import { setSelectedDomain } from 'app/slices/domainSlice'
 
 // Import redux assets
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
@@ -69,6 +72,8 @@ export default ({ children }) => {
   const [avatarPopup, setAvatarPopup] = useState(false)
   const [networkId, setNetworkID] = useState('')
 
+  const domains = useSelector(state => state.domain.domains)
+  const selectedDomain = useSelector(state => state.domain.selectedDomain)
   useReactiveVarListeners()
 
   const { windowDimenion } = useDeviceSize()
@@ -128,6 +133,10 @@ export default ({ children }) => {
 
   const showAvatarPopup = () => {
     setAvatarPopup(!avatarPopup)
+  }
+
+  const selectDomain = async (domain, index) => {
+    dispatch(setSelectedDomain(domain))
   }
 
   const changeToBSCChain = async () => {
@@ -217,114 +226,123 @@ export default ({ children }) => {
           </a>
           {/* Only show for the mobile device */}
           <div className="block md:hidden cursor-pointer" onClick={menuOpen}>
-            <HamburgerIcon className="text-[#1EEFA4]" />
-          </div>
-
-          <div className="relative">
-            {!isSafeApp && (
-              <div className="mt-0 w-full md:w-auto flex items-center">
-                {location.pathname !== '/' && (
-                  <Search className="mr-4 w-[400px]" errorShowing={false} />
-                )}
-
-                <div className="hidden md:block">
-                  <NoAccountsDefault
-                    onClick={connectProvider}
-                    loadingWallet={loadingWallet}
-                    buttonText={isReadOnly ? t('c.connect') : network}
-                    isReadOnly={isReadOnly}
-                  />
-                </div>
-
-                {accounts && accounts[0] && !isReadOnly && (
-                  <button
-                    className="flex items-center ml-4 cursor-pointer"
-                    onClick={() => {
-                      if (windowDimenion.winWidth > 768) {
-                        showAvatarPopup()
-                      }
-                    }}
-                  >
-                    {!reverseRecordLoading &&
-                    getReverseRecord &&
-                    getReverseRecord.avatar ? (
-                      <img
-                        src={imageUrl(
-                          getReverseRecord.avatar,
-                          displayName,
-                          network
-                        )}
-                      />
-                    ) : (
-                      <div className="w-[44px] h-[44px]">
-                        <UnstyledBlockies
-                          className="rounded-full w-full h-full"
-                          address={accounts[0]}
-                          imageSize={45}
-                        />
-                      </div>
-                    )}
-                  </button>
-                )}
-              </div>
-            )}
-
-            {/* DropdownMenu for the avatar popup */}
-            {accounts && accounts[0] && avatarPopup && (
-              <div className="absolute w-[266px] h-auto bg-[#0E4549] right-0 top-[60px] rounded-[24px] p-4 z-[100]">
-                <div>
-                  <div className="flex items-center border-b-[2px] border-[#7E9195] pb-4 flex justify-between">
-                    {!reverseRecordLoading &&
-                    getReverseRecord &&
-                    getReverseRecord.avatar ? (
-                      <img
-                        src={imageUrl(
-                          getReverseRecord.avatar,
-                          displayName,
-                          network
-                        )}
-                      />
-                    ) : (
-                      <div className="w-[64px] h-[64px]">
-                        <UnstyledBlockies
-                          className="rounded-full w-full h-full"
-                          address={accounts[0]}
-                          imageSize={64}
-                        />
-                      </div>
-                    )}
-                    <div className="font-semibold text-[20px] font-urbanist text-white ml-4">{`${accounts[0].substring(
-                      0,
-                      6
-                    )}....${accounts[0].substring(
-                      accounts[0].length - 6,
-                      accounts[0].length
-                    )}`}</div>
-                  </div>
-                </div>
-                <div
-                  className="font-semibold text-white font-urbanist text-[18px] text-center pt-4"
-                  onClick={showAvatarPopup}
-                >
-                  <div
-                    className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
-                    onClick={moveToProfile}
-                  >
-                    Manage Account
-                  </div>
-                  {/* <div className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]">
-                  Change Wallet
-                </div> */}
-                  <div
-                    className="h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
-                    onClick={disconnectProvider}
-                  >
-                    Disconnect
-                  </div>
+            {/* <SmallLogoIcon size={40} className="text-[#1EEFA4]" /> */}
+            {isMenuOpen ? (
+              <div className="flex items-center">
+                <HamburgerIcon className="text-[#1EEFA4] mr-5" />
+                <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+                <div className="font-semibold text-[18px] ml-5">
+                  <img src={LogoText} />
                 </div>
               </div>
+            ) : (
+              <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
             )}
           </div>
+          {!isMenuOpen && (
+            <div className="relative">
+              {!isSafeApp && (
+                <div className="mt-0 w-full md:w-auto flex items-center">
+                  {location.pathname !== '/' && (
+                    <Search className="mr-4 w-[400px]" errorShowing={false} />
+                  )}
+
+                  <div className="hidden md:block">
+                    <NoAccountsDefault
+                      onClick={connectProvider}
+                      loadingWallet={loadingWallet}
+                      buttonText={isReadOnly ? t('c.connect') : network}
+                      isReadOnly={isReadOnly}
+                    />
+                  </div>
+
+                  {accounts && accounts[0] && !isReadOnly && (
+                    <button
+                      className="flex items-center ml-4 cursor-pointer"
+                      onClick={() => {
+                        if (windowDimenion.winWidth > 768) {
+                          showAvatarPopup()
+                        }
+                      }}
+                    >
+                      {!reverseRecordLoading &&
+                      getReverseRecord &&
+                      getReverseRecord.avatar ? (
+                        <img
+                          src={imageUrl(
+                            getReverseRecord.avatar,
+                            displayName,
+                            network
+                          )}
+                        />
+                      ) : (
+                        <div className="w-[44px] h-[44px]">
+                          <UnstyledBlockies
+                            className="rounded-full w-full h-full"
+                            address={accounts[0]}
+                            imageSize={45}
+                          />
+                        </div>
+                      )}
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* DropdownMenu for the avatar popup */}
+              {accounts && accounts[0] && avatarPopup && (
+                <div className="absolute w-[266px] h-auto bg-[#0E4549] right-0 top-[60px] rounded-[24px] p-4 z-[100]">
+                  <div>
+                    <div className="flex items-center border-b-[2px] border-[#7E9195] pb-4 flex justify-between">
+                      {!reverseRecordLoading &&
+                      getReverseRecord &&
+                      getReverseRecord.avatar ? (
+                        <img
+                          src={imageUrl(
+                            getReverseRecord.avatar,
+                            displayName,
+                            network
+                          )}
+                        />
+                      ) : (
+                        <div className="w-[64px] h-[64px]">
+                          <UnstyledBlockies
+                            className="rounded-full w-full h-full"
+                            address={accounts[0]}
+                            imageSize={64}
+                          />
+                        </div>
+                      )}
+                      <div className="font-semibold text-[20px] font-urbanist text-white ml-4">{`${accounts[0].substring(
+                        0,
+                        6
+                      )}....${accounts[0].substring(
+                        accounts[0].length - 6,
+                        accounts[0].length
+                      )}`}</div>
+                    </div>
+                  </div>
+                  <div
+                    className="font-semibold text-white font-urbanist text-[18px] text-center pt-4"
+                    onClick={showAvatarPopup}
+                  >
+                    <div
+                      className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
+                      onClick={moveToProfile}
+                    >
+                      Manage Account
+                    </div>
+                    <div
+                      className="h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
+                      onClick={disconnectProvider}
+                    >
+                      Disconnect
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div
@@ -337,6 +355,55 @@ export default ({ children }) => {
             networkId={networkId}
           />
         </div>
+        {isMenuOpen && windowDimenion.winWidth < 768 && (
+          <div className="px-7 border-t border-[rgba(204,252,255,0.2)]">
+            <DomainList
+              className="mt-4 h-full flex flex-col"
+              domainsList={domains}
+              clickHandle={selectDomain}
+              selectedDomain={selectedDomain}
+            />
+          </div>
+        )}
+
+        {isMenuOpen && (
+          <div className="w-[100vw] block md:hidden">
+            {isReadOnly ? (
+              <div className="w-full flex justify-center absolute bottom-7">
+                <button
+                  className="flex items-center bg-[#1EEFA4] text-[#134757] text-[20px] px-[82px] py-3 text-[20px] rounded-[16px] font-semibold"
+                  onClick={connectProvider}
+                >
+                  Connect{' '}
+                  {loadingWallet && (
+                    <div className="ml-2">
+                      <AnimationSpin />
+                    </div>
+                  )}
+                </button>
+              </div>
+            ) : (
+              <div className="absolute bottom-7 w-[100vw] px-[87px]">
+                <div className="w-full">
+                  <button className="block text-white bg-[rgba(14,165,156,0.5)] w-full py-[7px] text-[20px] font-semibold rounded-[16px]">
+                    {network}
+                  </button>
+                  <button className="bg-[#1EEFA4] rounded-[16px] w-full py-[7px] mt-4 ">
+                    <div
+                      className="text-[20px] font-semibold text-[#134757]"
+                      onClick={disconnectProvider}
+                    >
+                      Disconnect
+                    </div>
+                    <div className="text-[18px] text-[#134757]">
+                      {displayName}
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Footer component in the home page */}

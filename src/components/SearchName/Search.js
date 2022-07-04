@@ -62,7 +62,9 @@ function Search({
           if (values.searchKey.length < 3) {
             errors.searchKey = 'Name length must be at least 3 characters'
           } else if (
-            !new RegExp(/^[a-z0-9\p{Emoji}]*$/u).test(values.searchKey)
+            !new RegExp(/^[^$^!^@^#^%^&^*^(^)^"^:^>^<^?^,\p{Emoji}]*$/u).test(
+              values.searchKey
+            )
           ) {
             errors.searchKey =
               'Name can only contain lowercase letters, numbers and emojis'
