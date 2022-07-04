@@ -62,15 +62,14 @@ function Search({
           const errors = {}
           if (values.searchKey.length < 3) {
             errors.searchKey = 'Name length must be at least 3 characters'
-          } else if (
-            // !new RegExp(nospecial).test(
-            //   values.searchKey
-            // )
-            !nospecial.test(values.searchKey)
-          ) {
+          } else if (!nospecial.test(values.searchKey)) {
             errors.searchKey =
               'Name can only contain lowercase letters, numbers and emojis'
-          } else if (values.searchKey.indexOf(' ') >= 0) {
+          } else if (
+            values.searchKey.indexOf(' ') >= 0 ||
+            values.searchKey.indexOf('/') >= 0 ||
+            values.searchKey.indexOf('.') >= 0
+          ) {
             errors.searchKey =
               'Name can only contain lowercase letters, numbers and emojis'
           }
