@@ -44,7 +44,7 @@ function Search({
         name: searchingDomainName
       }
       axios
-        .post(`https://backend.stg.space.id/nameof`, {
+        .post(`https://backend.prd.space.id/nameof`, {
           ...params
         })
         .then(res => {
@@ -81,7 +81,7 @@ function Search({
             name: values.searchKey
           }
           axios
-            .post(`https://backend.stg.space.id/nameof`, {
+            .post(`https://backend.prd.space.id/nameof`, {
               ...params
             })
             .then(res => {
