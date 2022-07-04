@@ -106,7 +106,7 @@ export default function DomainList({
         </div>
       </div>
       {domainsList.length > 0 ? (
-        <div className="mt-4 relative max-h-[60vh] overflow-y-auto">
+        <div className="mt-4 relative max-h-[calc(100vh-454px)] md:max-h-[60vh] overflow-y-auto">
           {domains.map((item, index) => (
             <div
               onClick={() => {

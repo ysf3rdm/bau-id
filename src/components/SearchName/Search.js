@@ -58,14 +58,19 @@ function Search({
       <Formik
         initialValues={{ searchKey: searchingDomainName ?? '' }}
         validate={values => {
+          let nospecial = /^[^*|\\":<>[\]{}`\\\\()';@&$]+$/u
           const errors = {}
           if (values.searchKey.length < 3) {
             errors.searchKey = 'Name length must be at least 3 characters'
           } else if (
-            !new RegExp(/^[^$^!^@^#^%^&^*^(^)^"^:^>^<^?^,\p{Emoji}]*$/u).test(
-              values.searchKey
-            )
+            // !new RegExp(nospecial).test(
+            //   values.searchKey
+            // )
+            !nospecial.test(values.searchKey)
           ) {
+            errors.searchKey =
+              'Name can only contain lowercase letters, numbers and emojis'
+          } else if (values.searchKey.indexOf(' ') >= 0) {
             errors.searchKey =
               'Name can only contain lowercase letters, numbers and emojis'
           }
