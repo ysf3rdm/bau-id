@@ -15,7 +15,7 @@ export default function HamburgerIcon({ size = 25, className }) {
           x2="23.5"
           y2="2"
           stroke="currentColor"
-          stroke-width="3"
+          strokeWidth="3"
           stroke-linecap="round"
         />
         <line
@@ -24,8 +24,8 @@ export default function HamburgerIcon({ size = 25, className }) {
           x2="23.5"
           y2="11.8276"
           stroke="currentColor"
-          stroke-width="3"
-          stroke-linecap="round"
+          strokeWidth="3"
+          strokeLinecap="round"
         />
         <line
           x1="1.5"
@@ -33,8 +33,8 @@ export default function HamburgerIcon({ size = 25, className }) {
           x2="23.5"
           y2="21"
           stroke="currentColor"
-          stroke-width="3"
-          stroke-linecap="round"
+          strokeWidth="3"
+          strokeLinecap="round"
         />
       </svg>
     </div>

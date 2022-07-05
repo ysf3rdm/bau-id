@@ -273,7 +273,7 @@ export default function Mainbar({
 
   if (loading) {
     return (
-      <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm p-5 relative min-w-[840px] flex justify-center items-center">
+      <div className="p-5 relative min-w-[840px] flex justify-center items-center">
         <AnimationSpin size={60} />
       </div>
     )
