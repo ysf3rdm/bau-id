@@ -27,8 +27,7 @@ function InnerSearch({ history, className, style }) {
           } else if (
             !new RegExp(/^[a-z0-9\p{Emoji}]*$/u).test(values.searchKey)
           ) {
-            errors.searchKey =
-              'Name can only contain lowercase letters, numbers and emojis'
+            errors.searchKey = 'Name contains unsupported characters'
           }
           return errors
         }}

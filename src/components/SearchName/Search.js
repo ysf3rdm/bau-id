@@ -64,15 +64,13 @@ function Search({
           if (values.searchKey.length < 3) {
             errors.searchKey = 'Name length must be at least 3 characters'
           } else if (!nospecial.test(values.searchKey)) {
-            errors.searchKey =
-              'Name can only contain lowercase letters, numbers and emojis'
+            errors.searchKey = 'Name contains unsupported characters'
           } else if (
             values.searchKey.indexOf(' ') >= 0 ||
             values.searchKey.indexOf('/') >= 0 ||
             values.searchKey.indexOf('.') >= 0
           ) {
-            errors.searchKey =
-              'Name can only contain lowercase letters, numbers and emojis'
+            errors.searchKey = 'Name contains unsupported characters'
           }
           console.log(errors)
           return errors

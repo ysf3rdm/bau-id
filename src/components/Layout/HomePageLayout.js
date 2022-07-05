@@ -188,7 +188,7 @@ export default ({ children }) => {
               Unsupported Network :(
             </div>
             <div className="text-urbanist font-semibold text-center mt-4">
-              Please change your dapp browser to Binance Smart Chain Mainnet to
+              Please change your dapp browser to Binance Smart Chain Testnet to
               continue.
             </div>
             <div className="flex justify-center">
