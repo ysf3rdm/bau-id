@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  subDomainEditMode: false
+  subDomainEditMode: false,
+  isShowDrawer: false
 }
 
 export const uiSlice = createSlice({
@@ -10,11 +11,15 @@ export const uiSlice = createSlice({
   reducers: {
     toggleSubDomainEditMode: (state, { payload }) => {
       state.subDomainEditMode = payload
+    },
+    toggleDrawer: (state, { payload }) => {
+      console.log(payload)
+      state.isShowDrawer = payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { toggleSubDomainEditMode } = uiSlice.actions
+export const { toggleSubDomainEditMode, toggleDrawer } = uiSlice.actions
 
 export default uiSlice.reducer

@@ -1,6 +1,6 @@
 // Import packages
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useQuery, gql } from '@apollo/client'
 import SID, { getSidAddress } from '@siddomains/sidjs'
 import { ethers } from '@siddomains/ui'
@@ -12,6 +12,9 @@ import { useAccount } from 'components/QueryAccount'
 import Mainbar from './components/Mainbar'
 import Sidebar from './components/Sidebar'
 import Drawer from 'components/Drawer'
+
+// Import redux Assets
+import { toggleDrawer } from 'app/slices/uiSlice'
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -28,8 +31,11 @@ export default function Profile() {
   const [isAccountConnected, setIsAccountConnected] = useState(false)
   const [networkId, setNetworkId] = useState('')
 
+  const dispatch = useDispatch()
+
   const account = useAccount()
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
+  const isShowDrawer = useSelector(state => state.ui.isShowDrawer)
 
   const { data } = useQuery(HOME_DATA, {
     variables: {
@@ -81,7 +87,7 @@ export default function Profile() {
           networkId={networkId}
         />
       </div>
-      {/* <Drawer show={true}>
+      {/* <Drawer width="420px" show={isShowDrawer} closeDrawer={() => dispatch(toggleDrawer(false))}>
         This is Drawer components
       </Drawer> */}
       {haveNoPermissionToEdit && <NoPermissionEdit />}

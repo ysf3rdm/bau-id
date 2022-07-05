@@ -30,6 +30,7 @@ import { setSelectedDomain } from 'app/slices/domainSlice'
 
 // Import redux assets
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
+import { toggleDrawer } from 'app/slices/uiSlice'
 
 // Import assets
 import bg from 'assets/heroBG.jpg'
@@ -176,6 +177,11 @@ export default ({ children }) => {
     history.push('/profile')
   }
 
+  const showDrawer = () => {
+    console.log('clicked')
+    dispatch(toggleDrawer(true))
+  }
+
   return (
     <section
       style={{ background: `url(${bg})` }}
@@ -224,7 +230,9 @@ export default ({ children }) => {
             </div>
           </div>
           <div className="hidden md:flex items-center lg:hidden">
-            <HamburgerIcon className="text-[#1EEFA4] mr-5" />
+            <div onClick={showDrawer}>
+              <HamburgerIcon className="text-[#1EEFA4] mr-5" />
+            </div>
             <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
           </div>
 
