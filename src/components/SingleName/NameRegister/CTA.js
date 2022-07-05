@@ -73,13 +73,7 @@ function getCTA({
       >
         {mutate => (
           <>
-            <div className="flex justify-between px-[48px] w-full">
-              <button
-                onClick={goBack}
-                className="border-[#30DB9E] border text-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
-              >
-                Go Back
-              </button>
+            <div className="md:flex justify-between md:px-[48px] w-full">
               <button
                 data-testid="request-register-button"
                 disabled={isReadOnly || parseFloat(years) < 0.1}
@@ -92,7 +86,7 @@ function getCTA({
                   } else setShowSufficientBalanceModal(true)
                 }}
                 className={cn(
-                  'font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center',
+                  'order-2 font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center',
                   isReadOnly || parseFloat(years) < 0.1
                     ? 'bg-[#7E9195] text-white cursor-not-allowed'
                     : 'bg-[#30DB9E]'
@@ -104,6 +98,12 @@ function getCTA({
                     <AnimationSpin />
                   </div>
                 )}
+              </button>
+              <button
+                onClick={goBack}
+                className="order-1 mt-4 md:mt-0 mx-auto border-[#30DB9E] border text-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
+              >
+                Go Back
               </button>
             </div>
           </>

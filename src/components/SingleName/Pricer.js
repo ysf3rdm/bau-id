@@ -24,7 +24,7 @@ function PricerInner({
   const { t } = useTranslation()
   return (
     <>
-      <div className={cn('flex', className)} ref={reference}>
+      <div className={cn('flex justify-between', className)} ref={reference}>
         <Years years={years} setYears={setYears} />
         <span className="text-white font-bold font-urbanist text-[18px] flex pt-2 mr-[13px]">
           =

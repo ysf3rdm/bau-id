@@ -58,9 +58,9 @@ export default function TopAddress({
       })
   }
   return (
-    <div className={cn('flex justify-between', className)}>
+    <div className={cn('md:flex justify-between w-full', className)}>
       <div
-        className="relative w-[300px] xl:w-[432px] h-[230px] xl:h-[272px] flex items-center text-center rounded-[20px] bg-cover mr-7"
+        className="relative w-full md:w-[300px] xl:w-[432px] h-[230px] xl:h-[272px] flex items-center text-center rounded-[20px] bg-cover mr-7"
         style={{ backgroundImage: `url(/assets/images/name-card.png)` }}
       >
         <div class="w-fit mx-auto px-3">
@@ -79,15 +79,15 @@ export default function TopAddress({
           </span>
         </div>
       </div>
-      <div className="flex flex-col justify-between py-2 xl:w-[447px]">
+      <div className="flex flex-col justify-between py-6 md:py-2 xl:w-[447px]">
         <div>
-          <p className="font-bold text-[18px] xl:text-[24px] text-[#1EEFA4]">
+          <p className="text-center md:text-left font-bold text-[18px] xl:text-[24px] text-[#1EEFA4]">
             Registrant
           </p>
           {loadingRegistration ? (
             <AnimationSpin />
           ) : (
-            <div>
+            <div className="flex items-center justify-center md:justify-start">
               {pending ? (
                 <PendingTx
                   txHash={txHash}
@@ -104,8 +104,8 @@ export default function TopAddress({
                   className="mt-1"
                 />
               ) : (
-                <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2">
-                  <p>{registrantAddress}</p>
+                <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2 break-all">
+                  <p className="text-center">{registrantAddress}</p>
                   <div className="ml-2" onClick={handleCopyRegistrantAddress}>
                     <Tooltip message={tooltipMessage} delay={1000}>
                       <CopyIcon />
@@ -116,11 +116,11 @@ export default function TopAddress({
             </div>
           )}
           {!pending && !loadingRegistration && (
-            <div className="flex items-center mt-4">
+            <div className="flex justify-center md:justify-start items-center mt-4">
               <button
                 disabled={pending || !isRegsitrant}
                 className={cn(
-                  'py-2 px-6 rounded-full mr-4 font-semibold',
+                  'py-2 px-6 rounded-full md:mr-4 font-semibold',
                   pending || !isRegsitrant
                     ? 'bg-[#7E9195] text-white'
                     : 'bg-[#30DB9E] text-[#134757]'
@@ -132,9 +132,9 @@ export default function TopAddress({
             </div>
           )}
         </div>
-        <div className="flex justify-between items-center">
+        <div className="md:flex justify-between items-center mt-8 md:mt-0">
           <div>
-            <p className="font-bold text-[18px] xl:text-[20px] text-[#1EEFA4]">
+            <p className="font-bold text-[18px] xl:text-[20px] text-[#1EEFA4] text-center md:text-left">
               Expiration Date
             </p>
 
@@ -156,7 +156,7 @@ export default function TopAddress({
             ) : (
               <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2">
                 {/* <p>2023.04.22 at 08:00 (UTC+8:00)</p> */}
-                <p>
+                <p className="text-center md:text-left w-full">
                   {moment(
                     selectedDomain?.expires_at
                       .split(',')[0]
@@ -176,11 +176,11 @@ export default function TopAddress({
               </div>
             )}
           </div>
-          <div>
+          <div className="flex justify-center md:justify-start items-center mt-4 md:mt-0">
             <button
               disabled={pendingExp}
               className={cn(
-                'py-2 px-[28px] rounded-full mr-4 font-semibold',
+                'py-2 px-[28px] rounded-full md:mr-4 font-semibold',
                 pendingExp
                   ? 'bg-[#7E9195] text-white'
                   : 'bg-[#30DB9E] text-[#134757]'

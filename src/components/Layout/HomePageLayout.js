@@ -242,7 +242,9 @@ export default ({ children }) => {
             {isMenuOpen ? (
               <div className="flex items-center">
                 <HamburgerIcon className="text-[#1EEFA4] mr-5" />
-                <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+                <a href="/">
+                  <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+                </a>
                 <div className="font-semibold text-[18px] ml-5">
                   <img src={LogoText} />
                 </div>
@@ -257,7 +259,7 @@ export default ({ children }) => {
                 <div className="mt-0 w-full md:w-auto flex items-center">
                   {location.pathname !== '/' && (
                     <Search
-                      className="mr-4 xl:w-[400px]"
+                      className="mr-4 xl:w-[400px] hidden md:block"
                       errorShowing={false}
                       isShowSearchBtn={false}
                     />
@@ -276,9 +278,9 @@ export default ({ children }) => {
                     <button
                       className="flex items-center ml-4 cursor-pointer"
                       onClick={() => {
-                        if (windowDimenion.winWidth > 768) {
-                          showAvatarPopup()
-                        }
+                        // if (windowDimenion.winWidth > 768) {
+                        showAvatarPopup()
+                        // }
                       }}
                     >
                       {!reverseRecordLoading &&

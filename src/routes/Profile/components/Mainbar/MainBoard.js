@@ -254,10 +254,10 @@ export default function MainBoard({
   return (
     <div className={cn(className)}>
       <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] p-5">
-        <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px]">
+        <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:text-left">
           Records
         </p>
-        <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] flex items-center justify-between py-[19px] px-6 mt-5">
+        <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] block md:flex items-center justify-between py-[19px] px-6 mt-5">
           {pendingBNBAddress ? (
             <PendingTx
               txHash={txHash}
@@ -271,11 +271,11 @@ export default function MainBoard({
             />
           ) : (
             <div>
-              <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px]">
+              <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:test-left">
                 BNB Address
               </p>
-              <div className="flex items-center text-[#B1D6D3] text-[14px] xl:text-[18px] mt-1">
-                <p className="mr-2">
+              <div className="flex items-center text-[#B1D6D3] text-[14px] xl:text-[18px] mt-1 break-all">
+                <p className="mr-2 text-center">
                   {updatingBNBAddress ? updatingBNBAddress : bnbAddress}
                 </p>
                 <span className="cursor-pointer" onClick={handleBNBAddressCopy}>
@@ -287,11 +287,11 @@ export default function MainBoard({
             </div>
           )}
 
-          <div className="flex items-center">
+          <div className="flex justify-center mt-2 items-center">
             <button
               disabled={pendingBNBAddress || !isRegsitrant}
               className={cn(
-                'py-2 px-[40px] rounded-full ml-4 font-semibold',
+                'py-2 px-[40px] rounded-full md:ml-4 font-semibold',
                 pendingBNBAddress || !isRegsitrant
                   ? 'bg-[#7E9195] text-[#BDCED1]'
                   : 'bg-[#2980E8] text-white'
@@ -305,8 +305,8 @@ export default function MainBoard({
           </div>
         </div>
       </div>
-      <div className="px-6 mt-8 flex justify-between">
-        {loadingResolverAddress ? (
+      {/* <div className="px-6 mt-8 flex justify-between"> */}
+      {/* {loadingResolverAddress ? (
           <AnimationSpin />
         ) : (
           <div>
@@ -344,9 +344,9 @@ export default function MainBoard({
               </div>
             )}
           </div>
-        )}
+        )} */}
 
-        {/* <div className="flex items-center">
+      {/* <div className="flex items-center">
           <button
             disabled={pending || !isRegsitrant}
             className={cn(
@@ -360,7 +360,7 @@ export default function MainBoard({
             Set
           </button>
         </div> */}
-      </div>
+      {/* </div> */}
     </div>
   )
 }

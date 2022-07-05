@@ -29,7 +29,7 @@ const Price = ({
   const priceInUsd = c?.priceInUsd
   return (
     <div>
-      <div className="w-[180px] h-[40px] flex justify-center items-center font-bold font-urbanist bg-[#C4C4C4]/20 text-white font-bold font-urbanist text-[18px] rounded-[8px]">
+      <div className="w-[120px] md:w-[180px] h-[40px] flex justify-center items-center font-bold font-urbanist bg-[#C4C4C4]/20 text-white font-bold font-urbanist text-[18px] rounded-[8px]">
         {ethPrice} <span>BNBT</span>
         {withPremium && (
           <span>

@@ -13,7 +13,7 @@ export default function Increase({
   return (
     <div
       className={cn(
-        'w-[180px] h-[40px] bg-[#C4C4C4]/20 flex rounded-[8px] items-center justify-between px-2',
+        'w-[120px] md:w-[180px] h-[40px] bg-[#C4C4C4]/20 flex rounded-[8px] items-center justify-between px-2',
         className
       )}
     >

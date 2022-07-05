@@ -7,7 +7,7 @@ export default function Drawer({ show, width, children, closeDrawer }) {
     <>
       <div
         className={cn(
-          `transition-width duration-1000 ease-in-out h-[100vh] fixed top-0 left-0 bg-[rgba(204,252,255,0.2)] backdrop-blur-3xl rounded-r-[24px] z-[100]`,
+          `transition-width duration-200 ease-in-out h-[100vh] fixed top-0 left-0 bg-[rgba(204,252,255,0.2)] backdrop-blur-3xl rounded-r-[24px] z-[100]`,
           show ? `w-[420px]` : 'w-0'
         )}
       >
