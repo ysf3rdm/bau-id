@@ -11,6 +11,7 @@ import { NoPermissionEdit } from 'components/ErrorModals'
 import { useAccount } from 'components/QueryAccount'
 import Mainbar from './components/Mainbar'
 import Sidebar from './components/Sidebar'
+import Drawer from 'components/Drawer'
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -63,9 +64,9 @@ export default function Profile() {
 
   return (
     <div className="my-[86px]">
-      <div className="flex justify-center">
+      <div className="flex justify-center px-[10px] 1400px:px-0">
         <Sidebar
-          className="mr-[32px]"
+          className="mr-[10px] 1400px:mr-[32px] hidden lg:block"
           isReadOnly={isReadOnly}
           displayName={displayName}
           isSafeApp={isSafeApp}
@@ -80,6 +81,9 @@ export default function Profile() {
           networkId={networkId}
         />
       </div>
+      {/* <Drawer show={true}>
+        This is Drawer components
+      </Drawer> */}
       {haveNoPermissionToEdit && <NoPermissionEdit />}
     </div>
   )

@@ -18,7 +18,8 @@ function Search({
   className,
   style,
   searchingDomainName,
-  errorShowing = true
+  errorShowing = true,
+  isShowSearchBtn = true
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
@@ -112,7 +113,10 @@ function Search({
             </button>
             <div>
               <input
-                className="w-full bg-[#104151]/[0.25] py-[10px] pl-[40px] pr-[150px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent"
+                className={cn(
+                  'w-full bg-[#104151]/[0.25] py-[10px] pl-[40px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent',
+                  isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]'
+                )}
                 placeholder="Explore the space"
                 onChange={e => {
                   setShowPopup(false)
@@ -132,15 +136,22 @@ function Search({
                   {errors.searchKey}
                 </div>
               )}
-            <div className="text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute right-[110px] top-[10px]">
+            <div
+              className={cn(
+                'text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute top-[10px]',
+                isShowSearchBtn ? 'right-[110px]' : 'right-[20px]'
+              )}
+            >
               .bnb
             </div>
-            <button
-              type="submit"
-              className="bg-[#1EEFA4] text-semibold text-[14px] font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
-            >
-              Search
-            </button>
+            {isShowSearchBtn && (
+              <button
+                type="submit"
+                className="bg-[#1EEFA4] text-semibold text-[14px] font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
+              >
+                Search
+              </button>
+            )}
           </form>
         )}
       </Formik>

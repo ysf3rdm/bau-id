@@ -58,13 +58,13 @@ export default function TopAddress({
       })
   }
   return (
-    <div className={cn('grid grid-cols-2 gap-x-[28px]', className)}>
+    <div className={cn('flex justify-between', className)}>
       <div
-        className={`relative w-fit 1400px:w-[432px] h-[272px] flex items-center text-center rounded-[20px] bg-cover`}
+        className="relative w-[300px] xl:w-[432px] h-[230px] xl:h-[272px] flex items-center text-center rounded-[20px] bg-cover mr-7"
         style={{ backgroundImage: `url(/assets/images/name-card.png)` }}
       >
         <div class="w-fit mx-auto px-3">
-          <span className="h-full text-[40px] font-bold text-white break-all">
+          <span className="h-full text-[30px] xl:text-[40px] font-bold text-white break-all">
             <span className="">{`${
               selectedDomain?.name.length > 12
                 ? selectedDomain?.name.substring(0, 4) +
@@ -79,9 +79,11 @@ export default function TopAddress({
           </span>
         </div>
       </div>
-      <div className="flex flex-col justify-between py-2 w-[447px]">
+      <div className="flex flex-col justify-between py-2 xl:w-[447px]">
         <div>
-          <p className="font-bold text-[24px] text-[#1EEFA4]">Registrant</p>
+          <p className="font-bold text-[18px] xl:text-[24px] text-[#1EEFA4]">
+            Registrant
+          </p>
           {loadingRegistration ? (
             <AnimationSpin />
           ) : (
@@ -102,7 +104,7 @@ export default function TopAddress({
                   className="mt-1"
                 />
               ) : (
-                <div className="flex text-[18px] text-white font-semibold items-center mt-2">
+                <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2">
                   <p>{registrantAddress}</p>
                   <div className="ml-2" onClick={handleCopyRegistrantAddress}>
                     <Tooltip message={tooltipMessage} delay={1000}>
@@ -132,7 +134,7 @@ export default function TopAddress({
         </div>
         <div className="flex justify-between items-center">
           <div>
-            <p className="font-bold text-[20px] text-[#1EEFA4]">
+            <p className="font-bold text-[18px] xl:text-[20px] text-[#1EEFA4]">
               Expiration Date
             </p>
 
@@ -152,7 +154,7 @@ export default function TopAddress({
                 className="mt-1"
               />
             ) : (
-              <div className="flex text-[18px] text-white font-semibold items-center mt-2">
+              <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2">
                 {/* <p>2023.04.22 at 08:00 (UTC+8:00)</p> */}
                 <p>
                   {moment(

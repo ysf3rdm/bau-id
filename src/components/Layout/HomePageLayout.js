@@ -196,7 +196,7 @@ export default ({ children }) => {
                 onClick={() => changeToBSCChain()}
                 className="mt-[36px] bg-[#30DB9E] rounded-full text-[14px] font-[urbanist] py-2 px-[36px] text-[#134757] font-semibold"
               >
-                Switch to BSC
+                Switch to BSC Testnet
               </button>
             </div>
           </div>
@@ -214,16 +214,20 @@ export default ({ children }) => {
       >
         <div className="flex py-[20px] px-7 md:px-[48px] justify-between items-center">
           {/* Only showing for the desktop device */}
-          <a
-            // href="https://space.id/"
+          <div
             href="/"
-            className="hidden md:flex text-[#1EEFA4] items-center cursor-pointer visited:text-[#1EEFA4]"
+            className="hidden lg:flex text-[#1EEFA4] items-center cursor-pointer visited:text-[#1EEFA4]"
           >
             <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
-            <div className="font-semibold text-[18px] ml-[31px]">
+            <div className="hidden lg:block font-semibold text-[18px] ml-[31px]">
               <img src={LogoText} />
             </div>
-          </a>
+          </div>
+          <div className="hidden md:flex items-center lg:hidden">
+            <HamburgerIcon className="text-[#1EEFA4] mr-5" />
+            <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+          </div>
+
           {/* Only show for the mobile device */}
           <div className="block md:hidden cursor-pointer" onClick={menuOpen}>
             {/* <SmallLogoIcon size={40} className="text-[#1EEFA4]" /> */}
@@ -244,7 +248,11 @@ export default ({ children }) => {
               {!isSafeApp && (
                 <div className="mt-0 w-full md:w-auto flex items-center">
                   {location.pathname !== '/' && (
-                    <Search className="mr-4 w-[400px]" errorShowing={false} />
+                    <Search
+                      className="mr-4 xl:w-[400px]"
+                      errorShowing={false}
+                      isShowSearchBtn={false}
+                    />
                   )}
 
                   <div className="hidden md:block">

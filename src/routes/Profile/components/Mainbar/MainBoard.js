@@ -254,7 +254,9 @@ export default function MainBoard({
   return (
     <div className={cn(className)}>
       <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] p-5">
-        <p className="text-[#B1D6D3] font-bold text-[20px]">Records</p>
+        <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px]">
+          Records
+        </p>
         <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] flex items-center justify-between py-[19px] px-6 mt-5">
           {pendingBNBAddress ? (
             <PendingTx
@@ -269,10 +271,10 @@ export default function MainBoard({
             />
           ) : (
             <div>
-              <p className="text-[#B1D6D3] font-bold text-[20px]">
+              <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px]">
                 BNB Address
               </p>
-              <div className="flex items-center text-[#B1D6D3] text-[18px] mt-1">
+              <div className="flex items-center text-[#B1D6D3] text-[14px] xl:text-[18px] mt-1">
                 <p className="mr-2">
                   {updatingBNBAddress ? updatingBNBAddress : bnbAddress}
                 </p>
@@ -308,7 +310,9 @@ export default function MainBoard({
           <AnimationSpin />
         ) : (
           <div>
-            <p className="text-[#B1D6D3] font-bold text-[20px]">Resolver</p>
+            <p className="text-[#B1D6D3] font-bold text-[18px] md:text-[20px]">
+              Resolver
+            </p>
             {pending ? (
               <PendingTx
                 txHash={txHash}
@@ -326,7 +330,7 @@ export default function MainBoard({
               />
             ) : (
               <div>
-                <div className="flex items-center text-[#B1D6D3] text-[18px] mt-1">
+                <div className="flex items-center text-[#B1D6D3] text-[14px] xl:text-[18px] mt-1">
                   <p className="mr-2">{resolverAddress}</p>
                   <div
                     className="cursor-pointer"
