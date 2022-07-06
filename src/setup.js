@@ -98,11 +98,14 @@ export const getProvider = async reconnect => {
     loadingWalletReactive(false)
     return provider
   } catch (e) {
-    // globalErrorReactive({
-    //   ...globalErrorReactive(),
-    //   network: 'Unsupported Network'
-    // })
-    return
+    if (e.message.match(/Unsupported network/)) {
+      loadingWalletReactive(false)
+      globalErrorReactive({
+        ...globalErrorReactive(),
+        network: 'Unsupported Network'
+      })
+      return
+    }
   }
 
   try {
@@ -125,12 +128,12 @@ export const setWeb3Provider = async provider => {
   const accounts = await getAccounts()
 
   if (provider) {
-    provider.removeAllListeners()
+    if (provider.removeAllListeners) provider.removeAllListeners()
     accountsReactive(accounts)
   }
 
-  window.ethereum.on('chainChanged', async _chainId => {
-    const networkId = parseInt(_chainId, 16)
+  provider?.on('chainChanged', async _chainId => {
+    const networkId = await getNetworkId()
     if (!isSupportedNetwork(networkId)) {
       globalErrorReactive({
         ...globalErrorReactive(),
@@ -165,10 +168,7 @@ export default async reconnect => {
 
     if (!provider) throw 'Please install a wallet'
 
-    const networkId = window.ethereum.networkVersion
-
-    alert('networkId' + networkId)
-
+    const networkId = await getNetworkId()
     if (!isSupportedNetwork(parseInt(networkId))) {
       globalErrorReactive({
         ...globalErrorReactive(),
@@ -178,7 +178,10 @@ export default async reconnect => {
     }
 
     networkIdReactive(networkId)
-    networkReactive(await getNetwork())
+
+    const network = await getNetwork()
+
+    networkReactive(network)
 
     await setWeb3Provider(provider)
 
@@ -194,8 +197,7 @@ export default async reconnect => {
     isAppReadyReactive(true)
     loadingWalletReactive(false)
   } catch (e) {
-    alert('errorhere')
-    alert(JSON.stringify(e))
+    alert(e)
     console.error('setup error: ', e)
   }
 }
