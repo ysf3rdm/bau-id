@@ -13,6 +13,7 @@
     "@ensdomains/ens-validation": "0.0.0",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ensdomains/mock": "^2.1.47",
+    "@siddomains/web3modal": "0.1.7",
     "@gnosis.pm/safe-apps-provider": "^0.9.2",
     "@myetherwallet/mewconnect-web-client": "^2.2.0-beta.16",
     "@portis/web3": "^2.0.0-beta.59",
