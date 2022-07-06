@@ -16,11 +16,12 @@ function Modal({
   return ReactDOM.createPortal(
     <div
       className="fixed left-0 top-0 w-full h-full p-0 flex justify-center items-center bg-black/50 z-[100]"
-      onClick={() => {
-        if (!cannotCloseFromOutside) {
-          closeModal()
-        }
-      }}
+      // onClick={() => {
+      //   console.log(cannotCloseFromOutside)
+      //   if (!cannotCloseFromOutside) {
+      //     closeModal()
+      //   }
+      // }}
     >
       <div
         className={cn(
