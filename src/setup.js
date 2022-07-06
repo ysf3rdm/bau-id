@@ -98,7 +98,6 @@ export const getProvider = async reconnect => {
     loadingWalletReactive(false)
     return provider
   } catch (e) {
-    alert(JSON.stringify(e))
     // globalErrorReactive({
     //   ...globalErrorReactive(),
     //   network: 'Unsupported Network'
@@ -193,6 +192,7 @@ export default async reconnect => {
     isAppReadyReactive(true)
     loadingWalletReactive(false)
   } catch (e) {
+    alert(JSON.stringify(e))
     console.error('setup error: ', e)
   }
 }
