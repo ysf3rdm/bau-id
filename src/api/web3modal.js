@@ -70,8 +70,6 @@ export const connect = async () => {
     web3Modal = new Web3Modal(option)
     provider = await web3Modal.connect()
 
-    alert('provider has been installed')
-
     await setupENS({
       customProvider: provider,
       reloadOnAccountsChange: false,
