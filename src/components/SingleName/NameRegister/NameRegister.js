@@ -6,6 +6,7 @@ import cn from 'classnames'
 import moment from 'moment'
 import { useHistory } from 'react-router'
 import axios from 'axios'
+import { connectProvider, disconnectProvider } from 'utils/providerUtils'
 
 import {
   CHECK_COMMITMENT,
@@ -260,6 +261,10 @@ const NameRegister = ({
     setCustomStep('SUCCESS')
   }
 
+  const connectHandler = () => {
+    connectProvider()
+  }
+
   const manageProfile = () => history.push('/profile')
 
   return (
@@ -318,6 +323,7 @@ const NameRegister = ({
             premium={currentPremium}
             ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
             successRegister={successRegister}
+            connectHandler={connectHandler}
           />
         </div>
       )}

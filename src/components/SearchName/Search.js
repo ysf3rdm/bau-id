@@ -19,7 +19,8 @@ function Search({
   style,
   searchingDomainName,
   errorShowing = true,
-  isShowSearchBtn = true
+  isShowSearchBtn = true,
+  errorsStyling = false
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
@@ -130,7 +131,14 @@ function Search({
               errors.searchKey &&
               touched.searchKey &&
               values.searchKey.length > 0 && (
-                <div className="text-[#ED7E17] text-[16px] font-semibold mt-1 ml-3">
+                <div
+                  className={cn(
+                    'text-[#ED7E17] text-[16px] font-semibold mt-1 ml-3',
+                    errorsStyling
+                      ? 'absolute shadow-popup flex w-[calc(100%-12px)] bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]'
+                      : ''
+                  )}
+                >
                   {errors.searchKey}
                 </div>
               )}

@@ -26,7 +26,7 @@ import ProfileCard from 'routes/Profile/components/Sidebar/ProfileCard'
 
 // Import graphql quires
 import { GET_REVERSE_RECORD } from 'graphql/queries'
-import { setSelectedDomain } from 'app/slices/domainSlice'
+import { setAllDomains, setSelectedDomain } from 'app/slices/domainSlice'
 
 // Import redux assets
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
@@ -122,6 +122,12 @@ export default ({ children }) => {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  useEffect(() => {
+    if (isReadOnly) {
+      dispatch(setAllDomains([]))
+    }
+  }, [isReadOnly])
+
   const {
     data: { getReverseRecord } = {},
     loading: reverseRecordLoading
@@ -138,6 +144,10 @@ export default ({ children }) => {
 
   const selectDomain = async (domain, index) => {
     dispatch(setSelectedDomain(domain))
+    if (windowDimenion.winWidth < 768) {
+      history.push('/profile')
+      setIsMenuOpen(false)
+    }
   }
 
   const changeToBSCChain = async () => {
@@ -182,6 +192,10 @@ export default ({ children }) => {
     dispatch(toggleDrawer(true))
   }
 
+  const disconnect = () => {
+    disconnectProvider()
+  }
+
   return (
     <section
       style={{ background: `url(${bg})` }}
@@ -205,6 +219,14 @@ export default ({ children }) => {
                 Switch to BSC Testnet
               </button>
             </div>
+            <div className="justify-center flex md:hidden">
+              <button
+                onClick={() => disconnect()}
+                className="mt-[36px] bg-[#30DB9E] rounded-full text-[14px] font-[urbanist] py-2 px-[36px] text-[#134757] font-semibold"
+              >
+                Disconnect
+              </button>
+            </div>
           </div>
         </Modal>
       )}
@@ -212,15 +234,15 @@ export default ({ children }) => {
       {/* Header component for mobile and desktop device */}
       <div
         className={cn(
-          'md:bg-transparency absolute top-0 w-full z-50 transition-all transition-slowest',
+          'md:bg-transparency absolute top-0 w-full z-50',
           isMenuOpen
-            ? 'h-[100vh] md:h-[100px] menu-mobile-background'
+            ? 'min-h-[100vh] h-full md:h-[100px] md:min-h-[100px] menu-mobile-background'
             : 'h-[80px]'
         )}
       >
         <div className="flex py-[20px] px-7 md:px-[48px] justify-between items-center">
           {/* Only showing for the desktop device */}
-          <div
+          <a
             href="/"
             className="hidden lg:flex text-[#1EEFA4] items-center cursor-pointer visited:text-[#1EEFA4]"
           >
@@ -228,7 +250,7 @@ export default ({ children }) => {
             <div className="hidden lg:block font-semibold text-[18px] ml-[31px]">
               <img src={LogoText} />
             </div>
-          </div>
+          </a>
           <div className="hidden md:flex items-center lg:hidden">
             <div onClick={showDrawer}>
               <HamburgerIcon className="text-[#1EEFA4] mr-5" />
@@ -237,20 +259,27 @@ export default ({ children }) => {
           </div>
 
           {/* Only show for the mobile device */}
-          <div className="block md:hidden cursor-pointer" onClick={menuOpen}>
+          <div className="block md:hidden cursor-pointer">
             {/* <SmallLogoIcon size={40} className="text-[#1EEFA4]" /> */}
             {isMenuOpen ? (
               <div className="flex items-center">
-                <HamburgerIcon className="text-[#1EEFA4] mr-5" />
-                <a href="/">
-                  <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
-                </a>
-                <div className="font-semibold text-[18px] ml-5">
-                  <img src={LogoText} />
+                <div onClick={menuOpen}>
+                  <HamburgerIcon className="text-[#1EEFA4] mr-5" />
                 </div>
+
+                <a href="/">
+                  <div className="flex items-center">
+                    <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+                    <div className="font-semibold text-[18px] ml-5">
+                      <img src={LogoText} />
+                    </div>
+                  </div>
+                </a>
               </div>
             ) : (
-              <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
+              <div onClick={menuOpen}>
+                <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
+              </div>
             )}
           </div>
           {!isMenuOpen && (
@@ -260,8 +289,9 @@ export default ({ children }) => {
                   {location.pathname !== '/' && (
                     <Search
                       className="mr-4 xl:w-[400px] hidden md:block"
-                      errorShowing={false}
-                      isShowSearchBtn={false}
+                      errorShowing={true}
+                      isShowSearchBtn={true}
+                      errorsStyling={true}
                     />
                   )}
 
@@ -387,7 +417,7 @@ export default ({ children }) => {
         {isMenuOpen && (
           <div className="w-[100vw] block md:hidden">
             {isReadOnly ? (
-              <div className="w-full flex justify-center absolute bottom-7">
+              <div className="w-full flex justify-center absolute bottom-[100px]">
                 <button
                   className="flex items-center bg-[#1EEFA4] text-[#134757] text-[20px] px-[82px] py-3 text-[20px] rounded-[16px] font-semibold"
                   onClick={connectProvider}
