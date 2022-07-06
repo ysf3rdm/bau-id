@@ -197,7 +197,7 @@ export default ({ children }) => {
               Please change your dapp browser to Binance Smart Chain Testnet to
               continue.
             </div>
-            <div className="flex justify-center">
+            <div className="justify-center hidden md:flex">
               <button
                 onClick={() => changeToBSCChain()}
                 className="mt-[36px] bg-[#30DB9E] rounded-full text-[14px] font-[urbanist] py-2 px-[36px] text-[#134757] font-semibold"
