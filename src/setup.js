@@ -128,12 +128,12 @@ export const setWeb3Provider = async provider => {
   const accounts = await getAccounts()
 
   if (provider) {
-    provider.removeAllListeners()
+    if (provider.removeAllListeners) provider.removeAllListeners()
     accountsReactive(accounts)
   }
 
-  window.ethereum.on('chainChanged', async _chainId => {
-    const networkId = parseInt(_chainId, 16)
+  provider?.on('chainChanged', async _chainId => {
+    const networkId = await getNetworkId()
     if (!isSupportedNetwork(networkId)) {
       globalErrorReactive({
         ...globalErrorReactive(),
@@ -149,7 +149,6 @@ export const setWeb3Provider = async provider => {
     })
 
     networkIdReactive(networkId)
-
     networkReactive(await getNetwork())
     loadingWalletReactive(false)
   })
@@ -187,11 +186,13 @@ export default async reconnect => {
 
     await setWeb3Provider(provider)
 
+    alert('set up provider')
     if (accountsReactive?.[0]) {
       reverseRecordReactive(await getReverseRecord(accountsReactive?.[0]))
       delegatesReactive(await getShouldDelegate(accountsReactive?.[0]))
     }
 
+    alert('no errors here')
     isReadOnlyReactive(isReadOnly())
 
     setupAnalytics()
@@ -200,7 +201,7 @@ export default async reconnect => {
     loadingWalletReactive(false)
   } catch (e) {
     alert('errorhere')
-    alert(JSON.stringify(e))
+    alert(e)
     console.error('setup error: ', e)
   }
 }
