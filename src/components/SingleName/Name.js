@@ -83,7 +83,7 @@ function Name({ details: domain, name, pathname, type, refetch }) {
 
   return (
     <div className="font-urbanist">
-      <div className="h-full min-h-[100vh] flex items-center justify-center">
+      <div className="h-full min-h-[100vh] flex items-center justify-center py-[84px]">
         {isDNSRegistrationOpen(domain) ? (
           <DNSNameRegister
             domain={domain}
