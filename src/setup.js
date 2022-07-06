@@ -180,19 +180,16 @@ export default async reconnect => {
     networkIdReactive(networkId)
 
     const network = await getNetwork()
-    alert(JSON.stringify(network))
 
-    networkReactive(await getNetwork())
+    networkReactive(network)
 
     await setWeb3Provider(provider)
 
-    alert('set up provider')
     if (accountsReactive?.[0]) {
       reverseRecordReactive(await getReverseRecord(accountsReactive?.[0]))
       delegatesReactive(await getShouldDelegate(accountsReactive?.[0]))
     }
 
-    alert('no errors here')
     isReadOnlyReactive(isReadOnly())
 
     setupAnalytics()
@@ -200,7 +197,6 @@ export default async reconnect => {
     isAppReadyReactive(true)
     loadingWalletReactive(false)
   } catch (e) {
-    alert('errorhere')
     alert(e)
     console.error('setup error: ', e)
   }
