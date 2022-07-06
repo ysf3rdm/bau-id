@@ -66,7 +66,7 @@ const option = {
 let web3Modal
 export const connect = async () => {
   try {
-    const Web3Modal = (await import('@ensdomains/web3modal')).default
+    const Web3Modal = (await import('@siddomains/web3modal')).default
     web3Modal = new Web3Modal(option)
     provider = await web3Modal.connect()
 
