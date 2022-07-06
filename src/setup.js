@@ -165,7 +165,7 @@ export default async reconnect => {
 
     if (!provider) throw 'Please install a wallet'
 
-    const networkId = window.ethereum.networkVersion
+    const networkId = await getNetworkId()
 
     alert('networkId' + networkId)
 
