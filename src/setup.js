@@ -98,11 +98,14 @@ export const getProvider = async reconnect => {
     loadingWalletReactive(false)
     return provider
   } catch (e) {
-    // globalErrorReactive({
-    //   ...globalErrorReactive(),
-    //   network: 'Unsupported Network'
-    // })
-    return
+    if (e.message.match(/Unsupported network/)) {
+      loadingWalletReactive(false)
+      globalErrorReactive({
+        ...globalErrorReactive(),
+        network: 'Unsupported Network'
+      })
+      return
+    }
   }
 
   try {
@@ -146,6 +149,7 @@ export const setWeb3Provider = async provider => {
     })
 
     networkIdReactive(networkId)
+
     networkReactive(await getNetwork())
     loadingWalletReactive(false)
   })
@@ -166,9 +170,6 @@ export default async reconnect => {
     if (!provider) throw 'Please install a wallet'
 
     const networkId = await getNetworkId()
-
-    alert('networkId' + networkId)
-
     if (!isSupportedNetwork(parseInt(networkId))) {
       globalErrorReactive({
         ...globalErrorReactive(),
@@ -178,6 +179,10 @@ export default async reconnect => {
     }
 
     networkIdReactive(networkId)
+
+    const network = await getNetwork()
+    alert(JSON.stringify(network))
+
     networkReactive(await getNetwork())
 
     await setWeb3Provider(provider)
