@@ -188,7 +188,7 @@ export default ({ children }) => {
       className="bg-cover relative min-h-[100vh] flex items-center justify-center"
     >
       {globalError.network && (
-        <Modal width="574px">
+        <Modal cannotCloseFromOutside={false} width="574px">
           <div className="text-[white]">
             <div className="text-[24px] md:text-[28px] font-cocoSharp text-center font-bold">
               Unsupported Network :(
