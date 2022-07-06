@@ -98,10 +98,10 @@ export const getProvider = async reconnect => {
     loadingWalletReactive(false)
     return provider
   } catch (e) {
-    globalErrorReactive({
-      ...globalErrorReactive(),
-      network: 'Unsupported Network'
-    })
+    // globalErrorReactive({
+    //   ...globalErrorReactive(),
+    //   network: 'Unsupported Network'
+    // })
     return
   }
 
@@ -167,6 +167,8 @@ export default async reconnect => {
 
     const networkId = window.ethereum.networkVersion
 
+    alert('networkId' + networkId)
+
     if (!isSupportedNetwork(parseInt(networkId))) {
       globalErrorReactive({
         ...globalErrorReactive(),
@@ -192,6 +194,8 @@ export default async reconnect => {
     isAppReadyReactive(true)
     loadingWalletReactive(false)
   } catch (e) {
+    alert('errorhere')
+    alert(JSON.stringify(e))
     console.error('setup error: ', e)
   }
 }

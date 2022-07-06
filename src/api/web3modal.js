@@ -70,6 +70,8 @@ export const connect = async () => {
     web3Modal = new Web3Modal(option)
     provider = await web3Modal.connect()
 
+    alert('provider has been installed')
+
     await setupENS({
       customProvider: provider,
       reloadOnAccountsChange: false,
@@ -84,7 +86,6 @@ export const connect = async () => {
 }
 
 export const disconnect = async function() {
-  console.log(web3Modal)
   if (web3Modal) {
     await web3Modal.clearCachedProvider()
   }
