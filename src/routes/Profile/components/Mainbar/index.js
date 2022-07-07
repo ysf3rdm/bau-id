@@ -252,7 +252,7 @@ export default function Mainbar({
   const extendExpiryDate = () => {
     const variables = {
       duration,
-      label: selectedDomain.name + '.bnb'
+      label: selectedDomain.name
     }
     mutationReNew({ variables })
   }
