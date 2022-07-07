@@ -79,6 +79,7 @@ const resolvers = {
       try {
         const registrar = getRegistrar()
         const tx = await registrar.register(label, duration, signature)
+        console.log('tx', tx)
         return sendHelper(tx)
       } catch (err) {
         if (
@@ -97,10 +98,7 @@ const resolvers = {
       return sendHelper(tx)
     },
     async renew(_, { label, duration }) {
-      console.log('hey renew called here:')
-      console.log('label', label)
       const registrar = getRegistrar()
-      console.log('registrar', registrar)
       const tx = await registrar.renew(label, duration)
       return sendHelper(tx)
     },

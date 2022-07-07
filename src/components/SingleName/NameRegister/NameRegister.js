@@ -6,6 +6,7 @@ import cn from 'classnames'
 import moment from 'moment'
 import { useHistory } from 'react-router'
 import axios from 'axios'
+import last from 'lodash/last'
 import { connectProvider, disconnectProvider } from 'utils/providerUtils'
 
 import {
@@ -27,6 +28,7 @@ import {
   successRegistering
 } from 'app/slices/registerSlice'
 import { calculateDuration, yearInSeconds } from 'utils/dates'
+import { GET_TRANSACTION_HISTORY } from 'graphql/queries'
 
 import Loader from 'components/Loader'
 import CTA from './CTA'
@@ -73,6 +75,8 @@ const NameRegister = ({
   const [commitmentExpirationDate, setCommitmentExpirationDate] = useState(
     false
   )
+  const [registering, setRegistering] = useState(false)
+  const [transactionHash, setTransactionHash] = useState('')
   const [signature, setSignature] = useState('')
   const {
     data: { getEthPrice: ethUsdPrice } = {},
@@ -87,6 +91,27 @@ const NameRegister = ({
     },
     fetchPolicy: 'no-cache'
   })
+
+  const { data: { transactionHistory } = {} } = useQuery(
+    GET_TRANSACTION_HISTORY
+  )
+
+  console.log('transactionHistory', transactionHistory)
+
+  const lastTransaction = last(transactionHistory)
+
+  useEffect(() => {
+    console.log('transactionHistory', transactionHistory)
+    if (
+      lastTransaction &&
+      lastTransaction.txHash === transactionHash &&
+      lastTransaction.txState === 'Confirmed'
+    ) {
+      console.log('transaction has confirmed')
+      successRegister()
+      setRegistering(false)
+    }
+  }, [transactionHistory])
 
   const history = useHistory()
 
@@ -261,6 +286,10 @@ const NameRegister = ({
     setCustomStep('SUCCESS')
   }
 
+  const paymentSuccess = () => {
+    setCustomStep('PAYMENT')
+  }
+
   const connectHandler = () => {
     connectProvider()
   }
@@ -298,6 +327,7 @@ const NameRegister = ({
             )}
           </div>
           <CTA
+            setTransactionHash={setTransactionHash}
             setCustomStep={setCustomStep}
             signature={signature}
             hasSufficientBalance={hasSufficientBalance}
@@ -324,12 +354,16 @@ const NameRegister = ({
             ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
             successRegister={successRegister}
             connectHandler={connectHandler}
+            setRegistering={setRegistering}
+            registering={registering}
+            paymentSuccess={paymentSuccess}
           />
         </div>
       )}
 
       {(customStep === 'SUCCESS' ||
         customStep === 'PENDING' ||
+        customStep === 'PAYMENT' ||
         customStep === 'ERROR') && (
         <div className="max-w-[436px]">
           <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
@@ -349,11 +383,12 @@ const NameRegister = ({
                 )}
               </div>
             )}
-            {customStep === 'PENDING' && (
-              <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
-                Please be patient as the process might take a while.
-              </div>
-            )}
+            {customStep === 'PENDING' ||
+              (customStep === 'PAYMENT' && (
+                <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
+                  Please be patient as the process might take a while.
+                </div>
+              ))}
 
             <div className="mt-8">
               <div className="text-center">
@@ -392,7 +427,7 @@ const NameRegister = ({
                 >
                   Successful registration. Name published
                 </div>
-                {customStep === 'PENDING' ? (
+                {customStep === 'PENDING' || customStep === 'PAYMENT' ? (
                   <AnimationSpin className="flex justify-center mt-1" />
                 ) : (
                   <div>

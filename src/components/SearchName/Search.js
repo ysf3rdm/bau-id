@@ -32,8 +32,10 @@ function Search({
   const gotoDetailPage = () => {
     setShowPopup(false)
     if (result.Owner) {
-      // history.push(`/address/${result.Owner}`)
-      dispatch(setSelectedDomain({ ...result, expires_at: '2023.3.6' }))
+      const date = new Date(result?.Expires)
+      const expires_at = `${date.getFullYear()}.${date.getMonth() +
+        1}.${date.getDate()}`
+      dispatch(setSelectedDomain({ ...result, expires_at }))
       history.push(`/profile`)
     } else {
       history.push(`/name/${result.name}.bnb/register`)
