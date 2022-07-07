@@ -100,6 +100,7 @@ const resolvers = {
       console.log('hey renew called here:')
       console.log('label', label)
       const registrar = getRegistrar()
+      console.log('registrar', registrar)
       const tx = await registrar.renew(label, duration)
       return sendHelper(tx)
     },

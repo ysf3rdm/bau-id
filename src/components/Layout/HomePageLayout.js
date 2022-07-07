@@ -42,6 +42,7 @@ import { GET_ERRORS } from 'graphql/queries'
 
 //Import Assets
 import LogoText from '../../assets/images/space-logo-text.png'
+import SearchIcon from '../Icons/SearchIcon'
 
 // Import custom hooks
 import useReactiveVarListeners from 'hooks/useReactiveVarListeners'
@@ -70,6 +71,7 @@ export default ({ children }) => {
   const history = useHistory()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const [avatarPopup, setAvatarPopup] = useState(false)
   const [networkId, setNetworkID] = useState('')
 
@@ -157,7 +159,6 @@ export default ({ children }) => {
         params: [{ chainId: '0x61' }]
       })
     } catch (switchError) {
-      // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
         try {
           await ethereum.request({
@@ -168,18 +169,15 @@ export default ({ children }) => {
                 chainName: 'BSC Testnet',
                 rpcUrls: [
                   'https://apis-sj.ankr.com/bc19fe97c68d4a99a059465623e46b3e/bb63faaa8f178d26aac2969443ec7e73/binance/full/test'
-                ] /* ... */
+                ]
               }
             ]
           })
         } catch (addError) {
           console.log()
-          // handle "add" error
         }
       }
-      // handle other "switch" errors
     }
-    // https://data-seed-prebsc-1-s1.binance.org:8545/
     window.location.reload()
   }
 
@@ -237,6 +235,9 @@ export default ({ children }) => {
           'md:bg-transparency absolute top-0 w-full z-50',
           isMenuOpen
             ? 'min-h-[100vh] h-full md:h-[100px] md:min-h-[100px] menu-mobile-background'
+            : 'h-[80px]',
+          searchOpen
+            ? 'min-h-auto h-auto md:h-[100px] md:min-h-[100px] menu-mobile-background rounded-b-[24px]'
             : 'h-[80px]'
         )}
       >
@@ -251,6 +252,7 @@ export default ({ children }) => {
               <img src={LogoText} />
             </div>
           </a>
+
           <div className="hidden md:flex items-center lg:hidden">
             <div onClick={showDrawer}>
               <HamburgerIcon className="text-[#1EEFA4] mr-5" />
@@ -259,7 +261,7 @@ export default ({ children }) => {
           </div>
 
           {/* Only show for the mobile device */}
-          <div className="block md:hidden cursor-pointer">
+          <div className="block md:hidden cursor-pointer w-full justify-between">
             {/* <SmallLogoIcon size={40} className="text-[#1EEFA4]" /> */}
             {isMenuOpen ? (
               <div className="flex items-center">
@@ -277,11 +279,31 @@ export default ({ children }) => {
                 </a>
               </div>
             ) : (
-              <div onClick={menuOpen}>
-                <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
+              <div className="flex justify-between items-center w-full">
+                <div onClick={menuOpen}>
+                  <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
+                </div>
+                <div className="block md:hidden">
+                  {isReadOnly && (
+                    <div className="">
+                      <button
+                        className="flex items-center bg-[#1EEFA4] text-[#134757] text-[20px] px-5 py-2 text-[20px] rounded-[16px] font-semibold"
+                        onClick={connectProvider}
+                      >
+                        Connect{' '}
+                        {loadingWallet && (
+                          <div className="ml-2">
+                            <AnimationSpin />
+                          </div>
+                        )}
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
+
           {!isMenuOpen && (
             <div className="relative">
               {!isSafeApp && (
@@ -305,34 +327,43 @@ export default ({ children }) => {
                   </div>
 
                   {accounts && accounts[0] && !isReadOnly && (
-                    <button
-                      className="flex items-center ml-4 cursor-pointer"
-                      onClick={() => {
-                        // if (windowDimenion.winWidth > 768) {
-                        showAvatarPopup()
-                        // }
-                      }}
-                    >
-                      {!reverseRecordLoading &&
-                      getReverseRecord &&
-                      getReverseRecord.avatar ? (
-                        <img
-                          src={imageUrl(
-                            getReverseRecord.avatar,
-                            displayName,
-                            network
-                          )}
-                        />
-                      ) : (
-                        <div className="w-[44px] h-[44px]">
-                          <UnstyledBlockies
-                            className="rounded-full w-full h-full"
-                            address={accounts[0]}
-                            imageSize={45}
+                    <div className="flex items-center">
+                      <div
+                        className="block md:hidden"
+                        onClick={() => setSearchOpen(!searchOpen)}
+                      >
+                        <SearchIcon className="text-[rgba(204,252,255,0.6)] cursor-pointer" />
+                      </div>
+
+                      <button
+                        className="flex items-center ml-4 cursor-pointer"
+                        onClick={() => {
+                          // if (windowDimenion.winWidth > 768) {
+                          showAvatarPopup()
+                          // }
+                        }}
+                      >
+                        {!reverseRecordLoading &&
+                        getReverseRecord &&
+                        getReverseRecord.avatar ? (
+                          <img
+                            src={imageUrl(
+                              getReverseRecord.avatar,
+                              displayName,
+                              network
+                            )}
                           />
-                        </div>
-                      )}
-                    </button>
+                        ) : (
+                          <div className="w-[44px] h-[44px]">
+                            <UnstyledBlockies
+                              className="rounded-full w-full h-full"
+                              address={accounts[0]}
+                              imageSize={45}
+                            />
+                          </div>
+                        )}
+                      </button>
+                    </div>
                   )}
                 </div>
               )}
@@ -393,6 +424,22 @@ export default ({ children }) => {
           )}
         </div>
 
+        {searchOpen && (
+          <div className="px-7 py-3 pb-7">
+            <Search
+              className="mx-auto"
+              errorShowing={true}
+              isShowSearchBtn={true}
+              errorsStyling={false}
+              suggestionClassName="w-full"
+              isAbsolutePosition={false}
+              onSubmit={() => {
+                setSearchOpen(false)
+              }}
+            />
+          </div>
+        )}
+
         <div
           className={cn('md:hidden', isMenuOpen ? 'block mx-7 mt-3' : 'hidden')}
         >
@@ -404,52 +451,13 @@ export default ({ children }) => {
           />
         </div>
         {isMenuOpen && windowDimenion.winWidth < 768 && (
-          <div className="px-7 border-t border-[rgba(204,252,255,0.2)]">
+          <div className="px-7 border-t border-[rgba(204,252,255,0.2)] h-[calc(100vh-250px)]">
             <DomainList
               className="mt-4 h-full flex flex-col"
               domainsList={domains}
               clickHandle={selectDomain}
               selectedDomain={selectedDomain}
             />
-          </div>
-        )}
-
-        {isMenuOpen && (
-          <div className="w-[100vw] block md:hidden">
-            {isReadOnly ? (
-              <div className="w-full flex justify-center absolute bottom-[100px]">
-                <button
-                  className="flex items-center bg-[#1EEFA4] text-[#134757] text-[20px] px-[82px] py-3 text-[20px] rounded-[16px] font-semibold"
-                  onClick={connectProvider}
-                >
-                  Connect{' '}
-                  {loadingWallet && (
-                    <div className="ml-2">
-                      <AnimationSpin />
-                    </div>
-                  )}
-                </button>
-              </div>
-            ) : (
-              <div className="absolute bottom-7 w-[100vw] px-[87px]">
-                <div className="w-full">
-                  <button className="block text-white bg-[rgba(14,165,156,0.5)] w-full py-[7px] text-[20px] font-semibold rounded-[16px]">
-                    {network}
-                  </button>
-                  <button className="bg-[#1EEFA4] rounded-[16px] w-full py-[7px] mt-4 ">
-                    <div
-                      className="text-[20px] font-semibold text-[#134757]"
-                      onClick={disconnectProvider}
-                    >
-                      Disconnect
-                    </div>
-                    <div className="text-[18px] text-[#134757]">
-                      {displayName}
-                    </div>
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>

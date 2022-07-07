@@ -20,7 +20,10 @@ function Search({
   searchingDomainName,
   errorShowing = true,
   isShowSearchBtn = true,
-  errorsStyling = false
+  errorsStyling = false,
+  suggestionClassName = 'w-[calc(100%-56px)]',
+  isAbsolutePosition = true,
+  onSubmit
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
@@ -35,6 +38,7 @@ function Search({
     } else {
       history.push(`/name/${result.name}.bnb/register`)
     }
+    onSubmit()
   }
 
   useEffect(() => {
@@ -162,7 +166,13 @@ function Search({
         )}
       </Formik>
       {showPopup && (
-        <div className="absolute top-[55px] shadow-popup flex w-[calc(100%-56px)] md:w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]">
+        <div
+          className={cn(
+            'shadow-popup flex md:w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]',
+            suggestionClassName,
+            isAbsolutePosition ? 'absolute top-[55px]' : 'relative mt-2'
+          )}
+        >
           <div className="flex items-center max-w-[calc(100%-170px)]">
             {result.Owner ? (
               <FaceCryIcon className="text-[#30DB9E]" />

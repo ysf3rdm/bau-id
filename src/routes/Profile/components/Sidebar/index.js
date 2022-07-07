@@ -58,7 +58,6 @@ export default function Sidebar({ className, isReadOnly }) {
     }
     if (isReadOnly) {
       setDomainList([])
-      dispatch(setSelectedDomain(null))
       dispatch(setAllDomains([]))
     }
   }, [isReadOnly, account])

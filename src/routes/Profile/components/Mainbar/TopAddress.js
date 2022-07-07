@@ -104,7 +104,7 @@ export default function TopAddress({
                   className="mt-1"
                 />
               ) : (
-                <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2 break-all">
+                <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2 break-all md:break-normal">
                   <p className="text-center">{registrantAddress}</p>
                   <div className="ml-2" onClick={handleCopyRegistrantAddress}>
                     <Tooltip message={tooltipMessage} delay={1000}>

@@ -271,7 +271,7 @@ export default function MainBoard({
             />
           ) : (
             <div>
-              <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:test-left">
+              <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:text-left">
                 BNB Address
               </p>
               <div className="flex items-center text-[#B1D6D3] text-[14px] xl:text-[18px] mt-1 break-all">

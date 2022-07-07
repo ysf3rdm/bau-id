@@ -5,6 +5,7 @@ import { useQuery, gql } from '@apollo/client'
 import SID, { getSidAddress } from '@siddomains/sidjs'
 import { ethers } from '@siddomains/ui'
 import { getNetworkId, getAccount } from '@siddomains/ui'
+import { useHistory } from 'react-router-dom'
 
 // Import components
 import { NoPermissionEdit } from 'components/ErrorModals'
@@ -43,6 +44,7 @@ export default function Profile() {
   const [networkId, setNetworkId] = useState('')
 
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const account = useAccount()
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
@@ -83,6 +85,12 @@ export default function Profile() {
   const selectDomain = async (domain, index) => {
     dispatch(setSelectedDomain(domain))
   }
+
+  useEffect(() => {
+    if (domains && domains.length === 0 && !selectedDomain) {
+      history.push('/')
+    }
+  }, [domains, selectedDomain])
 
   return (
     <div className="my-[86px]">
