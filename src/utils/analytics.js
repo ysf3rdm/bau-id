@@ -2,8 +2,8 @@ import ReactGA from 'react-ga'
 import { getNetworkId } from '@siddomains/ui'
 
 const TrackingID = {
-  live: 'G-ZZZT2KP807',
-  dev: 'G-ZZZT2KP807'
+  live: 'UA-233964103-1',
+  dev: 'UA-233964103-1'
 }
 
 function isProduction() {
