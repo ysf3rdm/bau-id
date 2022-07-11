@@ -95,19 +95,14 @@ const NameRegister = ({
   const { data: { transactionHistory } = {} } = useQuery(
     GET_TRANSACTION_HISTORY
   )
-
-  console.log('transactionHistory', transactionHistory)
-
   const lastTransaction = last(transactionHistory)
 
   useEffect(() => {
-    console.log('transactionHistory', transactionHistory)
     if (
       lastTransaction &&
       lastTransaction.txHash === transactionHash &&
       lastTransaction.txState === 'Confirmed'
     ) {
-      console.log('transaction has confirmed')
       successRegister()
       setRegistering(false)
     }
