@@ -85,13 +85,13 @@ export default function ChangePrimaryDomain({
         <Modal
           width="560px"
           showingCrossIcon={true}
-          className="pt-[34px] pb-[36px] px-[40px]"
+          className="pt-[34px] pb-[36px] px-5 md:px-[40px]"
           closeModal={closeModal}
           cannotCloseFromOutside={true}
         >
           {/* Title */}
           <div className="text-[white]">
-            <div className="text-[28px] font-bold font-cocoSharp text-center">
+            <div className="text-[24px] md:text-[28px] font-bold font-cocoSharp text-center">
               Primary SPACE ID Name
             </div>
           </div>

@@ -139,7 +139,7 @@ function Search({
               values.searchKey.length > 0 && (
                 <div
                   className={cn(
-                    'text-[#ED7E17] text-[16px] font-semibold mt-1 ml-3',
+                    'text-[#ED7E17] text-[14px] md:text-[16px] font-semibold mt-2 md:mt-1 ml-3',
                     errorsStyling
                       ? 'absolute shadow-popup flex w-[calc(100%-12px)] bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]'
                       : ''

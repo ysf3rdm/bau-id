@@ -43,7 +43,7 @@ export default function TransferAddressModal({
         <Modal
           width="380px"
           showingCrossIcon={true}
-          className="pt-[34px] pb-[36px] px-[40px]"
+          className="pt-[34px] pb-[36px] px-5 md:px-[40px]"
           closeModal={closeModal}
           cannotCloseFromOutside={true}
         >
@@ -60,12 +60,14 @@ export default function TransferAddressModal({
 
             <div className="text-urbanist mt-4">
               <div className="font-semibold">From address</div>
-              <div className="text-[14px]">{address}</div>
+              <div className="text-[14px] break-all md:break-normal">
+                {address}
+              </div>
             </div>
           </div>
           {/* Form for submitting transfer Registrant */}
           <form className="mt-4" onSubmit={formik.handleSubmit}>
-            <div>
+            {/* <div>
               <div className="text-white font-semibold">Chain</div>
               <input
                 className="w-full bg-[rgba(72,143,139,0.25)] rounded-[12px] text-[#7E9195] text-[14px] py-[7px] px-4"
@@ -76,7 +78,7 @@ export default function TransferAddressModal({
                 value={formik.values.chain}
                 disabled
               />
-            </div>
+            </div> */}
             <div className="mt-4">
               <div className="text-white font-semibold">
                 Address<span className="text-red-800">*</span>

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { getNetworkId } from '@siddomains/ui'
 import { useSelector, useDispatch } from 'react-redux'
 import cn from 'classnames'
+import ClickAwayListener from 'react-click-away-listener'
 
 // Import components
 import NoAccountsDefault from 'components/NoAccounts/NoAccounts'
@@ -30,7 +31,7 @@ import { setAllDomains, setSelectedDomain } from 'app/slices/domainSlice'
 
 // Import redux assets
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
-import { toggleDrawer } from 'app/slices/uiSlice'
+import { toggleDrawer, toggleNetworkError } from 'app/slices/uiSlice'
 
 // Import assets
 import bg from 'assets/heroBG.jpg'
@@ -76,6 +77,9 @@ export default ({ children }) => {
   const [networkId, setNetworkID] = useState('')
 
   const domains = useSelector(state => state.domain.domains)
+  const showNetworkErrorModal = useSelector(
+    state => state.ui.isShowNetworkErrorModal
+  )
   const selectedDomain = useSelector(state => state.domain.selectedDomain)
   useReactiveVarListeners()
 
@@ -121,6 +125,9 @@ export default ({ children }) => {
   }, [isReadOnly, accounts])
 
   const menuOpen = () => {
+    if (!isMenuOpen) {
+      setSearchOpen(false)
+    }
     setIsMenuOpen(!isMenuOpen)
   }
 
@@ -194,16 +201,26 @@ export default ({ children }) => {
     disconnectProvider()
   }
 
+  const closeModal = () => {
+    dispatch(toggleNetworkError(false))
+  }
+
   return (
     <section
       style={{ background: `url(${bg})` }}
       className="bg-cover relative min-h-[100vh] flex items-center justify-center"
     >
-      {globalError.network && (
-        <Modal cannotCloseFromOutside={false} width="574px">
+      {showNetworkErrorModal && (
+        <Modal
+          cannotCloseFromOutside={false}
+          width="574px"
+          className="pt-6 pb-[36px] px-[24px]"
+          showingCrossIcon={true}
+          closeModal={closeModal}
+        >
           <div className="text-[white]">
-            <div className="text-[24px] md:text-[28px] font-cocoSharp text-center font-bold">
-              Unsupported Network :(
+            <div className="text-[20px] md:text-[28px] font-cocoSharp text-center font-bold">
+              Unsupported Network
             </div>
             <div className="text-urbanist font-semibold text-center mt-4">
               Please change your dapp browser to Binance Smart Chain Testnet to
@@ -217,14 +234,6 @@ export default ({ children }) => {
                 Switch to BSC Testnet
               </button>
             </div>
-            <div className="justify-center flex md:hidden">
-              <button
-                onClick={() => disconnect()}
-                className="mt-[36px] bg-[#30DB9E] rounded-full text-[14px] font-[urbanist] py-2 px-[36px] text-[#134757] font-semibold"
-              >
-                Disconnect
-              </button>
-            </div>
           </div>
         </Modal>
       )}
@@ -235,8 +244,7 @@ export default ({ children }) => {
           'md:bg-transparency absolute top-0 w-full z-50',
           isMenuOpen
             ? 'min-h-[100vh] h-full md:h-[100px] md:min-h-[100px] menu-mobile-background'
-            : 'h-[80px]',
-          searchOpen
+            : searchOpen
             ? 'min-h-auto h-auto md:h-[100px] md:min-h-[100px] menu-mobile-background rounded-b-[24px]'
             : 'h-[80px]'
         )}
@@ -264,24 +272,42 @@ export default ({ children }) => {
           <div className="block md:hidden cursor-pointer w-full justify-between">
             {/* <SmallLogoIcon size={40} className="text-[#1EEFA4]" /> */}
             {isMenuOpen ? (
-              <div className="flex items-center">
-                <div onClick={menuOpen}>
-                  <HamburgerIcon className="text-[#1EEFA4] mr-5" />
-                </div>
-
-                <a href="/">
-                  <div className="flex items-center">
-                    <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
-                    <div className="font-semibold text-[18px] ml-5">
-                      <img src={LogoText} />
-                    </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div onClick={menuOpen}>
+                    <HamburgerIcon className="text-[#1EEFA4] mr-5" />
                   </div>
-                </a>
+                  <a href="/">
+                    <div className="flex items-center">
+                      <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+                    </div>
+                  </a>
+                </div>
+                <div className="">
+                  <button
+                    className="flex items-center bg-[#1EEFA4] text-[#134757] text-[20px] px-5 py-2 text-[20px] rounded-[16px] font-semibold"
+                    onClick={connectProvider}
+                  >
+                    Connect{' '}
+                    {loadingWallet && (
+                      <div className="ml-2">
+                        <AnimationSpin />
+                      </div>
+                    )}
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="flex justify-between items-center w-full">
-                <div onClick={menuOpen}>
-                  <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
+                <div className="flex items-center">
+                  <div onClick={menuOpen} className="mr-5">
+                    <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
+                  </div>
+                  <a href="/">
+                    <div className="flex items-center">
+                      <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+                    </div>
+                  </a>
                 </div>
                 <div className="block md:hidden">
                   {isReadOnly && (
@@ -370,55 +396,61 @@ export default ({ children }) => {
 
               {/* DropdownMenu for the avatar popup */}
               {accounts && accounts[0] && avatarPopup && (
-                <div className="absolute w-[266px] h-auto bg-[#0E4549] right-0 top-[60px] rounded-[24px] p-4 z-[100]">
-                  <div>
-                    <div className="flex items-center border-b-[2px] border-[#7E9195] pb-4 flex justify-between">
-                      {!reverseRecordLoading &&
-                      getReverseRecord &&
-                      getReverseRecord.avatar ? (
-                        <img
-                          src={imageUrl(
-                            getReverseRecord.avatar,
-                            displayName,
-                            network
-                          )}
-                        />
-                      ) : (
-                        <div className="w-[64px] h-[64px]">
-                          <UnstyledBlockies
-                            className="rounded-full w-full h-full"
-                            address={accounts[0]}
-                            imageSize={64}
+                <ClickAwayListener
+                  onClickAway={() => {
+                    setAvatarPopup(false)
+                  }}
+                >
+                  <div className="absolute w-[266px] h-auto bg-[#0E4549] right-0 top-[60px] rounded-[24px] p-4 z-[100]">
+                    <div>
+                      <div className="flex items-center border-b-[2px] border-[#7E9195] pb-4 flex justify-between">
+                        {!reverseRecordLoading &&
+                        getReverseRecord &&
+                        getReverseRecord.avatar ? (
+                          <img
+                            src={imageUrl(
+                              getReverseRecord.avatar,
+                              displayName,
+                              network
+                            )}
                           />
-                        </div>
-                      )}
-                      <div className="font-semibold text-[20px] font-urbanist text-white ml-4">{`${accounts[0].substring(
-                        0,
-                        6
-                      )}....${accounts[0].substring(
-                        accounts[0].length - 6,
-                        accounts[0].length
-                      )}`}</div>
-                    </div>
-                  </div>
-                  <div
-                    className="font-semibold text-white font-urbanist text-[18px] text-center pt-4"
-                    onClick={showAvatarPopup}
-                  >
-                    <div
-                      className="font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
-                      onClick={moveToProfile}
-                    >
-                      Manage Account
+                        ) : (
+                          <div className="w-[64px] h-[64px]">
+                            <UnstyledBlockies
+                              className="rounded-full w-full h-full"
+                              address={accounts[0]}
+                              imageSize={64}
+                            />
+                          </div>
+                        )}
+                        <div className="font-semibold text-[20px] font-urbanist text-white ml-4">{`${accounts[0].substring(
+                          0,
+                          6
+                        )}....${accounts[0].substring(
+                          accounts[0].length - 6,
+                          accounts[0].length
+                        )}`}</div>
+                      </div>
                     </div>
                     <div
-                      className="h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
-                      onClick={disconnectProvider}
+                      className="font-semibold text-white font-urbanist text-[18px] text-center pt-4"
+                      onClick={showAvatarPopup}
                     >
-                      Disconnect
+                      <div
+                        className="hidden md:block font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
+                        onClick={moveToProfile}
+                      >
+                        Manage Account
+                      </div>
+                      <div
+                        className="h-[40px] flex items-center justify-center cursor-pointer bg-[rgba(67,140,136,0.25)] rounded-[12px] md:bg-transparent hover:bg-[#1C585A] hover:rounded-[12px]"
+                        onClick={disconnectProvider}
+                      >
+                        Disconnect
+                      </div>
                     </div>
                   </div>
-                </div>
+                </ClickAwayListener>
               )}
             </div>
           )}
@@ -450,7 +482,7 @@ export default ({ children }) => {
             networkId={networkId}
           />
         </div>
-        {isMenuOpen && windowDimenion.winWidth < 768 && (
+        {!isReadOnly && isMenuOpen && windowDimenion.winWidth < 768 && (
           <div className="px-7 border-t border-[rgba(204,252,255,0.2)] h-[calc(100vh-250px)]">
             <DomainList
               className="mt-4 h-full flex flex-col"

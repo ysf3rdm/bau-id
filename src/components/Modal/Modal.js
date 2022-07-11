@@ -39,7 +39,7 @@ function Modal({
               closeModal()
             }}
           >
-            <CrossIcon className="text-[#808080] cursor-pointer" size={11} />
+            <CrossIcon className="text-white cursor-pointer" size={11} />
           </div>
         )}
 
