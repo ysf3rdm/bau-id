@@ -27,7 +27,7 @@ export async function setup({
   if (enforceReadOnly) {
     // FIXME determine network ID
     option.infura =
-      'https://apis-sj.ankr.com/bc19fe97c68d4a99a059465623e46b3e/bb63faaa8f178d26aac2969443ec7e73/binance/full/test'
+      'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd'
   }
   const {
     ens: ensInstance,
