@@ -4,8 +4,8 @@ import axios from 'axios'
 import { Formik } from 'formik'
 import { withRouter } from 'react-router'
 import { useDispatch } from 'react-redux'
+import { validate } from '@ensdomains/ens-validation'
 
-import TwoPoints from 'components/Icons/TwoPoints'
 import SearchIcon from 'components/Icons/SearchIcon'
 import FaceCryIcon from 'components/Icons/FaceCryIcon'
 import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
@@ -66,20 +66,18 @@ function Search({
       <Formik
         initialValues={{ searchKey: searchingDomainName ?? '' }}
         validate={values => {
-          let nospecial = /^[^*|\\":<>[\]{}`\\\\()';@&$]+$/u
+          let searchTerm
+          if (values.searchKey.split('.').length === 1) {
+            searchTerm = values.searchKey + '.eth'
+          } else {
+            searchTerm = values.searchKey
+          }
           const errors = {}
           if (values.searchKey.length < 3) {
             errors.searchKey = 'Name length must be at least 3 characters'
-          } else if (!nospecial.test(values.searchKey)) {
-            errors.searchKey = 'Name contains unsupported characters'
-          } else if (
-            values.searchKey.indexOf(' ') >= 0 ||
-            values.searchKey.indexOf('/') >= 0 ||
-            values.searchKey.indexOf('.') >= 0
-          ) {
+          } else if (!validate(searchTerm)) {
             errors.searchKey = 'Name contains unsupported characters'
           }
-          console.log(errors)
           return errors
         }}
         onSubmit={(values, { setSubmitting }) => {
