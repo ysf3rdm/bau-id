@@ -207,7 +207,10 @@ export default ({ children }) => {
 
   return (
     <section
-      style={{ background: `url(${bg})` }}
+      style={{
+        background: `url(${bg}) no-repeat center center fixed`,
+        backgroundSize: 'cover'
+      }}
       className="bg-cover relative min-h-[100vh] flex items-center justify-center"
     >
       {showNetworkErrorModal && (
