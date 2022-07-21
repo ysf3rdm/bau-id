@@ -422,7 +422,9 @@ const NameRegister = ({
                 >
                   Successful registration. Name published
                 </div>
-                {customStep === 'PENDING' || customStep === 'PAYMENT' ? (
+                {customStep === 'PENDING' ? (
+                  <div className="w-2 h-2 bg-[#7E9195] rounded-full flex justify-center mt-[14px] m-auto" />
+                ) : customStep === 'PAYMENT' ? (
                   <AnimationSpin className="flex justify-center mt-1" />
                 ) : (
                   <div>
