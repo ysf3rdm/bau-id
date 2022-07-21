@@ -27,6 +27,6 @@ jobs:
           bucket-region: 'us-west-2'
           dist-id: 'ESH7K4VJTGCUU'
           invalidation: /app/
-          delete-removed: true
+          delete-removed: false
           no-cache: false
           private: true
