@@ -12,6 +12,7 @@ import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
 import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
 
 import '../../api/subDomainRegistrar'
+import { parseSearchTerm, validateName } from '../../utils/utils'
 
 function Search({
   history,
@@ -65,18 +66,34 @@ function Search({
     <div className={cn('relative', className)}>
       <Formik
         initialValues={{ searchKey: searchingDomainName ?? '' }}
-        validate={values => {
-          let searchTerm
+        validate={async values => {
+          let searchTerm, _parsed
           if (values.searchKey.split('.').length === 1) {
             searchTerm = values.searchKey + '.eth'
           } else {
             searchTerm = values.searchKey
           }
           const errors = {}
-          if (values.searchKey.length < 3) {
+          const type = await parseSearchTerm(searchTerm)
+          if (type === 'short') {
             errors.searchKey = 'Name length must be at least 3 characters'
-          } else if (!validate(searchTerm)) {
+          } else if (
+            type === 'unsupported' ||
+            type === 'invalid' ||
+            !validate(searchTerm)
+          ) {
             errors.searchKey = 'Name contains unsupported characters'
+          }
+          if (!['unsupported', 'invalid', 'short'].includes(type)) {
+            _parsed = validateName(searchTerm)
+            let type = await parseSearchTerm(_parsed)
+            if (
+              type === 'unsupported' ||
+              type === 'invalid' ||
+              !validate(searchTerm)
+            ) {
+              errors.searchKey = 'Name contains unsupported characters'
+            }
           }
           return errors
         }}
