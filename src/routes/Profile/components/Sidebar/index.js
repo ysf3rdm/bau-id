@@ -32,7 +32,7 @@ export default function Sidebar({ className, isReadOnly }) {
       Address: account
     }
     let result = await axios.post(
-      'https://backend.prd.space.id/listname',
+      'https://backend.stg.space.id/listname',
       params
     )
     const data = result?.data?.map(item => {
