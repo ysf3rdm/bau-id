@@ -32,13 +32,13 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #1eefa4;
   border-radius: 20px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #1eefa4;
 }
 
 /* Change the white to any color */

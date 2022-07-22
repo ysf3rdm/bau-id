@@ -22,7 +22,7 @@ import {
   HamburgerIcon
 } from 'components/Icons'
 import Modal from 'components/Modal/Modal'
-import { Search } from 'components/SearchName/Search'
+import { Search } from 'components/SearchName/SearchInHeader'
 import ProfileCard from 'routes/Profile/components/Sidebar/ProfileCard'
 
 // Import graphql quires
@@ -345,7 +345,6 @@ export default ({ children }) => {
                       errorsStyling={true}
                     />
                   )}
-
                   <div className="hidden md:block">
                     <NoAccountsDefault
                       onClick={connectProvider}
@@ -440,7 +439,7 @@ export default ({ children }) => {
                       onClick={showAvatarPopup}
                     >
                       <div
-                        className="hidden md:block font-semibold h-[40px] flex items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
+                        className="hidden md:flex font-semibold h-[40px] items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
                         onClick={moveToProfile}
                       >
                         Manage Account
