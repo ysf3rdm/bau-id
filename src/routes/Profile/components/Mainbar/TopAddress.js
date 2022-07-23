@@ -105,7 +105,16 @@ export default function TopAddress({
                 />
               ) : (
                 <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2 break-all md:break-normal">
-                  <p className="text-center">{registrantAddress}</p>
+                  <p className="text-center">
+                    {registrantAddress
+                      ? `${registrantAddress.substring(
+                          0,
+                          10
+                        )}...${registrantAddress.substring(
+                          registrantAddress.length - 11
+                        )}`
+                      : ''}
+                  </p>
                   <div className="ml-2" onClick={handleCopyRegistrantAddress}>
                     <Tooltip message={tooltipMessage} delay={1000}>
                       <CopyIcon />
@@ -135,7 +144,7 @@ export default function TopAddress({
         <div className="md:flex justify-between items-center mt-8 md:mt-0">
           <div>
             <p className="font-bold text-[18px] xl:text-[20px] text-[#1EEFA4] text-center md:text-left">
-              Expiration Date
+              Expiry Date
             </p>
 
             {pendingExp ? (

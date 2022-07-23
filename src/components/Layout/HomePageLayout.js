@@ -345,14 +345,17 @@ export default ({ children }) => {
                       errorsStyling={true}
                     />
                   )}
-                  <div className="hidden md:block">
-                    <NoAccountsDefault
-                      onClick={connectProvider}
-                      loadingWallet={loadingWallet}
-                      buttonText={isReadOnly ? t('c.connect') : network}
-                      isReadOnly={isReadOnly}
-                    />
-                  </div>
+
+                  {isReadOnly && (
+                    <div className="hidden md:block">
+                      <NoAccountsDefault
+                        onClick={connectProvider}
+                        loadingWallet={loadingWallet}
+                        buttonText={isReadOnly ? t('c.connect') : network}
+                        isReadOnly={isReadOnly}
+                      />
+                    </div>
+                  )}
 
                   {accounts && accounts[0] && !isReadOnly && (
                     <div className="flex items-center">
