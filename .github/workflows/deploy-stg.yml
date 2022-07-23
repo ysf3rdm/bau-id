@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install
-      - run: yarn run build && cp -a build/. dist/app/
+      - run: yarn run build && cp -a build/. build/app/
 
       - name: Deploy
         uses: reggionick/s3-deploy@v3
