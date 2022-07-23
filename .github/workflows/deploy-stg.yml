@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install
-      - run: yarn run build && cp -a build/. build/app/
+      - run: yarn run build && cp -a build/. dist/ && cp -a dist/. build/app/
 
       - name: Deploy
         uses: reggionick/s3-deploy@v3
@@ -27,6 +27,6 @@ jobs:
           bucket-region: 'us-west-2'
           dist-id: 'ESH7K4VJTGCUU'
           invalidation: /app/
-          delete-removed: false
+          delete-removed: true
           no-cache: false
           private: true
