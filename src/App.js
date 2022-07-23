@@ -50,7 +50,7 @@ const App = () => {
   } = useQuery(GET_ERRORS)
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="app">
       <Switch>
         <Route exact path="/" component={Home} layout={HomePageLayout} />
         <Route
