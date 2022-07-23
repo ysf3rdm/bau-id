@@ -22,11 +22,11 @@ jobs:
       - name: Deploy
         uses: reggionick/s3-deploy@v3
         with:
-          folder: 'dist'
+          folder: 'build'
           bucket: 'stg-preregi-space-id'
           bucket-region: 'us-west-2'
           dist-id: 'ESH7K4VJTGCUU'
-          invalidation: /app/
+          invalidation: / /app/
           delete-removed: true
           no-cache: false
           private: true
