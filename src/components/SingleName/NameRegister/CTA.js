@@ -55,7 +55,6 @@ const CTA = ({
   const [txHash, setTxHash] = useState('')
 
   useEffect(() => {
-    console.log('isRegisterSuccess', isRegisterSuccess)
     if (isRegisterSuccess) {
       successRegister()
       setRegistering(false)
@@ -70,8 +69,7 @@ const CTA = ({
 
   const { isReadOnly } = data
 
-  const { state, actions } = useEditable()
-  const { startPending, setConfirmed } = actions
+  const { actions } = useEditable()
 
   const [mutationRegister] = useMutation(REGISTER, {
     onCompleted: data => {

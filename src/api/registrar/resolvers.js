@@ -79,7 +79,6 @@ const resolvers = {
       try {
         const registrar = getRegistrar()
         const tx = await registrar.register(label, duration, signature)
-        console.log('tx', tx)
         return sendHelper(tx)
       } catch (err) {
         if (
