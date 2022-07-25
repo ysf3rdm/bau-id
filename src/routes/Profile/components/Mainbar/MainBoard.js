@@ -262,8 +262,6 @@ export default function MainBoard({
             <PendingTx
               txHash={txHash}
               onConfirmed={async () => {
-                console.log('onConfirmed')
-                console.log(updatingBNBAddress)
                 setBNBAddress(updatingBNBAddress)
                 setConfirmed()
               }}
