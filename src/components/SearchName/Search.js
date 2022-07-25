@@ -67,35 +67,32 @@ function Search({
       <Formik
         initialValues={{ searchKey: searchingDomainName ?? '' }}
         validate={async values => {
-          let searchTerm, _parsed
-          if (values.searchKey.split('.').length === 1) {
-            searchTerm = values.searchKey + '.eth'
-          } else {
-            searchTerm = values.searchKey
-          }
-          const errors = {}
-          const type = await parseSearchTerm(searchTerm)
-          if (type === 'short') {
-            errors.searchKey = 'Name length must be at least 3 characters'
-          } else if (
-            type === 'unsupported' ||
-            type === 'invalid' ||
-            !validate(searchTerm)
-          ) {
-            errors.searchKey = 'Name contains unsupported characters'
-          }
-          if (!['unsupported', 'invalid', 'short'].includes(type)) {
-            _parsed = validateName(searchTerm)
-            console.log(_parsed)
-            let type = await parseSearchTerm(_parsed)
-            if (
-              type === 'unsupported' ||
-              type === 'invalid' ||
-              !validate(searchTerm) ||
-              _parsed.replace('.eth', '').indexOf('.') !== -1
+          let errors = {}
+          try {
+            let searchTerm
+            if (values.searchKey.split('.').length === 1) {
+              searchTerm = values.searchKey + '.eth'
+            } else {
+              searchTerm = values.searchKey
+            }
+            const parsed = await validateName(searchTerm)
+            const filterParsed = parsed.replace('.eth', '')
+            values.searchKey = filterParsed
+            let nospecial = /^[^*|\\":<>[\]{}`\\\\()';@&$]+$/u
+
+            if (values.searchKey.length < 3) {
+              errors.searchKey = 'Name length must be at least 3 characters'
+            } else if (!nospecial.test(values.searchKey)) {
+              errors.searchKey = 'Name contains unsupported characters'
+            } else if (
+              values.searchKey.indexOf(' ') >= 0 ||
+              values.searchKey.indexOf('/') >= 0 ||
+              values.searchKey.indexOf('.') >= 0
             ) {
               errors.searchKey = 'Name contains unsupported characters'
             }
+          } catch (err) {
+            errors.searchKey = 'Name contains unsupported characters'
           }
           return errors
         }}
