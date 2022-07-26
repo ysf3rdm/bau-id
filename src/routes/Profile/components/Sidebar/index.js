@@ -6,7 +6,7 @@ import cn from 'classnames'
 import axios from 'axios'
 
 import { useAccount } from 'components/QueryAccount'
-import { getNetworkId } from '@siddomains/ui'
+import { getNetworkId } from 'ui'
 
 import ProfileCard from './ProfileCard'
 

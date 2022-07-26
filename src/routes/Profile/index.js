@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useQuery, gql } from '@apollo/client'
 import SID, { getSidAddress } from '@siddomains/sidjs'
-import { ethers } from '@siddomains/ui'
-import { getNetworkId, getAccount } from '@siddomains/ui'
+import { ethers, getNetworkId } from '../../ui'
 import { useHistory } from 'react-router-dom'
 
 // Import components

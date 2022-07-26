@@ -10,7 +10,7 @@ import Loader from '../Loader'
 import { H2 } from '../Typography/Basic'
 import AddSubdomain from './AddSubdomain'
 import ChildDomainItem from '../DomainItem/ChildDomainItem'
-import { getNamehash } from '@siddomains/ui'
+import { getNamehash } from 'ui'
 import { decryptName } from '../../api/labels'
 
 const SubDomainsContainer = styled('div')`
@@ -25,7 +25,7 @@ const SubDomainH2 = styled(H2)`
   font-weight: 400;
   font-size: 24px;
   text-align: center;
-  color: #B1B1B1;
+  color: #b1b1b1;
   font-style: italic;
 `
 
