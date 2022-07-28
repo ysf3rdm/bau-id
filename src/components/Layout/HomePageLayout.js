@@ -32,6 +32,7 @@ import { setAllDomains, setSelectedDomain } from 'app/slices/domainSlice'
 // Import redux assets
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
 import { toggleDrawer, toggleNetworkError } from 'app/slices/uiSlice'
+import { globalErrorReactive } from 'apollo/reactiveVars'
 
 // Import assets
 import bg from 'assets/heroBG.jpg'
@@ -202,6 +203,10 @@ export default ({ children }) => {
   }
 
   const closeModal = () => {
+    globalErrorReactive({
+      ...globalErrorReactive(),
+      network: null
+    })
     dispatch(toggleNetworkError(false))
   }
 
@@ -213,7 +218,7 @@ export default ({ children }) => {
       }}
       className="bg-cover relative min-h-[100vh] flex items-center justify-center"
     >
-      {showNetworkErrorModal && (
+      {globalError.network && (
         <Modal
           cannotCloseFromOutside={false}
           width="574px"
