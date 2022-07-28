@@ -23,8 +23,7 @@ function Search({
   isShowSearchBtn = true,
   errorsStyling = false,
   suggestionClassName = 'w-[calc(100%-56px)]',
-  isAbsolutePosition = true,
-  onSubmit
+  isAbsolutePosition = true
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
@@ -41,7 +40,6 @@ function Search({
     } else {
       history.push(`/name/${result.name}.bnb/register`)
     }
-    onSubmit()
   }
 
   useEffect(() => {

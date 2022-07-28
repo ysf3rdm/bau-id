@@ -405,65 +405,7 @@ export default class Registrar {
     return permanentRegistrarController.commit(commitment)
   }
 
-  async registerV3(label, duration, signature) {
-    const permanentRegistrarControllerWithoutSigner = this
-      .permanentRegistrarControllerV3
-    const signer = await getSigner()
-    const permanentRegistrarController = permanentRegistrarControllerWithoutSigner.connect(
-      signer
-    )
-    const account = await getAccount()
-    const price = await this.getRentPrice(label, duration)
-    const priceWithBuffer = getBufferedPrice(price)
-    const resolverAddr = await this.getAddress('resolver.bnb')
-    if (parseInt(resolverAddr, 16) === 0) {
-      const gasLimit = await this.estimateGasLimit(() => {
-        return permanentRegistrarController.estimateGas.register(
-          label,
-          account,
-          duration,
-          signature,
-          { value: priceWithBuffer }
-        )
-      })
-
-      return permanentRegistrarController.register(
-        label,
-        account,
-        duration,
-        0, //free duration
-        0, //Index
-        signature,
-        { value: priceWithBuffer, gasLimit }
-      )
-    } else {
-      const gasLimit = await this.estimateGasLimit(() => {
-        return permanentRegistrarController.estimateGas.registerWithConfig(
-          label,
-          account,
-          duration,
-          resolverAddr,
-          account,
-          signature,
-          { value: priceWithBuffer }
-        )
-      })
-
-      return permanentRegistrarController.registerWithConfig(
-        label,
-        account,
-        duration,
-        0, //free duration,
-        resolverAddr,
-        account,
-        0, //index
-        signature,
-        { value: priceWithBuffer, gasLimit }
-      )
-    }
-  }
-
-  async register(label, duration, signature) {
+  async register(label, duration, freeDuration, index, merkleProof) {
     const permanentRegistrarControllerWithoutSigner = this
       .permanentRegistrarController
     const signer = await getSigner()
@@ -480,7 +422,9 @@ export default class Registrar {
           label,
           account,
           duration,
-          signature,
+          freeDuration,
+          index,
+          merkleProof,
           { value: priceWithBuffer }
         )
       })
@@ -489,7 +433,9 @@ export default class Registrar {
         label,
         account,
         duration,
-        signature,
+        freeDuration,
+        index,
+        merkleProof,
         { value: priceWithBuffer, gasLimit }
       )
     } else {
@@ -498,9 +444,11 @@ export default class Registrar {
           label,
           account,
           duration,
+          freeDuration,
           resolverAddr,
           account,
-          signature,
+          index,
+          merkleProof,
           { value: priceWithBuffer }
         )
       })
@@ -509,9 +457,11 @@ export default class Registrar {
         label,
         account,
         duration,
+        freeDuration,
         resolverAddr,
         account,
-        signature,
+        index,
+        merkleProof,
         { value: priceWithBuffer, gasLimit }
       )
     }

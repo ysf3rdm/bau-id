@@ -77,7 +77,7 @@ const NameRegister = ({
   )
   const [registering, setRegistering] = useState(false)
   const [transactionHash, setTransactionHash] = useState('')
-  const [signature, setSignature] = useState('')
+  const [signature, setSignature] = useState([])
   const {
     data: { getEthPrice: ethUsdPrice } = {},
     loading: ethUsdPriceLoading
@@ -115,19 +115,30 @@ const NameRegister = ({
   useEffect(() => {
     const fetchSignature = async () => {
       const params = {
-        name: domain.label,
-        owner: account,
-        duration: calculateDuration(years),
-        resolver: '0x075d6116Caba19df3211068163BEB64CB231B53C', // FIXME this is not fixed
-        addr: account, //Eth wallet of user connected with metamask
-        ChainID: 97
+        inputs: [
+          {
+            name: domain.label,
+            index: 0,
+            owner: account,
+            duration: 100,
+            resolver: '0x075d6116Caba19df3211068163BEB64CB231B53C', // FIXME this is not fixed
+            addr: account, //Eth wallet of user connected with metamask
+            freeDuration: 31536000
+          }
+        ]
       }
-      const result = await axios.post(
-        'https://backend.stg.space.id/sign',
-        params
-      )
-      if (result?.data?.signature) {
-        setSignature(result.data.signature)
+
+      const result = await axios({
+        method: 'post',
+        url: 'https://merkle.stg.space.id/getproof',
+        headers: {},
+        data: params
+      })
+
+      const proofs = result?.data
+
+      if (proofs) {
+        setSignature(proofs)
       }
     }
     fetchSignature()
