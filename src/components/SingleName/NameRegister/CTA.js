@@ -71,8 +71,7 @@ const CTA = ({
 
   const { isReadOnly } = data
 
-  const { state, actions } = useEditable()
-  const { startPending, setConfirmed } = actions
+  const { actions } = useEditable()
 
   const [mutationRegister] = useMutation(REGISTER, {
     onCompleted: data => {

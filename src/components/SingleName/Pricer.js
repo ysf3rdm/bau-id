@@ -19,7 +19,9 @@ function PricerInner({
   gasPrice,
   reference,
   underPremium,
-  displayGas = false
+  name,
+  displayGas = false,
+  discount
 }) {
   const { t } = useTranslation()
   return (
@@ -43,6 +45,7 @@ function PricerInner({
       {displayGas && gasPrice && (
         <div>
           <EthRegistrationGasPrice
+            name={name}
             price={price}
             gasPrice={gasPrice}
             loading={loading}
@@ -50,6 +53,7 @@ function PricerInner({
             ethUsdPrice={ethUsdPrice}
             ethUsdPremiumPrice={ethUsdPremiumPrice}
             underPremium={underPremium}
+            discount={discount}
           />
         </div>
       )}
