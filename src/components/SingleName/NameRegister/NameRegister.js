@@ -75,9 +75,11 @@ const NameRegister = ({
   const [commitmentExpirationDate, setCommitmentExpirationDate] = useState(
     false
   )
+  const [freeDuration, setFreeDuration] = useState(0)
+  const [index, setIndex] = useState(0)
   const [registering, setRegistering] = useState(false)
   const [transactionHash, setTransactionHash] = useState('')
-  const [signature, setSignature] = useState('')
+  const [signature, setSignature] = useState([])
   const {
     data: { getEthPrice: ethUsdPrice } = {},
     loading: ethUsdPriceLoading
@@ -114,20 +116,44 @@ const NameRegister = ({
 
   useEffect(() => {
     const fetchSignature = async () => {
+      const result = await axios({
+        method: 'get',
+        url: `https://backend.stg.space.id/merkleleaf?domain=${domain.label}`
+      })
+
+      console.log('index result', result)
+
+      setFreeDuration(result?.data?.data?.isaution ? 31536000 : 0)
+      setIndex(result?.data?.data?.index)
+
       const params = {
-        name: domain.label,
-        owner: account,
-        duration: calculateDuration(years),
-        resolver: '0x075d6116Caba19df3211068163BEB64CB231B53C', // FIXME this is not fixed
-        addr: account, //Eth wallet of user connected with metamask
-        ChainID: 97
+        inputs: [
+          {
+            name: domain.label,
+            index: result?.data?.data?.index,
+            owner: account,
+            duration,
+            resolver: '0x0173201746b48A276154ca9f234F1A9Df456B02F', // FIXME this is not fixed
+            addr: account, //Eth wallet of user connected with metamask
+            freeDuration: result?.data?.data?.isaution ? 31536000 : 0
+          }
+        ]
       }
-      const result = await axios.post(
-        'https://backend.stg.space.id/sign',
-        params
-      )
-      if (result?.data?.signature) {
-        setSignature(result.data.signature)
+
+      console.log('hey->index', result?.data?.data?.index)
+
+      const result1 = await axios({
+        method: 'post',
+        url: 'https://merkle.stg.space.id/getproof',
+        headers: {},
+        data: params
+      })
+
+      const proofs = result1?.data
+
+      console.log('proofs', proofs)
+      if (proofs) {
+        setSignature(proofs)
       }
     }
     fetchSignature()
@@ -352,6 +378,8 @@ const NameRegister = ({
             setRegistering={setRegistering}
             registering={registering}
             paymentSuccess={paymentSuccess}
+            freeDuration={freeDuration}
+            index={index}
           />
         </div>
       )}

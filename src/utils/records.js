@@ -1,4 +1,4 @@
-import { encodeContenthash, isValidContenthash } from '@siddomains/ui'
+import { encodeContenthash, isValidContenthash } from 'ui'
 import { addressUtils, supportedAvatarProtocols } from 'utils/utils'
 import { formatsByName } from '@siddomains/address-encoder'
 import validateTokenURI from 'api/avatar'

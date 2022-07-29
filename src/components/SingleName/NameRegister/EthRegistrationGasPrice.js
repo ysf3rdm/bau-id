@@ -17,8 +17,6 @@ const EthRegistrationGasPrice = ({ price, ethUsdPrice, gasPrice }) => {
     totalInUsdSlow = totalSlow.mul(ethUsdPrice)
     totalInUsdFast = totalFast.mul(ethUsdPrice)
   }
-  console.log('totalInUSDSlow', totalInUsdSlow)
-  console.log('totalInUsdFast', totalInUsdFast)
 
   // totalInUsdFast
   return (

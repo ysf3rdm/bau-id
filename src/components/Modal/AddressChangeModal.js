@@ -1,7 +1,7 @@
 //Import packages
 import React, { useEffect } from 'react'
 import { useFormik } from 'formik'
-import { ethers } from '@siddomains/ui'
+import { ethers } from '../../ui'
 import cn from 'classnames'
 
 //Import components

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import cn from 'classnames'
 import { useQuery } from '@apollo/client'
-import { getNamehash, emptyAddress } from '@siddomains/ui'
+import { getNamehash, emptyAddress } from 'ui'
 import { formatsByCoinType } from '@siddomains/address-encoder'
 import union from 'lodash/union'
 
@@ -262,8 +262,6 @@ export default function MainBoard({
             <PendingTx
               txHash={txHash}
               onConfirmed={async () => {
-                console.log('onConfirmed')
-                console.log(updatingBNBAddress)
                 setBNBAddress(updatingBNBAddress)
                 setConfirmed()
               }}

@@ -1,9 +1,4 @@
-import {
-  getAccounts,
-  getNetwork,
-  getNetworkId,
-  isReadOnly
-} from '@siddomains/ui'
+import { getAccounts, getNetwork, getNetworkId, isReadOnly } from './ui'
 import Web3 from 'web3'
 import { setup } from './apollo/mutations/ens'
 import { connect } from './api/web3modal'

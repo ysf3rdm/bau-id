@@ -12,7 +12,7 @@ export default function SuccessfulTickIcon({
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_41_1323)">
+        <g clipPath="url(#clip0_41_1323)">
           <path
             fillRule="evenodd"
             clipRule="evenodd"

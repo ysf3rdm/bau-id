@@ -75,11 +75,19 @@ const resolvers = {
       const tx = await registrar.commit(label, secret)
       return sendHelper(tx)
     },
-    async register(_, { label, duration, signature }) {
+    async register(_, { label, duration, signature, freeDuration, index }) {
       try {
         const registrar = getRegistrar()
-        const tx = await registrar.register(label, duration, signature)
-        console.log('tx', tx)
+        console.log('label--------------', label)
+        console.log('duration', duration)
+        console.log('signature', signature)
+        const tx = await registrar.register(
+          label,
+          duration,
+          freeDuration,
+          index,
+          signature
+        )
         return sendHelper(tx)
       } catch (err) {
         if (
