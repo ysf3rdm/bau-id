@@ -43,7 +43,9 @@ const CTA = ({
   successRegister,
   registering,
   setRegistering,
-  paymentSuccess
+  paymentSuccess,
+  freeDuration,
+  index
 }) => {
   const { t } = useTranslation()
   const history = useHistory()
@@ -105,7 +107,9 @@ const CTA = ({
     const variables = {
       label,
       duration,
-      signature
+      signature,
+      freeDuration,
+      index
     }
     mutationRegister({ variables })
   }
