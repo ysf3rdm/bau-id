@@ -120,8 +120,6 @@ const NameRegister = ({
         url: `https://backend.stg.space.id/merkleleaf?domain=${domain.label}`
       })
 
-      console.log('index result', result)
-
       setFreeDuration(result?.data?.data?.isaution ? 31536000 : 0)
       setIndex(result?.data?.data?.index)
 
@@ -139,8 +137,6 @@ const NameRegister = ({
         ]
       }
 
-      console.log('hey->index', result?.data?.data?.index)
-
       const result1 = await axios({
         method: 'post',
         url: 'https://merkle.stg.space.id/getproof',
@@ -149,8 +145,6 @@ const NameRegister = ({
       })
 
       const proofs = result1?.data
-
-      console.log('proofs', proofs)
       if (proofs) {
         setSignature(proofs)
       }

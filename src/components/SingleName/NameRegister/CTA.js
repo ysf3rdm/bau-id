@@ -99,10 +99,6 @@ const CTA = ({
     startRegisterFuc()
     setCustomStep('PENDING')
     setRegistering(true)
-
-    console.log('signature', signature)
-    console.log('label', label)
-    console.log('duration', duration)
     const variables = {
       label,
       duration,

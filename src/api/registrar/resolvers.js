@@ -78,9 +78,6 @@ const resolvers = {
     async register(_, { label, duration, signature, freeDuration, index }) {
       try {
         const registrar = getRegistrar()
-        console.log('label--------------', label)
-        console.log('duration', duration)
-        console.log('signature', signature)
         const tx = await registrar.register(
           label,
           duration,
@@ -154,7 +151,6 @@ const resolvers = {
       }
     },
     async setRegistrant(_, { name, address }) {
-      console.log('why printing here: cannot understand')
       const registrar = getRegistrar()
       const tx = await registrar.transferOwner(name, address)
       return sendHelper(tx)

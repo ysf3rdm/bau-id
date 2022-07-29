@@ -107,7 +107,6 @@ export async function setupWeb3({
     try {
       const url = 'http://localhost:8545'
       await fetch(url)
-      console.log('local node active')
       provider = getJsonRpcProvider(url)
     } catch (error) {
       if (

@@ -66,14 +66,3 @@ export const queryAll = async label => {
     return query(domain.name, label)
   })
 }
-
-// async function test() {
-//   // const node = await query('gimmethe', 'awesome')
-//   // console.log(node)
-//   const nodes = await queryAll('helloooo12345')
-//   nodes.map(promise =>
-//     promise.then(node => node.forEach(e => console.log(e.toString())))
-//   )
-// }
-
-// test()

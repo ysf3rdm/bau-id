@@ -194,7 +194,6 @@ export default ({ children }) => {
   }
 
   const showDrawer = () => {
-    console.log('clicked')
     dispatch(toggleDrawer(true))
   }
 

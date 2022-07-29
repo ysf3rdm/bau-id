@@ -304,10 +304,6 @@ const useInitRecords = (
   setInitialRecords
 ) => {
   useEffect(() => {
-    console.log(
-      'getInitialRecords(domain, dataAddresses, dataTextRecords)',
-      getInitialRecords(domain, dataAddresses, dataTextRecords)
-    )
     setInitialRecords(getInitialRecords(domain, dataAddresses, dataTextRecords))
   }, [domain, dataAddresses, dataTextRecords])
 }
