@@ -85,7 +85,8 @@ function Search({
             } else if (
               values.searchKey.indexOf(' ') >= 0 ||
               values.searchKey.indexOf('/') >= 0 ||
-              values.searchKey.indexOf('.') >= 0
+              values.searchKey.indexOf('.') >= 0 ||
+              values.searchKey.indexOf('-') >= 0
             ) {
               errors.searchKey = 'Name contains unsupported characters'
             }
