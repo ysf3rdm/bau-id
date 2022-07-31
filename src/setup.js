@@ -1,9 +1,4 @@
-import {
-  getAccounts,
-  getNetwork,
-  getNetworkId,
-  isReadOnly
-} from '@siddomains/ui'
+import { getAccounts, getNetwork, getNetworkId, isReadOnly } from './ui'
 import Web3 from 'web3'
 import { setup } from './apollo/mutations/ens'
 import { connect } from './api/web3modal'
@@ -98,7 +93,6 @@ export const getProvider = async reconnect => {
     loadingWalletReactive(false)
     return provider
   } catch (e) {
-    console.log(e)
     if (e.message.match(/Unsupported network/)) {
       loadingWalletReactive(false)
       globalErrorReactive({
@@ -198,7 +192,6 @@ export default async reconnect => {
     isAppReadyReactive(true)
     loadingWalletReactive(false)
   } catch (e) {
-    console.log(e)
     console.error('setup error: ', e)
   }
 }

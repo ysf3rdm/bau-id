@@ -16,7 +16,7 @@ export default function HamburgerIcon({ size = 25, className }) {
           y2="2"
           stroke="currentColor"
           strokeWidth="3"
-          stroke-linecap="round"
+          strokeLinecap="round"
         />
         <line
           x1="1.5"

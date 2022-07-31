@@ -1,4 +1,4 @@
-import { setupENS } from '@siddomains/ui'
+import { setupENS } from 'ui'
 import { isENSReadyReactive } from '../reactiveVars'
 
 const INFURA_ID =
@@ -34,11 +34,9 @@ export async function setup({
     registrar: registrarInstance,
     providerObject
   } = await setupENS(option)
-  console.log('called', ens)
   ens = ensInstance
   registrar = registrarInstance
   ensRegistryAddress = ensAddress
-  console.log('setting up to true')
   isENSReadyReactive(true)
   return { ens, registrar, providerObject }
 }

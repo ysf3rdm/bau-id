@@ -96,7 +96,6 @@ function Search({
           }
           if (!['unsupported', 'invalid', 'short'].includes(type)) {
             _parsed = validateName(searchTerm)
-            console.log(_parsed)
             let type = await parseSearchTerm(_parsed)
             if (
               type === 'unsupported' ||

@@ -43,7 +43,9 @@ const CTA = ({
   successRegister,
   registering,
   setRegistering,
-  paymentSuccess
+  paymentSuccess,
+  freeDuration,
+  index
 }) => {
   const { t } = useTranslation()
   const history = useHistory()
@@ -55,7 +57,6 @@ const CTA = ({
   const [txHash, setTxHash] = useState('')
 
   useEffect(() => {
-    console.log('isRegisterSuccess', isRegisterSuccess)
     if (isRegisterSuccess) {
       successRegister()
       setRegistering(false)
@@ -70,8 +71,7 @@ const CTA = ({
 
   const { isReadOnly } = data
 
-  const { state, actions } = useEditable()
-  const { startPending, setConfirmed } = actions
+  const { actions } = useEditable()
 
   const [mutationRegister] = useMutation(REGISTER, {
     onCompleted: data => {
@@ -80,7 +80,6 @@ const CTA = ({
         errorRegistering()
         setRegistering(false)
       } else {
-        console.log('hey, completed', data)
         setTxHash(data.register)
         setTransactionHash(data.register)
         paymentSuccess()
@@ -103,7 +102,9 @@ const CTA = ({
     const variables = {
       label,
       duration,
-      signature
+      signature,
+      freeDuration,
+      index
     }
     mutationRegister({ variables })
   }

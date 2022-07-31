@@ -1,4 +1,4 @@
-import { ethers, getNetworkId, getNetworkProviderUrl } from '@siddomains/ui'
+import { ethers, getNetworkId, getNetworkProviderUrl } from '../ui'
 
 export default function validateTokenURI(value, addr) {
   const details = value.split('/')

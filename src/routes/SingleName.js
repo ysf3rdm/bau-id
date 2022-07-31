@@ -39,11 +39,8 @@ function SingleName({
     }
   })
 
-  console.log('loading', loading)
-
   useEffect(() => {
     let normalisedName
-    console.log('isENSReady', isENSReady)
     if (isENSReady) {
       try {
         normalisedName = validateName(searchTerm)

@@ -16,7 +16,6 @@ export default function NoAccounts({
       colour={colour}
       onClick={onClick}
       active={active}
-      textColour={textColour}
       width={width}
       disabled={!isReadOnly}
       className="bg-[#0ea59c]/[0.85] px-[26px] py-[7px] rounded-[16px] backdrop-blur-[10px] cursor-pointer"

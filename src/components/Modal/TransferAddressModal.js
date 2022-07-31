@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useFormik } from 'formik'
-import { ethers, getWeb3 } from '@siddomains/ui'
+import { ethers, getWeb3 } from '../../ui'
 import Modal from './Modal'
 
 export default function TransferAddressModal({

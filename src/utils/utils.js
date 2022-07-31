@@ -8,7 +8,7 @@ import {
   isLabelValid as _isLabelValid,
   parseSearchTerm as _parseSearchTerm,
   validateName as _validateName
-} from '@siddomains/ui'
+} from 'ui'
 import * as jsSHA3 from 'js-sha3'
 import { throttle } from 'lodash'
 import { CID } from 'multiformats'
