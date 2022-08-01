@@ -150,7 +150,6 @@ const NameRegister = ({
 
       const proofs = result1?.data
       if (proofs && proofs.length > 0) {
-        console.log('proofs', proofs)
         setSignature(proofs)
         setIsAuctionWinner(true)
       } else {
