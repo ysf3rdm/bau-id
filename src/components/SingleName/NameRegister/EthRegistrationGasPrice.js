@@ -55,7 +55,10 @@ const EthRegistrationGasPrice = ({
         </div>
         {discount.percent !== 0 && years !== 1 && (
           <div className="font-bold text-[36px] text-white text-[24px] line-through heading-[34px]">
-            {(totalFast / (1 - discount.percent / 100)).toFixed(3).toString()}{' '}
+            {registerGasFast
+              .add(ethVal / (1 - discount.percent / 100))
+              .toFixed(3)
+              .toString()}{' '}
             BNB
           </div>
         )}

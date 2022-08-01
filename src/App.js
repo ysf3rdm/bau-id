@@ -4,7 +4,6 @@ import { BrowserRouter, Route as DefaultRoute, Switch } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 
 // Load components
-const TestRegistrar = lazy(() => import('./routes/TestRegistrar'))
 const Registration = lazy(() => import('./routes/Registration'))
 const Home = lazy(() => import('./routes/Home'))
 const SearchResults = lazy(() => import('./routes/SearchResults'))
@@ -65,7 +64,6 @@ const App = () => {
           component={Profile}
           layout={HomePageLayout}
         />
-        <Route path="/test-registrar" component={TestRegistrar} />
         <Route path="/favorites" component={Favorites} />
         <Route path="/faq" component={Faq} />
         <Route path="/my-bids" component={SearchResults} />
