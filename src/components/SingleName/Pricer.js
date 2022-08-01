@@ -21,7 +21,8 @@ function PricerInner({
   underPremium,
   name,
   displayGas = false,
-  discount
+  discount,
+  isAuctionWinner
 }) {
   const { t } = useTranslation()
   return (
@@ -32,6 +33,7 @@ function PricerInner({
           =
         </span>
         <Price
+          isAuctionWinner={isAuctionWinner}
           price={price}
           premiumOnlyPrice={premiumOnlyPrice}
           gasPrice={gasPrice}
@@ -54,6 +56,7 @@ function PricerInner({
             ethUsdPremiumPrice={ethUsdPremiumPrice}
             underPremium={underPremium}
             discount={discount}
+            years={years}
           />
         </div>
       )}
