@@ -19,7 +19,7 @@ import {
   TwitterIcon,
   DiscordIcon,
   RoundedIcon,
-  HamburgerIcon
+  HamburgerIcon,
 } from 'components/Icons'
 import Modal from 'components/Modal/Modal'
 import { Search } from 'components/SearchName/SearchInHeader'
@@ -35,7 +35,6 @@ import { toggleDrawer, toggleNetworkError } from 'app/slices/uiSlice'
 import { globalErrorReactive } from 'apollo/reactiveVars'
 
 // Import assets
-import bg from 'assets/heroBG.jpg'
 
 // Import custom functions
 import { connectProvider, disconnectProvider } from 'utils/providerUtils'
@@ -77,27 +76,27 @@ export default ({ children }) => {
   const [avatarPopup, setAvatarPopup] = useState(false)
   const [networkId, setNetworkID] = useState('')
 
-  const domains = useSelector(state => state.domain.domains)
+  const domains = useSelector((state) => state.domain.domains)
   const showNetworkErrorModal = useSelector(
-    state => state.ui.isShowNetworkErrorModal
+    (state) => state.ui.isShowNetworkErrorModal
   )
-  const selectedDomain = useSelector(state => state.domain.selectedDomain)
+  const selectedDomain = useSelector((state) => state.domain.selectedDomain)
   useReactiveVarListeners()
 
   const { windowDimenion } = useDeviceSize()
 
   const {
-    data: { globalError }
+    data: { globalError },
   } = useQuery(GET_ERRORS)
 
   const {
-    data: { accounts }
+    data: { accounts },
   } = useQuery(GET_ACCOUNT)
 
   const { data } = useQuery(HOME_DATA, {
     variables: {
-      address: accounts?.[0]
-    }
+      address: accounts?.[0],
+    },
   })
 
   useEffect(() => {
@@ -138,15 +137,13 @@ export default ({ children }) => {
     }
   }, [isReadOnly])
 
-  const {
-    data: { getReverseRecord } = {},
-    loading: reverseRecordLoading
-  } = useQuery(GET_REVERSE_RECORD, {
-    variables: {
-      address: accounts?.[0]
-    },
-    skip: !accounts?.length
-  })
+  const { data: { getReverseRecord } = {}, loading: reverseRecordLoading } =
+    useQuery(GET_REVERSE_RECORD, {
+      variables: {
+        address: accounts?.[0],
+      },
+      skip: !accounts?.length,
+    })
 
   const showAvatarPopup = () => {
     setAvatarPopup(!avatarPopup)
@@ -164,7 +161,7 @@ export default ({ children }) => {
     try {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x61' }]
+        params: [{ chainId: '0x61' }],
       })
     } catch (switchError) {
       if (switchError.code === 4902) {
@@ -176,10 +173,10 @@ export default ({ children }) => {
                 chainId: '0x61',
                 chainName: 'BSC Testnet',
                 rpcUrls: [
-                  'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd'
-                ]
-              }
-            ]
+                  'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd',
+                ],
+              },
+            ],
           })
         } catch (addError) {
           console.log()
@@ -204,19 +201,13 @@ export default ({ children }) => {
   const closeModal = () => {
     globalErrorReactive({
       ...globalErrorReactive(),
-      network: null
+      network: null,
     })
     dispatch(toggleNetworkError(false))
   }
 
   return (
-    <section
-      style={{
-        background: `url(${bg}) no-repeat center center fixed`,
-        backgroundSize: 'cover'
-      }}
-      className="bg-cover relative min-h-[100vh] flex items-center justify-center"
-    >
+    <section className="bg-[url('assets/images/home-bg.png')] bg-cover relative min-h-[100vh] flex items-center justify-center">
       {globalError.network && (
         <Modal
           cannotCloseFromOutside={false}

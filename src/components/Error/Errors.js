@@ -1,57 +1,26 @@
 import React from 'react'
+import { Button } from 'react-daisyui'
 import { Link } from 'react-router-dom'
-import styled from '@emotion/styled/macro'
 
-import warningImage from '../../assets/warning.svg'
-
-const ErrorContainer = styled('div')`
-  color: black;
-  padding: 40px 20px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  max-width: 400px;
-  margin: 0 auto 0;
-`
-
-const Warning = styled('img')`
-  width: 40px;
-`
-
-const H2 = styled('h2')`
-  font-family: Urbanist;
-  font-weight: 300;
-  font-size: 28px;
-  color: #2b2b2b;
-  text-align: center;
-`
-
-const Message = styled('div')``
-
-export const NetworkError = ({ message }) => (
-  <ErrorContainer data-testid="network-error">
-    <Message>
-      <Warning src={warningImage} />
-      <H2>{message}</H2>
-      <br />
-      Please change your dapp browser to BSC Testnet.
-    </Message>
-  </ErrorContainer>
-)
-
-export const InvalidCharacterError = ({ message }) => (
-  <ErrorContainer>
-    <Message>
-      <Warning src={warningImage} />
-      <H2>{message}</H2>
-      One or more domain names contain UTS46 forbidden characters.{' '}
-      <Link to="/">Click here</Link> to go back to the home page.
-    </Message>
-  </ErrorContainer>
-)
-
-const Error404 = () => <div>Error Page</div>
-
-export default Error404
+export default function Error404() {
+  return (
+    <div className='min-h-[100vh] bg-[url("assets/images/home-bg.png")] flex items-center justify-center'>
+      <div className="text-center space-y-12 relative">
+        <div className="text-[160px] font-bold left-[calc(50%-135px)] top-[80px] leading-[66px] absolute text-[rgba(204,252,255,0.2)]">
+          404
+        </div>
+        <p className="font-bold text-[72px] text-[#1EEFA4]">Oops!</p>
+        <p className="text-[#1EEFA4] text-[32px] leading-[46px] font-bold font-urbanist">
+          We can't find the page you're looking for...
+        </p>
+        <div>
+          <Link to="/">
+            <Button className="text-[#1EEFA4] border-[#1EEFA4] border rounded-full font-bold text-[24px] leading-[34px] py-3 px-8 font-cocoSharp">
+              Back to Home
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
