@@ -11,7 +11,7 @@ import {
   GET_PUBLIC_RESOLVER,
   GET_RENT_PRICE,
   IS_CONTRACT_CONTROLLER,
-  GET_ETH_PRICE
+  GET_ETH_PRICE,
 } from '../../graphql/queries'
 import { SET_RESOLVER, SET_SUBNODE_OWNER, SET_OWNER } from 'graphql/mutations'
 
@@ -25,7 +25,6 @@ import Bin from '../Forms/Bin'
 import { useAccount } from '../QueryAccount'
 import { getEnsAddress } from '../../apollo/mutations/ens'
 
-import AddToCalendar from '../Calendar/RenewalCalendar'
 import Tooltip from '../Tooltip/Tooltip'
 import { SingleNameBlockies } from '../Blockies'
 import DefaultAddressLink from '../Links/AddressLink'
@@ -36,10 +35,9 @@ import {
   DetailsContent,
   DetailsKeyValueContainer,
   DetailsContentSubContainer,
-  DetailsContentContainer
+  DetailsContentContainer,
 } from './DetailsItem'
 import DefaultSaveCancel from './SaveCancel'
-import DefaultInput from '../Forms/Input'
 import Button from '../Forms/Button'
 import Pencil from '../Forms/Pencil'
 import DefaultInfo from '../Icons/Info'
@@ -102,7 +100,7 @@ const DetailsEditableContainer = styled(DetailsItem)`
 `
 
 const DetailsValue = styled(DefaultDetailsValue)`
-  ${p =>
+  ${(p) =>
     p.expiryDate &&
     `
       overflow: inherit;
@@ -111,7 +109,7 @@ const DetailsValue = styled(DefaultDetailsValue)`
       flex-direction: column;
   `}
 
-  ${p =>
+  ${(p) =>
     p.expiryDate &&
     mq.medium`
       align-items: center;
@@ -129,10 +127,6 @@ const ExpiryDate = styled('span')`
 
 const EditRecord = styled(motion.div)`
   width: 100%;
-`
-
-const Input = styled(DefaultInput)`
-  margin-bottom: 20px;
 `
 
 const Action = styled(motion.div)`
@@ -254,7 +248,7 @@ function getInputType(
     expirationDate,
     rentPriceLoading,
     rentPrice,
-    placeholder
+    placeholder,
   }
 ) {
   if (keyName === 'Expiration Date') {
@@ -263,7 +257,7 @@ function getInputType(
         name={name.split('.')[0]}
         duration={duration}
         years={years}
-        setYears={years => {
+        setYears={(years) => {
           setYears(years)
           updateValue(formatDate(expirationDate))
         }}
@@ -291,7 +285,7 @@ function getInputType(
           updateValue('')
         }
       },
-      ensAddress
+      ensAddress,
     }
     return <AddressInput {...option} />
   }
@@ -299,7 +293,7 @@ function getInputType(
   return (
     <Input
       value={newValue}
-      onChange={e => updateValue(e.target.value.trim())}
+      onChange={(e) => updateValue(e.target.value.trim())}
       valid={isValid}
       invalid={isInvalid}
       placeholder={keyName === 'Resolver' ? placeholder : ''}
@@ -323,12 +317,12 @@ function getVariables(keyName, { domain, variableName, newValue, duration }) {
   if (keyName === 'Expiration Date') {
     return {
       label: domain.name.split('.')[0],
-      duration
+      duration,
     }
   } else {
     return {
       name: domain.name,
-      [variableName ? variableName : 'address']: newValue
+      [variableName ? variableName : 'address']: newValue,
     }
   }
 }
@@ -348,7 +342,7 @@ const Editable = ({
   variableName,
   refetch,
   confirm,
-  copyToClipboard
+  copyToClipboard,
 }) => {
   const { t } = useTranslation()
   const { state, actions } = useEditable()
@@ -356,13 +350,8 @@ const Editable = ({
 
   const { editing, newValue, txHash, pending, confirmed } = state
 
-  const {
-    startEditing,
-    stopEditing,
-    updateValue,
-    startPending,
-    setConfirmed
-  } = actions
+  const { startEditing, stopEditing, updateValue, startPending, setConfirmed } =
+    actions
 
   //only used with Expiration date
   let duration
@@ -375,7 +364,7 @@ const Editable = ({
   }
   const {
     data: { getEthPrice: ethUsdPrice } = {},
-    loading: ethUsdPriceLoading
+    loading: ethUsdPriceLoading,
   } = useQuery(GET_ETH_PRICE)
 
   const { data: { getRentPrice } = {}, loading: rentPriceLoading } = useQuery(
@@ -383,9 +372,9 @@ const Editable = ({
     {
       variables: {
         duration,
-        label: domain.label
+        label: domain.label,
       },
-      skip: keyName !== 'Expiration Date'
+      skip: keyName !== 'Expiration Date',
     }
   )
   const isNewResolverAddress =
@@ -396,9 +385,9 @@ const Editable = ({
     IS_CONTRACT_CONTROLLER,
     {
       variables: {
-        address: newValue
+        address: newValue,
       },
-      skip: !isNewResolverAddress
+      skip: !isNewResolverAddress,
     }
   )
   const isValid = getValidation(keyName, newValue, isContractAddress)
@@ -410,7 +399,7 @@ const Editable = ({
   const canDelete = ['Resolver'].includes(keyName)
   const placeholder = t('singleName.resolver.placeholder')
   const [mutation] = useMutation(mutationQuery, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       const txHash = Object.values(data)[0]
       startPending(txHash)
       if (keyName === 'Expiration Date') {
@@ -422,10 +411,10 @@ const Editable = ({
             .toEth()
             .mul(ethUsdPrice)
             .toFixed(2), // in wei, // in wei
-          years
+          years,
         })
       }
-    }
+    },
   })
 
   const [ownerMutation] = useMutation(
@@ -433,16 +422,16 @@ const Editable = ({
     {
       variables: {
         name: domain.name,
-        address: emptyAddress
+        address: emptyAddress,
       },
-      onCompleted: data => {
+      onCompleted: (data) => {
         startPending(Object.values(data)[0])
-      }
+      },
     }
   )
 
   const { data, loading } = useQuery(GET_PUBLIC_RESOLVER, {
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'network-only',
   })
 
   return (
@@ -495,18 +484,6 @@ const Editable = ({
                   >
                     {formatDate(value)}
                   </ExpiryDate>
-                  <AddToCalendar
-                    css={css`
-                      margin-right: 20px;
-                    `}
-                    name={domain.name}
-                    owner={domain.owner}
-                    registrant={domain.registrant}
-                    startDatetime={moment(value)
-                      .utc()
-                      .local()
-                      .subtract(30, 'days')}
-                  />
                 </>
               ) : (
                 value
@@ -525,9 +502,9 @@ const Editable = ({
                   interval: 300,
                   keyToCompare: 'registrant',
                   prevData: {
-                    singleName: domain
+                    singleName: domain,
                   },
-                  getterString: 'singleName'
+                  getterString: 'singleName',
                 })
               } else {
                 refetch()
@@ -539,15 +516,15 @@ const Editable = ({
           <Action
             initial={{
               opacity: 0,
-              x: 0
+              x: 0,
             }}
             animate={{
               opacity: 1,
-              x: 0
+              x: 0,
             }}
             exit={{
               opacity: 0,
-              x: 0
+              x: 0,
             }}
           >
             {editButton ? (
@@ -572,7 +549,7 @@ const Editable = ({
           <Action>
             <Bin
               data-testid={`delete-${type.toLowerCase()}`}
-              onClick={e => {
+              onClick={(e) => {
                 e.preventDefault()
                 ownerMutation()
               }}
@@ -588,32 +565,32 @@ const Editable = ({
             initial={{
               height: 0,
               width: 0,
-              opacity: 0
+              opacity: 0,
             }}
             animate={{
               height: 'auto',
               width: '100%',
-              opacity: 1
+              opacity: 1,
             }}
             exit={{
               height: 0,
               width: 0,
-              opacity: 0
+              opacity: 0,
             }}
             transition={{ ease: 'easeOut', duration: 0.3 }}
           >
             <EditRecord
               initial={{
                 scale: 0,
-                opacity: 0
+                opacity: 0,
               }}
               animate={{
                 scale: 1,
-                opacity: 1
+                opacity: 1,
               }}
               exit={{
                 scale: 0,
-                opacity: 0
+                opacity: 0,
               }}
               transition={{ ease: 'easeOut', duration: 0.3 }}
             >
@@ -632,7 +609,7 @@ const Editable = ({
                 expirationDate,
                 rentPriceLoading,
                 rentPrice: getRentPrice,
-                placeholder
+                placeholder,
               })}
             </EditRecord>
             <Buttons>
@@ -652,7 +629,7 @@ const Editable = ({
                   )}
                   {!loading && (
                     <DefaultResolverButton
-                      onClick={e => {
+                      onClick={(e) => {
                         e.preventDefault()
                         updateValue(data.publicResolver.address)
                       }}
@@ -670,10 +647,10 @@ const Editable = ({
                     domain,
                     variableName,
                     newValue,
-                    duration
+                    duration,
                   })
                   mutation({
-                    variables
+                    variables,
                   })
                 }}
                 value={
@@ -705,7 +682,7 @@ function ViewOnly({
   isDeedOwner,
   domain,
   isExpiredRegistrant,
-  copyToClipboard
+  copyToClipboard,
 }) {
   const { t } = useTranslation()
   //get default messages for 0x values
@@ -715,7 +692,7 @@ function ViewOnly({
       parent: domain.parent,
       deedOwner,
       isDeedOwner,
-      t
+      t,
     })
 
     value = newValue

@@ -11,7 +11,7 @@ import QuestionMark from '../Icons/QuestionMark'
 import {
   checkIsDecrypted,
   truncateUndecryptedName,
-  parseName
+  parseName,
 } from '../../api/labels'
 import ExpiryDate from './ExpiryDate'
 import { useMutation } from '@apollo/client'
@@ -19,8 +19,6 @@ import Bin from '../Forms/Bin'
 import { useEditable } from '../hooks'
 import PendingTx from '../PendingTx'
 import AddFavourite from '../AddFavourite/AddFavourite'
-
-import warningImage from '../../assets/warning.svg'
 
 const ChildDomainItemContainer = styled('div')`
   padding: 16px 0;
@@ -34,7 +32,7 @@ const DomainLink = styled(Link)`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  background-color: ${props => (props.warning ? 'hsla(37,91%,55%,0.1)' : '')};
+  background-color: ${(props) => (props.warning ? 'hsla(37,91%,55%,0.1)' : '')};
   color: #2b2b2b;
   font-size: 22px;
   font-weight: 100;
@@ -52,7 +50,7 @@ const DomainLink = styled(Link)`
     color: #379070;
   }
 
-  ${p =>
+  ${(p) =>
     p.isInvalid &&
     `
     h3 {
@@ -146,7 +144,7 @@ export default function ChildDomainItem({
   showBlockies = true,
   canDeleteSubdomain,
   refetch,
-  hasInvalidCharacter
+  hasInvalidCharacter,
 }) {
   const { state, actions } = useEditable()
   const { txHash, pending, confirmed } = state
@@ -160,14 +158,14 @@ export default function ChildDomainItem({
   if (isMigrated === false)
     label = label + ` (${t('childDomainItem.notmigrated')})`
   const [mutate] = useMutation(DELETE_SUBDOMAIN, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (Object.values(data)[0]) {
         startPending(Object.values(data)[0])
       }
     },
     variables: {
-      name: parseName(name)
-    }
+      name: parseName(name),
+    },
   })
 
   return (
@@ -184,12 +182,8 @@ export default function ChildDomainItem({
         <React.Fragment>
           {hasInvalidCharacter && (
             <WarningContainer>
-              <WarningImg
-                src={warningImage}
-                onClick={e => e.preventDefault()}
-              />
               <span>
-                <span onClick={e => e.preventDefault()}>
+                <span onClick={(e) => e.preventDefault()}>
                   This name is invalid.{' '}
                 </span>
                 <a href="https://docs.ens.domains/frequently-asked-questions#what-about-foreign-characters-what-about-upper-case-letters-is-any-unicode-character-valid">
@@ -223,9 +217,9 @@ export default function ChildDomainItem({
                       <Checkbox
                         testid={`checkbox-${name}`}
                         checked={checkedBoxes[name]}
-                        onClick={e => {
+                        onClick={(e) => {
                           e.preventDefault()
-                          setCheckedBoxes(prevState => {
+                          setCheckedBoxes((prevState) => {
                             return { ...prevState, [name]: !prevState[name] }
                           })
                           if (checkedBoxes[name]) {
@@ -242,7 +236,7 @@ export default function ChildDomainItem({
               {canDeleteSubdomain ? (
                 <Bin
                   data-testid={'delete-name'}
-                  onClick={e => {
+                  onClick={(e) => {
                     e.preventDefault()
                     mutate()
                   }}
@@ -291,9 +285,9 @@ export default function ChildDomainItem({
                   <Checkbox
                     testid={`checkbox-${name}`}
                     checked={checkedBoxes[name]}
-                    onClick={e => {
+                    onClick={(e) => {
                       e.preventDefault()
-                      setCheckedBoxes(prevState => {
+                      setCheckedBoxes((prevState) => {
                         return { ...prevState, [name]: !prevState[name] }
                       })
                       if (checkedBoxes[name]) {
