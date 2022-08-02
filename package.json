@@ -57,6 +57,7 @@
     "node-sass": "^7.0.1",
     "notification-polyfill": "^1.0.0",
     "postcss-normalize": "^10.0.1",
+    "prettier": "^2.7.1",
     "react": "17.0.0",
     "react-add-to-calendar-hoc": "^1.0.9",
     "react-click-away-listener": "^2.2.1",
@@ -116,13 +117,8 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "cacheBust": "node cacheBust.js",
     "lint": "eslint src",
-    "lint:fix": "eslint --fix src "
-  },
-  "prettier": {
-    "semi": false,
-    "editor.formatOnSave": true,
-    "singleQuote": true,
-    "trailingComma": "none"
+    "lint:fix": "eslint --fix src ",
+    "pretty": "prettier --write ."
   },
   "husky": {
     "hooks": {
@@ -156,7 +152,6 @@
     "jest-localstorage-mock": "^2.4.0",
     "postcss": "^8.4.13",
     "postcss-cli": "^9.1.0",
-    "prettier": "1.17.0",
     "pretty-quick": "^1.10.0",
     "react-testing-library": "^3.0.2",
     "replace-in-file": "6.2.0",

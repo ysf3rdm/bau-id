@@ -82,3 +82,55 @@ input[type='number'] {
     background: linear-gradient(180deg, #3d888d 0%, #2e4450 100%);
   }
 }
+.web3modal-modal-card {
+  display: grid !important;
+  column-gap: 20px !important;
+  grid-template-columns: 1fr 1fr !important;
+  background-color: #0e4549 !important;
+  padding: 34px !important;
+}
+
+.web3modal-provider-wrapper {
+  border: none !important;
+}
+
+.web3modal-provider-wrapper:first-child .web3modal-provider-container {
+  background-color: #f5841f !important;
+}
+
+.web3modal-provider-container {
+  display: flex !important;
+  flex-direction: row !important;
+  height: 72px;
+  padding: 16px !important;
+  background-color: #3b99fc !important;
+}
+
+.web3modal-provider-description {
+  display: none !important;
+}
+
+.web3modal-provider-name {
+  margin-top: 0 !important;
+  font-family: Urbanist;
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .web3modal-provider-wrapper {
+    padding: 0 !important;
+  }
+  .web3modal-modal-card {
+    grid-template-columns: 1fr !important;
+    padding: 24px !important;
+    gap: 20px !important;
+  }
+  .web3modal-provider-icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .web3modal-provider-name {
+    font-size: 20px !important;
+  }
+}

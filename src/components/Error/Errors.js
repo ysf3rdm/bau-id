@@ -52,12 +52,6 @@ export const InvalidCharacterError = ({ message }) => (
   </ErrorContainer>
 )
 
-export const Error404 = () => (
-  <ErrorContainer>
-    <Message>
-      <Warning src={warningImage} />
-      <H2>404</H2>
-      We couldn't find what you were looking for!
-    </Message>
-  </ErrorContainer>
-)
+const Error404 = () => <div>Error Page</div>
+
+export default Error404
