@@ -18,7 +18,7 @@ import {
   WAIT_BLOCK_TIMESTAMP,
   GET_BALANCE,
   GET_ETH_PRICE,
-  GET_PRICE_CURVE
+  GET_PRICE_CURVE,
 } from 'graphql/queries'
 import { useInterval, useGasPrice, useBlock } from 'components/hooks'
 import { useAccount } from '../../QueryAccount'
@@ -47,7 +47,7 @@ const NameRegister = ({
   refetch,
   refetchIsMigrated,
   readOnly,
-  registrationOpen
+  registrationOpen,
 }) => {
   const { t } = useTranslation()
   const [secret, setSecret] = useState(false)
@@ -80,21 +80,21 @@ const NameRegister = ({
   const [isAuctionWinner, setIsAuctionWinner] = useState(false)
   const [discountAmount, setDiscountAmount] = useState({
     percent: 0,
-    amount: 0
+    amount: 0,
   })
 
   const {
     data: { getEthPrice: ethUsdPrice } = {},
-    loading: ethUsdPriceLoading
+    loading: ethUsdPriceLoading,
   } = useQuery(GET_ETH_PRICE)
   const { data: { getPriceCurve } = {} } = useQuery(GET_PRICE_CURVE)
   const { loading: gasPriceLoading, price: gasPrice } = useGasPrice()
   const { block } = useBlock()
   const { data: { waitBlockTimestamp } = {} } = useQuery(WAIT_BLOCK_TIMESTAMP, {
     variables: {
-      waitUntil
+      waitUntil,
     },
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const { data: { transactionHistory } = {} } = useQuery(
@@ -121,7 +121,7 @@ const NameRegister = ({
     const fetchSignature = async () => {
       const result = await axios({
         method: 'get',
-        url: `https://backend.stg.space.id/merkleleaf?domain=${domain.label}`
+        url: `https://backend.stg.space.id/merkleleaf?domain=${domain.label}`,
       })
 
       setFreeDuration(result?.data?.data?.isaution ? 31536000 : 0)
@@ -134,18 +134,18 @@ const NameRegister = ({
             index: result?.data?.data?.index,
             owner: account,
             duration,
-            resolver: '0x0173201746b48A276154ca9f234F1A9Df456B02F', // FIXME this is not fixed
+            resolver: '0xc2fC8899F671A2DCDea6E7e544121EfDcd04dE9F', // FIXME this is not fixed
             addr: account, //Eth wallet of user connected with metamask
-            freeDuration: result?.data?.data?.isaution ? 31536000 : 0
-          }
-        ]
+            freeDuration: result?.data?.data?.isaution ? 31536000 : 0,
+          },
+        ],
       }
 
       const result1 = await axios({
         method: 'post',
         url: 'https://merkle.stg.space.id/getproof',
         headers: {},
-        data: params
+        data: params,
       })
 
       const proofs = result1?.data
@@ -162,13 +162,13 @@ const NameRegister = ({
 
   const { data: { getBalance } = {} } = useQuery(GET_BALANCE, {
     variables: { address: account },
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const { data: { getMaximumCommitmentAge } = {} } = useQuery(
     GET_MAXIMUM_COMMITMENT_AGE,
     {
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
     }
   )
 
@@ -189,9 +189,9 @@ const NameRegister = ({
         label: domain.label,
         secret,
         // Add this varialbe so that it keeps polling only during the timer is on
-        commitmentTimerRunning
+        commitmentTimerRunning,
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
     }
   )
 
@@ -214,7 +214,7 @@ const NameRegister = ({
     setSecondsPassed,
     commitmentExpirationDate,
     setCommitmentExpirationDate,
-    now
+    now,
   })
 
   useInterval(
@@ -259,20 +259,20 @@ const NameRegister = ({
       variables: {
         duration,
         label: domain.label,
-        commitmentTimerRunning
-      }
+        commitmentTimerRunning,
+      },
     }
   )
 
   const {
     data: { getRentPrice: getPremiumPrice } = {},
-    loading: getPremiumPriceLoading
+    loading: getPremiumPriceLoading,
   } = useQuery(GET_RENT_PRICE, {
     variables: {
       duration: 0,
       label: domain.label,
-      commitmentTimerRunning
-    }
+      commitmentTimerRunning,
+    },
   })
 
   useEffect(() => {
@@ -282,18 +282,18 @@ const NameRegister = ({
       if (domain.label.length === 3) {
         const tPrice = {
           amount: ethVal * 0.4,
-          percent: 40
+          percent: 40,
         }
         setDiscountAmount({ ...tPrice })
       } else if (domain.label.length === 4) {
         setDiscountAmount({
           amount: ethVal * 0.2,
-          percent: 20
+          percent: 20,
         })
       } else {
         setDiscountAmount({
           amount: 0,
-          percent: 0
+          percent: 0,
         })
       }
     }
