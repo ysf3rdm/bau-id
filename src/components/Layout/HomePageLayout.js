@@ -191,6 +191,10 @@ export default ({ children }) => {
     history.push('/profile')
   }
 
+  const moveToWishList = () => {
+    history.push('https://pre.stg.space.id/auction/wishlist')
+  }
+
   const showDrawer = () => {
     dispatch(toggleDrawer(true))
   }
@@ -348,7 +352,7 @@ export default ({ children }) => {
                       <NoAccountsDefault
                         onClick={connectProvider}
                         loadingWallet={loadingWallet}
-                        buttonText={isReadOnly ? t('c.connect') : network}
+                        buttonText={isReadOnly ? 'Connect' : network}
                         isReadOnly={isReadOnly}
                       />
                     </div>
@@ -438,14 +442,12 @@ export default ({ children }) => {
                       className="font-semibold text-white font-urbanist text-[18px] text-center pt-4"
                       onClick={showAvatarPopup}
                     >
-                      <a
-                        href="https://pre.stg.space.id/auction/wishlist"
-                        className="visited:text-white"
+                      <div
+                        onClick={moveToWishList}
+                        className="hidden md:flex font-semibold h-[40px] items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
                       >
-                        <div className="hidden md:flex font-semibold h-[40px] items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]">
-                          Wishlist
-                        </div>
-                      </a>
+                        Wishlist
+                      </div>
                       <div
                         className="hidden md:flex font-semibold h-[40px] items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
                         onClick={moveToProfile}
