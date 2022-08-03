@@ -10,7 +10,8 @@ const EthRegistrationGasPrice = ({
   ethUsdPrice,
   gasPrice,
   name,
-  discount
+  discount,
+  years
 }) => {
   const ethVal = new EthVal(`${price || 0}`).toEth()
   const registerGasSlow = new EthVal(`${TOGAL_GAS_WEI * gasPrice.slow}`).toEth()
@@ -29,28 +30,43 @@ const EthRegistrationGasPrice = ({
     <div>
       <div className="text-white py-[25px] border-y border-white border-dashed mt-6 px-6">
         <div className="flex justify-between">
-          <div className="font-semibold text-[14px]">Registration</div>
+          <div className="font-semibold text-[14px]">Registration Fee</div>
           <div className="font-bold text-[16px]">{ethVal.toFixed(3)} BNBT</div>
         </div>
+
+        {discount.amount !== 0 && (
+          <div className="flex justify-between mt-[14px] text-[#1EEFA4]">
+            <div className="font-semibold text-[14px]">Discount</div>
+            <div className="font-bold text-[16px]">-{discount.percent}%</div>
+          </div>
+        )}
+      </div>
+      <div className="text-white py-[25px] border-b border-white border-dashed px-6">
         <div className="flex justify-between mt-[14px]">
-          <div className="font-semibold text-[14px]">Gas Fee</div>
+          <div className="font-semibold text-[14px]">Gas Fee (Estimated)</div>
           <div className="font-bold text-[16px]">
             {registerGasFast.toFixed(3)} BNBT
           </div>
         </div>
-        {discount !== 0 && (
-          <div className="flex justify-between mt-[14px]">
-            <div className="font-semibold text-[14px]">Discount</div>
-            <div className="font-bold text-[16px]">
-              {discount.toFixed(3)} BNBT
-            </div>
-          </div>
-        )}
       </div>
       <div className="text-center text-white mt-6">
-        <div className="text-[14px]">{name}</div>
-        <div className="font-bold text-[36px]">
-          ${totalInUsdFast?.toFixed(2) ?? 0}
+        <div className="text-[14px] leading-[22px] font-urbanist">
+          Total Cost
+        </div>
+        {discount.percent !== 0 && years !== 1 && (
+          <div className="font-bold text-[36px] text-white text-[24px] line-through heading-[34px]">
+            {registerGasFast
+              .add(ethVal / (1 - discount.percent / 100))
+              .toFixed(3)
+              .toString()}{' '}
+            BNB
+          </div>
+        )}
+        <div className="font-bold text-[36px] text-[#1EEFA4] italic">
+          {totalFast.toFixed(3).toString()} BNB
+        </div>
+        <div className="text-[14px] font-urbanist text-white leading-[22px]">
+          (${totalInUsdFast.toFixed(3)})
         </div>
       </div>
     </div>

@@ -2,20 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled/macro'
 
 import { emptyAddress } from '../../utils/utils'
-import DefaultInput from '../Forms/Input'
-
-const Input = styled(DefaultInput)`
-  width: 100%;
-  ${p =>
-    p.hasBeenUpdated
-      ? `
-    input {
-      border: #5284FF solid 1px;
-    }
-    
-  `
-      : ''}
-`
 
 const RecordInput = ({
   onChange,
@@ -26,7 +12,7 @@ const RecordInput = ({
   contentType,
   placeholder,
   hasBeenUpdated,
-  testId
+  testId,
 }) => {
   return (
     <Input

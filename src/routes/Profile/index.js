@@ -24,7 +24,6 @@ import { toggleDrawer } from 'app/slices/uiSlice'
 import { setSelectedDomain } from 'app/slices/domainSlice'
 
 //Import Assets
-// import LogoText from '../../assets/images/space-logo-text.png'
 import LogoText from '../../assets/images/space-logo-text.png'
 
 export const HOME_DATA = gql`
@@ -46,14 +45,14 @@ export default function Profile() {
   const history = useHistory()
 
   const account = useAccount()
-  const selectedDomain = useSelector(state => state.domain.selectedDomain)
-  const isShowDrawer = useSelector(state => state.ui.isShowDrawer)
-  const domains = useSelector(state => state.domain.domains)
+  const selectedDomain = useSelector((state) => state.domain.selectedDomain)
+  const isShowDrawer = useSelector((state) => state.ui.isShowDrawer)
+  const domains = useSelector((state) => state.domain.domains)
 
   const { data } = useQuery(HOME_DATA, {
     variables: {
-      address: account
-    }
+      address: account,
+    },
   })
 
   const { displayName, isReadOnly, isSafeApp, network } = data
@@ -85,11 +84,11 @@ export default function Profile() {
     dispatch(setSelectedDomain(domain))
   }
 
-  useEffect(() => {
-    if (domains && domains.length === 0 && !selectedDomain) {
-      history.push('/')
-    }
-  }, [domains, selectedDomain])
+  // useEffect(() => {
+  //   if (domains && domains.length === 0 && !selectedDomain) {
+  //     history.push('/')
+  //   }
+  // }, [domains, selectedDomain])
 
   return (
     <div className="my-[86px]">

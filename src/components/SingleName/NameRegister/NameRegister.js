@@ -77,7 +77,11 @@ const NameRegister = ({
   const [registering, setRegistering] = useState(false)
   const [transactionHash, setTransactionHash] = useState('')
   const [signature, setSignature] = useState([])
-  const [discountAmount, setDiscountAmount] = useState(0)
+  const [isAuctionWinner, setIsAuctionWinner] = useState(false)
+  const [discountAmount, setDiscountAmount] = useState({
+    percent: 0,
+    amount: 0
+  })
 
   const {
     data: { getEthPrice: ethUsdPrice } = {},
@@ -145,8 +149,12 @@ const NameRegister = ({
       })
 
       const proofs = result1?.data
-      if (proofs) {
+      if (proofs && proofs.length > 0) {
         setSignature(proofs)
+        setIsAuctionWinner(true)
+      } else {
+        setSignature([])
+        isAuctionWinner(false)
       }
     }
     fetchSignature()
@@ -241,8 +249,9 @@ const NameRegister = ({
     commitmentTimerRunning ? 1000 : null
   )
 
-  const parsedYears = parseFloat(years)
-  const duration = calculateDuration(years)
+  const parsedYears = parseFloat(isAuctionWinner ? years - 1 : years)
+
+  const duration = calculateDuration(isAuctionWinner ? years - 1 : years)
 
   const { data: { getRentPrice } = {}, loading: rentPriceLoading } = useQuery(
     GET_RENT_PRICE,
@@ -271,11 +280,21 @@ const NameRegister = ({
     if (getRentPrice) {
       const ethVal = new EthVal(`${getRentPrice || 0}`).toEth()
       if (domain.label.length === 3) {
-        setDiscountAmount(ethVal * 0.4)
+        const tPrice = {
+          amount: ethVal * 0.4,
+          percent: 40
+        }
+        setDiscountAmount({ ...tPrice })
       } else if (domain.label.length === 4) {
-        setDiscountAmount(ethVal * 0.2)
+        setDiscountAmount({
+          amount: ethVal * 0.2,
+          percent: 20
+        })
       } else {
-        setDiscountAmount(0)
+        setDiscountAmount({
+          amount: 0,
+          percent: 0
+        })
       }
     }
   }, [getRentPrice])
@@ -359,6 +378,8 @@ const NameRegister = ({
                 underPremium={underPremium}
                 displayGas={true}
                 discount={discountAmount}
+                signature={signature}
+                isAuctionWinner={isAuctionWinner}
               />
             )}
           </div>
