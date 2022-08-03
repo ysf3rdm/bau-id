@@ -1,7 +1,7 @@
 // Import packages
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { useQuery, gql } from '@apollo/client'
 import { useTranslation } from 'react-i18next'
 import { getNetworkId } from 'ui'
@@ -35,6 +35,7 @@ import { toggleDrawer, toggleNetworkError } from 'app/slices/uiSlice'
 import { globalErrorReactive } from 'apollo/reactiveVars'
 
 // Import assets
+import DefaultAvatar from 'assets/images/default-avatar.png'
 
 // Import custom functions
 import { connectProvider, disconnectProvider } from 'utils/providerUtils'
@@ -251,7 +252,7 @@ export default ({ children }) => {
           {/* Only showing for the desktop device */}
           <a
             href="/"
-            className="hidden lg:flex text-[#1EEFA4] items-center cursor-pointer visited:text-[#1EEFA4]"
+            className="hidden lg:flex text-[#1EEFA4] items-center cursor-pointer"
           >
             <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
             <div className="hidden lg:block font-semibold text-[18px] ml-[31px]">
@@ -332,14 +333,15 @@ export default ({ children }) => {
             <div className="relative">
               {!isSafeApp && (
                 <div className="mt-0 w-full md:w-auto flex items-center">
-                  {location.pathname !== '/' && (
+                  {/* //TODO should show in the public registration */}
+                  {/* {location.pathname !== '/' && (
                     <Search
                       className="mr-4 xl:w-[400px] hidden md:block"
                       errorShowing={true}
                       isShowSearchBtn={true}
                       errorsStyling={true}
                     />
-                  )}
+                  )} */}
 
                   {isReadOnly && (
                     <div className="hidden md:block">
@@ -380,11 +382,11 @@ export default ({ children }) => {
                             )}
                           />
                         ) : (
-                          <div className="w-[44px] h-[44px]">
-                            <UnstyledBlockies
-                              className="rounded-full w-full h-full"
-                              address={accounts[0]}
-                              imageSize={45}
+                          <div className="w-[44px] h-[44px] rounded-full">
+                            <img
+                              className="rounded-full"
+                              src={DefaultAvatar}
+                              alt="default avatar"
                             />
                           </div>
                         )}
@@ -416,10 +418,10 @@ export default ({ children }) => {
                           />
                         ) : (
                           <div className="w-[64px] h-[64px]">
-                            <UnstyledBlockies
-                              className="rounded-full w-full h-full"
-                              address={accounts[0]}
-                              imageSize={64}
+                            <img
+                              className="rounded-full"
+                              src={DefaultAvatar}
+                              alt="default avatar"
                             />
                           </div>
                         )}
@@ -436,6 +438,14 @@ export default ({ children }) => {
                       className="font-semibold text-white font-urbanist text-[18px] text-center pt-4"
                       onClick={showAvatarPopup}
                     >
+                      <a
+                        href="https://pre.stg.space.id/auction/wishlist"
+                        className="visited:text-white"
+                      >
+                        <div className="hidden md:flex font-semibold h-[40px] items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]">
+                          Wishlist
+                        </div>
+                      </a>
                       <div
                         className="hidden md:flex font-semibold h-[40px] items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
                         onClick={moveToProfile}
