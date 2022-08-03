@@ -145,7 +145,7 @@ export default function MobileMenu({
   network,
   displayName,
   isSafeApp,
-  menuOpen
+  menuOpen,
 }) {
   const { t } = useTranslation()
   return (
@@ -195,7 +195,7 @@ export default function MobileMenu({
             <NoAccounts
               active={isReadOnly ? false : true}
               onClick={isReadOnly ? connectProvider : disconnectProvider}
-              buttonText={isReadOnly ? t('c.connect') : t('c.disconnect')}
+              buttonText={isReadOnly ? 'Connect' : 'Disconnect'}
             />
           )}
         </ConnectButtonContainer>
