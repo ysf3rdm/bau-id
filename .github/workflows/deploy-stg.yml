@@ -25,8 +25,8 @@ jobs:
           folder: 'dist'
           bucket: 'stg-app-baseurl-space-id'
           bucket-region: 'us-west-2'
-          dist-id: 'E2R5GONZT2GASZ'
-          invalidation: / /app/
+          dist-id: 'ESH7K4VJTGCUU'
+          invalidation: /app/
           delete-removed: true
           no-cache: false
           private: true
