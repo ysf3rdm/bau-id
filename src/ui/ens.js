@@ -4,7 +4,7 @@ import { utils } from 'ethers'
 import {
   getENSContract,
   getResolverContract,
-  getReverseRegistrarContract
+  getReverseRegistrarContract,
 } from './contracts'
 import { decryptHashes } from './preimage'
 import {
@@ -14,7 +14,7 @@ import {
   labelhash,
   mergeLabels,
   namehash,
-  uniq
+  uniq,
 } from './utils'
 import { decodeContenthash, encodeContenthash } from './utils/contents'
 import { encodeLabelhash } from './utils/labelhash'
@@ -23,7 +23,7 @@ import {
   getNetworkId,
   getProvider,
   getSigner,
-  getWeb3
+  getWeb3,
 } from './web3'
 
 /* Utils */
@@ -43,8 +43,8 @@ function getLabelhash(label) {
 
 const contracts = {
   97: {
-    registry: '0x60fcB83fAd91335EBf6e9bB81d79b973bf3DA3e2'
-  }
+    registry: process.env.REACT_APP_REGISTRY_ADDRESS,
+  },
 }
 
 export class ENS {
@@ -108,7 +108,7 @@ export class ENS {
       const provider = await getProvider()
       const Resolver = getResolverContract({
         address: resolverAddr,
-        provider
+        provider,
       })
       const addr = await Resolver['addr(bytes32)'](namehash)
       return addr
@@ -137,7 +137,7 @@ export class ENS {
       const provider = await getProvider()
       const Resolver = getResolverContract({
         address: resolverAddr,
-        provider
+        provider,
       })
       const { coinType, encoder } = formatsByName[key]
       const addr = await Resolver['addr(bytes32,uint256)'](namehash, coinType)
@@ -167,7 +167,7 @@ export class ENS {
       const provider = await getProvider()
       const Resolver = getResolverContract({
         address: resolverAddr,
-        provider
+        provider,
       })
       const contentHashSignature = utils
         .solidityKeccak256(['string'], ['contenthash(bytes32)'])
@@ -183,18 +183,18 @@ export class ENS {
         if (error) {
           return {
             value: error,
-            contentType: 'error'
+            contentType: 'error',
           }
         }
         return {
           value: `${protocolType}://${decoded}`,
-          contentType: 'contenthash'
+          contentType: 'contenthash',
         }
       } else {
         const value = await Resolver.content(namehash)
         return {
           value,
-          contentType: 'oldcontent'
+          contentType: 'oldcontent',
         }
       }
     } catch (e) {
@@ -219,7 +219,7 @@ export class ENS {
       const provider = await getProvider()
       const Resolver = getResolverContract({
         address: resolverAddr,
-        provider
+        provider,
       })
       const addr = await Resolver.text(namehash, key)
       return addr
@@ -242,7 +242,7 @@ export class ENS {
     const reverseNamehash = getNamehash(reverseNode)
     if (parseInt(resolverAddr, 16) === 0) {
       return {
-        name: null
+        name: null,
       }
     }
 
@@ -250,11 +250,11 @@ export class ENS {
       const provider = await getProvider()
       const Resolver = getResolverContract({
         address: resolverAddr,
-        provider
+        provider,
       })
       const name = await Resolver.name(reverseNamehash)
       return {
-        name
+        name,
       }
     } catch (e) {
       console.log(`Error getting name for reverse record of ${address}`, e)
@@ -275,14 +275,14 @@ export class ENS {
         ...node,
         addr,
         content: content.value,
-        contentType: content.contentType
+        contentType: content.contentType,
       }
     } catch (e) {
       return {
         ...node,
         addr: '0x0',
         content: '0x0',
-        contentType: 'error'
+        contentType: 'error',
       }
     }
   }
@@ -292,27 +292,30 @@ export class ENS {
     const namehash = getNamehash(name)
     const rawLogs = await this.getENSEvent('NewOwner', {
       topics: [namehash],
-      fromBlock: startBlock
+      fromBlock: startBlock,
     })
-    const flattenedLogs = rawLogs.map(log => log.values)
+    const flattenedLogs = rawLogs.map((log) => log.values)
     flattenedLogs.reverse()
     const logs = uniq(flattenedLogs, 'label')
-    const labelhashes = logs.map(log => log.label)
+    const labelhashes = logs.map((log) => log.label)
     const remoteLabels = await decryptHashes(...labelhashes)
     const localLabels = checkLabels(...labelhashes)
     const labels = mergeLabels(localLabels, remoteLabels)
-    const ownerPromises = labels.map(label => this.getOwner(`${label}.${name}`))
+    const ownerPromises = labels.map((label) =>
+      this.getOwner(`${label}.${name}`)
+    )
 
-    return Promise.all(ownerPromises).then(owners =>
+    return Promise.all(ownerPromises).then((owners) =>
       owners.map((owner, index) => {
         return {
           label: labels[index],
           labelhash: logs[index].label,
           decrypted: labels[index] !== null,
           node: name,
-          name: `${labels[index] ||
-            encodeLabelhash(logs[index].label)}.${name}`,
-          owner
+          name: `${
+            labels[index] || encodeLabelhash(logs[index].label)
+          }.${name}`,
+          owner,
         }
       })
     )
@@ -323,14 +326,14 @@ export class ENS {
     const labelhash = getLabelhash(nameArray[0])
     const [owner, resolver] = await Promise.all([
       this.getOwner(name),
-      this.getResolver(name)
+      this.getResolver(name),
     ])
     const node = {
       name,
       label: nameArray[0],
       labelhash,
       owner,
-      resolver
+      resolver,
     }
 
     const hasResolver = parseInt(node.resolver, 16) !== 0
@@ -342,7 +345,7 @@ export class ENS {
     return {
       ...node,
       addr: null,
-      content: null
+      content: null,
     }
   }
 
@@ -405,7 +408,7 @@ export class ENS {
     const provider = await getProvider()
     const ResolverWithoutSigner = getResolverContract({
       address: resolverAddr,
-      provider
+      provider,
     })
     const signer = await getSigner()
     const Resolver = ResolverWithoutSigner.connect(signer)
@@ -422,7 +425,7 @@ export class ENS {
     const provider = await getProvider()
     const ResolverWithoutSigner = getResolverContract({
       address: resolverAddr,
-      provider
+      provider,
     })
     const signer = await getSigner()
     const Resolver = ResolverWithoutSigner.connect(signer)
@@ -450,7 +453,7 @@ export class ENS {
     const provider = await getProvider()
     const ResolverWithoutSigner = getResolverContract({
       address: resolverAddr,
-      provider
+      provider,
     })
     const signer = await getSigner()
     const Resolver = ResolverWithoutSigner.connect(signer)
@@ -471,7 +474,7 @@ export class ENS {
     const provider = await getProvider()
     const ResolverWithoutSigner = getResolverContract({
       address: resolverAddr,
-      provider
+      provider,
     })
     const signer = await getSigner()
     const Resolver = ResolverWithoutSigner.connect(signer)
@@ -488,7 +491,7 @@ export class ENS {
     const provider = await getProvider()
     const ResolverWithoutSigner = getResolverContract({
       address: resolverAddr,
-      provider
+      provider,
     })
     const signer = await getSigner()
     const Resolver = ResolverWithoutSigner.connect(signer)
@@ -518,7 +521,7 @@ export class ENS {
     const provider = await getProvider(0)
     const reverseRegistrarWithoutSigner = getReverseRegistrarContract({
       address: reverseRegistrarAddr,
-      provider
+      provider,
     })
     const signer = await getSigner()
     const reverseRegistrar = reverseRegistrarWithoutSigner.connect(signer)
@@ -528,7 +531,7 @@ export class ENS {
       const gasLimit = await reverseRegistrar.estimateGas.setName(name)
       overrides = {
         gasLimit: gasLimit.toNumber() * 2,
-        ...overrides
+        ...overrides,
       }
     }
     return reverseRegistrar.setName(name, overrides)
@@ -541,7 +544,7 @@ export class ENS {
     const resolverAddr = await this.getResolver(reverseNode)
     const ResolverWithoutSigner = getResolverContract({
       address: resolverAddr,
-      provider
+      provider,
     })
     const signer = await getSigner()
     const Resolver = ResolverWithoutSigner.connect(signer)
@@ -561,12 +564,12 @@ export class ENS {
       fromBlock,
       toBlock: 'latest',
       address: Event.address,
-      topics: [...Event.topics, ...topics]
+      topics: [...Event.topics, ...topics],
     }
 
     const logs = await provider.getLogs(filter)
 
-    const parsed = logs.map(log => {
+    const parsed = logs.map((log) => {
       const parsedLog = ensInterface.parseLog(log)
       return parsedLog
     })
