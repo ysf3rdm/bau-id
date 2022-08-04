@@ -8,17 +8,24 @@ const Price = ({
   price,
   ethUsdPrice,
   ethUsdPremiumPrice,
-  underPremium
+  underPremium,
+  discount,
+  years,
 }) => {
+  console.log('discount', discount)
+  console.log('years', years)
   let ethPrice = <InlineLoader />
   let withPremium, c
   if (!loading && price) {
     c = priceCalculator({
       price, // in ETH, BN
       premium: price, // in ETH
-      ethUsdPrice
+      ethUsdPrice,
     })
-    ethPrice = c.price
+    ethPrice =
+      years === 1
+        ? c.price
+        : (c.price / (1 - discount.percent / 100)).toFixed(3)
     if (underPremium) {
       withPremium =
         underPremium && ethUsdPremiumPrice
