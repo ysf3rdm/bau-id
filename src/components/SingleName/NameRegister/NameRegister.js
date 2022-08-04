@@ -69,8 +69,9 @@ const NameRegister = ({
   const [waitUntil, setWaitUntil] = useState(null)
   const [targetDate, setTargetDate] = useState(false)
   const [targetPremium, setTargetPremium] = useState(false)
-  const [commitmentExpirationDate, setCommitmentExpirationDate] =
-    useState(false)
+  const [commitmentExpirationDate, setCommitmentExpirationDate] = useState(
+    false
+  )
   const [freeDuration, setFreeDuration] = useState(0)
   const [index, setIndex] = useState(0)
   const [registering, setRegistering] = useState(false)
@@ -123,7 +124,7 @@ const NameRegister = ({
         url: `https://backend.stg.space.id/merkleleaf?domain=${domain.label}`,
       })
 
-      setFreeDuration(result?.data?.data?.isaution ? 31536000 : 0)
+      setFreeDuration(result?.data?.data?.isaution ? 31556952 : 0)
       setIndex(result?.data?.data?.index)
 
       console.log('this is the result of the merkleleaf', result)
@@ -142,7 +143,7 @@ const NameRegister = ({
             duration,
             resolver: '0xc2fC8899F671A2DCDea6E7e544121EfDcd04dE9F', // FIXME this is not fixed
             addr: account, //Eth wallet of user connected with metamask
-            freeDuration: result?.data?.data?.isaution ? 31536000 : 0,
+            freeDuration: result?.data?.data?.isaution ? 31556952 : 0,
           },
         ],
       }
@@ -227,7 +228,7 @@ const NameRegister = ({
         setWaitUntil(blockCreatedAt + waitTime * 1000)
       }
       if (secondsPassed < waitTime) {
-        setSecondsPassed((s) => s + 1)
+        setSecondsPassed(s => s + 1)
       } else {
         if (waitBlockTimestamp && timerRunning) {
           incrementStep()
@@ -546,7 +547,7 @@ const NameRegister = ({
   )
 }
 
-const NameRegisterDataWrapper = (props) => {
+const NameRegisterDataWrapper = props => {
   const { data, loading, error } = useQuery(GET_MINIMUM_COMMITMENT_AGE)
 
   if (loading) return <AnimationSpin size={40} />

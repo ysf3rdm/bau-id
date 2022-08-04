@@ -11,7 +11,7 @@ import {
   getPermanentRegistrarControllerContract,
   getResolverContract,
   getTestRegistrarContract,
-  getOracleContract
+  getOracleContract,
 } from './contracts'
 import DNSRegistrarJS from './dnsregistrar'
 import { isEncodedLabelhash, labelhash } from './utils/labelhash'
@@ -21,7 +21,7 @@ import {
   getBlock,
   getNetworkId,
   getProvider,
-  getSigner
+  getSigner,
 } from './web3'
 
 const {
@@ -30,7 +30,7 @@ const {
   bulkRenewal: bulkRenewalInterfaceId,
   dnsRegistrar: dnsRegistrarInterfaceId,
   dnssecClaimOld: dnssecClaimOldId,
-  dnssecClaimNew: dnssecClaimNewId
+  dnssecClaimNew: dnssecClaimNewId,
 } = interfaces
 
 // Renewal seem failing as it's not correctly estimating gas to return when buffer exceeds the renewal cost
@@ -40,7 +40,7 @@ function checkArguments({
   registryAddress,
   ethAddress,
   legacyAuctionRegistrarAddress,
-  provider
+  provider,
 }) {
   if (!registryAddress) throw 'No registry address given to Registrar class'
 
@@ -68,33 +68,33 @@ export default class Registrar {
     legacyAuctionRegistrarAddress,
     controllerAddress,
     bulkRenewalAddress,
-    provider
+    provider,
   }) {
     checkArguments({
       registryAddress,
       ethAddress,
       legacyAuctionRegistrarAddress,
-      provider
+      provider,
     })
 
     const permanentRegistrar = getPermanentRegistrarContract({
       address: ethAddress,
-      provider
+      provider,
     })
     const permanentRegistrarController = getPermanentRegistrarControllerContract(
       {
         address: controllerAddress,
-        provider
+        provider,
       }
     )
     const legacyAuctionRegistrar = getLegacyAuctionContract({
       address: legacyAuctionRegistrarAddress,
-      provider
+      provider,
     })
 
     const bulkRenewal = getBulkRenewalContract({
       address: bulkRenewalAddress,
-      provider
+      provider,
     })
 
     const ENS = getENSContract({ address: registryAddress, provider })
@@ -149,7 +149,7 @@ export default class Registrar {
         registrationDate: parseInt(entry[2]) * 1000,
         revealDate: (parseInt(entry[2]) - 24 * 2 * 60 * 60) * 1000,
         value: parseInt(entry[3]),
-        highestBid: parseInt(entry[4])
+        highestBid: parseInt(entry[4]),
       }
     } catch (e) {
       legacyEntry = {
@@ -160,7 +160,7 @@ export default class Registrar {
         value: 0,
         highestBid: 0,
         expiryTime: 0,
-        error: e.message
+        error: e.message,
       }
     }
     return legacyEntry
@@ -169,13 +169,13 @@ export default class Registrar {
   async getPermanentEntry(label) {
     const {
       permanentRegistrar: Registrar,
-      permanentRegistrarController: RegistrarController
+      permanentRegistrarController: RegistrarController,
     } = this
 
     let getAvailable
     let ret = {
       available: null,
-      nameExpires: null
+      nameExpires: null,
     }
     try {
       const labelHash = labelhash(label)
@@ -190,14 +190,14 @@ export default class Registrar {
       const [available, nameExpires, gracePeriod] = await Promise.all([
         getAvailable,
         Registrar.nameExpires(labelHash),
-        this.getGracePeriod(Registrar)
+        this.getGracePeriod(Registrar),
       ])
 
       ret = {
         ...ret,
         available,
         gracePeriod,
-        nameExpires: nameExpires > 0 ? new Date(nameExpires * 1000) : null
+        nameExpires: nameExpires > 0 ? new Date(nameExpires * 1000) : null,
       }
       // Returns registrar address if owned by new registrar.
       // Keep it as a separate call as this will throw exception for non existing domains
@@ -216,7 +216,7 @@ export default class Registrar {
     let [block, legacyEntry, permEntry] = await Promise.all([
       getBlock(),
       this.getLegacyEntry(label),
-      this.getPermanentEntry(label)
+      this.getPermanentEntry(label),
     ])
 
     let ret = {
@@ -224,7 +224,7 @@ export default class Registrar {
       registrant: 0,
       transferEndDate: null,
       isNewRegistrar: false,
-      gracePeriodEndDate: null
+      gracePeriodEndDate: null,
     }
 
     if (permEntry) {
@@ -250,7 +250,7 @@ export default class Registrar {
 
     return {
       ...legacyEntry,
-      ...ret
+      ...ret,
     }
   }
 
@@ -278,7 +278,7 @@ export default class Registrar {
         ](account, to, labelHash)
         overrides = {
           ...overrides,
-          gasLimit: gas.toNumber() * 2
+          gasLimit: gas.toNumber() * 2,
         }
       }
       return Registrar['safeTransferFrom(address,address,uint256)'](
@@ -306,12 +306,12 @@ export default class Registrar {
 
         overrides = {
           ...overrides,
-          gasLimit: gas.toNumber() * 2
+          gasLimit: gas.toNumber() * 2,
         }
       }
 
       return Registrar.reclaim(labelHash, address, {
-        ...overrides
+        ...overrides,
       })
     } catch (e) {
       console.log('Error calling reclaim', e)
@@ -443,7 +443,7 @@ export default class Registrar {
         return permanentRegistrarController.estimateGas.registerWithConfig(
           label,
           account,
-          duration,
+          duration + freeDuration,
           freeDuration,
           resolverAddr,
           account,
@@ -456,7 +456,7 @@ export default class Registrar {
       return permanentRegistrarController.registerWithConfig(
         label,
         account,
-        duration,
+        duration + freeDuration,
         freeDuration,
         resolverAddr,
         account,
@@ -498,12 +498,12 @@ export default class Registrar {
     const priceWithBuffer = getBufferedPrice(price)
     const gasLimit = await this.estimateGasLimit(() => {
       return permanentRegistrarController.estimateGas.renew(label, duration, {
-        value: priceWithBuffer
+        value: priceWithBuffer,
       })
     })
     return permanentRegistrarController.renew(label, duration, {
       value: priceWithBuffer,
-      gasLimit
+      gasLimit,
     })
   }
 
@@ -515,12 +515,12 @@ export default class Registrar {
     const pricesWithBuffer = getBufferedPrice(prices)
     const gasLimit = await this.estimateGasLimit(() => {
       return bulkRenewal.estimateGas.renewAll(labels, duration, {
-        value: pricesWithBuffer
+        value: pricesWithBuffer,
       })
     })
     return bulkRenewal.renewAll(labels, duration, {
       value: pricesWithBuffer,
-      gasLimit
+      gasLimit,
     })
   }
 
@@ -553,7 +553,7 @@ export default class Registrar {
   async selectDnsRegistrarContract({ parentOwner, provider }) {
     let registrarContract = await getOldDnsRegistrarContract({
       parentOwner,
-      provider
+      provider,
     })
     let isOld = false,
       isNew = false
@@ -564,7 +564,7 @@ export default class Registrar {
       if (!isOld) {
         registrarContract = await getDnsRegistrarContract({
           parentOwner,
-          provider
+          provider,
         })
         isNew = await registrarContract['supportsInterface(bytes4)'](
           dnssecClaimNewId
@@ -582,7 +582,7 @@ export default class Registrar {
     const provider = await getProvider()
     const { isOld, registrarContract } = await this.selectDnsRegistrarContract({
       parentOwner,
-      provider
+      provider,
     })
     const oracleAddress = await registrarContract.oracle()
     const registrarjs = new DNSRegistrarJS(oracleAddress, isOld)
@@ -640,7 +640,7 @@ export default class Registrar {
     const owner = claim.getOwner()
     const {
       registrarContract: registrarWithoutSigner,
-      isOld
+      isOld,
     } = await this.selectDnsRegistrarContract({ parentOwner, provider })
 
     const signer = await getSigner()
@@ -674,7 +674,7 @@ export default class Registrar {
     const testAddress = await this.ENS.owner(namehash('test'))
     const registrarWithoutSigner = getTestRegistrarContract({
       address: testAddress,
-      provider
+      provider,
     })
     const signer = await getSigner()
     const hash = labelhash(label)
@@ -688,7 +688,7 @@ export default class Registrar {
     const testAddress = await this.ENS.owner(namehash('test'))
     const TestRegistrar = await getTestRegistrarContract({
       address: testAddress,
-      provider
+      provider,
     })
     const hash = labelhash(label)
     const result = await TestRegistrar.expiryTimes(hash)
@@ -731,6 +731,6 @@ export async function setupRegistrar(registryAddress) {
     ethAddress, // HashRegistrar
     controllerAddress, // BNBRegistrarController
     bulkRenewalAddress, // BulkRenewal
-    provider
+    provider,
   })
 }
