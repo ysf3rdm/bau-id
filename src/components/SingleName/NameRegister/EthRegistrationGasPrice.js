@@ -12,11 +12,10 @@ const EthRegistrationGasPrice = ({
   name,
   discount,
   years,
+  isAuctionWinner,
+  registrationFee,
 }) => {
   const ethVal = new EthVal(`${price || 0}`).toEth()
-  console.log('ethVal', ethVal)
-  const registrationFee =
-    years === 1 ? ethVal : ethVal / (1 - discount.percent / 100)
   const registerGasSlow = new EthVal(`${TOGAL_GAS_WEI * gasPrice.slow}`).toEth()
   const registerGasFast = new EthVal(`${TOGAL_GAS_WEI * gasPrice.fast}`).toEth()
   const totalSlow = ethVal.add(registerGasSlow)
@@ -58,7 +57,8 @@ const EthRegistrationGasPrice = ({
         <div className="text-[14px] leading-[22px] font-urbanist">
           Total Cost
         </div>
-        {discount.percent !== 0 && years !== 1 && (
+        {/* {discount.percent !== 0 && years !== 1 && ( */}
+        {!(isAuctionWinner && years === 1) && (
           <div className="font-bold text-[36px] text-white text-[24px] line-through heading-[34px]">
             {registerGasFast
               .add(ethVal / (1 - discount.percent / 100))
