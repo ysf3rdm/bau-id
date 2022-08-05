@@ -69,9 +69,8 @@ const NameRegister = ({
   const [waitUntil, setWaitUntil] = useState(null)
   const [targetDate, setTargetDate] = useState(false)
   const [targetPremium, setTargetPremium] = useState(false)
-  const [commitmentExpirationDate, setCommitmentExpirationDate] = useState(
-    false
-  )
+  const [commitmentExpirationDate, setCommitmentExpirationDate] =
+    useState(false)
   const [freeDuration, setFreeDuration] = useState(0)
   const [index, setIndex] = useState(0)
   const [registering, setRegistering] = useState(false)
@@ -121,13 +120,12 @@ const NameRegister = ({
     const fetchSignature = async () => {
       const result = await axios({
         method: 'get',
-        url: `https://backend.stg.space.id/merkleleaf?domain=${domain.label}`,
+        url: `${process.env.REACT_APP_BACKEND_URL}/merkleleaf?domain=${domain.label}`,
       })
 
       setFreeDuration(result?.data?.data?.isaution ? 31556952 : 0)
       setIndex(result?.data?.data?.index)
 
-      console.log('this is the result of the merkleleaf', result)
       if (result?.data?.data?.isaution) {
         setIsAuctionWinner(true)
       } else {
@@ -141,16 +139,18 @@ const NameRegister = ({
             index: result?.data?.data?.index,
             owner: account, //
             duration,
-            resolver: '0xc2fC8899F671A2DCDea6E7e544121EfDcd04dE9F', // FIXME this is not fixed
+            resolver: process.env.REACT_APP_RESOLVER_ADDRESS, // FIXME this is not fixed
             addr: account, //Eth wallet of user connected with metamask
             freeDuration: result?.data?.data?.isaution ? 31556952 : 0,
           },
         ],
       }
 
+      console.log('hey this is from env', process.env)
+
       const result1 = await axios({
         method: 'post',
-        url: 'https://merkle.stg.space.id/getproof',
+        url: `${process.env.REACT_APP_MERKLE_BASE_URL}/getproof`,
         headers: {},
         data: params,
       })
@@ -228,7 +228,7 @@ const NameRegister = ({
         setWaitUntil(blockCreatedAt + waitTime * 1000)
       }
       if (secondsPassed < waitTime) {
-        setSecondsPassed(s => s + 1)
+        setSecondsPassed((s) => s + 1)
       } else {
         if (waitBlockTimestamp && timerRunning) {
           incrementStep()
@@ -547,7 +547,7 @@ const NameRegister = ({
   )
 }
 
-const NameRegisterDataWrapper = props => {
+const NameRegisterDataWrapper = (props) => {
   const { data, loading, error } = useQuery(GET_MINIMUM_COMMITMENT_AGE)
 
   if (loading) return <AnimationSpin size={40} />

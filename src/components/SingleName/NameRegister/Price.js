@@ -11,9 +11,9 @@ const Price = ({
   underPremium,
   discount,
   years,
+  isAuctionWinner,
+  registrationFee,
 }) => {
-  console.log('discount', discount)
-  console.log('years', years)
   let ethPrice = <InlineLoader />
   let withPremium, c
   if (!loading && price) {
@@ -23,7 +23,7 @@ const Price = ({
       ethUsdPrice,
     })
     ethPrice =
-      years === 1
+      isAuctionWinner && years === 1
         ? c.price
         : (c.price / (1 - discount.percent / 100)).toFixed(3)
     if (underPremium) {
@@ -37,7 +37,7 @@ const Price = ({
   return (
     <div>
       <div className="w-[120px] md:w-[180px] h-[40px] flex justify-center items-center font-bold font-urbanist bg-[#C4C4C4]/20 text-white font-bold font-urbanist text-[18px] rounded-[8px]">
-        {ethPrice} <span>BNBT</span>
+        {registrationFee.toFixed(3)} <span>BNBT</span>
         {withPremium && (
           <span>
             {withPremium}${priceInUsd} USD
