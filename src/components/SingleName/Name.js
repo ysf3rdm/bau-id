@@ -6,7 +6,6 @@ import { EMPTY_ADDRESS } from '../../utils/records'
 import NameDetails from './NameDetails'
 import DNSNameRegister from './DNSNameRegister'
 import ShortName from './ShortName'
-import Tabs from './Tabs'
 import { isOwnerOfParentDomain } from '../../utils/utils'
 
 function isRegistrationOpen(available, parent) {
@@ -38,11 +37,11 @@ const NAME_REGISTER_DATA_WRAPPER = gql`
 export const useRefreshComponent = () => {
   const [key, setKey] = useState(0)
   const {
-    data: { accounts, networkId }
+    data: { accounts, networkId },
   } = useQuery(NAME_REGISTER_DATA_WRAPPER)
   const mainAccount = accounts?.[0]
   useEffect(() => {
-    setKey(x => x + 1)
+    setKey((x) => x + 1)
   }, [mainAccount, networkId])
   return key
 }
@@ -55,7 +54,7 @@ const NAME_QUERY = gql`
 
 function Name({ details: domain, name, pathname, type, refetch }) {
   const {
-    data: { accounts }
+    data: { accounts },
   } = useQuery(NAME_QUERY)
 
   const account = accounts?.[0]

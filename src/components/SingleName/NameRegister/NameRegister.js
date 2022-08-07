@@ -1,13 +1,14 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useQuery } from '@apollo/client'
 import cn from 'classnames'
 import moment from 'moment'
 import { useHistory } from 'react-router'
 import axios from 'axios'
 import last from 'lodash/last'
-import { connectProvider, disconnectProvider } from 'utils/providerUtils'
+import { connectProvider } from 'utils/providerUtils'
+import EthVal from 'ethval'
 
 import {
   CHECK_COMMITMENT,
@@ -17,16 +18,12 @@ import {
   WAIT_BLOCK_TIMESTAMP,
   GET_BALANCE,
   GET_ETH_PRICE,
-  GET_PRICE_CURVE
+  GET_PRICE_CURVE,
 } from 'graphql/queries'
 import { useInterval, useGasPrice, useBlock } from 'components/hooks'
 import { useAccount } from '../../QueryAccount'
 import { registerMachine, registerReducer } from './registerReducer'
-import {
-  startRegistering,
-  errorRegistering,
-  successRegistering
-} from 'app/slices/registerSlice'
+import { successRegistering } from 'app/slices/registerSlice'
 import { calculateDuration, yearInSeconds } from 'utils/dates'
 import { GET_TRANSACTION_HISTORY } from 'graphql/queries'
 
@@ -50,7 +47,7 @@ const NameRegister = ({
   refetch,
   refetchIsMigrated,
   readOnly,
-  registrationOpen
+  registrationOpen,
 }) => {
   const { t } = useTranslation()
   const [secret, setSecret] = useState(false)
@@ -72,24 +69,31 @@ const NameRegister = ({
   const [waitUntil, setWaitUntil] = useState(null)
   const [targetDate, setTargetDate] = useState(false)
   const [targetPremium, setTargetPremium] = useState(false)
-  const [commitmentExpirationDate, setCommitmentExpirationDate] = useState(
-    false
-  )
+  const [commitmentExpirationDate, setCommitmentExpirationDate] =
+    useState(false)
+  const [freeDuration, setFreeDuration] = useState(0)
+  const [index, setIndex] = useState(0)
   const [registering, setRegistering] = useState(false)
   const [transactionHash, setTransactionHash] = useState('')
-  const [signature, setSignature] = useState('')
+  const [signature, setSignature] = useState([])
+  const [isAuctionWinner, setIsAuctionWinner] = useState(false)
+  const [discountAmount, setDiscountAmount] = useState({
+    percent: 0,
+    amount: 0,
+  })
+
   const {
     data: { getEthPrice: ethUsdPrice } = {},
-    loading: ethUsdPriceLoading
+    loading: ethUsdPriceLoading,
   } = useQuery(GET_ETH_PRICE)
   const { data: { getPriceCurve } = {} } = useQuery(GET_PRICE_CURVE)
   const { loading: gasPriceLoading, price: gasPrice } = useGasPrice()
   const { block } = useBlock()
   const { data: { waitBlockTimestamp } = {} } = useQuery(WAIT_BLOCK_TIMESTAMP, {
     variables: {
-      waitUntil
+      waitUntil,
     },
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const { data: { transactionHistory } = {} } = useQuery(
@@ -114,20 +118,48 @@ const NameRegister = ({
 
   useEffect(() => {
     const fetchSignature = async () => {
-      const params = {
-        name: domain.label,
-        owner: account,
-        duration: calculateDuration(years),
-        resolver: '0x075d6116Caba19df3211068163BEB64CB231B53C', // FIXME this is not fixed
-        addr: account, //Eth wallet of user connected with metamask
-        ChainID: 97
+      const result = await axios({
+        method: 'get',
+        url: `${process.env.REACT_APP_BACKEND_URL}/merkleleaf?domain=${domain.label}`,
+      })
+
+      setFreeDuration(result?.data?.data?.isaution ? 31556952 : 0)
+      setIndex(result?.data?.data?.index)
+
+      if (result?.data?.data?.isaution) {
+        setIsAuctionWinner(true)
+      } else {
+        setIsAuctionWinner(false)
       }
-      const result = await axios.post(
-        'https://backend.prd.space.id/sign',
-        params
-      )
-      if (result?.data?.signature) {
-        setSignature(result.data.signature)
+
+      const params = {
+        inputs: [
+          {
+            name: domain.label,
+            index: result?.data?.data?.index,
+            owner: account, //
+            duration,
+            resolver: process.env.REACT_APP_RESOLVER_ADDRESS, // FIXME this is not fixed
+            addr: account, //Eth wallet of user connected with metamask
+            freeDuration: result?.data?.data?.isaution ? 31556952 : 0,
+          },
+        ],
+      }
+
+      console.log('hey this is from env', process.env)
+
+      const result1 = await axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_MERKLE_BASE_URL}/getproof`,
+        headers: {},
+        data: params,
+      })
+
+      const proofs = result1?.data
+      if (proofs && proofs.length > 0) {
+        setSignature(proofs)
+      } else {
+        setSignature([])
       }
     }
     fetchSignature()
@@ -135,23 +167,26 @@ const NameRegister = ({
 
   const { data: { getBalance } = {} } = useQuery(GET_BALANCE, {
     variables: { address: account },
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const { data: { getMaximumCommitmentAge } = {} } = useQuery(
     GET_MAXIMUM_COMMITMENT_AGE,
     {
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
     }
   )
+
   if (block) {
     now = moment(block.timestamp * 1000)
   }
+
   if (!commitmentExpirationDate && getMaximumCommitmentAge && blockCreatedAt) {
     setCommitmentExpirationDate(
       moment(blockCreatedAt).add(getMaximumCommitmentAge, 'second')
     )
   }
+
   const { data: { checkCommitment = false } = {} } = useQuery(
     CHECK_COMMITMENT,
     {
@@ -159,9 +194,9 @@ const NameRegister = ({
         label: domain.label,
         secret,
         // Add this varialbe so that it keeps polling only during the timer is on
-        commitmentTimerRunning
+        commitmentTimerRunning,
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
     }
   )
 
@@ -184,15 +219,16 @@ const NameRegister = ({
     setSecondsPassed,
     commitmentExpirationDate,
     setCommitmentExpirationDate,
-    now
+    now,
   })
+
   useInterval(
     () => {
       if (blockCreatedAt && !waitUntil) {
         setWaitUntil(blockCreatedAt + waitTime * 1000)
       }
       if (secondsPassed < waitTime) {
-        setSecondsPassed(s => s + 1)
+        setSecondsPassed((s) => s + 1)
       } else {
         if (waitBlockTimestamp && timerRunning) {
           incrementStep()
@@ -217,28 +253,56 @@ const NameRegister = ({
     },
     commitmentTimerRunning ? 1000 : null
   )
-  const parsedYears = parseFloat(years)
-  const duration = calculateDuration(years)
+
+  const parsedYears = parseFloat(isAuctionWinner ? years - 1 : years)
+
+  const duration = calculateDuration(isAuctionWinner ? years - 1 : years)
+
   const { data: { getRentPrice } = {}, loading: rentPriceLoading } = useQuery(
     GET_RENT_PRICE,
     {
       variables: {
         duration,
         label: domain.label,
-        commitmentTimerRunning
-      }
+        commitmentTimerRunning,
+      },
     }
   )
+
   const {
     data: { getRentPrice: getPremiumPrice } = {},
-    loading: getPremiumPriceLoading
+    loading: getPremiumPriceLoading,
   } = useQuery(GET_RENT_PRICE, {
     variables: {
       duration: 0,
       label: domain.label,
-      commitmentTimerRunning
-    }
+      commitmentTimerRunning,
+    },
   })
+
+  useEffect(() => {
+    //Set the 40% discount if the domain length is consist of 3 characters
+    if (getRentPrice) {
+      const ethVal = new EthVal(`${getRentPrice || 0}`).toEth()
+      if (domain.label.length === 3) {
+        const tPrice = {
+          amount: ethVal * 0.4,
+          percent: 40,
+        }
+        setDiscountAmount({ ...tPrice })
+      } else if (domain.label.length === 4) {
+        setDiscountAmount({
+          amount: ethVal * 0.2,
+          percent: 20,
+        })
+      } else {
+        setDiscountAmount({
+          amount: 0,
+          percent: 0,
+        })
+      }
+    }
+  }, [getRentPrice])
 
   let hasSufficientBalance
   if (!blockCreatedAt && checkCommitment > 0) {
@@ -318,6 +382,9 @@ const NameRegister = ({
                 premiumOnlyPrice={getPremiumPrice}
                 underPremium={underPremium}
                 displayGas={true}
+                discount={discountAmount}
+                signature={signature}
+                isAuctionWinner={isAuctionWinner}
               />
             )}
           </div>
@@ -352,6 +419,8 @@ const NameRegister = ({
             setRegistering={setRegistering}
             registering={registering}
             paymentSuccess={paymentSuccess}
+            freeDuration={freeDuration}
+            index={index}
           />
         </div>
       )}
@@ -422,7 +491,9 @@ const NameRegister = ({
                 >
                   Successful registration. Name published
                 </div>
-                {customStep === 'PENDING' || customStep === 'PAYMENT' ? (
+                {customStep === 'PENDING' ? (
+                  <div className="w-2 h-2 bg-[#7E9195] rounded-full flex justify-center mt-[14px] m-auto" />
+                ) : customStep === 'PAYMENT' ? (
                   <AnimationSpin className="flex justify-center mt-1" />
                 ) : (
                   <div>
@@ -476,13 +547,15 @@ const NameRegister = ({
   )
 }
 
-const NameRegisterDataWrapper = props => {
+const NameRegisterDataWrapper = (props) => {
   const { data, loading, error } = useQuery(GET_MINIMUM_COMMITMENT_AGE)
 
   if (loading) return <AnimationSpin size={40} />
+
   if (error) {
     console.log(error)
   }
+
   return <NameRegister waitTime={data?.getMinimumCommitmentAge} {...props} />
 }
 

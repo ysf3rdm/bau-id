@@ -8,7 +8,7 @@ import {
   isLabelValid as _isLabelValid,
   parseSearchTerm as _parseSearchTerm,
   validateName as _validateName
-} from '@siddomains/ui'
+} from 'ui'
 import * as jsSHA3 from 'js-sha3'
 import { throttle } from 'lodash'
 import { CID } from 'multiformats'
@@ -130,7 +130,6 @@ export function isLabelValid(name) {
 }
 
 export const parseSearchTerm = async term => {
-  const ens = getENS()
   const domains = term.split('.')
   const tld = domains[domains.length - 1]
   try {
@@ -138,7 +137,6 @@ export const parseSearchTerm = async term => {
   } catch (e) {
     return 'invalid'
   }
-  const address = await ens.getOwner(tld)
   return _parseSearchTerm(term, true)
 }
 

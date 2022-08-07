@@ -8,7 +8,11 @@ const Price = ({
   price,
   ethUsdPrice,
   ethUsdPremiumPrice,
-  underPremium
+  underPremium,
+  discount,
+  years,
+  isAuctionWinner,
+  registrationFee,
 }) => {
   let ethPrice = <InlineLoader />
   let withPremium, c
@@ -16,9 +20,12 @@ const Price = ({
     c = priceCalculator({
       price, // in ETH, BN
       premium: price, // in ETH
-      ethUsdPrice
+      ethUsdPrice,
     })
-    ethPrice = c.price
+    ethPrice =
+      isAuctionWinner && years === 1
+        ? c.price
+        : (c.price / (1 - discount.percent / 100)).toFixed(3)
     if (underPremium) {
       withPremium =
         underPremium && ethUsdPremiumPrice
@@ -30,7 +37,7 @@ const Price = ({
   return (
     <div>
       <div className="w-[120px] md:w-[180px] h-[40px] flex justify-center items-center font-bold font-urbanist bg-[#C4C4C4]/20 text-white font-bold font-urbanist text-[18px] rounded-[8px]">
-        {ethPrice} <span>BNBT</span>
+        {registrationFee.toFixed(3)} <span>BNBT</span>
         {withPremium && (
           <span>
             {withPremium}${priceInUsd} USD

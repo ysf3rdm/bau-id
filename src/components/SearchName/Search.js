@@ -4,14 +4,15 @@ import axios from 'axios'
 import { Formik } from 'formik'
 import { withRouter } from 'react-router'
 import { useDispatch } from 'react-redux'
+import { validate } from '@ensdomains/ens-validation'
 
-import TwoPoints from 'components/Icons/TwoPoints'
 import SearchIcon from 'components/Icons/SearchIcon'
 import FaceCryIcon from 'components/Icons/FaceCryIcon'
 import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
 import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
 
 import '../../api/subDomainRegistrar'
+import { parseSearchTerm, validateName } from '../../utils/utils'
 
 function Search({
   history,
@@ -22,8 +23,7 @@ function Search({
   isShowSearchBtn = true,
   errorsStyling = false,
   suggestionClassName = 'w-[calc(100%-56px)]',
-  isAbsolutePosition = true,
-  onSubmit
+  isAbsolutePosition = true
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
@@ -40,7 +40,6 @@ function Search({
     } else {
       history.push(`/name/${result.name}.bnb/register`)
     }
-    onSubmit()
   }
 
   useEffect(() => {
@@ -51,7 +50,7 @@ function Search({
         name: searchingDomainName
       }
       axios
-        .post(`https://backend.prd.space.id/nameof`, {
+        .post(`https://backend.stg.space.id/nameof`, {
           ...params
         })
         .then(res => {
@@ -65,21 +64,35 @@ function Search({
     <div className={cn('relative', className)}>
       <Formik
         initialValues={{ searchKey: searchingDomainName ?? '' }}
-        validate={values => {
-          let nospecial = /^[^*|\\":<>[\]{}`\\\\()';@&$]+$/u
-          const errors = {}
-          if (values.searchKey.length < 3) {
-            errors.searchKey = 'Name length must be at least 3 characters'
-          } else if (!nospecial.test(values.searchKey)) {
-            errors.searchKey = 'Name contains unsupported characters'
-          } else if (
-            values.searchKey.indexOf(' ') >= 0 ||
-            values.searchKey.indexOf('/') >= 0 ||
-            values.searchKey.indexOf('.') >= 0
-          ) {
+        validate={async values => {
+          let errors = {}
+          try {
+            let searchTerm
+            if (values.searchKey.split('.').length === 1) {
+              searchTerm = values.searchKey + '.eth'
+            } else {
+              searchTerm = values.searchKey
+            }
+            const parsed = await validateName(searchTerm)
+            const filterParsed = parsed.replace('.eth', '')
+            values.searchKey = filterParsed
+            let nospecial = /^[^*|\\":<>[\]{}`\\\\()';@&$]+$/u
+
+            if (values.searchKey.length < 3) {
+              errors.searchKey = 'Name length must be at least 3 characters'
+            } else if (!nospecial.test(values.searchKey)) {
+              errors.searchKey = 'Name contains unsupported characters'
+            } else if (
+              values.searchKey.indexOf(' ') >= 0 ||
+              values.searchKey.indexOf('/') >= 0 ||
+              values.searchKey.indexOf('.') >= 0 ||
+              values.searchKey.indexOf('-') >= 0
+            ) {
+              errors.searchKey = 'Name contains unsupported characters'
+            }
+          } catch (err) {
             errors.searchKey = 'Name contains unsupported characters'
           }
-          console.log(errors)
           return errors
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -88,7 +101,7 @@ function Search({
             name: values.searchKey
           }
           axios
-            .post(`https://backend.prd.space.id/nameof`, {
+            .post(`https://backend.stg.space.id/nameof`, {
               ...params
             })
             .then(res => {
@@ -119,7 +132,7 @@ function Search({
             <div>
               <input
                 className={cn(
-                  'w-full bg-[#104151]/[0.25] py-[10px] pl-[40px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent active:bg-transparent',
+                  'w-full bg-[#104151]/[0.25] py-[10px] pl-[40px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent text-[#30DB9E] active:bg-transparent focus:outline-none',
                   isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]'
                 )}
                 placeholder="Explore the space"
@@ -159,7 +172,7 @@ function Search({
             {isShowSearchBtn && (
               <button
                 type="submit"
-                className="bg-[#1EEFA4] text-semibold text-[14px] font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
+                className="w-[92px] bg-[#1EEFA4] text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
               >
                 Search
               </button>
@@ -193,7 +206,7 @@ function Search({
           <div className="flex items-center">
             <div
               className={cn(
-                'text-[12px]',
+                'text-[14px]',
                 result.Owner ? 'text-[#ED7E17]' : 'text-[#2980E8]'
               )}
             >
@@ -202,7 +215,7 @@ function Search({
             <div
               onClick={gotoDetailPage}
               className={cn(
-                'cursor-pointer w-[100px] justify-center flex items-center h-[28px] text-white text-center rounded-[8px] font-urbanist font-semibold ml-3',
+                'cursor-pointer w-[92px] justify-center flex items-center h-[28px] text-white text-center rounded-[8px] font-urbanist font-semibold ml-3',
                 result.Owner ? 'bg-[#ED7E17]' : 'bg-[#2980E8]'
               )}
             >

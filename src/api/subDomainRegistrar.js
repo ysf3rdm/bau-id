@@ -1,5 +1,5 @@
 import subDomainRegistrarContract from './contracts/subDomainRegistrarContract.json'
-import { getProvider, ethers } from '@siddomains/ui'
+import { getProvider, ethers } from 'ui'
 import domains from '../constants/domains.json'
 
 let subDomainRegistrars = {}
@@ -66,14 +66,3 @@ export const queryAll = async label => {
     return query(domain.name, label)
   })
 }
-
-// async function test() {
-//   // const node = await query('gimmethe', 'awesome')
-//   // console.log(node)
-//   const nodes = await queryAll('helloooo12345')
-//   nodes.map(promise =>
-//     promise.then(node => node.forEach(e => console.log(e.toString())))
-//   )
-// }
-
-// test()

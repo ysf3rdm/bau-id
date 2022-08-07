@@ -78,7 +78,6 @@ export default function Mainbar({
 
   const [mutation] = useMutation(mutationQuery ?? SET_REGISTRANT, {
     onCompleted: data => {
-      console.log('consoling here', data)
       const txHash = Object.values(data)[0]
       startPending(txHash)
     }
@@ -161,7 +160,7 @@ export default function Mainbar({
       Address: account
     }
     let result = await axios.post(
-      'https://backend.prd.space.id/listname',
+      'https://backend.stg.space.id/listname',
       params
     )
     const data = result?.data?.map(item => {
@@ -177,7 +176,6 @@ export default function Mainbar({
 
   const fetchExpiryDate = async () => {
     let data = await refetchExpiryDate()
-    console.log(data)
     if (data.length > 0) {
       const matchedData = data.filter(item => item.name === selectedDomain.name)
       if (matchedData && matchedData.length > 0) {
@@ -261,10 +259,6 @@ export default function Mainbar({
     setShowAddressChangeModal(false)
     setTitle('BNBAddress')
     const variables = [{ ...updatedRecords, value: param.address, key: 'ETH' }]
-    console.log('variables', {
-      name: selectedDomain.name + '.bnb',
-      records: variables
-    })
     setParam(param.address)
     addMultiRecords({
       variables: { name: selectedDomain.name + '.bnb', records: variables }

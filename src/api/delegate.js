@@ -1,4 +1,4 @@
-import { ethers, getNetworkId, getProvider } from '@siddomains/ui'
+import { ethers, getNetworkId, getProvider } from '../ui'
 import { EMPTY_ADDRESS } from 'utils/records'
 
 const ENSTokenABI = [

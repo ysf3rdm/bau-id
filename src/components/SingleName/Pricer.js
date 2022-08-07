@@ -1,5 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
+import EthVal from 'ethval'
+
 import Years from './NameRegister/Years'
 import Price from './NameRegister/Price'
 import EthRegistrationGasPrice from './NameRegister/EthRegistrationGasPrice'
@@ -19,9 +21,17 @@ function PricerInner({
   gasPrice,
   reference,
   underPremium,
-  displayGas = false
+  name,
+  displayGas = false,
+  discount,
+  isAuctionWinner,
 }) {
   const { t } = useTranslation()
+  const ethVal = new EthVal(`${price || 0}`).toEth()
+  const registrationFee =
+    years === 1 && isAuctionWinner
+      ? ethVal
+      : ethVal / (1 - discount.percent / 100)
   return (
     <>
       <div className={cn('flex justify-between', className)} ref={reference}>
@@ -30,6 +40,7 @@ function PricerInner({
           =
         </span>
         <Price
+          isAuctionWinner={isAuctionWinner}
           price={price}
           premiumOnlyPrice={premiumOnlyPrice}
           gasPrice={gasPrice}
@@ -38,11 +49,15 @@ function PricerInner({
           ethUsdPrice={ethUsdPrice}
           ethUsdPremiumPrice={ethUsdPremiumPrice}
           underPremium={underPremium}
+          discount={discount}
+          years={years}
+          registrationFee={registrationFee}
         />
       </div>
       {displayGas && gasPrice && (
         <div>
           <EthRegistrationGasPrice
+            name={name}
             price={price}
             gasPrice={gasPrice}
             loading={loading}
@@ -50,6 +65,10 @@ function PricerInner({
             ethUsdPrice={ethUsdPrice}
             ethUsdPremiumPrice={ethUsdPremiumPrice}
             underPremium={underPremium}
+            discount={discount}
+            years={years}
+            isAuctionWinner={isAuctionWinner}
+            registrationFee={registrationFee}
           />
         </div>
       )}

@@ -9,7 +9,6 @@ import mq from 'mediaQuery'
 import { useEditable } from '../hooks'
 
 import Button from '../Forms/Button'
-import DefaultInput from '../Forms/Input'
 import SaveCancel from './SaveCancel'
 import PendingTx from '../PendingTx'
 
@@ -27,37 +26,23 @@ const AddSubdomainContent = styled('div')`
   `}
 `
 
-const Input = styled(DefaultInput)`
-  width: 100%;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  ${mq.small`
-    margin-bottom: 0;
-  `}
-`
-
 function AddSubdomain({ domain, refetch }) {
   const { state, actions } = useEditable()
   const { t } = useTranslation()
   const { editing, newValue, txHash, pending, confirmed } = state
 
-  const {
-    startEditing,
-    stopEditing,
-    updateValue,
-    startPending,
-    setConfirmed
-  } = actions
+  const { startEditing, stopEditing, updateValue, startPending, setConfirmed } =
+    actions
 
   const isValid = newValue.length > 0 && isLabelValid(newValue)
   const isInvalid = !isValid && newValue.length > 0
   const [mutation] = useMutation(CREATE_SUBDOMAIN, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (data) {
         startPending(Object.values(data)[0])
         updateValue('')
       }
-    }
+    },
   })
 
   return (
@@ -82,7 +67,7 @@ function AddSubdomain({ domain, refetch }) {
           <AddSubdomainContent>
             <Input
               value={newValue}
-              onChange={e => updateValue(e.target.value)}
+              onChange={(e) => updateValue(e.target.value)}
               valid={isValid}
               invalid={isInvalid}
               placeholder="Type in a label for your subdomain"
@@ -95,8 +80,8 @@ function AddSubdomain({ domain, refetch }) {
                 mutation={() => {
                   mutation({
                     variables: {
-                      name: `${newValue}.${domain.name}`
-                    }
+                      name: `${newValue}.${domain.name}`,
+                    },
                   }).then(() => {
                     refetch()
                   })

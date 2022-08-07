@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useQuery } from '@apollo/client'
-import { getNamehash, emptyAddress } from '@siddomains/ui'
+import { getNamehash, emptyAddress } from 'ui'
 import { formatsByCoinType } from '@siddomains/address-encoder'
 
 import union from 'lodash/union'

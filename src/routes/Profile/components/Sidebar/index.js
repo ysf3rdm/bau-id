@@ -6,7 +6,7 @@ import cn from 'classnames'
 import axios from 'axios'
 
 import { useAccount } from 'components/QueryAccount'
-import { getNetworkId } from '@siddomains/ui'
+import { getNetworkId } from 'ui'
 
 import ProfileCard from './ProfileCard'
 
@@ -32,7 +32,7 @@ export default function Sidebar({ className, isReadOnly }) {
       Address: account
     }
     let result = await axios.post(
-      'https://backend.prd.space.id/listname',
+      'https://backend.stg.space.id/listname',
       params
     )
     const data = result?.data?.map(item => {
@@ -69,17 +69,20 @@ export default function Sidebar({ className, isReadOnly }) {
   return (
     <div
       className={cn(
-        'bg-[rgba(204,252,255,0.2)] backdrop-blur-sm rounded-[24px] p-[20px] min-h-[calc(100vh-180px)] flex flex-col justify-between max-w-[360px]',
+        'bg-[rgba(204,252,255,0.2)] backdrop-blur-sm rounded-[24px] py-5 pl-5 min-h-[calc(100vh-180px)] flex flex-col justify-between max-w-[360px]',
         className
       )}
     >
       <div className="h-full flex flex-col">
-        <ProfileCard
-          className="mb-4"
-          account={account}
-          isReadOnly={isReadOnly}
-          networkId={networkId}
-        />
+        <div className="pb-4 border-b border-[rgba(204,252,255,0.2)] mr-5">
+          <ProfileCard
+            className="pb-4"
+            account={account}
+            isReadOnly={isReadOnly}
+            networkId={networkId}
+          />
+        </div>
+
         {/* <WidgetFunction className="mt-4 mb-4" /> */}
         {/* <DomainPanel /> */}
         <DomainList

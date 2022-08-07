@@ -6,7 +6,7 @@ import differenceWith from 'lodash/differenceWith'
 import { useTranslation } from 'react-i18next'
 import { gql } from '@apollo/client'
 
-import { getNamehash, emptyAddress } from '@siddomains/ui'
+import { getNamehash, emptyAddress } from 'ui'
 import { useEditable } from '../../hooks'
 import { ADD_MULTI_RECORDS } from '../../../graphql/mutations'
 import COIN_LIST from 'constants/coinList'
@@ -304,10 +304,6 @@ const useInitRecords = (
   setInitialRecords
 ) => {
   useEffect(() => {
-    console.log(
-      'getInitialRecords(domain, dataAddresses, dataTextRecords)',
-      getInitialRecords(domain, dataAddresses, dataTextRecords)
-    )
     setInitialRecords(getInitialRecords(domain, dataAddresses, dataTextRecords))
   }, [domain, dataAddresses, dataTextRecords])
 }

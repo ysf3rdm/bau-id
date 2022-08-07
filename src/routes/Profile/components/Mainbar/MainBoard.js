@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import cn from 'classnames'
 import { useQuery } from '@apollo/client'
-import { getNamehash, emptyAddress } from '@siddomains/ui'
+import { getNamehash, emptyAddress } from 'ui'
 import { formatsByCoinType } from '@siddomains/address-encoder'
 import union from 'lodash/union'
 
@@ -253,8 +253,8 @@ export default function MainBoard({
 
   return (
     <div className={cn(className)}>
-      <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] p-5">
-        <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:text-left">
+      <div className="rounded-[24px]">
+        <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:text-left px-3">
           Records
         </p>
         <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] block md:flex items-center justify-between py-[19px] px-6 mt-5">
@@ -262,8 +262,6 @@ export default function MainBoard({
             <PendingTx
               txHash={txHash}
               onConfirmed={async () => {
-                console.log('onConfirmed')
-                console.log(updatingBNBAddress)
                 setBNBAddress(updatingBNBAddress)
                 setConfirmed()
               }}
@@ -276,7 +274,16 @@ export default function MainBoard({
               </p>
               <div className="flex items-center text-[#B1D6D3] text-[14px] xl:text-[18px] mt-1 break-all">
                 <p className="mr-2 text-center">
-                  {updatingBNBAddress ? updatingBNBAddress : bnbAddress}
+                  {updatingBNBAddress
+                    ? `${updatingBNBAddress.substring(
+                        0,
+                        10
+                      )}...${updatingBNBAddress.substring(
+                        updatingBNBAddress.length - 11
+                      )}`
+                    : `${bnbAddress.substring(0, 10)}...${bnbAddress.substring(
+                        bnbAddress.length - 11
+                      )}`}
                 </p>
                 <span className="cursor-pointer" onClick={handleBNBAddressCopy}>
                   <Tooltip message={tooltipMessage} delay={1000}>

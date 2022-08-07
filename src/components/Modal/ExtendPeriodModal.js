@@ -23,9 +23,6 @@ export default function ExtendPeriodModal({
   gasPrice,
   extendHandler
 }) {
-  useEffect(() => {
-    console.log('hey years is changing now', years)
-  }, [years])
   return (
     <div>
       {show && (

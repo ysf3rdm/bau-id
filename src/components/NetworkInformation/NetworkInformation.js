@@ -98,18 +98,16 @@ const NETWORK_INFORMATION_QUERY = gql`
 function NetworkInformation() {
   const { t } = useTranslation()
   const {
-    data: { accounts, isSafeApp, network, displayName, isReadOnly }
+    data: { accounts, isSafeApp, network, displayName, isReadOnly },
   } = useQuery(NETWORK_INFORMATION_QUERY)
 
-  const {
-    data: { getReverseRecord } = {},
-    loading: reverseRecordLoading
-  } = useQuery(GET_REVERSE_RECORD, {
-    variables: {
-      address: accounts?.[0]
-    },
-    skip: !accounts?.length
-  })
+  const { data: { getReverseRecord } = {}, loading: reverseRecordLoading } =
+    useQuery(GET_REVERSE_RECORD, {
+      variables: {
+        address: accounts?.[0],
+      },
+      skip: !accounts?.length,
+    })
 
   return (
     <NetworkInformationContainer hasAccount={accounts && accounts.length > 0}>
@@ -151,7 +149,7 @@ function NetworkInformation() {
           <NoAccountsModal
             onClick={connectProvider}
             colour={'#25FFB1'}
-            buttonText={t('c.connect')}
+            buttonText="Connect"
             active={isReadOnly ? true : false}
             width="100%"
           />

@@ -14,15 +14,7 @@ function Modal({
 }) {
   const modalRoot = document.getElementById('modal-root')
   return ReactDOM.createPortal(
-    <div
-      className="fixed left-0 top-0 w-full h-full p-0 flex justify-center items-center bg-black/50 z-[100]"
-      // onClick={() => {
-      //   console.log(cannotCloseFromOutside)
-      //   if (!cannotCloseFromOutside) {
-      //     closeModal()
-      //   }
-      // }}
-    >
+    <div className="fixed left-0 top-0 w-full h-full p-0 flex justify-center items-center bg-black/50 z-[100]">
       <div
         className={cn(
           `bg-[#0E4549] overflow-y-auto h-auto rounded-[24px] relative mx-7 md:mx-0 z-[100]`,
