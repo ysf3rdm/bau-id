@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
 
-import { validateName, parseSearchTerm } from '../utils/utils'
+import { validateName, parseSearchTerm, validateDomain } from '../utils/utils'
 import { useScrollTo } from '../components/hooks'
 import { GET_SINGLE_NAME } from '../graphql/queries'
 import Loader from '../components/Loader'
@@ -18,9 +18,9 @@ const SINGLE_NAME = gql`
 
 function SingleName({
   match: {
-    params: { name: searchTerm }
+    params: { name: searchTerm },
   },
-  location: { pathname }
+  location: { pathname },
 }) {
   useScrollTo(0)
   const [valid, setValid] = useState(undefined)
@@ -29,31 +29,35 @@ function SingleName({
   let errorMessage
 
   const {
-    data: { isENSReady }
+    data: { isENSReady },
   } = useQuery(SINGLE_NAME)
   const { data, loading, error, refetch } = useQuery(GET_SINGLE_NAME, {
     variables: { name },
     fetchPolicy: 'no-cache',
     context: {
-      queryDeduplication: false
-    }
+      queryDeduplication: false,
+    },
   })
 
   useEffect(() => {
     let normalisedName
     if (isENSReady) {
-      try {
-        normalisedName = validateName(searchTerm)
-        setNormalisedName(normalisedName)
-        document.title = searchTerm
-      } catch {
-        document.title = 'Error finding name'
-      } finally {
-        setValid(true)
+      if (!validateDomain(searchTerm)) {
+        setValid(false)
+        setType('invalid')
+      } else {
+        try {
+          normalisedName = validateName(searchTerm)
+          setNormalisedName(normalisedName)
+          document.title = searchTerm
+        } catch {
+          document.title = 'Error finding name'
+        } finally {
+          setValid(true)
+        }
       }
     }
   }, [searchTerm, isENSReady])
-
   if (valid) {
     if (loading) return <Loader large center />
     if (error) return <div>{(console.log(error), JSON.stringify(error))}</div>

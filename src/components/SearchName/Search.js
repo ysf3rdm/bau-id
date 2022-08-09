@@ -12,7 +12,11 @@ import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
 import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
 
 import '../../api/subDomainRegistrar'
-import { parseSearchTerm, validateName } from '../../utils/utils'
+import {
+  parseSearchTerm,
+  validateDomain,
+  validateName,
+} from '../../utils/utils'
 
 function Search({
   history,
@@ -23,7 +27,7 @@ function Search({
   isShowSearchBtn = true,
   errorsStyling = false,
   suggestionClassName = 'w-[calc(100%-56px)]',
-  isAbsolutePosition = true
+  isAbsolutePosition = true,
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
@@ -33,8 +37,9 @@ function Search({
     setShowPopup(false)
     if (result.Owner) {
       const date = new Date(result?.Expires)
-      const expires_at = `${date.getFullYear()}.${date.getMonth() +
-        1}.${date.getDate()}`
+      const expires_at = `${date.getFullYear()}.${
+        date.getMonth() + 1
+      }.${date.getDate()}`
       dispatch(setSelectedDomain({ ...result, expires_at }))
       history.push(`/profile`)
     } else {
@@ -47,13 +52,13 @@ function Search({
       dispatch(setSearchDomainName(''))
       const params = {
         ChainID: 97,
-        name: searchingDomainName
+        name: searchingDomainName,
       }
       axios
         .post(`https://backend.stg.space.id/nameof`, {
-          ...params
+          ...params,
         })
-        .then(res => {
+        .then((res) => {
           setResult(res.data)
           setShowPopup(true)
         })
@@ -64,7 +69,7 @@ function Search({
     <div className={cn('relative', className)}>
       <Formik
         initialValues={{ searchKey: searchingDomainName ?? '' }}
-        validate={async values => {
+        validate={async (values) => {
           let errors = {}
           try {
             let searchTerm
@@ -76,18 +81,10 @@ function Search({
             const parsed = await validateName(searchTerm)
             const filterParsed = parsed.replace('.eth', '')
             values.searchKey = filterParsed
-            let nospecial = /^[^*|\\":<>[\]{}`\\\\()';@&$]+$/u
 
             if (values.searchKey.length < 3) {
               errors.searchKey = 'Name length must be at least 3 characters'
-            } else if (!nospecial.test(values.searchKey)) {
-              errors.searchKey = 'Name contains unsupported characters'
-            } else if (
-              values.searchKey.indexOf(' ') >= 0 ||
-              values.searchKey.indexOf('/') >= 0 ||
-              values.searchKey.indexOf('.') >= 0 ||
-              values.searchKey.indexOf('-') >= 0
-            ) {
+            } else if (!validateDomain(values.searchKey)) {
               errors.searchKey = 'Name contains unsupported characters'
             }
           } catch (err) {
@@ -98,13 +95,13 @@ function Search({
         onSubmit={(values, { setSubmitting }) => {
           const params = {
             ChainID: 97,
-            name: values.searchKey
+            name: values.searchKey,
           }
           axios
             .post(`https://backend.stg.space.id/nameof`, {
-              ...params
+              ...params,
             })
-            .then(res => {
+            .then((res) => {
               setResult(res.data)
               setShowPopup(true)
             })
@@ -116,7 +113,7 @@ function Search({
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
         }) => (
           <form
             className={cn(`relative`)}
@@ -136,7 +133,7 @@ function Search({
                   isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]'
                 )}
                 placeholder="Explore the space"
-                onChange={e => {
+                onChange={(e) => {
                   setShowPopup(false)
                   handleChange(e)
                 }}
@@ -234,7 +231,7 @@ const SearchContainer = ({
   searchDomain,
   className,
   style,
-  searchingDomainName
+  searchingDomainName,
 }) => {
   return (
     <SearchWithRouter
