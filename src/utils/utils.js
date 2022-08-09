@@ -339,3 +339,19 @@ export function convertToETHAddressDisplayFormat(address) {
     address.length
   )}`
 }
+
+export const validateDomain = (value) => {
+  const nospecial = /^[^*|\\":<>[\]{}`\\\\()';@&$]+$/u
+  // black list ASCII中的十进制0-44, 46-47, 58-94, 96, 123-127
+  const blackList =
+    // eslint-disable-next-line no-control-regex
+    /[\u0000-\u002c\u002e-\u002f\u003a-\u005e\u0060\u007b-\u007f]/g
+  if (!nospecial.test(value)) {
+    return false
+  } else if (blackList.test(value)) {
+    return false
+  } else if (!validate(value)) {
+    return false
+  }
+  return true
+}

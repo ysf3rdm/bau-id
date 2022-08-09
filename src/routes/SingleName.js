@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
 
-import { validateName, parseSearchTerm } from '../utils/utils'
+import { validateName, parseSearchTerm, validateDomain } from '../utils/utils'
 import { useScrollTo } from '../components/hooks'
 import { GET_SINGLE_NAME } from '../graphql/queries'
 import Loader from '../components/Loader'
@@ -42,14 +42,19 @@ function SingleName({
   useEffect(() => {
     let normalisedName
     if (isENSReady) {
-      try {
-        normalisedName = validateName(searchTerm)
-        setNormalisedName(normalisedName)
-        document.title = searchTerm
-      } catch {
-        document.title = 'Error finding name'
-      } finally {
-        setValid(true)
+      if (!validateDomain(searchTerm)) {
+        setValid(false)
+        setType('invalid')
+      } else {
+        try {
+          normalisedName = validateName(searchTerm)
+          setNormalisedName(normalisedName)
+          document.title = searchTerm
+        } catch {
+          document.title = 'Error finding name'
+        } finally {
+          setValid(true)
+        }
       }
     }
   }, [searchTerm, isENSReady])
