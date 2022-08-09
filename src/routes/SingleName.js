@@ -18,9 +18,9 @@ const SINGLE_NAME = gql`
 
 function SingleName({
   match: {
-    params: { name: searchTerm },
+    params: { name: searchTerm }
   },
-  location: { pathname },
+  location: { pathname }
 }) {
   useScrollTo(0)
   const [valid, setValid] = useState(undefined)
@@ -29,14 +29,14 @@ function SingleName({
   let errorMessage
 
   const {
-    data: { isENSReady },
+    data: { isENSReady }
   } = useQuery(SINGLE_NAME)
   const { data, loading, error, refetch } = useQuery(GET_SINGLE_NAME, {
     variables: { name },
     fetchPolicy: 'no-cache',
     context: {
-      queryDeduplication: false,
-    },
+      queryDeduplication: false
+    }
   })
 
   useEffect(() => {
@@ -58,6 +58,7 @@ function SingleName({
       }
     }
   }, [searchTerm, isENSReady])
+
   if (valid) {
     if (loading) return <Loader large center />
     if (error) return <div>{(console.log(error), JSON.stringify(error))}</div>
