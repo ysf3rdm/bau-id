@@ -44,7 +44,14 @@ function SingleName({
   useEffect(() => {
     let normalisedName
     if (isENSReady) {
-      if (!validateDomain(searchTerm)) {
+      let domain = searchTerm;
+      let suffix = '';
+      let i = domain.lastIndexOf('.');
+      if (i>0) {
+        domain = searchTerm.substring(0,i);
+        suffix = searchTerm.substring(i);
+      }
+      if (suffix !== '.bnb' || !validateDomain(domain)) {
         setValid(false)
         setType('invalid')
         history.replace('/404')
