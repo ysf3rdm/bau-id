@@ -192,7 +192,7 @@ export default ({ children }) => {
   }
 
   const moveToWishList = () => {
-    history.push('https://pre.stg.space.id/auction/wishlist')
+    window.location.href = 'https://pre.stg.space.id/auction/wishlist'
   }
 
   const showDrawer = () => {
