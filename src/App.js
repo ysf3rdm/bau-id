@@ -1,7 +1,6 @@
 import React, { lazy } from 'react'
 import { BrowserRouter, Route as DefaultRoute, Switch } from 'react-router-dom'
 
-// Load components
 const Home = lazy(() => import('./routes/Home'))
 const SingleName = lazy(() => import('./routes/SingleName'))
 const Profile = lazy(() => import('./routes/Profile'))

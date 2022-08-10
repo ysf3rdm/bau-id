@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import last from 'lodash/last'
 import { useDispatch } from 'react-redux'
 import cn from 'classnames'
 
@@ -12,7 +11,6 @@ import { REGISTER } from '../../../graphql/mutations'
 import { useEditable } from 'components/hooks'
 
 import { useAccount } from '../../QueryAccount'
-import { GET_TRANSACTION_HISTORY } from 'graphql/queries'
 
 import InsufficientBalanceModal from '../../Modal/InsufficientBalanceModal'
 import AnimationSpin from '../../AnimationSpin/index'
@@ -45,15 +43,14 @@ const CTA = ({
   setRegistering,
   paymentSuccess,
   freeDuration,
-  index
+  index,
 }) => {
   const { t } = useTranslation()
   const history = useHistory()
   const account = useAccount()
   const dispatch = useDispatch()
-  const [showSufficientBalanceModal, setShowSufficientBalanceModal] = useState(
-    false
-  )
+  const [showSufficientBalanceModal, setShowSufficientBalanceModal] =
+    useState(false)
   const [txHash, setTxHash] = useState('')
 
   useEffect(() => {
@@ -65,16 +62,15 @@ const CTA = ({
 
   const { data } = useQuery(HOME_DATA, {
     variables: {
-      address: account
-    }
+      address: account,
+    },
   })
 
   const { isReadOnly } = data
 
-  const { actions } = useEditable()
-
   const [mutationRegister] = useMutation(REGISTER, {
-    onCompleted: data => {
+    onCompleted: (data) => {
+      console.log(data)
       if (data?.register?.err) {
         setCustomStep('ERROR')
         errorRegistering()
@@ -84,7 +80,10 @@ const CTA = ({
         setTransactionHash(data.register)
         paymentSuccess()
       }
-    }
+    },
+    onError: (err) => {
+      console.log('hey error', err)
+    },
   })
 
   const goBack = () => {
@@ -104,7 +103,7 @@ const CTA = ({
       duration,
       signature,
       freeDuration,
-      index
+      index,
     }
     mutationRegister({ variables })
   }
