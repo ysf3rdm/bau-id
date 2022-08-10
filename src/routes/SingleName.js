@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
 
@@ -22,6 +23,7 @@ function SingleName({
   },
   location: { pathname }
 }) {
+  let history = useHistory()
   useScrollTo(0)
   const [valid, setValid] = useState(undefined)
   const [type, setType] = useState(undefined)
@@ -45,6 +47,7 @@ function SingleName({
       if (!validateDomain(searchTerm)) {
         setValid(false)
         setType('invalid')
+        history.replace('/404')
       } else {
         try {
           normalisedName = validateName(searchTerm)
