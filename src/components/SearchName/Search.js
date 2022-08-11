@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
+import { toArray } from 'lodash'
 import axios from 'axios'
 import { Formik } from 'formik'
 import { withRouter } from 'react-router'
@@ -82,7 +83,7 @@ function Search({
             const filterParsed = parsed.replace('.eth', '')
             values.searchKey = filterParsed
 
-            if (values.searchKey.length < 3) {
+            if (toArray(values.searchKey).length < 3) {
               errors.searchKey = 'Name length must be at least 3 characters'
             } else if (!validateDomain(values.searchKey)) {
               errors.searchKey = 'Name contains unsupported characters'

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
+import { toArray } from 'lodash'
 import { Formik } from 'formik'
 import { withRouter } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
@@ -20,9 +21,9 @@ function InnerSearch({ history, className, style }) {
     <div className={cn('relative', className)}>
       <Formik
         initialValues={{ searchKey: '' }}
-        validate={values => {
+        validate={(values) => {
           const errors = {}
-          if (values.searchKey.length < 3) {
+          if (toArray(values.searchKey).length < 3) {
             errors.searchKey = 'Name length must be at least 3 characters'
           } else if (
             !new RegExp(/^[a-z0-9\p{Emoji}]*$/u).test(values.searchKey)
@@ -42,7 +43,7 @@ function InnerSearch({ history, className, style }) {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
           /* and other goodies */
         }) => (
           <form
@@ -61,7 +62,7 @@ function InnerSearch({ history, className, style }) {
               <input
                 className="w-full bg-[#104151]/[0.25] py-2 px-[36px] text-[#BDCED1] text-[18px] border border-[rgba(204,252,255,0.3)] rounded-[18px]"
                 placeholder=""
-                onChange={e => {
+                onChange={(e) => {
                   handleChange(e)
                 }}
                 type="text"
