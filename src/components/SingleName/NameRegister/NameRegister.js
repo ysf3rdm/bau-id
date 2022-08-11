@@ -41,14 +41,7 @@ import SuccessfulTickIcon from 'components/Icons/SuccessfulTickIcon'
 import FailedIcon from 'components/Icons/FailedIcon'
 import AnimationSpin from 'components/AnimationSpin'
 
-const NameRegister = ({
-  domain,
-  waitTime,
-  refetch,
-  refetchIsMigrated,
-  readOnly,
-  registrationOpen,
-}) => {
+const NameRegister = ({ domain, waitTime, registrationOpen }) => {
   const { t } = useTranslation()
   const [secret, setSecret] = useState(false)
   const { networkId } = useNetworkInfo()
@@ -59,8 +52,6 @@ const NameRegister = ({
   )
   const [customStep, setCustomStep] = useState('START')
   let now, currentPremium, underPremium
-  const incrementStep = () => dispatch('NEXT')
-  const decrementStep = () => dispatch('PREVIOUS')
   const [years, setYears] = useState(false)
   const [secondsPassed, setSecondsPassed] = useState(0)
   const [timerRunning, setTimerRunning] = useState(false)
@@ -68,7 +59,6 @@ const NameRegister = ({
   const [blockCreatedAt, setBlockCreatedAt] = useState(null)
   const [waitUntil, setWaitUntil] = useState(null)
   const [targetDate, setTargetDate] = useState(false)
-  const [targetPremium, setTargetPremium] = useState(false)
   const [commitmentExpirationDate, setCommitmentExpirationDate] =
     useState(false)
   const [freeDuration, setFreeDuration] = useState(0)
@@ -77,10 +67,8 @@ const NameRegister = ({
   const [transactionHash, setTransactionHash] = useState('')
   const [signature, setSignature] = useState([])
   const [isAuctionWinner, setIsAuctionWinner] = useState(false)
-  const [discountAmount, setDiscountAmount] = useState({
-    percent: 0,
-    amount: 0,
-  })
+  const [discountAmount, setDiscountAmount] = useState(null)
+  const [winnerLoading, setWinnerLoading] = useState(false)
 
   const {
     data: { getEthPrice: ethUsdPrice } = {},
@@ -99,6 +87,7 @@ const NameRegister = ({
   const { data: { transactionHistory } = {} } = useQuery(
     GET_TRANSACTION_HISTORY
   )
+
   const lastTransaction = last(transactionHistory)
 
   useEffect(() => {
@@ -110,56 +99,62 @@ const NameRegister = ({
       successRegister()
       setRegistering(false)
     }
+    if (
+      lastTransaction &&
+      lastTransaction.txHash === transactionHash &&
+      lastTransaction.txState === 'Error'
+    ) {
+      setCustomStep('ERROR')
+      setRegistering(false)
+    }
   }, [transactionHistory])
 
   const history = useHistory()
-
   const account = useAccount()
-
   useEffect(() => {
     const fetchSignature = async () => {
-      const result = await axios({
-        method: 'get',
-        url: `${process.env.REACT_APP_BACKEND_URL}/merkleleaf?domain=${domain.label}`,
-      })
-
-      setFreeDuration(result?.data?.data?.isaution ? 31536000 : 0)
-      setIndex(result?.data?.data?.index)
-
-      if (result?.data?.data?.isaution) {
-        setIsAuctionWinner(true)
-      } else {
-        setIsAuctionWinner(false)
-      }
-
-      const params = {
-        inputs: [
-          {
-            name: domain.label,
-            index: result?.data?.data?.index,
-            owner: account, //
-            duration,
-            resolver: process.env.REACT_APP_RESOLVER_ADDRESS, // FIXME this is not fixed
-            addr: account, //Eth wallet of user connected with metamask
-            freeDuration: result?.data?.data?.isaution ? 31536000 : 0,
-          },
-        ],
-      }
-
-      console.log('hey this is from env', process.env)
-
-      const result1 = await axios({
-        method: 'post',
-        url: `${process.env.REACT_APP_MERKLE_BASE_URL}/getproof`,
-        headers: {},
-        data: params,
-      })
-
-      const proofs = result1?.data
-      if (proofs && proofs.length > 0) {
-        setSignature(proofs)
-      } else {
-        setSignature([])
+      setWinnerLoading(true)
+      try {
+        const result = await axios({
+          method: 'get',
+          url: `${process.env.REACT_APP_BACKEND_URL}/merkleleaf?domain=${domain.label}`,
+        })
+        setFreeDuration(result?.data?.data?.isaution ? 31536000 : 0)
+        setIndex(result?.data?.data?.index)
+        if (result?.data?.data?.isaution) {
+          setIsAuctionWinner(true)
+        } else {
+          setIsAuctionWinner(false)
+        }
+        const params = {
+          inputs: [
+            {
+              name: domain.label,
+              index: result?.data?.data?.index,
+              owner: account, //
+              duration,
+              resolver: process.env.REACT_APP_RESOLVER_ADDRESS, // FIXME this is not fixed
+              addr: account, //Eth wallet of user connected with metamask
+              freeDuration: result?.data?.data?.isaution ? 31536000 : 0,
+            },
+          ],
+        }
+        const result1 = await axios({
+          method: 'post',
+          url: `${process.env.REACT_APP_MERKLE_BASE_URL}/getproof`,
+          headers: {},
+          data: params,
+        })
+        const proofs = result1?.data
+        if (proofs && proofs.length > 0) {
+          setSignature(proofs)
+        } else {
+          setSignature([])
+        }
+        setWinnerLoading(false)
+      } catch (err) {
+        setWinnerLoading(false)
+        console.log('hey err', err)
       }
     }
     fetchSignature()
@@ -193,7 +188,6 @@ const NameRegister = ({
       variables: {
         label: domain.label,
         secret,
-        // Add this varialbe so that it keeps polling only during the timer is on
         commitmentTimerRunning,
       },
       fetchPolicy: 'no-cache',
@@ -231,7 +225,6 @@ const NameRegister = ({
         setSecondsPassed((s) => s + 1)
       } else {
         if (waitBlockTimestamp && timerRunning) {
-          incrementStep()
           sendNotification(
             `${domain.name} ${t('register.notifications.ready')}`
           )
@@ -241,21 +234,8 @@ const NameRegister = ({
     },
     timerRunning ? 1000 : null
   )
-  useInterval(
-    () => {
-      if (checkCommitment > 0) {
-        incrementStep()
-        setTimerRunning(true)
-        setCommitmentTimerRunning(false)
-      } else {
-        setCommitmentTimerRunning(new Date())
-      }
-    },
-    commitmentTimerRunning ? 1000 : null
-  )
 
   const parsedYears = parseFloat(isAuctionWinner ? years - 1 : years)
-
   const duration = calculateDuration(isAuctionWinner ? years - 1 : years)
 
   const { data: { getRentPrice } = {}, loading: rentPriceLoading } = useQuery(
@@ -317,7 +297,6 @@ const NameRegister = ({
 
   const oneMonthInSeconds = 2419200
   const twentyEightDaysInYears = oneMonthInSeconds / yearInSeconds
-  const isAboveMinDuration = parsedYears > twentyEightDaysInYears
 
   const expiryDate = moment(domain.expiryTime)
   const oracle = new PremiumPriceOracle(expiryDate, getPriceCurve)
@@ -330,9 +309,6 @@ const NameRegister = ({
 
   if (!targetDate) {
     setTargetDate(zeroPremiumDate)
-    setTargetPremium(
-      oracle.getTargetAmountByDaysPast(oracle.getDaysPast(zeroPremiumDate))
-    )
   }
 
   if (block) {
@@ -345,15 +321,11 @@ const NameRegister = ({
     setCustomStep('SUCCESS')
   }
 
-  const paymentSuccess = () => {
-    setCustomStep('PAYMENT')
-  }
-
   const connectHandler = () => {
     connectProvider()
   }
 
-  const manageProfile = () => history.push('/profile')
+  if (winnerLoading) return <AnimationSpin size={40} />
 
   return (
     <div className="max-w-[448px] mx-auto">
@@ -362,200 +334,175 @@ const NameRegister = ({
           {domain.name}
         </p>
       </div>
-
-      {/* Register Process Screen if the user doesn't have any domain */}
       {customStep === 'START' && (
         <div>
           <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
-            {step === 'AWAITING_REGISTER' && (
-              <Pricer
-                name={domain.label}
-                duration={duration}
-                years={years}
-                setYears={setYears}
-                ethUsdPriceLoading={ethUsdPriceLoading}
-                ethUsdPremiumPrice={currentPremium}
-                ethUsdPrice={ethUsdPrice}
-                gasPrice={gasPrice}
-                loading={rentPriceLoading}
-                price={getRentPrice}
-                premiumOnlyPrice={getPremiumPrice}
-                underPremium={underPremium}
-                displayGas={true}
-                discount={discountAmount}
-                signature={signature}
-                isAuctionWinner={isAuctionWinner}
-              />
-            )}
+            <Pricer
+              name={domain.label}
+              duration={duration}
+              years={years}
+              setYears={setYears}
+              ethUsdPriceLoading={ethUsdPriceLoading}
+              ethUsdPremiumPrice={currentPremium}
+              ethUsdPrice={ethUsdPrice}
+              gasPrice={gasPrice}
+              loading={rentPriceLoading}
+              price={getRentPrice}
+              premiumOnlyPrice={getPremiumPrice}
+              underPremium={underPremium}
+              displayGas={true}
+              discount={discountAmount}
+              signature={signature}
+              isAuctionWinner={isAuctionWinner}
+            />
           </div>
           <CTA
             setTransactionHash={setTransactionHash}
             setCustomStep={setCustomStep}
             signature={signature}
             hasSufficientBalance={hasSufficientBalance}
-            waitTime={waitTime}
-            incrementStep={incrementStep}
-            decrementStep={decrementStep}
-            secret={secret}
             step={step}
             label={domain.label}
             duration={duration}
-            secondsPassed={secondsPassed}
-            timerRunning={timerRunning}
-            setTimerRunning={setTimerRunning}
-            setCommitmentTimerRunning={setCommitmentTimerRunning}
-            commitmentTimerRunning={commitmentTimerRunning}
-            setBlockCreatedAt={setBlockCreatedAt}
-            refetch={refetch}
-            refetchIsMigrated={refetchIsMigrated}
-            isAboveMinDuration={isAboveMinDuration}
-            readOnly={readOnly}
-            price={getRentPrice}
             years={years}
-            premium={currentPremium}
-            ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
             successRegister={successRegister}
             connectHandler={connectHandler}
             setRegistering={setRegistering}
             registering={registering}
-            paymentSuccess={paymentSuccess}
+            paymentSuccess={() => setCustomStep('PAYMENT')}
             freeDuration={freeDuration}
             index={index}
           />
         </div>
       )}
-
       {(customStep === 'SUCCESS' ||
         customStep === 'PENDING' ||
         customStep === 'PAYMENT' ||
         customStep === 'ERROR') && (
-          <div className="max-w-[436px]">
-            <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
-              <div className="flex justify-center">
-                <EditIcon />
-              </div>
-              {customStep === 'PENDING' ? (
-                <div className="font-semibold text-[24px] text-white text-center mt-2">
-                  Registration in progress...
-                </div>
-              ) : (
-                <div className="font-semibold text-[24px] text-white text-center mt-2">
-                  {customStep === 'ERROR' ? (
-                    <span>Registration incompleted :(</span>
-                  ) : (
-                    <span>Registration completed!</span>
-                  )}
-                </div>
-              )}
-              {customStep === 'PENDING' ||
-                (customStep === 'PAYMENT' && (
-                  <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
-                    Please be patient as the process might take a while.
-                  </div>
-                ))}
-
-              <div className="mt-8">
-                <div className="text-center">
-                  <div
-                    className={cn(
-                      customStep === 'ERROR'
-                        ? 'text-[#ED7E17]'
-                        : 'text-[#30DB9E]',
-                      'font-semibold text-[16px]'
-                    )}
-                  >
-                    Confirm Payment
-                  </div>
-                  {customStep === 'PENDING' ? (
-                    <AnimationSpin className="flex justify-center mt-1" />
-                  ) : (
-                    <div>
-                      {customStep === 'ERROR' ? (
-                        <FailedIcon className="text-[#ED7E17] flex justify-center my-2" />
-                      ) : (
-                        <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
-                      )}
-                    </div>
-                  )}
-                </div>
-                <div className="text-center mt-1">
-                  <div
-                    className={cn(
-                      'font-semibold text-[16px]',
-                      customStep === 'PENDING'
-                        ? 'text-[#7E9195]'
-                        : customStep === 'ERROR'
-                          ? 'text-[#ED7E17]'
-                          : 'text-[#30DB9E]'
-                    )}
-                  >
-                    Successful registration. Name published
-                  </div>
-                  {customStep === 'PENDING' ? (
-                    <div className="w-2 h-2 bg-[#7E9195] rounded-full flex justify-center mt-[14px] m-auto" />
-                  ) : customStep === 'PAYMENT' ? (
-                    <AnimationSpin className="flex justify-center mt-1" />
-                  ) : (
-                    <div>
-                      {customStep === 'ERROR' ? (
-                        <FailedIcon className="text-[#ED7E17] flex justify-center my-2" />
-                      ) : (
-                        <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-              {customStep === 'ERROR' && (
-                <div className="text-[#BDCED1] text-[16px] text-center mt-8">
-                  Something went wrong in the registration process. You may choose
-                  to retry and be redirected back to the payment review page.
-                </div>
-              )}
-
-              {customStep === 'ERROR' ? (
-                <div className="flex justify-center mt-10">
-                  <button
-                    className={cn(
-                      'py-2 border rounded-[16px] text-[#071A2F] font-semibold bg-[#30DB9E] border-0 px-[30px]'
-                    )}
-                    onClick={() => setCustomStep('START')}
-                  >
-                    Retry
-                  </button>
-                </div>
-              ) : (
-                <div className="flex justify-center mt-10">
-                  <button
-                    className={cn(
-                      'py-2 border rounded-[16px] font-semibold border-0 px-[30px]',
-                      customStep === 'SUCCESS'
-                        ? 'text-[#071A2F] bg-[#30DB9E]'
-                        : 'bg-[#7E9195] text-white'
-                    )}
-                    disabled={customStep !== 'SUCCESS'}
-                    onClick={() => manageProfile()}
-                  >
-                    Manage Profile
-                  </button>
-                </div>
-              )}
+        <div className="max-w-[436px]">
+          <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
+            <div className="flex justify-center">
+              <EditIcon />
             </div>
+            {customStep === 'PENDING' ? (
+              <div className="font-semibold text-[24px] text-white text-center mt-2">
+                Registration in progress...
+              </div>
+            ) : (
+              <div className="font-semibold text-[24px] text-white text-center mt-2">
+                {customStep === 'ERROR' ? (
+                  <span>Registration incompleted :(</span>
+                ) : (
+                  <span>Registration completed!</span>
+                )}
+              </div>
+            )}
+            {customStep === 'PENDING' ||
+              (customStep === 'PAYMENT' && (
+                <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
+                  Please be patient as the process might take a while.
+                </div>
+              ))}
+
+            <div className="mt-8">
+              <div className="text-center">
+                <div
+                  className={cn(
+                    customStep === 'ERROR'
+                      ? 'text-[#ED7E17]'
+                      : 'text-[#30DB9E]',
+                    'font-semibold text-[16px]'
+                  )}
+                >
+                  Confirm Payment
+                </div>
+                {customStep === 'PENDING' ? (
+                  <AnimationSpin className="flex justify-center mt-1" />
+                ) : (
+                  <div>
+                    {customStep === 'ERROR' ? (
+                      <FailedIcon className="text-[#ED7E17] flex justify-center my-2" />
+                    ) : (
+                      <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="text-center mt-1">
+                <div
+                  className={cn(
+                    'font-semibold text-[16px]',
+                    customStep === 'PENDING'
+                      ? 'text-[#7E9195]'
+                      : customStep === 'ERROR'
+                      ? 'text-[#ED7E17]'
+                      : 'text-[#30DB9E]'
+                  )}
+                >
+                  Successful registration. Name published
+                </div>
+                {customStep === 'PENDING' ? (
+                  <div className="w-2 h-2 bg-[#7E9195] rounded-full flex justify-center mt-[14px] m-auto" />
+                ) : customStep === 'PAYMENT' ? (
+                  <AnimationSpin className="flex justify-center mt-1" />
+                ) : (
+                  <div>
+                    {customStep === 'ERROR' ? (
+                      <FailedIcon className="text-[#ED7E17] flex justify-center my-2" />
+                    ) : (
+                      <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            {customStep === 'ERROR' && (
+              <div className="text-[#BDCED1] text-[16px] text-center mt-8">
+                Something went wrong in the registration process. You may choose
+                to retry and be redirected back to the payment review page.
+              </div>
+            )}
+
+            {customStep === 'ERROR' ? (
+              <div className="flex justify-center mt-10">
+                <button
+                  className={cn(
+                    'py-2 border rounded-[16px] text-[#071A2F] font-semibold bg-[#30DB9E] border-0 px-[30px]'
+                  )}
+                  onClick={() => setCustomStep('START')}
+                >
+                  Retry
+                </button>
+              </div>
+            ) : (
+              <div className="flex justify-center mt-10">
+                <button
+                  className={cn(
+                    'py-2 border rounded-[16px] font-semibold border-0 px-[30px]',
+                    customStep === 'SUCCESS'
+                      ? 'text-[#071A2F] bg-[#30DB9E]'
+                      : 'bg-[#7E9195] text-white'
+                  )}
+                  disabled={customStep !== 'SUCCESS'}
+                  onClick={() => history.push('/profile')}
+                >
+                  Manage Profile
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
+      )}
     </div>
   )
 }
 
 const NameRegisterDataWrapper = (props) => {
   const { data, loading, error } = useQuery(GET_MINIMUM_COMMITMENT_AGE)
-
   if (loading) return <AnimationSpin size={40} />
-
   if (error) {
     console.log(error)
   }
-
   return <NameRegister waitTime={data?.getMinimumCommitmentAge} {...props} />
 }
 

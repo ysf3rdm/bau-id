@@ -12,7 +12,11 @@ import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
 import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
 
 import '../../api/subDomainRegistrar'
-import { parseSearchTerm, validateName, validateDomain } from '../../utils/utils'
+import {
+  parseSearchTerm,
+  validateName,
+  validateDomain,
+} from '../../utils/utils'
 
 function Search({
   history,
@@ -23,7 +27,7 @@ function Search({
   isShowSearchBtn = true,
   errorsStyling = false,
   suggestionClassName = 'w-[calc(100%-56px)]',
-  isAbsolutePosition = true
+  isAbsolutePosition = true,
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
@@ -33,8 +37,9 @@ function Search({
     setShowPopup(false)
     if (result.Owner) {
       const date = new Date(result?.Expires)
-      const expires_at = `${date.getFullYear()}.${date.getMonth() +
-        1}.${date.getDate()}`
+      const expires_at = `${date.getFullYear()}.${
+        date.getMonth() + 1
+      }.${date.getDate()}`
       dispatch(setSelectedDomain({ ...result, expires_at }))
       history.push(`/profile`)
     } else {
@@ -47,13 +52,13 @@ function Search({
       dispatch(setSearchDomainName(''))
       const params = {
         ChainID: 97,
-        name: searchingDomainName
+        name: searchingDomainName,
       }
       axios
         .post(`https://backend.stg.space.id/nameof`, {
-          ...params
+          ...params,
         })
-        .then(res => {
+        .then((res) => {
           setResult(res.data)
           setShowPopup(true)
         })
@@ -64,7 +69,7 @@ function Search({
     <div className={cn('relative', className)}>
       <Formik
         initialValues={{ searchKey: searchingDomainName ?? '' }}
-        validate={async values => {
+        validate={async (values) => {
           let errors = {}
           try {
             let searchTerm
@@ -90,13 +95,13 @@ function Search({
         onSubmit={(values, { setSubmitting }) => {
           const params = {
             ChainID: 97,
-            name: values.searchKey
+            name: values.searchKey,
           }
           axios
             .post(`https://backend.stg.space.id/nameof`, {
-              ...params
+              ...params,
             })
-            .then(res => {
+            .then((res) => {
               setResult(res.data)
               setShowPopup(true)
             })
@@ -108,7 +113,7 @@ function Search({
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
         }) => (
           <form
             className={cn(`relative`)}
@@ -128,7 +133,7 @@ function Search({
                   isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]'
                 )}
                 placeholder="Explore the space"
-                onChange={e => {
+                onChange={(e) => {
                   setShowPopup(false)
                   handleChange(e)
                 }}
@@ -155,7 +160,7 @@ function Search({
               )}
             <div
               className={cn(
-                'text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute top-[10px]',
+                'text-primary font-urbanist font-semibold text-[16px] absolute top-[10px]',
                 isShowSearchBtn ? 'right-[110px]' : 'right-[20px]'
               )}
             >
@@ -164,7 +169,7 @@ function Search({
             {isShowSearchBtn && (
               <button
                 type="submit"
-                className="w-[92px] bg-[#1EEFA4] text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
+                className="text-darkButton w-[92px] bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
               >
                 Search
               </button>
@@ -226,7 +231,7 @@ const SearchContainer = ({
   searchDomain,
   className,
   style,
-  searchingDomainName
+  searchingDomainName,
 }) => {
   return (
     <SearchWithRouter

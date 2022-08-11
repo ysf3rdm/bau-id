@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from '@emotion/styled/macro'
+import AnimationSpin from 'components/AnimationSpin/index'
 
 const LoaderContainer = styled('div')`
-  ${p =>
+  ${(p) =>
     p.center &&
     `
     width: 100%;
@@ -55,40 +56,19 @@ const LoaderContainer = styled('div')`
   }
 `
 
-const LoaderWrapper = styled('div')`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 50px 0;
-`
-
 const InlineLoaderContainer = styled('span')`
   display: inline-flex;
 `
 
-const Loader = props => {
-  const { withWrap } = props
-  if (withWrap) {
-    return (
-      <LoaderWrapper>
-        <LoaderContainer className="lds-css" {...props}>
-          <div className="lds-dual-ring">
-            <div />
-          </div>
-        </LoaderContainer>
-      </LoaderWrapper>
-    )
-  }
+const Loader = (props) => {
   return (
-    <LoaderContainer className="lds-css" {...props}>
-      <div className="lds-dual-ring">
-        <div />
-      </div>
-    </LoaderContainer>
+    <div>
+      <AnimationSpin size={40} />
+    </div>
   )
 }
 
-export const InlineLoader = props => {
+export const InlineLoader = (props) => {
   return (
     <InlineLoaderContainer>
       <LoaderContainer className="lds-css" {...props}>

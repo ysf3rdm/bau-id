@@ -19,36 +19,34 @@ const SINGLE_NAME = gql`
 
 function SingleName({
   match: {
-    params: { name: searchTerm }
+    params: { name: searchTerm },
   },
-  location: { pathname }
+  location: { pathname },
 }) {
   let history = useHistory()
-  useScrollTo(0)
   const [valid, setValid] = useState(undefined)
   const [type, setType] = useState(undefined)
-  const [name, setNormalisedName] = useState('')
+  const [name, setNormalizedName] = useState('')
   let errorMessage
-
   const {
-    data: { isENSReady }
+    data: { isENSReady },
   } = useQuery(SINGLE_NAME)
   const { data, loading, error, refetch } = useQuery(GET_SINGLE_NAME, {
     variables: { name },
     fetchPolicy: 'no-cache',
     context: {
-      queryDeduplication: false
-    }
+      queryDeduplication: false,
+    },
   })
 
   useEffect(() => {
-    let normalisedName
+    let normalizedName
     if (isENSReady) {
       let domain = searchTerm;
       let suffix = '';
       let i = domain.lastIndexOf('.');
-      if (i>0) {
-        domain = searchTerm.substring(0,i);
+      if (i > 0) {
+        domain = searchTerm.substring(0, i);
         suffix = searchTerm.substring(i);
       }
       if (suffix !== '.bnb' || !validateDomain(domain)) {
@@ -57,9 +55,8 @@ function SingleName({
         history.replace('/404')
       } else {
         try {
-          normalisedName = validateName(searchTerm)
-          setNormalisedName(normalisedName)
-          document.title = searchTerm
+          normalizedName = validateName(searchTerm)
+          setNormalizedName(normalizedName)
         } catch {
           document.title = 'Error finding name'
         } finally {

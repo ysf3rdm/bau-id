@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next'
 function PricerInner({
   years,
   setYears,
-  duration,
   ethUsdPriceLoading,
   ethUsdPrice,
   ethUsdPremiumPrice,
@@ -26,7 +25,6 @@ function PricerInner({
   discount,
   isAuctionWinner,
 }) {
-  const { t } = useTranslation()
   const ethVal = new EthVal(`${price || 0}`).toEth()
   const registrationFee =
     years === 1 && isAuctionWinner
