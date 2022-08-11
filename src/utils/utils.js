@@ -7,7 +7,7 @@ import {
   isEncodedLabelhash,
   isLabelValid as _isLabelValid,
   parseSearchTerm as _parseSearchTerm,
-  validateName as _validateName
+  validateName as _validateName,
 } from 'ui'
 import * as jsSHA3 from 'js-sha3'
 import { throttle } from 'lodash'
@@ -36,14 +36,14 @@ export const networkName = {
   rinkeby: 'rinkeby',
   ropsten: 'ropsten',
   bsc_test: 'bsc_test',
-  local: 'local'
+  local: 'local',
 }
 
 export const supportedAvatarProtocols = [
   'http://',
   'https://',
   'ipfs://',
-  'eip155'
+  'eip155',
 ]
 
 export const addressUtils = {
@@ -79,12 +79,13 @@ export const addressUtils = {
       const isValidChecksummedAddress = addressUtils.isChecksumAddress(address)
       return isValidChecksummedAddress
     }
-  }
+  },
 }
 
 export const uniq = (a, param) =>
   a.filter(
-    (item, pos) => a.map(mapItem => mapItem[param]).indexOf(item[param]) === pos
+    (item, pos) =>
+      a.map((mapItem) => mapItem[param]).indexOf(item[param]) === pos
   )
 
 export async function getEtherScanAddr() {
@@ -111,7 +112,7 @@ export async function ensStartBlock() {
   return _ensStartBlock()
 }
 
-export const checkLabels = (...labelHashes) => labelHashes.map(hash => null)
+export const checkLabels = (...labelHashes) => labelHashes.map((hash) => null)
 
 // export const checkLabels = (...labelHashes) =>
 //   labelHashes.map(labelHash => checkLabelHash(labelHash) || null)
@@ -129,7 +130,7 @@ export function isLabelValid(name) {
   return _isLabelValid(name)
 }
 
-export const parseSearchTerm = async term => {
+export const parseSearchTerm = async (term) => {
   const domains = term.split('.')
   const tld = domains[domains.length - 1]
   try {
@@ -143,7 +144,7 @@ export const parseSearchTerm = async term => {
 export function humaniseName(name) {
   return name
     .split('.')
-    .map(label => {
+    .map((label) => {
       return isEncodedLabelhash(label) ? `[unknown${label.slice(1, 8)}]` : label
     })
     .join('.')
@@ -210,7 +211,7 @@ export function isRecordEmpty(value) {
   return value === emptyAddress || value === ''
 }
 
-export const hasValidReverseRecord = getReverseRecord =>
+export const hasValidReverseRecord = (getReverseRecord) =>
   getReverseRecord?.name && getReverseRecord.name !== emptyAddress
 
 export const hasNonAscii = () => {
@@ -245,7 +246,7 @@ export function isOwnerOfParentDomain(domain, account) {
 
 export function filterNormalised(data, name, nested = false) {
   try {
-    return data?.filter(data => {
+    return data?.filter((data) => {
       const domain = nested ? data.domain : data
       return domain[name] === normalize(domain[name])
     })
@@ -253,7 +254,7 @@ export function filterNormalised(data, name, nested = false) {
     if (e.message.match(/Illegal char/)) {
       globalErrorReactive({
         ...globalErrorReactive(),
-        invalidCharacter: 'Invalid character'
+        invalidCharacter: 'Invalid character',
       })
       return
     }
@@ -261,7 +262,7 @@ export function filterNormalised(data, name, nested = false) {
 }
 
 export function normaliseOrMark(data, name, nested = false) {
-  return data?.map(data => {
+  return data?.map((data) => {
     const domain = nested ? data.domain : data
     let normalised
 
@@ -274,7 +275,7 @@ export function normaliseOrMark(data, name, nested = false) {
 
       globalErrorReactive({
         ...globalErrorReactive(),
-        invalidCharacter: 'Name error: ' + e.message
+        invalidCharacter: 'Name error: ' + e.message,
       })
       return { ...data, hasInvalidCharacter: true }
     }
@@ -297,7 +298,7 @@ export function prependUrl(url) {
 
 export function imageUrl(url, name, network) {
   const _network = networkName[network?.toLowerCase()]
-  const _protocol = supportedAvatarProtocols.find(proto =>
+  const _protocol = supportedAvatarProtocols.find((proto) =>
     url.startsWith(proto)
   )
   // check if given uri is supported
@@ -338,4 +339,20 @@ export function convertToETHAddressDisplayFormat(address) {
     address.length - 6,
     address.length
   )}`
+}
+
+export const validateDomain = (value) => {
+  const nospecial = /^[^*|\\":<>[\]{}`\\\\()';@&$]+$/u
+  // black list ASCII中的十进制0-44, 46-47, 58-94, 96, 123-127
+  const blackList =
+    // eslint-disable-next-line no-control-regex
+    /[\u0000-\u002c\u002e-\u002f\u003a-\u005e\u0060\u007b-\u007f]/g
+  if (!nospecial.test(value)) {
+    return false
+  } else if (blackList.test(value)) {
+    return false
+  } else if (!validate(value)) {
+    return false
+  }
+  return true
 }
