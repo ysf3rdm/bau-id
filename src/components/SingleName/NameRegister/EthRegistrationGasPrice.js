@@ -27,7 +27,6 @@ const EthRegistrationGasPrice = ({
     totalInUsdFast = totalFast.mul(ethUsdPrice)
   }
 
-  // totalInUsdFast
   return (
     <div>
       <div className="text-white py-[25px] border-y border-white border-dashed mt-6 px-6">
@@ -57,13 +56,9 @@ const EthRegistrationGasPrice = ({
         <div className="text-[14px] leading-[22px] font-urbanist">
           Total Cost
         </div>
-        {/* {discount.percent !== 0 && years !== 1 && ( */}
         {!(isAuctionWinner && years === 1) && (
           <div className="font-bold text-[36px] text-white text-[24px] line-through heading-[34px]">
-            {registerGasFast
-              .add(ethVal / (1 - discount.percent / 100))
-              .toFixed(3)
-              .toString()}{' '}
+            {registerGasFast.add(registrationFee).toFixed(3).toString()}
             BNB
           </div>
         )}
