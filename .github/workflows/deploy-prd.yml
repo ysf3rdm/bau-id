@@ -17,12 +17,12 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install
-      - run: yarn run build:prd
+      - run: yarn run build:prd && cp -a build/. dist/ && cp -a build/. dist/app/
 
       - name: Deploy
         uses: reggionick/s3-deploy@v3
         with:
-          folder: 'build'
+          folder: 'dist'
           bucket: 'pre-prd-space-id'
           bucket-region: 'us-west-2'
           dist-id: 'E3SU0ENOLNWBR6'
