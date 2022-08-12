@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
+import { toArray } from 'lodash'
 import axios from 'axios'
 import { Formik } from 'formik'
 import { withRouter } from 'react-router'
@@ -82,7 +83,7 @@ function Search({
             const filterParsed = parsed.replace('.eth', '')
             values.searchKey = filterParsed
 
-            if (values.searchKey.length < 3) {
+            if (toArray(values.searchKey).length < 3) {
               errors.searchKey = 'Name length must be at least 3 characters'
             } else if (!validateDomain(values.searchKey)) {
               errors.searchKey = 'Name contains unsupported characters'
@@ -160,7 +161,7 @@ function Search({
               )}
             <div
               className={cn(
-                'text-[#1EEFA4] font-urbanist font-semibold text-[16px] absolute top-[10px]',
+                'text-primary font-urbanist font-semibold text-[16px] absolute top-[10px]',
                 isShowSearchBtn ? 'right-[110px]' : 'right-[20px]'
               )}
             >
@@ -169,7 +170,7 @@ function Search({
             {isShowSearchBtn && (
               <button
                 type="submit"
-                className="w-[92px] bg-[#1EEFA4] text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
+                className="text-darkButton w-[92px] bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
               >
                 Search
               </button>

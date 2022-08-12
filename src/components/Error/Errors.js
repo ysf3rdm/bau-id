@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 export default function Error404() {
   return (
-    <div className='min-h-[100vh] bg-[url("assets/images/home-bg.png")] flex items-center justify-center'>
+    <div className='min-h-[100vh] bg-[url("assets/images/home-bg.png")] flex items-center justify-center bg-no-repeat bg-cover'>
       <div className="text-center space-y-12 relative">
         <div className="text-[160px] font-bold left-[calc(50%-135px)] top-[80px] leading-[66px] absolute text-[rgba(204,252,255,0.2)]">
           404

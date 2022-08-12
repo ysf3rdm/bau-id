@@ -81,12 +81,11 @@ export default class Registrar {
       address: ethAddress,
       provider,
     })
-    const permanentRegistrarController = getPermanentRegistrarControllerContract(
-      {
+    const permanentRegistrarController =
+      getPermanentRegistrarControllerContract({
         address: controllerAddress,
         provider,
-      }
-    )
+      })
     const legacyAuctionRegistrar = getLegacyAuctionContract({
       address: legacyAuctionRegistrarAddress,
       provider,
@@ -341,7 +340,7 @@ export default class Registrar {
 
   async getRentPrices(labels, duration) {
     const pricesArray = await Promise.all(
-      labels.map(label => {
+      labels.map((label) => {
         return this.getRentPrice(label, duration)
       })
     )
@@ -359,12 +358,11 @@ export default class Registrar {
   }
 
   async makeCommitment(name, owner, secret = '') {
-    const permanentRegistrarControllerWithoutSigner = this
-      .permanentRegistrarController
+    const permanentRegistrarControllerWithoutSigner =
+      this.permanentRegistrarController
     const signer = await getSigner()
-    const permanentRegistrarController = permanentRegistrarControllerWithoutSigner.connect(
-      signer
-    )
+    const permanentRegistrarController =
+      permanentRegistrarControllerWithoutSigner.connect(signer)
     const account = await getAccount()
     const resolverAddr = await this.getAddress('resolver.bnb')
     if (parseInt(resolverAddr, 16) === 0) {
@@ -381,24 +379,22 @@ export default class Registrar {
   }
 
   async checkCommitment(label, secret = '') {
-    const permanentRegistrarControllerWithoutSigner = this
-      .permanentRegistrarController
+    const permanentRegistrarControllerWithoutSigner =
+      this.permanentRegistrarController
     const signer = await getSigner()
-    const permanentRegistrarController = permanentRegistrarControllerWithoutSigner.connect(
-      signer
-    )
+    const permanentRegistrarController =
+      permanentRegistrarControllerWithoutSigner.connect(signer)
     const account = await getAccount()
     const commitment = await this.makeCommitment(label, account, secret)
     return await permanentRegistrarController.commitments(commitment)
   }
 
   async commit(label, secret = '') {
-    const permanentRegistrarControllerWithoutSigner = this
-      .permanentRegistrarController
+    const permanentRegistrarControllerWithoutSigner =
+      this.permanentRegistrarController
     const signer = await getSigner()
-    const permanentRegistrarController = permanentRegistrarControllerWithoutSigner.connect(
-      signer
-    )
+    const permanentRegistrarController =
+      permanentRegistrarControllerWithoutSigner.connect(signer)
     const account = await getAccount()
     const commitment = await this.makeCommitment(label, account, secret)
 
@@ -406,12 +402,11 @@ export default class Registrar {
   }
 
   async register(label, duration, freeDuration, index, merkleProof) {
-    const permanentRegistrarControllerWithoutSigner = this
-      .permanentRegistrarController
+    const permanentRegistrarControllerWithoutSigner =
+      this.permanentRegistrarController
     const signer = await getSigner()
-    const permanentRegistrarController = permanentRegistrarControllerWithoutSigner.connect(
-      signer
-    )
+    const permanentRegistrarController =
+      permanentRegistrarControllerWithoutSigner.connect(signer)
     const account = await getAccount()
     const price = await this.getRentPrice(label, duration)
     const priceWithBuffer = getBufferedPrice(price)
@@ -488,12 +483,11 @@ export default class Registrar {
   }
 
   async renew(label, duration) {
-    const permanentRegistrarControllerWithoutSigner = this
-      .permanentRegistrarController
+    const permanentRegistrarControllerWithoutSigner =
+      this.permanentRegistrarController
     const signer = await getSigner()
-    const permanentRegistrarController = permanentRegistrarControllerWithoutSigner.connect(
-      signer
-    )
+    const permanentRegistrarController =
+      permanentRegistrarControllerWithoutSigner.connect(signer)
     const price = await this.getRentPrice(label, duration)
     const priceWithBuffer = getBufferedPrice(price)
     const gasLimit = await this.estimateGasLimit(() => {
@@ -527,9 +521,8 @@ export default class Registrar {
   async releaseDeed(label) {
     const legacyAuctionRegistrar = this.legacyAuctionRegistrar
     const signer = await getSigner()
-    const legacyAuctionRegistrarWithSigner = legacyAuctionRegistrar.connect(
-      signer
-    )
+    const legacyAuctionRegistrarWithSigner =
+      legacyAuctionRegistrar.connect(signer)
     const hash = labelhash(label)
     return legacyAuctionRegistrarWithSigner.releaseDeed(hash)
   }
@@ -638,10 +631,8 @@ export default class Registrar {
     const provider = await getProvider()
     const { claim, result } = await this.getDNSEntry(name, parentOwner)
     const owner = claim.getOwner()
-    const {
-      registrarContract: registrarWithoutSigner,
-      isOld,
-    } = await this.selectDnsRegistrarContract({ parentOwner, provider })
+    const { registrarContract: registrarWithoutSigner, isOld } =
+      await this.selectDnsRegistrarContract({ parentOwner, provider })
 
     const signer = await getSigner()
     const user = await signer.getAddress()

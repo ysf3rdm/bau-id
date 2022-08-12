@@ -9,10 +9,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import cn from 'classnames'
 import ClickAwayListener from 'react-click-away-listener'
 
+import { Button } from 'react-daisyui'
+
 // Import components
 import NoAccountsDefault from 'components/NoAccounts/NoAccounts'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
-import UnstyledBlockies from 'components/Blockies'
 import AnimationSpin from 'components/AnimationSpin'
 import DomainList from 'routes/Profile/components/Sidebar/DomainList'
 import {
@@ -36,6 +37,8 @@ import { globalErrorReactive } from 'apollo/reactiveVars'
 
 // Import assets
 import DefaultAvatar from 'assets/images/default-avatar.png'
+
+import { chainsInfo } from 'utils/constants'
 
 // Import custom functions
 import { connectProvider, disconnectProvider } from 'utils/providerUtils'
@@ -69,7 +72,6 @@ export const GET_ACCOUNT = gql`
 export default ({ children }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const location = useLocation()
   const history = useHistory()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -78,9 +80,6 @@ export default ({ children }) => {
   const [networkId, setNetworkID] = useState('')
 
   const domains = useSelector((state) => state.domain.domains)
-  const showNetworkErrorModal = useSelector(
-    (state) => state.ui.isShowNetworkErrorModal
-  )
   const selectedDomain = useSelector((state) => state.domain.selectedDomain)
   useReactiveVarListeners()
 
@@ -159,28 +158,31 @@ export default ({ children }) => {
   }
 
   const changeToBSCChain = async () => {
-    try {
-      await ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x61' }],
-      })
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        try {
-          await ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: '0x61',
-                chainName: 'BSC Testnet',
-                rpcUrls: [
-                  'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd',
-                ],
-              },
-            ],
-          })
-        } catch (addError) {
-          console.log()
+    const chainID = process.env.REACT_APP_NETWORK_CHAIN_ID
+    let chain = chainsInfo.filter((item) => item.chainId.toString() === chainID)
+    if (chain && chain.length > 0) {
+      chain = chain[0]
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${chain.chainId.toString(16)}` }],
+        })
+      } catch (err) {
+        if (err.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: `0x${chain.chainId.toString(16)}`,
+                  chainName: chain.chainName,
+                  rpcUrls: [chain.rpc],
+                },
+              ],
+            })
+          } catch (addError) {
+            console.log(addError)
+          }
         }
       }
     }
@@ -192,15 +194,11 @@ export default ({ children }) => {
   }
 
   const moveToWishList = () => {
-    history.push('https://pre.stg.space.id/auction/wishlist')
+    window.location.href = process.env.REACT_APP_AUCTION_WISHLIST_URL
   }
 
   const showDrawer = () => {
     dispatch(toggleDrawer(true))
-  }
-
-  const disconnect = () => {
-    disconnectProvider()
   }
 
   const closeModal = () => {
@@ -222,20 +220,20 @@ export default ({ children }) => {
           closeModal={closeModal}
         >
           <div className="text-[white]">
-            <div className="text-[20px] md:text-[28px] font-cocoSharp text-center font-bold">
+            <div className="text-[20px] md:text-[28px] font-cocoSharp text-center font-bold text-white">
               Unsupported Network
             </div>
-            <div className="text-urbanist font-semibold text-center mt-4">
+            <div className="text-urbanist font-semibold text-center mt-4 text-white">
               Please change your dapp browser to Binance Smart Chain Testnet to
               continue.
             </div>
             <div className="justify-center hidden md:flex">
-              <button
+              <Button
                 onClick={() => changeToBSCChain()}
-                className="mt-[36px] bg-[#30DB9E] rounded-full text-[14px] font-[urbanist] py-2 px-[36px] text-[#134757] font-semibold"
+                className="leading-[26px] border-none mt-[36px] bg-[#30DB9E] rounded-full text-[18px] font-urbanist py-2 px-[36px] text-secondary font-semibold normal-case"
               >
                 Switch to BSC Testnet
-              </button>
+              </Button>
             </div>
           </div>
         </Modal>

@@ -6,7 +6,6 @@ import { Provider } from 'react-redux'
 
 import App from 'App'
 import 'globalStyles'
-import './i18n'
 import './index.css'
 import setup from './setup'
 import { clientReactive, networkIdReactive } from './apollo/reactiveVars'
@@ -18,7 +17,7 @@ window.addEventListener('load', async () => {
   const client = clientReactive(setupClient(networkIdReactive()))
   ReactDOM.render(
     <Provider store={store}>
-      <Suspense fallback={<Loader withWrap large />}>
+      <Suspense fallback={<Loader fullScreenLoading />}>
         <ApolloProvider {...{ client }}>
           <App />
         </ApolloProvider>

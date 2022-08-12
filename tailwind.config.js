@@ -1,5 +1,9 @@
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    './src/**/*.{js,jsx,ts,tsx}',
+    'node_modules/daisyui/dist/**/*.js',
+    'node_modules/react-daisyui/dist/**/*.js',
+  ],
   theme: {
     colors: {
       gray: {
@@ -9,7 +13,7 @@ module.exports = {
         400: '#C7C8D3',
         500: '#E3E3E9',
       },
-      primary: '#1EEFA4',
+      primary: '#134757',
       primaryBg: '#F8F8FC',
       primaryDark: '#0C0D17',
       green: '#25C196',
@@ -17,6 +21,7 @@ module.exports = {
       alert: '#F9AF60',
       purple: '#6852F5',
       white: '#ffffff',
+      darkButton: '#134757',
     },
     screens: {
       sm: '640px',
@@ -51,6 +56,23 @@ module.exports = {
         'home-bg': "url('/assets/images/heroBG.png')",
       },
     },
+  },
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: '#1EEFA4',
+          secondary: '#071A2F',
+          accent: '#a0d33b',
+          neutral: '#262B31',
+          'base-100': '#F1EEF6',
+          info: '#589DCA',
+          success: '#218752',
+          warning: '#EFCC43',
+          error: '#E66067',
+        },
+      },
+    ],
   },
   plugins: [require('daisyui')],
 }

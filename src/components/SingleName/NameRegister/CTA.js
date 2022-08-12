@@ -1,21 +1,14 @@
-// Import packages
 import React, { useState, useEffect } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { useHistory } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import last from 'lodash/last'
 import { useDispatch } from 'react-redux'
 import cn from 'classnames'
 
-import { REGISTER } from '../../../graphql/mutations'
-
-import { useEditable } from 'components/hooks'
-
-import { useAccount } from '../../QueryAccount'
-import { GET_TRANSACTION_HISTORY } from 'graphql/queries'
-
-import InsufficientBalanceModal from '../../Modal/InsufficientBalanceModal'
+import InsufficientBalanceModal from 'components/Modal/InsufficientBalanceModal'
 import AnimationSpin from '../../AnimationSpin/index'
+
+import { REGISTER } from 'graphql/mutations'
+import { useAccount } from '../../QueryAccount'
 
 import { startRegistering } from 'app/slices/registerSlice'
 
@@ -30,11 +23,9 @@ export const HOME_DATA = gql`
 
 const CTA = ({
   setCustomStep,
-  step,
   duration,
   label,
   hasSufficientBalance,
-  refetch,
   years,
   signature,
   connectHandler,
@@ -45,16 +36,13 @@ const CTA = ({
   setRegistering,
   paymentSuccess,
   freeDuration,
-  index
+  index,
 }) => {
-  const { t } = useTranslation()
   const history = useHistory()
   const account = useAccount()
   const dispatch = useDispatch()
-  const [showSufficientBalanceModal, setShowSufficientBalanceModal] = useState(
-    false
-  )
-  const [txHash, setTxHash] = useState('')
+  const [showSufficientBalanceModal, setShowSufficientBalanceModal] =
+    useState(false)
 
   useEffect(() => {
     if (isRegisterSuccess) {
@@ -65,26 +53,24 @@ const CTA = ({
 
   const { data } = useQuery(HOME_DATA, {
     variables: {
-      address: account
-    }
+      address: account,
+    },
   })
 
   const { isReadOnly } = data
 
-  const { actions } = useEditable()
-
   const [mutationRegister] = useMutation(REGISTER, {
-    onCompleted: data => {
+    onCompleted: (data) => {
+      console.log(data)
       if (data?.register?.err) {
         setCustomStep('ERROR')
         errorRegistering()
         setRegistering(false)
       } else {
-        setTxHash(data.register)
         setTransactionHash(data.register)
         paymentSuccess()
       }
-    }
+    },
   })
 
   const goBack = () => {
@@ -104,7 +90,7 @@ const CTA = ({
       duration,
       signature,
       freeDuration,
-      index
+      index,
     }
     mutationRegister({ variables })
   }

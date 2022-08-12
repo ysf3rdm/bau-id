@@ -67,7 +67,7 @@ const resolvers = {
       } catch (e) {
         console.log(e)
       }
-    }
+    },
   },
   Mutation: {
     async commit(_, { label, secret }) {
@@ -87,6 +87,7 @@ const resolvers = {
         )
         return sendHelper(tx)
       } catch (err) {
+        console.log(err)
         if (
           err.message.includes(
             'MetaMask Tx Signature: User denied transaction signature.'
@@ -111,17 +112,12 @@ const resolvers = {
       const registrar = getRegistrar()
       const ens = getENS()
       try {
-        const {
-          state,
-          registrationDate,
-          revealDate,
-          value,
-          highestBid
-        } = await registrar.getEntry(name)
+        const { state, registrationDate, revealDate, value, highestBid } =
+          await registrar.getEntry(name)
         let owner = null
         if (isShortName(name)) {
           cache.writeData({
-            data: defaults
+            data: defaults,
           })
           return null
         }
@@ -139,8 +135,8 @@ const resolvers = {
             value,
             highestBid,
             owner,
-            __typename: 'DomainState'
-          }
+            __typename: 'DomainState',
+          },
         }
 
         cache.writeData({ data })
@@ -164,8 +160,8 @@ const resolvers = {
       const registrar = getRegistrar()
       const tx = await registrar.renewAll(labels, duration)
       return sendHelper(tx)
-    }
-  }
+    },
+  },
 }
 
 export default resolvers
