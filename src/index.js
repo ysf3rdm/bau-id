@@ -6,7 +6,6 @@ import { Provider } from 'react-redux'
 
 import App from 'App'
 import 'globalStyles'
-import './i18n'
 import './index.css'
 import setup from './setup'
 import { clientReactive, networkIdReactive } from './apollo/reactiveVars'
