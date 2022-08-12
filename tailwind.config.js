@@ -1,5 +1,9 @@
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    './src/**/*.{js,jsx,ts,tsx}',
+    'node_modules/daisyui/dist/**/*.js',
+    'node_modules/react-daisyui/dist/**/*.js',
+  ],
   theme: {
     colors: {
       gray: {
@@ -58,7 +62,7 @@ module.exports = {
       {
         mytheme: {
           primary: '#1EEFA4',
-          secondary: '#d659b5',
+          secondary: '#071A2F',
           accent: '#a0d33b',
           neutral: '#262B31',
           'base-100': '#F1EEF6',

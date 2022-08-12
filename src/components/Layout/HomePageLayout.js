@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import cn from 'classnames'
 import ClickAwayListener from 'react-click-away-listener'
 
+import { Button } from 'react-daisyui'
+
 // Import components
 import NoAccountsDefault from 'components/NoAccounts/NoAccounts'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
@@ -222,20 +224,20 @@ export default ({ children }) => {
           closeModal={closeModal}
         >
           <div className="text-[white]">
-            <div className="text-[20px] md:text-[28px] font-cocoSharp text-center font-bold">
+            <div className="text-[20px] md:text-[28px] font-cocoSharp text-center font-bold text-white">
               Unsupported Network
             </div>
-            <div className="text-urbanist font-semibold text-center mt-4">
+            <div className="text-urbanist font-semibold text-center mt-4 text-white">
               Please change your dapp browser to Binance Smart Chain Testnet to
               continue.
             </div>
             <div className="justify-center hidden md:flex">
-              <button
+              <Button
                 onClick={() => changeToBSCChain()}
-                className="mt-[36px] bg-[#30DB9E] rounded-full text-[14px] font-[urbanist] py-2 px-[36px] text-[#134757] font-semibold"
+                className="leading-[26px] border-none mt-[36px] bg-[#30DB9E] rounded-full text-[18px] font-urbanist py-2 px-[36px] text-secondary font-semibold normal-case"
               >
                 Switch to BSC Testnet
-              </button>
+              </Button>
             </div>
           </div>
         </Modal>
