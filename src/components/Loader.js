@@ -62,7 +62,13 @@ const InlineLoaderContainer = styled('span')`
 
 const Loader = (props) => {
   return (
-    <div>
+    <div
+      className={
+        props.fullScreenLoading
+          ? "bg-[url('assets/images/home-bg.png')] bg-cover relative min-h-[100vh] flex items-center justify-center"
+          : ''
+      }
+    >
       <AnimationSpin size={40} />
     </div>
   )

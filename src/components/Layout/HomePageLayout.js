@@ -14,7 +14,6 @@ import { Button } from 'react-daisyui'
 // Import components
 import NoAccountsDefault from 'components/NoAccounts/NoAccounts'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
-import UnstyledBlockies from 'components/Blockies'
 import AnimationSpin from 'components/AnimationSpin'
 import DomainList from 'routes/Profile/components/Sidebar/DomainList'
 import {
@@ -38,6 +37,8 @@ import { globalErrorReactive } from 'apollo/reactiveVars'
 
 // Import assets
 import DefaultAvatar from 'assets/images/default-avatar.png'
+
+import { chainsInfo } from 'utils/constants'
 
 // Import custom functions
 import { connectProvider, disconnectProvider } from 'utils/providerUtils'
@@ -71,7 +72,6 @@ export const GET_ACCOUNT = gql`
 export default ({ children }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const location = useLocation()
   const history = useHistory()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -80,9 +80,6 @@ export default ({ children }) => {
   const [networkId, setNetworkID] = useState('')
 
   const domains = useSelector((state) => state.domain.domains)
-  const showNetworkErrorModal = useSelector(
-    (state) => state.ui.isShowNetworkErrorModal
-  )
   const selectedDomain = useSelector((state) => state.domain.selectedDomain)
   useReactiveVarListeners()
 
@@ -161,28 +158,31 @@ export default ({ children }) => {
   }
 
   const changeToBSCChain = async () => {
-    try {
-      await ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x61' }],
-      })
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        try {
-          await ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: '0x61',
-                chainName: 'BSC Testnet',
-                rpcUrls: [
-                  'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd',
-                ],
-              },
-            ],
-          })
-        } catch (addError) {
-          console.log()
+    const chainID = process.env.REACT_APP_NETWORK_CHAIN_ID
+    let chain = chainsInfo.filter((item) => item.chainId.toString() === chainID)
+    if (chain && chain.length > 0) {
+      chain = chain[0]
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${chain.chainId.toString(16)}` }],
+        })
+      } catch (err) {
+        if (err.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: `0x${chain.chainId.toString(16)}`,
+                  chainName: chain.chainName,
+                  rpcUrls: [chain.rpc],
+                },
+              ],
+            })
+          } catch (addError) {
+            console.log(addError)
+          }
         }
       }
     }
@@ -194,15 +194,11 @@ export default ({ children }) => {
   }
 
   const moveToWishList = () => {
-    window.location.href = 'https://pre.stg.space.id/auction/wishlist'
+    window.location.href = process.env.REACT_APP_AUCTION_WISHLIST_URL
   }
 
   const showDrawer = () => {
     dispatch(toggleDrawer(true))
-  }
-
-  const disconnect = () => {
-    disconnectProvider()
   }
 
   const closeModal = () => {

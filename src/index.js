@@ -18,7 +18,7 @@ window.addEventListener('load', async () => {
   const client = clientReactive(setupClient(networkIdReactive()))
   ReactDOM.render(
     <Provider store={store}>
-      <Suspense fallback={<Loader withWrap large />}>
+      <Suspense fallback={<Loader fullScreenLoading />}>
         <ApolloProvider {...{ client }}>
           <App />
         </ApolloProvider>
