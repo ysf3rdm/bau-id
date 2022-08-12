@@ -2,7 +2,7 @@ name: Space ID App S3 Deploy - Staging
 
 on:
   push:
-    branches: [dev]
+    branches: [feature/add-baseurl-to-route]
 
 jobs:
   build-and-deploy:
@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install
-      - run: yarn run build && cp -a build/. dist/ && cp -a build/. dist/app/
+      - run: yarn run build:stg && cp -a build/. dist/ && cp -a build/. dist/app/
 
       - name: Deploy
         uses: reggionick/s3-deploy@v3
@@ -25,8 +25,8 @@ jobs:
           folder: 'dist'
           bucket: 'stg-app-baseurl-space-id'
           bucket-region: 'us-west-2'
-          dist-id: 'E2R5GONZT2GASZ'
-          invalidation: / /app/
+          dist-id: 'ESH7K4VJTGCUU'
+          invalidation: /app/
           delete-removed: true
           no-cache: false
           private: true
