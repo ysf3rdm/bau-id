@@ -9,25 +9,28 @@ export async function setupENS({
   reloadOnAccountsChange,
   enforceReadOnly,
   enforceReload,
-  infura
+  infura,
 } = {}) {
   const { provider } = await setupWeb3({
     customProvider,
     reloadOnAccountsChange,
     enforceReadOnly,
     enforceReload,
-    infura
+    infura,
   })
-  const networkId = await getNetworkId()
+  let networkId = await getNetworkId()
+  console.log('networkId', networkId)
   const ens = new ENS({ provider, networkId, registryAddress: ensAddress })
+  console.log('ens', ens)
   const registrar = await setupRegistrar(ens.registryAddress)
+  console.log('registrar', registrar)
   const network = await getNetwork()
   return {
     ens,
     registrar,
     provider: customProvider,
     network,
-    providerObject: provider
+    providerObject: provider,
   }
 }
 

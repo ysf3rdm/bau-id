@@ -42,6 +42,9 @@ function getLabelhash(label) {
 }
 
 const contracts = {
+  56: {
+    registry: process.env.REACT_APP_REGISTRY_ADDRESS,
+  },
   97: {
     registry: process.env.REACT_APP_REGISTRY_ADDRESS,
   },
@@ -55,6 +58,7 @@ export class ENS {
       Object.keys(this.contracts[networkId]).includes('registry')
 
     if (!hasRegistry && !registryAddress) {
+      console.log('networkId', networkId)
       throw new Error(`Unsupported network ${networkId}`)
     } else if (this.contracts[networkId] && !registryAddress) {
       registryAddress = contracts[networkId].registry

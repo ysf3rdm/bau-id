@@ -39,15 +39,16 @@ function SingleName({
     },
   })
 
+  console.log('data', data)
   useEffect(() => {
     let normalizedName
     if (isENSReady) {
-      let domain = searchTerm;
-      let suffix = '';
-      let i = domain.lastIndexOf('.');
+      let domain = searchTerm
+      let suffix = ''
+      let i = domain.lastIndexOf('.')
       if (i > 0) {
-        domain = searchTerm.substring(0, i);
-        suffix = searchTerm.substring(i);
+        domain = searchTerm.substring(0, i)
+        suffix = searchTerm.substring(i)
       }
       if (suffix !== '.bnb' || !validateDomain(domain)) {
         setValid(false)

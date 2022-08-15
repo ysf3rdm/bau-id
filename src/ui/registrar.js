@@ -76,7 +76,6 @@ export default class Registrar {
       legacyAuctionRegistrarAddress,
       provider,
     })
-
     const permanentRegistrar = getPermanentRegistrarContract({
       address: ethAddress,
       provider,
@@ -246,7 +245,6 @@ export default class Registrar {
         }
       }
     }
-
     return {
       ...legacyEntry,
       ...ret,

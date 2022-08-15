@@ -175,7 +175,11 @@ async function getRegistrarEntry(name) {
       return {}
     }
 
+    console.log('registrar', registrar)
+    console.log('nameArray[0]', nameArray[0])
     const entry = await registrar.getEntry(nameArray[0])
+
+    console.log('entry', entry)
 
     const {
       registrant,
