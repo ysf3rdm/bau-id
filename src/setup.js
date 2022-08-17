@@ -63,7 +63,6 @@ export const getProvider = async (reconnect) => {
     loadingWalletReactive(false)
     return provider
   } catch (e) {
-    console.log('hey e', e)
     if (e.message.match(/Unsupported network/)) {
       loadingWalletReactive(false)
       globalErrorReactive({

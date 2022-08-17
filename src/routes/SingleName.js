@@ -39,7 +39,6 @@ function SingleName({
     },
   })
 
-  console.log('data', data)
   useEffect(() => {
     let normalizedName
     if (isENSReady) {

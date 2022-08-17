@@ -62,7 +62,6 @@ const CTA = ({
 
   const [mutationRegister] = useMutation(REGISTER, {
     onCompleted: (data) => {
-      console.log(data)
       if (data?.register?.err) {
         setCustomStep('ERROR')
         errorRegistering()

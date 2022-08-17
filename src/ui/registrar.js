@@ -323,6 +323,7 @@ export default class Registrar {
 
   async getEthPrice() {
     const contractAddress = await this.getAddress('bnb-usd.data.bnb') // get price oracle addr
+    console.log('contractAddress', contractAddress)
     const oracle = await this.getOracle(contractAddress)
     return (await oracle.latestAnswer()).toNumber() / 100000000
   }

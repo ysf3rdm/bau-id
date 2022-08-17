@@ -148,7 +148,6 @@ export class ENS {
 
       return encoder(Buffer.from(addr.slice(2), 'hex'))
     } catch (e) {
-      console.log(e)
       console.warn(
         'Error getting addr on the resolver contract, are you sure the resolver address is a resolver contract?'
       )
