@@ -86,6 +86,8 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
     fetchPolicy: 'no-cache',
   })
 
+  console.log('ethUsdPrice', ethUsdPrice)
+
   const { data: { transactionHistory } = {} } = useQuery(
     GET_TRANSACTION_HISTORY
   )
@@ -346,7 +348,7 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
       {customStep === 'START' && (
         <div>
           <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
-            <Pricer
+            {/* <Pricer
               name={domain.label}
               duration={duration}
               years={years}
@@ -363,7 +365,7 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
               discount={discountAmount}
               signature={signature}
               isAuctionWinner={isAuctionWinner}
-            />
+            /> */}
           </div>
           <CTA
             setTransactionHash={setTransactionHash}

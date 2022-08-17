@@ -15,11 +15,13 @@ const resolvers = {
     },
     async getEthPrice(_, {}) {
       try {
+        console.log('calling now')
         const registrar = getRegistrar()
         const result = await registrar.getEthPrice()
+        console.log('ethPrice ----- ', result)
         return result
       } catch (err) {
-        console.error(err)
+        console.error('hey error from ethPrice', err)
       }
     },
     async getRentPrice(_, { label, duration }) {
