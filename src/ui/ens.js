@@ -58,7 +58,6 @@ export class ENS {
       Object.keys(this.contracts[networkId]).includes('registry')
 
     if (!hasRegistry && !registryAddress) {
-      console.log('networkId', networkId)
       throw new Error(`Unsupported network ${networkId}`)
     } else if (this.contracts[networkId] && !registryAddress) {
       registryAddress = contracts[networkId].registry

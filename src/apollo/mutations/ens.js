@@ -19,9 +19,8 @@ export async function setup({
       customProvider,
       ensAddress,
     }
-    if (enforceReadOnly && process.env.REACT_APP_NETWORK_CHAIN_ID === '97') {
-      option.infura =
-        'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd'
+    if (process.env.REACT_APP_INFURA_URL) {
+      option.infura = process.env.REACT_APP_INFURA_URL
     }
     const {
       ens: ensInstance,
