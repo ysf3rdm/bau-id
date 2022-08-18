@@ -8,14 +8,14 @@ export default function TransferAddressModal({
   saveHandler,
   closeModal,
   title,
-  address
+  address,
 }) {
   const formik = useFormik({
     initialValues: {
       chain: 'BSC',
-      address: ''
+      address: '',
     },
-    validate: async values => {
+    validate: async (values) => {
       let isContractAddress = true
       if (title === 'Resolver') {
         let provider = await getWeb3()
@@ -30,9 +30,9 @@ export default function TransferAddressModal({
       }
       return errors
     },
-    onSubmit: values => {
+    onSubmit: (values) => {
       saveHandler(values)
-    }
+    },
   })
   useEffect(() => {
     formik.resetForm()
@@ -43,11 +43,11 @@ export default function TransferAddressModal({
         <Modal
           width="380px"
           showingCrossIcon={true}
-          className="pt-[34px] pb-[36px] px-5 md:px-[40px]"
+          className="pt-[34px] pb-9 px-5 md:px-10"
           closeModal={closeModal}
           cannotCloseFromOutside={true}
         >
-          <div className="text-[white]">
+          <div className="text-white">
             <div className="text-[28px] font-bold font-cocoSharp text-center">
               {title === 'Registrant' ? 'Transfer Registrant' : `Set ${title}`}
             </div>
@@ -58,7 +58,7 @@ export default function TransferAddressModal({
               </div>
             )}
 
-            <div className="text-urbanist mt-4">
+            <div className="mt-4 text-urbanist">
               <div className="font-semibold">From address</div>
               <div className="text-[14px] break-all md:break-normal">
                 {address}
@@ -68,7 +68,7 @@ export default function TransferAddressModal({
           {/* Form for submitting transfer Registrant */}
           <form className="mt-4" onSubmit={formik.handleSubmit}>
             {/* <div>
-              <div className="text-white font-semibold">Chain</div>
+              <div className="font-semibold text-white">Chain</div>
               <input
                 className="w-full bg-[rgba(72,143,139,0.25)] rounded-[12px] text-[#7E9195] text-[14px] py-[7px] px-4"
                 id="chain"
@@ -80,7 +80,7 @@ export default function TransferAddressModal({
               />
             </div> */}
             <div className="mt-4">
-              <div className="text-white font-semibold">
+              <div className="font-semibold text-white">
                 Address<span className="text-red-800">*</span>
               </div>
               <input
