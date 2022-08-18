@@ -131,10 +131,10 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
             {
               name: domain.label,
               index: result?.data?.data?.index,
-              owner: account, //
+              owner: account?.toLowerCase(), //
               duration,
               resolver: process.env.REACT_APP_RESOLVER_ADDRESS, // FIXME this is not fixed
-              addr: account, //Eth wallet of user connected with metamask
+              addr: account?.toLowerCase(), //Eth wallet of user connected with metamask
               freeDuration: result?.data?.data?.isaution ? 31536000 : 0,
             },
           ],
@@ -146,6 +146,7 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
           data: params,
         })
         const proofs = result1?.data
+        console.log('signature', proofs)
         if (proofs && proofs.length > 0) {
           setSignature(proofs)
         } else {
@@ -428,7 +429,7 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
                   </div>
                 )}
               </div>
-              <div className="text-center mt-1">
+              <div className="mt-1 text-center">
                 <div
                   className={cn(
                     'font-semibold text-[16px]',

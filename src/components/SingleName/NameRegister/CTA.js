@@ -96,7 +96,7 @@ const CTA = ({
   }
 
   return (
-    <div className="mt-8 flex justify-between items-end">
+    <div className="flex items-end justify-between mt-8">
       {showSufficientBalanceModal && (
         <InsufficientBalanceModal
           closeModal={() => setShowSufficientBalanceModal(false)}
@@ -105,7 +105,7 @@ const CTA = ({
       <div className="md:flex justify-between md:px-[48px] w-full">
         {isReadOnly ? (
           <button
-            className="order-2 font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center bg-[#30DB9E]"
+            className="order-2 font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] w-[160px] flex justify-center items-center bg-[#30DB9E]"
             onClick={connectHandler}
           >
             Connect
