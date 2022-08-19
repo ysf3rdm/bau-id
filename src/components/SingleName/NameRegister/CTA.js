@@ -120,10 +120,10 @@ const CTA = ({
               } else setShowSufficientBalanceModal(true)
             }}
             className={cn(
-              'order-2 font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center',
+              'order-2 text-dark-common font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] w-[160px] flex justify-center items-center',
               isReadOnly || parseFloat(years) < 0.1
-                ? 'bg-[#7E9195] text-white cursor-not-allowed'
-                : 'bg-[#30DB9E]'
+                ? 'bg-gray-800 text-white cursor-not-allowed'
+                : 'bg-primary'
             )}
           >
             Register{' '}

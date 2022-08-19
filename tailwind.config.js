@@ -14,6 +14,7 @@ module.exports = {
         500: '#E3E3E9',
         600: '#B1D6D3',
         700: '#BDCED1',
+        800: '#7E9195',
       },
       dark: {
         common: '#071A2F',
