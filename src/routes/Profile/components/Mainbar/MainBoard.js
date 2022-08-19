@@ -271,7 +271,7 @@ export default function MainBoard({
               <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:text-left">
                 BNB Address
               </p>
-              <div className="flex items-center text-[#B1D6D3] text-[14px] xl:text-[18px] mt-1 break-all justify-center md:justify-start">
+              <div className="flex items-center text-gray-600 text-[14px] xl:text-[18px] mt-1 break-all justify-center md:justify-start">
                 <p className="mr-2 text-center">
                   {updatingBNBAddress
                     ? `${updatingBNBAddress.substring(
@@ -297,9 +297,9 @@ export default function MainBoard({
             <button
               disabled={pendingBNBAddress || !isRegsitrant}
               className={cn(
-                'py-2 px-[40px] rounded-full md:ml-4 font-semibold',
+                'py-2 px-10 rounded-full md:ml-4 font-semibold',
                 pendingBNBAddress || !isRegsitrant
-                  ? 'bg-[#7E9195] text-[#BDCED1]'
+                  ? 'bg-[#7E9195] text-gray-700'
                   : 'bg-[#2980E8] text-white'
               )}
               onClick={() =>

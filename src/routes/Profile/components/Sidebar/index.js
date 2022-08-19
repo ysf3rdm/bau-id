@@ -20,8 +20,8 @@ export default function Sidebar({ className, isReadOnly }) {
   const [networkId, setNetworkID] = useState('')
 
   const dispatch = useDispatch()
-  const selectedDomain = useSelector(state => state.domain.selectedDomain)
-  const domains = useSelector(state => state.domain.domains)
+  const selectedDomain = useSelector((state) => state.domain.selectedDomain)
+  const domains = useSelector((state) => state.domain.domains)
   const account = useAccount()
 
   const fetchDomainsList = async () => {
@@ -29,18 +29,19 @@ export default function Sidebar({ className, isReadOnly }) {
     setNetworkID(networkId)
     const params = {
       ChainID: networkId,
-      Address: account
+      Address: account,
     }
     let result = await axios.post(
       'https://backend.stg.space.id/listname',
       params
     )
-    const data = result?.data?.map(item => {
+    const data = result?.data?.map((item) => {
       const date = new Date(item?.expires)
       return {
-        expires_at: `${date.getFullYear()}.${date.getMonth() +
-          1}.${date.getDate()}`,
-        ...item
+        expires_at: `${date.getFullYear()}.${
+          date.getMonth() + 1
+        }.${date.getDate()}`,
+        ...item,
       }
     })
     if (data.length > 0) {
@@ -73,7 +74,7 @@ export default function Sidebar({ className, isReadOnly }) {
         className
       )}
     >
-      <div className="h-full flex flex-col">
+      <div className="flex flex-col h-full">
         <div className="pb-4 border-b border-[rgba(204,252,255,0.2)] mr-5">
           <ProfileCard
             className="pb-4"
@@ -86,7 +87,7 @@ export default function Sidebar({ className, isReadOnly }) {
         {/* <WidgetFunction className="mt-4 mb-4" /> */}
         {/* <DomainPanel /> */}
         <DomainList
-          className="mt-4 h-full flex flex-col"
+          className="flex flex-col h-full mt-4"
           domainsList={domains}
           clickHandle={selectDomain}
           selectedDomain={selectedDomain}

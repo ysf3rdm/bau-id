@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import cn from 'classnames'
 import moment from 'moment'
+import keccak256 from 'keccak256'
+import Web3 from 'web3'
 
 //Import Components
 import CopyIcon from 'components/Icons/CopyIcon'
@@ -33,6 +35,7 @@ export default function TopAddress({
   expDate,
 }) {
   const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
+  const [tokenId, setTokenId] = useState('')
 
   async function copyTextToClipboard(text) {
     if ('clipboard' in navigator) {
@@ -41,6 +44,15 @@ export default function TopAddress({
       return document.execCommand('copy', true, text)
     }
   }
+
+  useEffect(() => {
+    if (selectedDomain.name) {
+      const domain = selectedDomain.name
+      let label = keccak256(Buffer.from(domain)).toString('hex')
+      let nftId = Web3.utils.toBN(label).toString()
+      setTokenId(nftId)
+    }
+  }, [selectedDomain])
 
   const handleCopyRegistrantAddress = (e) => {
     e.preventDefault()
@@ -61,10 +73,9 @@ export default function TopAddress({
       <div
         className="relative bg-cover mr-7 w-[320px] h-[320px] drop-shadow-[0px_0px_55px_rgba(80,255,192,0.6)] rounded-[20px] flex-none"
         style={{
-          backgroundImage:
-            'url("https://meta.image.space.id/image/stg/68973098076537131524574092748255993382476723181350192827367994548076350642114.svg")',
+          backgroundImage: `url("https://meta.image.space.id/image/stg/${tokenId}.svg")`,
         }}
-      ></div>
+      />
       <div className="ml-0 pt-6 md:space-y-[120px] md:w-full">
         <div className="justify-between md:flex">
           <div>

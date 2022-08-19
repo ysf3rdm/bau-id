@@ -400,7 +400,7 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
             )}
             {customStep === 'PENDING' ||
               (customStep === 'PAYMENT' && (
-                <div className="text-[14px] text-[#BDCED1] leading-[22px] text-center">
+                <div className="text-[14px] text-gray-700 leading-[22px] text-center">
                   Please be patient as the process might take a while.
                 </div>
               ))}
