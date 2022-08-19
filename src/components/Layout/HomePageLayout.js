@@ -219,18 +219,18 @@ export default ({ children }) => {
           showingCrossIcon={true}
           closeModal={closeModal}
         >
-          <div className="text-[white]">
+          <div className="text-white">
             <div className="text-[20px] md:text-[28px] font-cocoSharp text-center font-bold text-white">
               Unsupported Network
             </div>
-            <div className="text-urbanist font-semibold text-center mt-4 text-white">
+            <div className="mt-4 font-semibold text-center text-white text-urbanist">
               Please change your dapp browser to Binance Smart Chain Testnet to
               continue.
             </div>
             <div className="justify-center hidden md:flex">
               <Button
                 onClick={() => changeToBSCChain()}
-                className="leading-[26px] border-none mt-[36px] bg-[#30DB9E] rounded-full text-[18px] font-urbanist py-2 px-[36px] text-secondary font-semibold normal-case"
+                className="leading-[26px] text-dark-common border-none mt-9 bg-primary rounded-full text-[18px] font-urbanist py-2 px-9 font-semibold normal-case"
               >
                 Switch to BSC Testnet
               </Button>
@@ -262,7 +262,7 @@ export default ({ children }) => {
             </div>
           </a>
 
-          <div className="hidden md:flex items-center lg:hidden">
+          <div className="items-center hidden md:flex lg:hidden">
             <div onClick={showDrawer}>
               <HamburgerIcon className="text-[#1EEFA4] mr-5" />
             </div>
@@ -270,7 +270,7 @@ export default ({ children }) => {
           </div>
 
           {/* Only show for the mobile device */}
-          <div className="block md:hidden cursor-pointer w-full justify-between">
+          <div className="justify-between block w-full cursor-pointer md:hidden">
             {/* <SmallLogoIcon size={40} className="text-[#1EEFA4]" /> */}
             {isMenuOpen ? (
               <div className="flex items-center justify-between">
@@ -299,7 +299,7 @@ export default ({ children }) => {
                 </div>
               </div>
             ) : (
-              <div className="flex justify-between items-center w-full">
+              <div className="flex items-center justify-between w-full">
                 <div className="flex items-center">
                   <div onClick={menuOpen} className="mr-5">
                     <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
@@ -334,7 +334,7 @@ export default ({ children }) => {
           {!isMenuOpen && (
             <div className="relative">
               {!isSafeApp && (
-                <div className="mt-0 w-full md:w-auto flex items-center">
+                <div className="flex items-center w-full mt-0 md:w-auto">
                   {/* //TODO should show in the public registration */}
                   {/* {location.pathname !== '/' && (
                     <Search
@@ -467,7 +467,7 @@ export default ({ children }) => {
         </div>
 
         {searchOpen && (
-          <div className="px-7 py-3 pb-7">
+          <div className="py-3 px-7 pb-7">
             <Search
               className="mx-auto"
               errorShowing={true}
@@ -495,7 +495,7 @@ export default ({ children }) => {
         {!isReadOnly && isMenuOpen && windowDimenion.winWidth < 768 && (
           <div className="px-7 border-t border-[rgba(204,252,255,0.2)] h-[calc(100vh-250px)]">
             <DomainList
-              className="mt-4 h-full flex flex-col"
+              className="flex flex-col h-full mt-4"
               domainsList={domains}
               clickHandle={selectDomain}
               selectedDomain={selectedDomain}

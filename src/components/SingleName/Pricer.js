@@ -1,6 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import EthVal from 'ethval'
+import { useSelector } from 'react-redux'
 
 import Years from './NameRegister/Years'
 import Price from './NameRegister/Price'
@@ -67,6 +68,7 @@ function PricerInner({
             years={years}
             isAuctionWinner={isAuctionWinner}
             registrationFee={registrationFee}
+            domain={name}
           />
         </div>
       )}

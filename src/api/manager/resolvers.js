@@ -10,7 +10,7 @@ import {
   getWeb3,
   isDecrypted,
   labelhash,
-  utils
+  utils,
 } from '../../ui'
 import { formatsByName } from '@siddomains/address-encoder'
 import isEqual from 'lodash/isEqual'
@@ -19,7 +19,7 @@ import { sendHelper, sendHelperArray } from '../resolverUtils'
 import {
   emptyAddress,
   MAINNET_DNSREGISTRAR_ADDRESS,
-  ROPSTEN_DNSREGISTRAR_ADDRESS
+  ROPSTEN_DNSREGISTRAR_ADDRESS,
 } from '../../utils/utils'
 import TEXT_RECORD_KEYS from 'constants/textRecords'
 import COIN_LIST_KEYS from 'constants/coinList'
@@ -31,11 +31,11 @@ import getReverseRecord from './getReverseRecord'
 import { isEmptyAddress } from '../../utils/records'
 
 const defaults = {
-  names: []
+  names: [],
 }
 
 async function delay(ms) {
-  return await new Promise(resolve => setTimeout(resolve, ms))
+  return await new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 function setState(node) {
@@ -50,7 +50,7 @@ function setState(node) {
   }
   return {
     ...node,
-    state
+    state,
   }
 }
 
@@ -118,7 +118,7 @@ export const handleMultipleTransactions = async (
     const resolver = resolverInstance.interface
     const namehash = getNamehash(name)
 
-    const transactionArray = records.map(record => {
+    const transactionArray = records.map((record) => {
       if (record.contractFn === 'setContenthash') {
         let value
         if (isEmptyAddress(record.value)) {
@@ -133,7 +133,7 @@ export const handleMultipleTransactions = async (
         return resolver.encodeFunctionData(record.contractFn, [
           namehash,
           record.key,
-          record.value
+          record.value,
         ])
       }
 
@@ -152,7 +152,7 @@ export const handleMultipleTransactions = async (
         return resolver.encodeFunctionData(record.contractFn, [
           namehash,
           coinType,
-          addressAsBytes
+          addressAsBytes,
         ])
       }
     })
@@ -191,7 +191,7 @@ async function getRegistrarEntry(name) {
       highestBid,
       expiryTime,
       isNewRegistrar,
-      available
+      available,
     } = entry
 
     return {
@@ -210,7 +210,7 @@ async function getRegistrarEntry(name) {
       deedOwner,
       isNewRegistrar: !!isNewRegistrar,
       available,
-      expiryTime: expiryTime || null
+      expiryTime: expiryTime || null,
     }
   } catch (err) {
     console.log(err)
@@ -237,8 +237,8 @@ async function getRegistrant(name) {
       fetchPolicy: 'network-only',
       variables: { id: labelhash(name.split('.')[0]) },
       context: {
-        queryDeduplication: false
-      }
+        queryDeduplication: false,
+      },
     })
     if (!data || !data.registration) {
       return null
@@ -294,7 +294,7 @@ async function getDNSEntryDetails(name) {
         : emptyAddress,
       state: dnsEntry.state,
       stateError: dnsEntry.stateError,
-      parentOwner: tldowner
+      parentOwner: tldowner,
     }
   }
 }
@@ -340,7 +340,7 @@ function adjustForShortNames(node) {
     ...node,
     auctionEnds,
     onAuction,
-    state: onAuction ? 'Auction' : node.state
+    state: onAuction ? 'Auction' : node.state,
   }
 }
 
@@ -352,7 +352,7 @@ const resolvers = {
         const resolver = await ens.getAddress('resolver.bnb')
         return {
           address: resolver,
-          __typename: 'Resolver'
+          __typename: 'Resolver',
         }
       } catch (e) {
         console.log('error getting public resolver', e)
@@ -391,7 +391,7 @@ const resolvers = {
             dnsOwner: null,
             deedOwner: null,
             registrant: null,
-            auctionEnds: null
+            auctionEnds: null,
           }
 
         const ens = getENS()
@@ -422,7 +422,7 @@ const resolvers = {
           dnsOwner: null,
           deedOwner: null,
           registrant: null,
-          auctionEnds: null // remove when auction is over
+          auctionEnds: null, // remove when auction is over
         }
 
         const dataSources = [
@@ -431,7 +431,7 @@ const resolvers = {
           getParent(name),
           getDNSEntryDetails(name),
           getTestEntry(name),
-          getRegistrant(name)
+          getRegistrant(name),
         ]
 
         const [
@@ -440,7 +440,7 @@ const resolvers = {
           [parent, parentOwner],
           dnsEntry,
           testEntry,
-          registrant
+          registrant,
         ] = await Promise.all(dataSources)
 
         const names = namesReactive()
@@ -458,7 +458,7 @@ const resolvers = {
             : null,
           parent,
           parentOwner,
-          __typename: 'Node'
+          __typename: 'Node',
         })
 
         detailedNode = setState(detailedNode)
@@ -492,29 +492,29 @@ const resolvers = {
             '0x5ffc014343cd971b7eb70732021e26c35b744cc4',
             '0x6dbc5978711cb22d7ba611bc18cec308ea12ea95',
             '0xd3ddccdd3b25a8a7423b5bee360a42146eb4baf3',
-            '0x226159d592e2b063810a10ebf6dcbada94ed68b8'
-          ]
+            '0x226159d592e2b063810a10ebf6dcbada94ed68b8',
+          ],
         },
         3: {
           OLD: [
             '0x12299799a50340FB860D276805E78550cBaD3De3', // Ropsten
-            '0x9C4c3B509e47a298544d0fD0591B47550845e903' // Ropsten
+            '0x9C4c3B509e47a298544d0fD0591B47550845e903', // Ropsten
           ],
-          DEPRECATED: []
+          DEPRECATED: [],
         },
         4: {
           OLD: ['0x06E6B4E68b0B9B2617b35Eec811535050999282F'],
-          DEPRECATED: []
+          DEPRECATED: [],
         },
         5: {
           OLD: ['0xfF77b96d6bafCec0D684bB528b22e0Ab09C70663'],
-          DEPRECATED: []
-        }
+          DEPRECATED: [],
+        },
       }
 
       let DEPRECATED_RESOLVERS = []
       let OLD_RESOLVERS = [
-        '0xDaaF96c344f63131acadD0Ea35170E7892d3dfBA' // all networks
+        '0xDaaF96c344f63131acadD0Ea35170E7892d3dfBA', // all networks
       ]
 
       if (RESOLVERS[networkId]) {
@@ -526,16 +526,15 @@ const resolvers = {
         process.env.REACT_APP_STAGE === 'local' &&
         process.env.REACT_APP_DEPRECATED_RESOLVERS
       ) {
-        const localResolvers = process.env.REACT_APP_DEPRECATED_RESOLVERS.split(
-          ','
-        )
+        const localResolvers =
+          process.env.REACT_APP_DEPRECATED_RESOLVERS.split(',')
         DEPRECATED_RESOLVERS = [...DEPRECATED_RESOLVERS, ...localResolvers]
       }
 
       /* Deprecated resolvers are using the new registry and can be continued to be used*/
 
       function calculateIsDeprecatedResolver(address) {
-        return DEPRECATED_RESOLVERS.map(a => a.toLowerCase()).includes(
+        return DEPRECATED_RESOLVERS.map((a) => a.toLowerCase()).includes(
           address.toLowerCase()
         )
       }
@@ -543,14 +542,16 @@ const resolvers = {
       /* Old Public resolvers are using the old registry and must be migrated  */
 
       function calculateIsOldPublicResolver(address) {
-        return OLD_RESOLVERS.map(a => a.toLowerCase()).includes(
+        return OLD_RESOLVERS.map((a) => a.toLowerCase()).includes(
           address.toLowerCase()
         )
       }
 
       async function calculateIsPublicResolverReady() {
         const publicResolver = await ens.getAddress('resolver.bnb')
-        return !OLD_RESOLVERS.map(a => a.toLowerCase()).includes(publicResolver)
+        return !OLD_RESOLVERS.map((a) => a.toLowerCase()).includes(
+          publicResolver
+        )
       }
 
       let isDeprecatedResolver = calculateIsDeprecatedResolver(resolver)
@@ -561,7 +562,7 @@ const resolvers = {
         isDeprecatedResolver,
         isOldPublicResolver,
         isPublicResolverReady,
-        __typename: 'ResolverMigration'
+        __typename: 'ResolverMigration',
       }
     },
     isMigrated: (_, { name }) => {
@@ -580,7 +581,7 @@ const resolvers = {
 
         return {
           subDomains: rawSubDomains,
-          __typename: 'SubDomains'
+          __typename: 'SubDomains',
         }
       } catch (e) {
         console.log('getSubDomains error: ', e)
@@ -607,16 +608,16 @@ const resolvers = {
     },
     getAddresses: (_, { name, keys }) => {
       const ens = getENS()
-      const addresses = keys.map(key =>
-        ens.getAddr(name, key).then(addr => ({ key, value: addr }))
+      const addresses = keys.map((key) =>
+        ens.getAddr(name, key).then((addr) => ({ key, value: addr }))
       )
       return Promise.all(addresses)
     },
     getTextRecords: async (_, { name, keys }) => {
       if (!name || !keys) return []
       const ens = getENS()
-      const textRecords = keys.map(key =>
-        ens.getText(name, key).then(addr => ({ key, value: addr }))
+      const textRecords = keys.map((key) =>
+        ens.getText(name, key).then((addr) => ({ key, value: addr }))
       )
       return await Promise.all(textRecords)
     },
@@ -643,7 +644,7 @@ const resolvers = {
         console.log(e)
       }
       return balance
-    }
+    },
   },
   Mutation: {
     registerTestdomain: async (_, { label }) => {
@@ -654,7 +655,7 @@ const resolvers = {
     setName: async (_, { name }) => {
       try {
         const ens = getENS()
-        const tx = await ens.claimAndSetReverseRecordName(name)
+        const tx = await ens.claimAndSetReverseRecordName(name + '.bnb')
         return sendHelper(tx)
       } catch (e) {
         console.log(e)
@@ -739,7 +740,7 @@ const resolvers = {
       const resolver = await ens.getResolver(name)
       const resolverInstanceWithoutSigner = await getResolverContract({
         address: resolver,
-        provider
+        provider,
       })
       const signer = await getSigner()
       const resolverInstance = resolverInstanceWithoutSigner.connect(signer)
@@ -763,25 +764,25 @@ const resolvers = {
                 if (parseInt(record, 16) === 0) return undefined
                 return resolver.encodeFunctionData('setAddr(bytes32,address)', [
                   namehash,
-                  record
+                  record,
                 ])
               case 1:
                 if (!record || parseInt(record, 16) === 0) return undefined
                 return resolver.encodeFunctionData('setContenthash', [
                   namehash,
-                  record
+                  record,
                 ])
               case 2:
-                return record.map(textRecord => {
+                return record.map((textRecord) => {
                   if (textRecord.value.length === 0) return undefined
                   return resolver.encodeFunctionData('setText', [
                     namehash,
                     textRecord.key,
-                    textRecord.value
+                    textRecord.value,
                   ])
                 })
               case 3:
-                return record.map(coinRecord => {
+                return record.map((coinRecord) => {
                   if (parseInt(coinRecord.value, 16) === 0) return undefined
                   const { decoder, coinType } = formatsByName[coinRecord.key]
                   let addressAsBytes
@@ -801,7 +802,7 @@ const resolvers = {
           })
 
           // flatten textrecords and addresses and remove undefined
-          return transactionArray.flat().filter(bytes => bytes)
+          return transactionArray.flat().filter((bytes) => bytes)
         } catch (e) {
           console.log('error creating transaction array', e)
         }
@@ -811,14 +812,14 @@ const resolvers = {
         const oldContentResolvers = [
           '0x5ffc014343cd971b7eb70732021e26c35b744cc4',
           '0x6dbc5978711cb22d7ba611bc18cec308ea12ea95',
-          '0xbf80bc10d6ebfee11bea9a157d762110a0b73d95'
+          '0xbf80bc10d6ebfee11bea9a157d762110a0b73d95',
         ]
         const localResolvers = process.env.REACT_APP_OLD_CONTENT_RESOLVERS
           ? process.env.REACT_APP_OLD_CONTENT_RESOLVERS.split(',')
           : []
 
         const oldResolvers = [...oldContentResolvers, ...localResolvers].map(
-          a => {
+          (a) => {
             return a.toLowerCase()
           }
         )
@@ -829,18 +830,18 @@ const resolvers = {
       function buildKeyValueObjects(keys, values) {
         return values.map((record, i) => ({
           key: keys[i],
-          value: record
+          value: record,
         }))
       }
 
       async function getAllTextRecords(name) {
-        const promises = TEXT_RECORD_KEYS.map(key => ens.getText(name, key))
+        const promises = TEXT_RECORD_KEYS.map((key) => ens.getText(name, key))
         const records = await Promise.all(promises)
         return buildKeyValueObjects(TEXT_RECORD_KEYS, records)
       }
 
       async function getAllTextRecordsWithResolver(name, resolver) {
-        const promises = TEXT_RECORD_KEYS.map(key =>
+        const promises = TEXT_RECORD_KEYS.map((key) =>
           ens.getTextWithResolver(name, key, resolver)
         )
         const records = await Promise.all(promises)
@@ -848,13 +849,13 @@ const resolvers = {
       }
 
       async function getAllAddresses(name) {
-        const promises = COIN_LIST_KEYS.map(key => ens.getAddr(name, key))
+        const promises = COIN_LIST_KEYS.map((key) => ens.getAddr(name, key))
         const records = await Promise.all(promises)
         return buildKeyValueObjects(COIN_LIST_KEYS, records)
       }
 
       async function getAllAddressesWithResolver(name, resolver) {
-        const promises = COIN_LIST_KEYS.map(key =>
+        const promises = COIN_LIST_KEYS.map((key) =>
           ens.getAddrWithResolver(name, key, resolver)
         )
         const records = await Promise.all(promises)
@@ -866,7 +867,7 @@ const resolvers = {
         const namehash = getNamehash(name)
         const resolverInstanceWithoutSigner = await getOldResolverContract({
           address: resolver,
-          provider
+          provider,
         })
         const content = await resolverInstanceWithoutSigner.content(namehash)
         const { encoded } = encodeContenthash('bzz://' + content)
@@ -882,7 +883,7 @@ const resolvers = {
         const namehash = getNamehash(name)
         const resolverInstanceWithoutSigner = await getResolverContract({
           address: resolver,
-          provider
+          provider,
         })
         return await resolverInstanceWithoutSigner.contenthash(namehash)
       }
@@ -892,7 +893,7 @@ const resolvers = {
           ens.getAddress(name),
           isOldContentResolver ? getOldContent(name) : getContenthash(name),
           getAllTextRecords(name),
-          getAllAddresses(name)
+          getAllAddresses(name),
         ]
         return Promise.all(promises)
       }
@@ -902,7 +903,7 @@ const resolvers = {
           ens.getEthAddressWithResolver(name, publicResolver),
           getContenthashWithResolver(name, publicResolver),
           getAllTextRecordsWithResolver(name, publicResolver),
-          getAllAddressesWithResolver(name, publicResolver)
+          getAllAddressesWithResolver(name, publicResolver),
         ]
         return Promise.all(promises)
       }
@@ -920,7 +921,7 @@ const resolvers = {
         // get old and new records in parallel
         const [records, newResolverRecords] = await Promise.all([
           getAllRecords(name, isOldContentResolver),
-          getAllRecordsNew(name, publicResolver)
+          getAllRecordsNew(name, publicResolver),
         ])
 
         // compare new and old records
@@ -928,14 +929,14 @@ const resolvers = {
           //get the transaction by using contract.method.encode from ethers
           const resolverInstanceWithoutSigner = await getResolverContract({
             address: publicResolver,
-            provider
+            provider,
           })
           const signer = await getSigner()
           const resolverInstance = resolverInstanceWithoutSigner.connect(signer)
           const transactionArray = setupTransactions({
             name,
             records,
-            resolverInstance
+            resolverInstance,
           })
           //add them all together into one transaction
           const tx1 = await resolverInstance.multicall(transactionArray)
@@ -980,8 +981,8 @@ const resolvers = {
       } catch (e) {
         console.log(e)
       }
-    }
-  }
+    },
+  },
 }
 
 export default resolvers
