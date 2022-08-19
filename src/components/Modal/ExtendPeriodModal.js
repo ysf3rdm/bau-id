@@ -93,6 +93,7 @@ export default function ExtendPeriodModal({
                 ethUsdPrice={ethUsdPrice}
                 discount={discountAmount}
                 registrationFee={registrationFee}
+                domain={selectedDomain.name}
               />
               <button
                 className={cn(

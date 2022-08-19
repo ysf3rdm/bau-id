@@ -70,6 +70,8 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
   const [discountAmount, setDiscountAmount] = useState(null)
   const [winnerLoading, setWinnerLoading] = useState(false)
 
+  const [canRegister, setCanRegister] = useState(false)
+
   const {
     data: { getEthPrice: ethUsdPrice } = {},
     loading: ethUsdPriceLoading,
@@ -120,39 +122,45 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
           url: `${process.env.REACT_APP_BACKEND_URL}/merkleleaf?domain=${domain.label}`,
         })
         setFreeDuration(result?.data?.data?.isaution ? 31536000 : 0)
-        setIndex(result?.data?.data?.index)
-        if (result?.data?.data?.isaution) {
-          setIsAuctionWinner(true)
-        } else {
-          setIsAuctionWinner(false)
+        if (result?.data?.data?.index) {
+          setCanRegister(true)
+          setIndex(result?.data?.data?.index)
+          if (result?.data?.data?.isaution) {
+            setIsAuctionWinner(true)
+          } else {
+            setIsAuctionWinner(false)
+          }
+          const params = {
+            inputs: [
+              {
+                name: domain.label,
+                index: result?.data?.data?.index,
+                owner: account?.toLowerCase(), //
+                duration,
+                resolver: process.env.REACT_APP_RESOLVER_ADDRESS, // FIXME this is not fixed
+                addr: account?.toLowerCase(), //Eth wallet of user connected with metamask
+                freeDuration: result?.data?.data?.isaution ? 31536000 : 0,
+              },
+            ],
+          }
+          const result1 = await axios({
+            method: 'post',
+            url: `${process.env.REACT_APP_MERKLE_BASE_URL}/getproof`,
+            headers: {},
+            data: params,
+          })
+          const proofs = result1?.data
+          if (proofs && proofs.length > 0) {
+            setSignature(proofs)
+          } else {
+            setSignature([])
+          }
+          setWinnerLoading(false)
         }
-        const params = {
-          inputs: [
-            {
-              name: domain.label,
-              index: result?.data?.data?.index,
-              owner: account?.toLowerCase(), //
-              duration,
-              resolver: process.env.REACT_APP_RESOLVER_ADDRESS, // FIXME this is not fixed
-              addr: account?.toLowerCase(), //Eth wallet of user connected with metamask
-              freeDuration: result?.data?.data?.isaution ? 31536000 : 0,
-            },
-          ],
+        //Cannot get index from merkletree
+        else {
+          canRegister(false)
         }
-        const result1 = await axios({
-          method: 'post',
-          url: `${process.env.REACT_APP_MERKLE_BASE_URL}/getproof`,
-          headers: {},
-          data: params,
-        })
-        const proofs = result1?.data
-        console.log('signature', proofs)
-        if (proofs && proofs.length > 0) {
-          setSignature(proofs)
-        } else {
-          setSignature([])
-        }
-        setWinnerLoading(false)
       } catch (err) {
         setWinnerLoading(false)
         console.log('hey err', err)
@@ -373,6 +381,7 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
             paymentSuccess={() => setCustomStep('PAYMENT')}
             freeDuration={freeDuration}
             index={index}
+            canRegister={canRegister}
           />
         </div>
       )}
