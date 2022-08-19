@@ -230,7 +230,7 @@ export default ({ children }) => {
             <div className="justify-center hidden md:flex">
               <Button
                 onClick={() => changeToBSCChain()}
-                className="leading-[26px] border-none mt-[36px] bg-[#30DB9E] rounded-full text-[18px] font-urbanist py-2 px-[36px] text-secondary font-semibold normal-case"
+                className="leading-[26px] text-dark-common border-none mt-9 bg-primary rounded-full text-[18px] font-urbanist py-2 px-9 font-semibold normal-case"
               >
                 Switch to BSC Testnet
               </Button>
