@@ -1,6 +1,7 @@
 //Import packages
 import React, { useEffect } from 'react'
 import cn from 'classnames'
+import EthVal from 'ethval'
 
 //Import components
 import Modal from './Modal'
@@ -21,7 +22,7 @@ export default function ExtendPeriodModal({
   price,
   rentPriceLoading,
   gasPrice,
-  extendHandler
+  extendHandler,
 }) {
   return (
     <div>
@@ -38,7 +39,7 @@ export default function ExtendPeriodModal({
           </div>
           {Object.keys(gasPrice).length > 0 && (
             <div>
-              <div className="text-white mt-4">
+              <div className="mt-4 text-white">
                 <Pricer
                   className="justify-between"
                   name={selectedDomain.name}
@@ -50,12 +51,16 @@ export default function ExtendPeriodModal({
                   ethUsdPrice={ethUsdPrice}
                   loading={rentPriceLoading}
                   price={price}
+                  discount={{ amount: 0, percent: 0 }}
                 />
               </div>
               <EthRegistrationGasPrice
                 price={price}
                 gasPrice={gasPrice}
                 ethUsdPrice={ethUsdPrice}
+                discount={{ amount: 0, percent: 0 }}
+                registrationFee={new EthVal(`${price || 0}`).toEth()}
+                type="extend"
               />
               <button
                 className={cn(
