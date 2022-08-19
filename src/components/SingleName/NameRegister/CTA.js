@@ -37,6 +37,7 @@ const CTA = ({
   paymentSuccess,
   freeDuration,
   index,
+  canRegister,
 }) => {
   const history = useHistory()
   const account = useAccount()
@@ -113,17 +114,17 @@ const CTA = ({
         ) : (
           <button
             data-testid="request-register-button"
-            disabled={isReadOnly || parseFloat(years) < 0.1}
+            disabled={isReadOnly || parseFloat(years) < 0.1 || !canRegister}
             onClick={async () => {
               if (hasSufficientBalance) {
                 registerHandle()
               } else setShowSufficientBalanceModal(true)
             }}
             className={cn(
-              'order-2 font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center',
-              isReadOnly || parseFloat(years) < 0.1
-                ? 'bg-[#7E9195] text-white cursor-not-allowed'
-                : 'bg-[#30DB9E]'
+              'order-2 font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] w-[160px] flex justify-center items-center',
+              isReadOnly || parseFloat(years) < 0.1 || !canRegister
+                ? 'bg-gray-800 text-white cursor-not-allowed'
+                : 'bg-primary text-dark-common'
             )}
           >
             Register{' '}

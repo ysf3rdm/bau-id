@@ -15,7 +15,7 @@ import { Tooltip } from 'components/Tooltip/Tooltip'
 import {
   GET_RESOLVER_FROM_SUBGRAPH,
   GET_ADDRESSES,
-  GET_TEXT_RECORDS
+  GET_TEXT_RECORDS,
 } from 'graphql/queries'
 
 import TEXT_PLACEHOLDER_RECORDS from 'constants/textRecords'
@@ -35,11 +35,11 @@ function isContentHashEmpty(hash) {
   return hash?.startsWith('undefined') || parseInt(hash, 16) === 0
 }
 
-const useGetRecords = domain => {
+const useGetRecords = (domain) => {
   const { data: dataResolver } = useQuery(GET_RESOLVER_FROM_SUBGRAPH, {
     variables: {
-      id: getNamehash(domain.name + '.bnb')
-    }
+      id: getNamehash(domain.name + '.bnb'),
+    },
   })
 
   const resolver =
@@ -49,19 +49,19 @@ const useGetRecords = domain => {
     resolver &&
     resolver.coinTypes &&
     resolver.coinTypes
-      .map(c => {
+      .map((c) => {
         return formatsByCoinType[c] && formatsByCoinType[c].name
       })
-      .filter(c => c)
+      .filter((c) => c)
 
   const { loading: addressesLoading, data: dataAddresses } = useQuery(
     GET_ADDRESSES,
     {
       variables: {
         name: domain.name + '.bnb',
-        keys: union(coinList, COIN_PLACEHOLDER_RECORDS)
+        keys: union(coinList, COIN_PLACEHOLDER_RECORDS),
       },
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
     }
   )
 
@@ -70,24 +70,24 @@ const useGetRecords = domain => {
     {
       variables: {
         name: domain.name + 'bnb',
-        keys: union(resolver && resolver.texts, TEXT_PLACEHOLDER_RECORDS)
+        keys: union(resolver && resolver.texts, TEXT_PLACEHOLDER_RECORDS),
       },
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
     }
   )
   return {
     dataAddresses,
     dataTextRecords,
-    recordsLoading: addressesLoading || textRecordsLoading
+    recordsLoading: addressesLoading || textRecordsLoading,
   }
 }
 
 const processRecords = (records, placeholder) => {
   const nonDuplicatePlaceholderRecords = placeholder.filter(
-    record => !records.find(r => record === r.key)
+    (record) => !records.find((r) => record === r.key)
   )
 
-  const recordsSansEmpty = records.map(record => {
+  const recordsSansEmpty = records.map((record) => {
     if (record.value === emptyAddress) {
       return { ...record, value: '' }
     }
@@ -96,10 +96,10 @@ const processRecords = (records, placeholder) => {
 
   return [
     ...recordsSansEmpty,
-    ...nonDuplicatePlaceholderRecords.map(record => ({
+    ...nonDuplicatePlaceholderRecords.map((record) => ({
       key: record,
-      value: ''
-    }))
+      value: '',
+    })),
   ]
 }
 
@@ -109,36 +109,36 @@ const getInitialTextRecords = (dataTextRecords, domain) => {
       ? processRecords(dataTextRecords.getTextRecords, TEXT_PLACEHOLDER_RECORDS)
       : processRecords([], TEXT_PLACEHOLDER_RECORDS)
 
-  return textRecords?.map(textRecord => ({
+  return textRecords?.map((textRecord) => ({
     contractFn: 'setText',
-    ...textRecord
+    ...textRecord,
   }))
 }
 
-const getInitialCoins = dataAddresses => {
+const getInitialCoins = (dataAddresses) => {
   const addresses =
     dataAddresses && dataAddresses.getAddresses
       ? processRecords(dataAddresses.getAddresses, COIN_PLACEHOLDER_RECORDS)
       : processRecords([], COIN_PLACEHOLDER_RECORDS)
 
-  return addresses?.map(address => ({
+  return addresses?.map((address) => ({
     contractFn: 'setAddr(bytes32,uint256,bytes)',
-    ...address
+    ...address,
   }))
 }
 
-const getInitialContent = domain => {
+const getInitialContent = (domain) => {
   return {
     contractFn: 'setContenthash',
     key: 'CONTENT',
-    value: isContentHashEmpty(domain.content) ? '' : domain.content
+    value: isContentHashEmpty(domain.content) ? '' : domain.content,
   }
 }
 
-const getCoins = updatedRecords =>
+const getCoins = (updatedRecords) =>
   updatedRecords
-    .filter(record => record.contractFn === 'setAddr(bytes32,uint256,bytes)')
-    .sort(record => (record.key === 'ETH' ? -1 : 1))
+    .filter((record) => record.contractFn === 'setAddr(bytes32,uint256,bytes)')
+    .sort((record) => (record.key === 'ETH' ? -1 : 1))
 
 const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
   const initialTextRecords = getInitialTextRecords(dataTextRecords, domain)
@@ -189,11 +189,10 @@ export default function MainBoard({
   isRegsitrant,
   showAddressChangeModalHandle,
   pendingBNBAddress,
-  updatingBNBAddress
+  updatingBNBAddress,
 }) {
-  const { dataAddresses, dataTextRecords, recordsLoading } = useGetRecords(
-    selectedDomain
-  )
+  const { dataAddresses, dataTextRecords, recordsLoading } =
+    useGetRecords(selectedDomain)
 
   const [updatedRecords, setUpdatedRecords] = useState([])
   const [initialRecords, setInitialRecords] = useState([])
@@ -223,7 +222,7 @@ export default function MainBoard({
     }
   }, [updatedRecords])
 
-  const handleResolverAddressCopy = e => {
+  const handleResolverAddressCopy = (e) => {
     e.preventDefault()
     copyTextToClipboard(resolverAddress)
       .then(() => {
@@ -232,12 +231,12 @@ export default function MainBoard({
           setTooltipMessage('Copy to clipboard')
         }, 2000)
       })
-      .catch(err => {
+      .catch((err) => {
         alert('err')
       })
   }
 
-  const handleBNBAddressCopy = e => {
+  const handleBNBAddressCopy = (e) => {
     e.preventDefault()
     copyTextToClipboard(getCoins(updatedRecords)[0]?.value)
       .then(() => {
@@ -246,7 +245,7 @@ export default function MainBoard({
           setTooltipMessage('Copy to clipboard')
         }, 2000)
       })
-      .catch(err => {
+      .catch((err) => {
         alert('err')
       })
   }
@@ -257,7 +256,7 @@ export default function MainBoard({
         <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:text-left px-3">
           Records
         </p>
-        <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] block md:flex items-center justify-between py-[19px] px-6 mt-5">
+        <div className="bg-[rgba(67,140,136,0.25)] rounded-[24px] block md:flex items-center justify-between py-5 px-6 mt-5">
           {pendingBNBAddress ? (
             <PendingTx
               txHash={txHash}
@@ -272,7 +271,7 @@ export default function MainBoard({
               <p className="text-[#B1D6D3] font-bold text-[18px] xl:text-[20px] text-center md:text-left">
                 BNB Address
               </p>
-              <div className="flex items-center text-[#B1D6D3] text-[14px] xl:text-[18px] mt-1 break-all">
+              <div className="flex items-center text-gray-600 text-[14px] xl:text-[18px] mt-1 break-all justify-center md:justify-start">
                 <p className="mr-2 text-center">
                   {updatingBNBAddress
                     ? `${updatingBNBAddress.substring(
@@ -294,13 +293,13 @@ export default function MainBoard({
             </div>
           )}
 
-          <div className="flex justify-center mt-2 items-center">
+          <div className="flex items-center justify-center mt-2">
             <button
               disabled={pendingBNBAddress || !isRegsitrant}
               className={cn(
-                'py-2 px-[40px] rounded-full md:ml-4 font-semibold',
+                'py-2 px-10 rounded-full md:ml-4 font-semibold',
                 pendingBNBAddress || !isRegsitrant
-                  ? 'bg-[#7E9195] text-[#BDCED1]'
+                  ? 'bg-[#7E9195] text-gray-700'
                   : 'bg-[#2980E8] text-white'
               )}
               onClick={() =>
@@ -312,7 +311,7 @@ export default function MainBoard({
           </div>
         </div>
       </div>
-      {/* <div className="px-6 mt-8 flex justify-between"> */}
+      {/* <div className="flex justify-between px-6 mt-8"> */}
       {/* {loadingResolverAddress ? (
           <AnimationSpin />
         ) : (

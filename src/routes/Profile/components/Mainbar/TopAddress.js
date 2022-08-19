@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import cn from 'classnames'
 import moment from 'moment'
+import keccak256 from 'keccak256'
+import Web3 from 'web3'
 
 //Import Components
 import CopyIcon from 'components/Icons/CopyIcon'
@@ -33,6 +35,7 @@ export default function TopAddress({
   expDate,
 }) {
   const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
+  const [tokenId, setTokenId] = useState('')
 
   async function copyTextToClipboard(text) {
     if ('clipboard' in navigator) {
@@ -41,6 +44,15 @@ export default function TopAddress({
       return document.execCommand('copy', true, text)
     }
   }
+
+  useEffect(() => {
+    if (selectedDomain.name) {
+      const domain = selectedDomain.name
+      let label = keccak256(Buffer.from(domain)).toString('hex')
+      let nftId = Web3.utils.toBN(label).toString()
+      setTokenId(nftId)
+    }
+  }, [selectedDomain])
 
   const handleCopyRegistrantAddress = (e) => {
     e.preventDefault()
@@ -57,78 +69,63 @@ export default function TopAddress({
       })
   }
   return (
-    <div className={cn('md:flex justify-between w-full', className)}>
+    <div className={cn('md:flex w-full space-x-7', className)}>
       <div
-        className="relative w-full md:w-[300px] xl:w-[432px] h-[230px] xl:h-[272px] flex items-center text-center rounded-[20px] bg-cover mr-7"
+        className="relative bg-cover mr-7 w-[320px] h-[320px] drop-shadow-[0px_0px_55px_rgba(80,255,192,0.6)] rounded-[20px] flex-none"
         style={{
-          backgroundImage:
-            'url("https://meta.image.space.id/image/stg/43443925618549062928880397539982650978270070079144859533144982342317488169307.svg")',
-          backgroundSize: '100% 100%',
+          backgroundImage: `url("https://meta.image.space.id/image/stg/${tokenId}.svg")`,
         }}
-      >
-        <div class="w-fit mx-auto px-3">
-          <span className="h-full text-[30px] xl:text-[40px] font-bold text-white break-all">
-            <span className="">{`${
-              selectedDomain?.name.length > 12
-                ? selectedDomain?.name.substring(0, 4) +
-                  '...' +
-                  selectedDomain?.name.substring(
-                    selectedDomain?.name.length - 4,
-                    selectedDomain?.name.length
-                  )
-                : selectedDomain?.name
-            }`}</span>
-            <span className="text-[#1EEFA4]">.bnb</span>
-          </span>
-        </div>
-      </div>
-      <div className="flex flex-col justify-between py-6 md:py-2 xl:w-[447px]">
-        <div>
-          <p className="text-center md:text-left font-bold text-[18px] xl:text-[24px] text-[#1EEFA4]">
-            Registrant
-          </p>
-          {loadingRegistration ? (
-            <AnimationSpin />
-          ) : (
-            <div className="flex items-center justify-center md:justify-start">
-              {pending ? (
-                <PendingTx
-                  txHash={txHash}
-                  onConfirmed={async () => {
-                    refetchTilUpdatedSingle({
-                      refetch: refetchAddress,
-                      interval: 300,
-                      keyToCompare: 'registrant',
-                      prevData: address,
-                    })
-                    await fetchAddress()
-                    setConfirmed()
-                  }}
-                  className="mt-1"
-                />
-              ) : (
-                <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2 break-all md:break-normal">
-                  <p className="text-center">
-                    {registrantAddress
-                      ? `${registrantAddress.substring(
-                          0,
-                          10
-                        )}...${registrantAddress.substring(
-                          registrantAddress.length - 11
-                        )}`
-                      : ''}
-                  </p>
-                  <div className="ml-2" onClick={handleCopyRegistrantAddress}>
-                    <Tooltip message={tooltipMessage} delay={1000}>
-                      <CopyIcon />
-                    </Tooltip>
+      />
+      <div className="ml-0 pt-6 md:space-y-[120px] md:w-full">
+        <div className="justify-between md:flex">
+          <div>
+            <p className="text-center md:text-left font-bold text-[18px] xl:text-[24px] text-[#1EEFA4]">
+              Registrant
+            </p>
+            {loadingRegistration ? (
+              <AnimationSpin />
+            ) : (
+              <div className="flex items-center justify-center md:justify-start">
+                {pending ? (
+                  <PendingTx
+                    txHash={txHash}
+                    onConfirmed={async () => {
+                      refetchTilUpdatedSingle({
+                        refetch: refetchAddress,
+                        interval: 300,
+                        keyToCompare: 'registrant',
+                        prevData: address,
+                      })
+                      await fetchAddress()
+                      setConfirmed()
+                    }}
+                    className="mt-1"
+                  />
+                ) : (
+                  <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2 break-all md:break-normal">
+                    <p className="text-center">
+                      {registrantAddress
+                        ? `${registrantAddress.substring(
+                            0,
+                            10
+                          )}...${registrantAddress.substring(
+                            registrantAddress.length - 11
+                          )}`
+                        : ''}
+                    </p>
+                    <div className="ml-2" onClick={handleCopyRegistrantAddress}>
+                      <Tooltip message={tooltipMessage} delay={1000}>
+                        <CopyIcon />
+                      </Tooltip>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
+          </div>
+
           {!pending && !loadingRegistration && (
-            <div className="flex items-center justify-center mt-4 md:justify-start">
+            <div className="flex items-center justify-center md:justify-start">
               <button
                 disabled={pending || !isRegsitrant}
                 className={cn(
