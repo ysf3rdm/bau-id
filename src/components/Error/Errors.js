@@ -15,7 +15,7 @@ export default function Error404() {
         </p>
         <div>
           <Link to="/">
-            <Button className="text-[#1EEFA4] border-[#1EEFA4] border rounded-full font-bold text-[24px] leading-[34px] py-3 px-8 font-cocoSharp">
+            <Button className="text-[#1EEFA4] border-[#1EEFA4] border rounded-full font-bold text-[24px] leading-[24px] py-3 px-8 font-cocoSharp bg-transparent hover:bg-transparent hover:border-[#1EEFA4]">
               Back to Home
             </Button>
           </Link>

@@ -7,11 +7,11 @@ import cn from 'classnames'
 import Modal from './Modal'
 
 const colorStyles = {
-  control: styles => ({
+  control: (styles) => ({
     ...styles,
     backgroundColor: 'rgba(67,140,136,0.25)',
     border: 'none',
-    borderRadius: '12px'
+    borderRadius: '12px',
   }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
     return {
@@ -23,37 +23,37 @@ const colorStyles = {
       borderBottom: '1px solid rgba(204,252,255,0.2)',
       maxWidth: '100%',
       overflow: 'hidden',
-      textOverflow: 'ellipsis'
+      textOverflow: 'ellipsis',
     }
   },
-  singleValue: styles => {
+  singleValue: (styles) => {
     return {
       ...styles,
       color: 'white',
-      paddingLeft: '10px'
+      paddingLeft: '10px',
     }
   },
-  input: styles => {
+  input: (styles) => {
     return {
       ...styles,
       color: 'white',
-      paddingLeft: '10px'
+      paddingLeft: '10px',
     }
   },
-  menu: styles => ({
+  menu: (styles) => ({
     ...styles,
     backgroundColor: '#1B5759',
     borderRadius: '12px',
     padding: '12px 16px',
-    position: 'absolute'
+    position: 'absolute',
   }),
-  menuList: styles => ({
+  menuList: (styles) => ({
     ...styles,
-    maxHeight: '120px'
-  })
+    maxHeight: '120px',
+  }),
 }
 
-const IndicatorsContainer = props => {
+const IndicatorsContainer = (props) => {
   return (
     <div style={{ border: 'none' }}>
       <components.IndicatorsContainer {...props} />
@@ -65,13 +65,13 @@ export default function ChangePrimaryDomain({
   show,
   saveHandler,
   closeModal,
-  domains
+  domains,
 }) {
   const [selected, setSelected] = useState(null)
-  const options = domains.map(item => {
+  const options = domains.map((item) => {
     return {
       value: item.name,
-      label: item.name + '.bnb'
+      label: item.name + '.bnb',
     }
   })
 
@@ -90,7 +90,7 @@ export default function ChangePrimaryDomain({
           cannotCloseFromOutside={true}
         >
           {/* Title */}
-          <div className="text-[white]">
+          <div className="text-white">
             <div className="text-[24px] md:text-[28px] font-bold font-cocoSharp text-center">
               Primary SPACE ID Name
             </div>
@@ -113,9 +113,9 @@ export default function ChangePrimaryDomain({
                   styles={colorStyles}
                   components={{
                     IndicatorSeparator: () => null,
-                    IndicatorsContainer
+                    IndicatorsContainer,
                   }}
-                  onChange={item => {
+                  onChange={(item) => {
                     setSelected(item)
                   }}
                 />
@@ -128,7 +128,7 @@ export default function ChangePrimaryDomain({
           </div>
 
           {/* Footer Actions */}
-          <div className="mt-5 flex justify-center">
+          <div className="flex justify-center mt-5">
             <button
               disabled={!selected}
               className={cn(

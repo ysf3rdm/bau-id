@@ -10,11 +10,11 @@ export default function NoPermissionEdit() {
     <React.Fragment>
       {show && (
         <Modal width="424px">
-          <div className="text-[white]">
+          <div className="text-white">
             <div className="text-[28px] font-cocoSharp text-center font-bold">
               Ooops...
             </div>
-            <div className="text-urbanist font-semibold text-center mt-4">
+            <div className="mt-4 font-semibold text-center text-urbanist">
               You do not have the access to edit the account.
             </div>
             <div className="flex justify-center">

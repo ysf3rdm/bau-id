@@ -13,6 +13,9 @@ module.exports = {
         400: '#C7C8D3',
         500: '#E3E3E9',
       },
+      dark: {
+        common: '#071A2F',
+      },
       primary: '#134757',
       primaryBg: '#F8F8FC',
       primaryDark: '#0C0D17',
@@ -61,15 +64,14 @@ module.exports = {
     themes: [
       {
         mytheme: {
-          primary: '#1EEFA4',
-          secondary: '#071A2F',
-          accent: '#a0d33b',
-          neutral: '#262B31',
-          'base-100': '#F1EEF6',
-          info: '#589DCA',
+          primary: '#30DB9E',
+          secondary: '#1EEFA4',
+          accent: '#B1D6D3',
+          neutral: '#00ECC1',
+          info: '#BDCED1',
           success: '#218752',
-          warning: '#EFCC43',
-          error: '#E66067',
+          warning: '#ED7E17',
+          error: '#FF0000',
         },
       },
     ],

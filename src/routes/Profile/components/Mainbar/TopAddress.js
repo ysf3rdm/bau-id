@@ -6,7 +6,6 @@ import moment from 'moment'
 import CopyIcon from 'components/Icons/CopyIcon'
 
 //Import Assets
-import NotifyIcon from 'components/Icons/NotifyIcon'
 import AnimationSpin from 'components/AnimationSpin'
 import PendingTx from 'components/PendingTx'
 
@@ -31,7 +30,7 @@ export default function TopAddress({
   pendingExp,
   refetchExp,
   fetchExp,
-  expDate
+  expDate,
 }) {
   const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
 
@@ -43,7 +42,7 @@ export default function TopAddress({
     }
   }
 
-  const handleCopyRegistrantAddress = e => {
+  const handleCopyRegistrantAddress = (e) => {
     e.preventDefault()
     copyTextToClipboard(registrantAddress)
       .then(() => {
@@ -53,7 +52,7 @@ export default function TopAddress({
           setTooltipMessage('Copy to clipboard')
         }, 2000)
       })
-      .catch(err => {
+      .catch((err) => {
         alert('err')
       })
   }
@@ -61,7 +60,11 @@ export default function TopAddress({
     <div className={cn('md:flex justify-between w-full', className)}>
       <div
         className="relative w-full md:w-[300px] xl:w-[432px] h-[230px] xl:h-[272px] flex items-center text-center rounded-[20px] bg-cover mr-7"
-        style={{ backgroundImage: `url(/assets/images/name-card.png)` }}
+        style={{
+          backgroundImage:
+            'url("https://meta.image.space.id/image/stg/43443925618549062928880397539982650978270070079144859533144982342317488169307.svg")',
+          backgroundSize: '100% 100%',
+        }}
       >
         <div class="w-fit mx-auto px-3">
           <span className="h-full text-[30px] xl:text-[40px] font-bold text-white break-all">
@@ -96,7 +99,7 @@ export default function TopAddress({
                       refetch: refetchAddress,
                       interval: 300,
                       keyToCompare: 'registrant',
-                      prevData: address
+                      prevData: address,
                     })
                     await fetchAddress()
                     setConfirmed()
@@ -125,7 +128,7 @@ export default function TopAddress({
             </div>
           )}
           {!pending && !loadingRegistration && (
-            <div className="flex justify-center md:justify-start items-center mt-4">
+            <div className="flex items-center justify-center mt-4 md:justify-start">
               <button
                 disabled={pending || !isRegsitrant}
                 className={cn(
@@ -141,7 +144,7 @@ export default function TopAddress({
             </div>
           )}
         </div>
-        <div className="md:flex justify-between items-center mt-8 md:mt-0">
+        <div className="items-center justify-between mt-8 md:flex md:mt-0">
           <div>
             <p className="font-bold text-[18px] xl:text-[20px] text-[#1EEFA4] text-center md:text-left">
               Expiry Date
@@ -155,7 +158,7 @@ export default function TopAddress({
                     refetch: refetchExp,
                     interval: 300,
                     keyToCompare: 'expires',
-                    prevData: expDate
+                    prevData: expDate,
                   })
                   await fetchExp()
                   setConfirmed()
@@ -165,7 +168,7 @@ export default function TopAddress({
             ) : (
               <div className="flex text-[14px] xl:text-[18px] text-white font-semibold items-center mt-2">
                 {/* <p>2023.04.22 at 08:00 (UTC+8:00)</p> */}
-                <p className="text-center md:text-left w-full">
+                <p className="w-full text-center md:text-left">
                   {moment(
                     selectedDomain?.expires_at
                       .split(',')[0]
@@ -179,13 +182,10 @@ export default function TopAddress({
                   ).format('hh:mm')}
                   <span className="ml-1">(UTC+8:00)</span>
                 </p>
-                {/* <div className="ml-2">
-                  <NotifyIcon />
-                </div> */}
               </div>
             )}
           </div>
-          <div className="flex justify-center md:justify-start items-center mt-4 md:mt-0">
+          <div className="flex items-center justify-center mt-4 md:justify-start md:mt-0">
             <button
               disabled={pendingExp}
               className={cn(
