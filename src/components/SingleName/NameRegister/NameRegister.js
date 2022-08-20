@@ -121,7 +121,7 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
           method: 'get',
           url: `${process.env.REACT_APP_BACKEND_URL}/merkleleaf?domain=${domain.label}`,
         })
-        setFreeDuration(result?.data?.data?.isaution ? 31536000 : 0)
+        setFreeDuration(result?.data?.data?.isaution ? 31556952 : 0)
         if (result?.data?.data?.index) {
           setCanRegister(true)
           setIndex(result?.data?.data?.index)
@@ -137,9 +137,10 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
                 index: result?.data?.data?.index,
                 owner: account?.toLowerCase(), //
                 duration,
-                resolver: process.env.REACT_APP_RESOLVER_ADDRESS, // FIXME this is not fixed
+                resolver:
+                  process.env.REACT_APP_RESOLVER_ADDRESS.toLocaleLowerCase(),
                 addr: account?.toLowerCase(), //Eth wallet of user connected with metamask
-                freeDuration: result?.data?.data?.isaution ? 31536000 : 0,
+                freeDuration: result?.data?.data?.isaution ? 31556952 : 0,
               },
             ],
           }
