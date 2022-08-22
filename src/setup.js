@@ -1,5 +1,4 @@
 import { getAccounts, getNetwork, getNetworkId, isReadOnly } from './ui'
-import Web3 from 'web3'
 import { setup } from './apollo/mutations/ens'
 import { connect } from './api/web3modal'
 import {
@@ -14,7 +13,7 @@ import {
   reverseRecordReactive,
   subDomainFavouritesReactive,
   web3ProviderReactive,
-  loadingWalletReactive
+  loadingWalletReactive,
 } from './apollo/reactiveVars'
 import { setupAnalytics } from './utils/analytics'
 import { getReverseRecord } from './apollo/sideEffects'
@@ -32,9 +31,10 @@ export const setSubDomainFavourites = () => {
   )
 }
 
-export const isSupportedNetwork = networkId => {
+export const isSupportedNetwork = (networkId) => {
   switch (networkId) {
     case 56:
+      return true
     case 97:
       return true
     default:
@@ -42,40 +42,10 @@ export const isSupportedNetwork = networkId => {
   }
 }
 
-export const getProvider = async reconnect => {
+export const getProvider = async (reconnect) => {
   try {
     let provider
     loadingWalletReactive(true)
-    if (
-      process.env.REACT_APP_STAGE === 'local' &&
-      process.env.REACT_APP_ENS_ADDRESS
-    ) {
-      const { providerObject } = await setup({
-        reloadOnAccountsChange: false,
-        customProvider: 'http://localhost:8545',
-        ensAddress: process.env.REACT_APP_ENS_ADDRESS
-      })
-      provider = providerObject
-      let labels = window.localStorage['labels']
-        ? JSON.parse(window.localStorage['labels'])
-        : {}
-      window.localStorage.setItem(
-        'labels',
-        JSON.stringify({
-          ...labels,
-          ...JSON.parse(process.env.REACT_APP_LABELS)
-        })
-      )
-      loadingWalletReactive(false)
-      return provider
-    }
-    const safe = await safeInfo()
-    if (safe) {
-      const provider = await setupSafeApp(safe)
-      loadingWalletReactive(false)
-      return provider
-    }
-
     if (
       window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER') ||
       reconnect
@@ -87,7 +57,7 @@ export const getProvider = async reconnect => {
     const { providerObject } = await setup({
       reloadOnAccountsChange: false,
       enforceReadOnly: true,
-      enforceReload: false
+      enforceReload: false,
     })
     provider = providerObject
     loadingWalletReactive(false)
@@ -97,27 +67,14 @@ export const getProvider = async reconnect => {
       loadingWalletReactive(false)
       globalErrorReactive({
         ...globalErrorReactive(),
-        network: 'Unsupported Network'
+        network: 'Unsupported Network',
       })
       return
     }
   }
-
-  try {
-    const { providerObject } = await setup({
-      reloadOnAccountsChange: false,
-      enforceReadOnly: true,
-      enforceReload: false
-    })
-    provider = providerObject
-    return provider
-  } catch (e) {
-    loadingWalletReactive(false)
-    console.error('getProvider readOnly error: ', e)
-  }
 }
 
-export const setWeb3Provider = async provider => {
+export const setWeb3Provider = async (provider) => {
   web3ProviderReactive(provider)
 
   const accounts = await getAccounts()
@@ -127,20 +84,19 @@ export const setWeb3Provider = async provider => {
     accountsReactive(accounts)
   }
 
-  provider?.on('chainChanged', async _chainId => {
+  provider?.on('chainChanged', async (_chainId) => {
     const networkId = await getNetworkId()
     if (!isSupportedNetwork(networkId)) {
       globalErrorReactive({
         ...globalErrorReactive(),
-        network: 'Unsupported Network'
+        network: 'Unsupported Network',
       })
       return
     }
-
     await setup({
       customProvider: provider,
       reloadOnAccountsChange: false,
-      enforceReload: true
+      enforceReload: true,
     })
 
     networkIdReactive(networkId)
@@ -148,14 +104,14 @@ export const setWeb3Provider = async provider => {
     loadingWalletReactive(false)
   })
 
-  provider?.on('accountsChanged', async accounts => {
+  provider?.on('accountsChanged', async (accounts) => {
     accountsReactive(accounts)
   })
 
   return provider
 }
 
-export default async reconnect => {
+export default async (reconnect) => {
   try {
     setFavourites()
     setSubDomainFavourites()
@@ -167,7 +123,7 @@ export default async reconnect => {
     if (!isSupportedNetwork(parseInt(networkId))) {
       globalErrorReactive({
         ...globalErrorReactive(),
-        network: 'Unsupported Network'
+        network: 'Unsupported Network',
       })
       return
     }

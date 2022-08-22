@@ -70,8 +70,7 @@ export default function Profile() {
     try {
       const networkId = await getNetworkId()
       setNetworkId(networkId)
-      const infura =
-        'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd'
+      const infura = process.env.REACT_APP_INFURA_URL
       const provider = new ethers.providers.JsonRpcProvider(infura)
       const tSid = new SID({ provider, sidAddress: getSidAddress(networkId) })
       setSid(tSid)
@@ -135,7 +134,7 @@ export default function Profile() {
           <div>
             <div className="border-t border-[rgba(204,252,255,0.2)]">
               <DomainList
-                className="mt-4 h-full flex flex-col"
+                className="flex flex-col h-full mt-4"
                 domainsList={domains}
                 clickHandle={selectDomain}
                 selectedDomain={selectedDomain}

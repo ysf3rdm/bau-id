@@ -4,7 +4,7 @@ import {
   isReadOnlyReactive,
   networkIdReactive,
   networkReactive,
-  web3ProviderReactive
+  web3ProviderReactive,
 } from '../apollo/reactiveVars'
 
 const INFURA_ID =
@@ -23,44 +23,44 @@ const option = {
     main: '#379070',
     secondary: 'rgb(136, 136, 136)',
     border: '#47C799',
-    hover: '#47C799'
+    hover: '#47C799',
   },
   providerOptions: {
     walletconnect: {
       package: () => import('@walletconnect/web3-provider'),
       packageFactory: true,
       options: {
-        infuraId: INFURA_ID
-      }
+        infuraId: INFURA_ID,
+      },
     },
     walletlink: {
       package: () => import('walletlink'),
       packageFactory: true,
       options: {
         appName: 'Ethereum name service',
-        jsonRpcUrl: `https://mainnet.infura.io/v3/${INFURA_ID}`
-      }
+        jsonRpcUrl: `https://mainnet.infura.io/v3/${INFURA_ID}`,
+      },
     },
     mewconnect: {
       package: () => import('@myetherwallet/mewconnect-web-client'),
       packageFactory: true,
       options: {
         infuraId: INFURA_ID,
-        description: ' '
-      }
+        description: ' ',
+      },
     },
     portis: {
       package: () => import('@portis/web3'),
       packageFactory: true,
       options: {
-        id: PORTIS_ID
-      }
+        id: PORTIS_ID,
+      },
     },
     torus: {
       package: () => import('@toruslabs/torus-embed'),
-      packageFactory: true
-    }
-  }
+      packageFactory: true,
+    },
+  },
 }
 
 let web3Modal
@@ -69,11 +69,10 @@ export const connect = async () => {
     const Web3Modal = (await import('@siddomains/web3modal')).default
     web3Modal = new Web3Modal(option)
     provider = await web3Modal.connect()
-
     await setupENS({
       customProvider: provider,
       reloadOnAccountsChange: false,
-      enforceReload: true
+      enforceReload: true,
     })
     return provider
   } catch (e) {
@@ -83,7 +82,7 @@ export const connect = async () => {
   }
 }
 
-export const disconnect = async function() {
+export const disconnect = async function () {
   if (web3Modal) {
     await web3Modal.clearCachedProvider()
   }
@@ -95,7 +94,7 @@ export const disconnect = async function() {
   await setupENS({
     reloadOnAccountsChange: false,
     enforceReadOnly: true,
-    enforceReload: false
+    enforceReload: false,
   })
 
   isReadOnlyReactive(isReadOnly())
@@ -104,6 +103,6 @@ export const disconnect = async function() {
   networkReactive(await getNetwork())
 }
 
-export const setWeb3Modal = x => {
+export const setWeb3Modal = (x) => {
   web3Modal = x
 }
