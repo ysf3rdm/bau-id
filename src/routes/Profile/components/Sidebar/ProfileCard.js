@@ -1,12 +1,12 @@
 // Import packages
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import cn from 'classnames'
 import { useMutation } from '@apollo/client'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
+import { isEmptyAddress } from 'utils/records'
 
 // Import components
-import UnstyledBlockies from 'components/Blockies'
 import ChangePrimaryDomain from 'components/Modal/ChangePrimaryDomain'
 import PendingTx from 'components/PendingTx'
 
@@ -24,8 +24,7 @@ import { useEditable } from 'components/hooks'
 import { setAllDomains } from 'app/slices/domainSlice'
 
 //Import assets
-import SmileFace from '../../../../assets/images/profile/smileface.png'
-import { useEffect } from 'react'
+import DefaultAvatar from 'assets/images/default-avatar.png'
 
 export const GET_ACCOUNT = gql`
   query getAccounts @client {
@@ -37,16 +36,15 @@ export default function ProfileCard({
   className,
   account,
   isReadOnly,
-  networkId
+  networkId,
 }) {
-  const [isShowChangePrimaryModal, setIsShowChangePrimaryModal] = useState(
-    false
-  )
-  const domains = useSelector(state => state.domain.domains)
+  const [isShowChangePrimaryModal, setIsShowChangePrimaryModal] =
+    useState(false)
+  const domains = useSelector((state) => state.domain.domains)
 
   const dispatch = useDispatch()
 
-  const primaryDomain = domains.filter(item => item.isPrimary)
+  const primaryDomain = domains.filter((item) => item.isPrimary)
 
   const { actions, state } = useEditable()
 
@@ -54,53 +52,57 @@ export default function ProfileCard({
   const { pending, txHash } = state
 
   useEffect(() => {
-    if (!isReadOnly && domains.length === 0 && account) {
+    if (
+      !isReadOnly &&
+      domains.length === 0 &&
+      !isEmptyAddress(account) &&
+      networkId === process.env.REACT_APP_NETWORK_CHAIN_ID
+    ) {
       fetchPrimaryDomain()
     }
   }, [isReadOnly, networkId, account])
 
   const {
-    data: { accounts }
+    data: { accounts },
   } = useQuery(GET_ACCOUNT)
 
-  const {
-    data: { getReverseRecord } = {},
-    loading: reverseRecordLoading
-  } = useQuery(GET_REVERSE_RECORD, {
-    variables: {
-      address: accounts?.[0]
-    },
-    skip: !accounts?.length
-  })
+  const { data: { getReverseRecord } = {}, loading: reverseRecordLoading } =
+    useQuery(GET_REVERSE_RECORD, {
+      variables: {
+        address: accounts?.[0],
+      },
+      skip: !accounts?.length,
+    })
 
   const [setName] = useMutation(SET_NAME, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (Object.values(data)[0]) {
         startPending(Object.values(data)[0])
         setIsShowChangePrimaryModal(false)
       }
-    }
+    },
   })
 
-  const changePrimaryDomain = param => {
+  const changePrimaryDomain = (param) => {
     setName({ variables: { name: param.value } })
   }
 
   const refetchPrimaryDomain = async () => {
     const params = {
       ChainID: networkId,
-      Address: account
+      Address: account,
     }
     let result = await axios.post(
       'https://backend.stg.space.id/listname',
       params
     )
-    const data = result?.data?.map(item => {
+    const data = result?.data?.map((item) => {
       const date = new Date(item?.expires)
       return {
-        expires_at: `${date.getFullYear()}.${date.getMonth() +
-          1}.${date.getDate()}`,
-        ...item
+        expires_at: `${date.getFullYear()}.${
+          date.getMonth() + 1
+        }.${date.getDate()}`,
+        ...item,
       }
     })
     return data
@@ -112,6 +114,7 @@ export default function ProfileCard({
   }
 
   const refetchForPrimaryDomain = async () => {
+    console.log('refetchForPrimaryDomain')
     await fetchPrimaryDomain()
     setConfirmed()
   }
@@ -132,21 +135,17 @@ export default function ProfileCard({
               src={imageUrl(getReverseRecord.avatar, displayName, network)}
             />
           ) : (
-            <div className="w-full h-full">
-              {accounts && accounts.length > 0 ? (
-                <UnstyledBlockies
-                  className="rounded-full w-full h-full"
-                  address={accounts[0]}
-                  imageSize={45}
-                />
-              ) : (
-                <img src={SmileFace} />
-              )}
+            <div className="w-16 h-16 rounded-full ">
+              <img
+                className="rounded-full"
+                src={DefaultAvatar}
+                alt="default avatar"
+              />
             </div>
           )}
         </div>
       ) : (
-        <div className="mr-4 flex-none w-[40px] xl:w-[64px]" />
+        <div className="flex-none w-10 mr-4 xl:w-8" />
       )}
 
       <div className="w-full">
@@ -178,7 +177,7 @@ export default function ProfileCard({
                     prevData:
                       primaryDomain && primaryDomain.length > 0
                         ? primaryDomain?.[0]
-                        : ''
+                        : '',
                   })
                 }}
                 className="mt-1"
