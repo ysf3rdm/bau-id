@@ -1,12 +1,12 @@
 // Import packages
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import cn from 'classnames'
 import { useMutation } from '@apollo/client'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
+import { isEmptyAddress } from 'utils/records'
 
 // Import components
-import UnstyledBlockies from 'components/Blockies'
 import ChangePrimaryDomain from 'components/Modal/ChangePrimaryDomain'
 import PendingTx from 'components/PendingTx'
 
@@ -24,9 +24,7 @@ import { useEditable } from 'components/hooks'
 import { setAllDomains } from 'app/slices/domainSlice'
 
 //Import assets
-import SmileFace from 'assets/images/profile/smileface.png'
 import DefaultAvatar from 'assets/images/default-avatar.png'
-import { useEffect } from 'react'
 
 export const GET_ACCOUNT = gql`
   query getAccounts @client {
@@ -54,7 +52,12 @@ export default function ProfileCard({
   const { pending, txHash } = state
 
   useEffect(() => {
-    if (!isReadOnly && domains.length === 0 && account) {
+    if (
+      !isReadOnly &&
+      domains.length === 0 &&
+      !isEmptyAddress(account) &&
+      networkId === process.env.REACT_APP_NETWORK_CHAIN_ID
+    ) {
       fetchPrimaryDomain()
     }
   }, [isReadOnly, networkId, account])
@@ -111,6 +114,7 @@ export default function ProfileCard({
   }
 
   const refetchForPrimaryDomain = async () => {
+    console.log('refetchForPrimaryDomain')
     await fetchPrimaryDomain()
     setConfirmed()
   }
