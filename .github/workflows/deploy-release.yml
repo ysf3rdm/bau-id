@@ -1,8 +1,8 @@
-name: Space ID App S3 Deploy - Staging
+name: Space ID App S3 Deploy - Production
 
 on:
   push:
-    branches: [dev]
+    branches: [release]
 
 jobs:
   build-and-deploy:
@@ -17,16 +17,16 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install
-      - run: yarn run build:stg
+      - run: yarn run build:prd && cp -a build/. dist/ && cp -a build/. dist/app/
 
       - name: Deploy
         uses: reggionick/s3-deploy@v3
         with:
-          folder: 'build'
-          bucket: 'stg-app-space-id'
+          folder: 'dist'
+          bucket: 'pre-prd-space-id'
           bucket-region: 'us-west-2'
-          dist-id: 'EQQRPZMXDBL2P'
-          invalidation: /
+          dist-id: 'E3SU0ENOLNWBR6'
+          invalidation: /app/
           delete-removed: true
           no-cache: false
           private: true
