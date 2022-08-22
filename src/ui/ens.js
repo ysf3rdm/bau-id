@@ -42,6 +42,9 @@ function getLabelhash(label) {
 }
 
 const contracts = {
+  56: {
+    registry: process.env.REACT_APP_REGISTRY_ADDRESS,
+  },
   97: {
     registry: process.env.REACT_APP_REGISTRY_ADDRESS,
   },
@@ -145,7 +148,6 @@ export class ENS {
 
       return encoder(Buffer.from(addr.slice(2), 'hex'))
     } catch (e) {
-      console.log(e)
       console.warn(
         'Error getting addr on the resolver contract, are you sure the resolver address is a resolver contract?'
       )
