@@ -1,6 +1,7 @@
 import {
   networkIdReactive,
   networkReactive,
+  loadingWalletReactive,
   reverseRecordReactive,
   accountsReactive,
   isReadOnlyReactive,
@@ -30,6 +31,16 @@ export default {
       networkId: {
         read() {
           return networkIdReactive()
+        }
+      },
+      loadingWallet: {
+        read() {
+          return loadingWalletReactive()
+        }
+      },
+      loadingRegister: {
+        read() {
+          return registerLoadingReactive()
         }
       },
       network: {

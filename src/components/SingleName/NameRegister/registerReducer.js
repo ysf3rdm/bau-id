@@ -1,7 +1,7 @@
 import registerReducerFactory from '../registerReducerFactory'
 
 export const registerMachine = {
-  initialState: 'PRICE_DECISION',
+  initialState: 'AWAITING_REGISTER',
   states: {
     PRICE_DECISION: {
       on: {

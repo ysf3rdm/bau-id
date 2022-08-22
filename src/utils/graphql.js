@@ -38,12 +38,34 @@ export function refetchTilUpdated(
   recurseRefetch()
 }
 
-export function refetchTilUpdatedSingle({
+export function refetchTilUpdatedSingle({ refetch, interval, prevData }) {
+  let maxTries = 10
+  let tries = maxTries
+  let incrementedInterval = interval
+
+  function recurseRefetch() {
+    if (tries > 0) {
+      return setTimeout(() => {
+        tries--
+        incrementedInterval = interval * (maxTries - tries + 1)
+        refetch().then(data => {
+          const updated = prevData !== data
+          if (updated) return
+          return recurseRefetch()
+        })
+      }, incrementedInterval)
+    }
+    return
+  }
+
+  recurseRefetch()
+}
+
+export function refetchTilUpdatedSingleForPrimaryKey({
   refetch,
   interval,
-  keyToCompare,
   prevData,
-  getterString
+  refetchForPrimaryDomain
 }) {
   let maxTries = 10
   let tries = maxTries
@@ -54,12 +76,16 @@ export function refetchTilUpdatedSingle({
       return setTimeout(() => {
         tries--
         incrementedInterval = interval * (maxTries - tries + 1)
-        refetch().then(({ data }) => {
-          const updated =
-            get(data, getterString)[keyToCompare] !==
-            get(prevData, getterString)[keyToCompare]
-
-          if (updated) return
+        refetch().then(data => {
+          const matchedData = data.filter(item => item.name === prevData.name)
+          if (
+            matchedData &&
+            matchedData.length > 0 &&
+            matchedData[0]?.isPrimary !== prevData?.isPrimary
+          ) {
+            refetchForPrimaryDomain()
+            return
+          }
           return recurseRefetch()
         })
       }, incrementedInterval)

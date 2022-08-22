@@ -1,10 +1,5 @@
-import {
-  getAccounts,
-  getNetwork,
-  getNetworkId,
-  isReadOnly
-} from '@ensdomains/ui'
-
+import { getAccounts, getNetwork, getNetworkId, isReadOnly } from './ui'
+import Web3 from 'web3'
 import { setup } from './apollo/mutations/ens'
 import { connect } from './api/web3modal'
 import {
@@ -18,7 +13,8 @@ import {
   networkReactive,
   reverseRecordReactive,
   subDomainFavouritesReactive,
-  web3ProviderReactive
+  web3ProviderReactive,
+  loadingWalletReactive
 } from './apollo/reactiveVars'
 import { setupAnalytics } from './utils/analytics'
 import { getReverseRecord } from './apollo/sideEffects'
@@ -38,11 +34,8 @@ export const setSubDomainFavourites = () => {
 
 export const isSupportedNetwork = networkId => {
   switch (networkId) {
-    case 1:
-    case 3:
-    case 4:
-    case 5:
-    case 1337:
+    case 56:
+    case 97:
       return true
     default:
       return false
@@ -52,6 +45,7 @@ export const isSupportedNetwork = networkId => {
 export const getProvider = async reconnect => {
   try {
     let provider
+    loadingWalletReactive(true)
     if (
       process.env.REACT_APP_STAGE === 'local' &&
       process.env.REACT_APP_ENS_ADDRESS
@@ -72,12 +66,13 @@ export const getProvider = async reconnect => {
           ...JSON.parse(process.env.REACT_APP_LABELS)
         })
       )
+      loadingWalletReactive(false)
       return provider
     }
-
     const safe = await safeInfo()
     if (safe) {
       const provider = await setupSafeApp(safe)
+      loadingWalletReactive(false)
       return provider
     }
 
@@ -86,18 +81,20 @@ export const getProvider = async reconnect => {
       reconnect
     ) {
       provider = await connect()
+      loadingWalletReactive(false)
       return provider
     }
-
     const { providerObject } = await setup({
       reloadOnAccountsChange: false,
       enforceReadOnly: true,
       enforceReload: false
     })
     provider = providerObject
+    loadingWalletReactive(false)
     return provider
   } catch (e) {
     if (e.message.match(/Unsupported network/)) {
+      loadingWalletReactive(false)
       globalErrorReactive({
         ...globalErrorReactive(),
         network: 'Unsupported Network'
@@ -115,6 +112,7 @@ export const getProvider = async reconnect => {
     provider = providerObject
     return provider
   } catch (e) {
+    loadingWalletReactive(false)
     console.error('getProvider readOnly error: ', e)
   }
 }
@@ -125,7 +123,7 @@ export const setWeb3Provider = async provider => {
   const accounts = await getAccounts()
 
   if (provider) {
-    provider.removeAllListeners()
+    if (provider.removeAllListeners) provider.removeAllListeners()
     accountsReactive(accounts)
   }
 
@@ -147,6 +145,7 @@ export const setWeb3Provider = async provider => {
 
     networkIdReactive(networkId)
     networkReactive(await getNetwork())
+    loadingWalletReactive(false)
   })
 
   provider?.on('accountsChanged', async accounts => {
@@ -165,8 +164,7 @@ export default async reconnect => {
     if (!provider) throw 'Please install a wallet'
 
     const networkId = await getNetworkId()
-
-    if (!isSupportedNetwork(networkId)) {
+    if (!isSupportedNetwork(parseInt(networkId))) {
       globalErrorReactive({
         ...globalErrorReactive(),
         network: 'Unsupported Network'
@@ -174,8 +172,11 @@ export default async reconnect => {
       return
     }
 
-    networkIdReactive(await getNetworkId())
-    networkReactive(await getNetwork())
+    networkIdReactive(networkId)
+
+    const network = await getNetwork()
+
+    networkReactive(network)
 
     await setWeb3Provider(provider)
 
@@ -189,6 +190,7 @@ export default async reconnect => {
     setupAnalytics()
 
     isAppReadyReactive(true)
+    loadingWalletReactive(false)
   } catch (e) {
     console.error('setup error: ', e)
   }

@@ -2,15 +2,12 @@ import React from 'react'
 import styled from '@emotion/styled/macro'
 import { useTranslation } from 'react-i18next'
 import Button from '../Forms/Button'
-import warning from '../../assets/warning.svg'
-import write from '../../assets/Write.svg'
 
 import mq from 'mediaQuery'
 
 const ConfirmContainer = styled('div')`
   &:before {
     display: none;
-    background: url(${write});
     content: '';
     height: 43px;
     width: 42px;
@@ -35,7 +32,6 @@ const Title = styled('h3')`
     font-size: 22px;
   `}
   &:before {
-    background: url(${warning});
     content: '';
     height: 17px;
     width: 19px;
@@ -66,7 +62,7 @@ const Values = styled('ul')`
 const Value = styled('li')`
   font-size: 12px;
   font-weight: bold;
-  font-family: Overpass Mono;
+  font-family: Urbanist Mono;
   display: flex;
   justify-content: space-between;
   color: ${({ old }) => (old ? 'grey' : 'black')};
@@ -101,7 +97,7 @@ const Confirm = ({
   value,
   extraDataComponent,
   newValue,
-  explanation
+  explanation,
 }) => {
   const { t } = useTranslation()
   return (

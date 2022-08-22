@@ -11,16 +11,13 @@ const SortContainer = styled('ul')`
 `
 
 const SortButton = styled('li')`
-  color: #adbbcd;
-  font-size: 18px;
-  padding: 0 10px 5px;
-  border-bottom: 1px #d2d2d2 solid;
-
-  &:hover,
-  &.active {
-    cursor: pointer;
-    color: #2c46a6;
-    border-bottom: 1px #2c46a6 solid;
+  font-family: Urbanist;
+  font-weight: 600;
+  color: #379070;
+  font-size: 24px;
+  text-decoration: underline;
+  @media (max-width: 768px) {
+    font-size: 20px;
   }
 `
 
@@ -34,25 +31,6 @@ export default function Sorting({
 
   return (
     <SortContainer className={className}>
-      {/* <SortButton
-        className={
-          activeSort === 'alphabetical' || activeSort === 'alphabeticalDesc'
-            ? 'active'
-            : ''
-        }
-        onClick={() => {
-          switch (activeSort) {
-            case 'alphabetical':
-              return setActiveSort('alphabeticalDesc')
-            case 'alphabeticalDesc':
-              return setActiveSort('alphabetical')
-            default:
-              return setActiveSort('alphabetical')
-          }
-        }}
-      >
-        {t('address.sort.alphabetical')}
-      </SortButton> */}
       {activeFilter === 'registrant' && (
         <SortButton
           className={activeSort.type === 'expiryDate' ? 'active' : ''}

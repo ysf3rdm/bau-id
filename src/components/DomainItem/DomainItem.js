@@ -2,7 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled/macro'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import mq from 'mediaQuery'
 
 import AddFavourite from '../AddFavourite/AddFavourite'
 import { useAccount } from '../QueryAccount'
@@ -12,71 +11,47 @@ import { humaniseName } from '../../utils/utils'
 import Checkbox from '../Forms/Checkbox'
 import warningImage from '../../assets/warning.svg'
 
+import mq, { useMediaMin, useMediaMax } from 'mediaQuery'
+
 const CheckBoxContainer = styled('div')`
-  margin: 5px;
+  margin-left: 24px;
+  @media (max-width: 768px) {
+    margin-left: 21px;
+  }
 `
 
 const Container = styled.div`
-  &:before {
-    content: '';
-    background: ${p => {
-      if (p.hasInvalidCharacter) return 'black'
-
-      switch (p.state) {
-        case 'Yours':
-          return '#52E5FF'
-        case 'Open':
-          return '#42E068'
-        case 'Auction':
-        case 'Reveal':
-          return 'linear-gradient(-180deg, #42E068 0%, #52E5FF 100%)'
-        case 'Owned':
-          return '#CACACA'
-        case 'Forbidden':
-          return 'black'
-        case 'NotYetAvailable':
-          return 'red'
-        default:
-          return 'red'
-      }
-    }};
-
-    width: 4px;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 10;
-  }
-
   position: relative;
   background-color: white;
-  border-radius: 6px;
+  border-radius: 20px;
   box-shadow: 3px 4px 20px 0 rgba(144, 171, 191, 0.42);
   padding: ${p => (p.hasInvalidCharacter ? '20' : '0')}px;
   padding-left: 0px;
 `
 
 const DomainContainer = styled(Link)`
-  padding: 20px;
-  color: #2b2b2b;
+  width: 100%;
+  padding: 18px 28px;
+  color: #379170;
   overflow: hidden;
   position: relative;
   background: ${({ percentDone }) =>
     percentDone
       ? `
   linear-gradient(to right, rgba(128, 255, 128, 0.1) 0%, rgba(82,229,255, 0.1) ${percentDone}%,#ffffff ${percentDone}%)`
-      : 'white'};
+      : '#F0F7F4;'};
   height: 65px;
-  display: grid;
+  display: flex;
+  justify-content: space-between;
   height: auto;
-  grid-template-columns: 1fr;
-  grid-gap: 10px;
   align-items: center;
   font-size: 22px;
+  font-weight: 500;
+  line-height: 29px;
   margin-bottom: 4px;
   transition: 0.2s all;
-  border-radius: 6px;
+  border-radius: 20px;
+  border: 2px solid #18e199;
 
   ${mq.medium`
     grid-template-columns: 1fr minmax(150px,350px) 100px 50px 50px;
@@ -97,23 +72,37 @@ const DomainContainer = styled(Link)`
 const RightContainer = styled('div')`
   display: flex;
   align-items: center;
+  order: 3;
+  @media (max-width: 768px) {
+    justify-content: flex-end;
+  }
 `
 
-const DomainName = styled('h2')`
+const SecondContainer = styled('div')`
+  display: flex;
+  align-items: center;
+  @media (max-width: 768px) {
+    display: block;
+  }
+`
+
+const DomainName = styled('div')`
   font-size: 18px;
   font-weight: 100;
 
+  font-family: 'Urbanist'
   ${mq.medium`
-    font-size: 28px;
+    font-size: 24px;
+
   `}
 
   color: ${p => {
     switch (p.state) {
       case 'Yours':
       case 'Owned':
-        return '#2b2b2b'
+        return '#379070'
       default:
-        return '#2b2b2b'
+        return '#379070'
     }
   }};
 `
@@ -124,6 +113,7 @@ const LabelContainer = styled('div')`
   color: #ccd4da;
   display: none;
   align-items: center;
+  order: 2;
 `
 
 const LabelText = styled('div')``
@@ -191,7 +181,7 @@ const Domain = ({
   setSelectAll,
   hasInvalidCharacter
 }) => {
-  console.log('DomainItem: ', Array.from(domain.name))
+  const mediumBP = useMediaMax('medium')
   if (loading) {
     return (
       <DomainContainer state={'Owned'} className={className} to="">
@@ -238,39 +228,44 @@ const Domain = ({
       >
         <DomainName state={isOwner ? 'Yours' : domain.state}>
           {humaniseName(domain.name)}
-        </DomainName>
-        <ExpiryDate expiryDate={expiryDate} name={domain.name} />
-        {!hasInvalidCharacter && <Label domain={domain} isOwner={isOwner} />}
-        <RightContainer>
-          <AddFavourite
-            domain={domain}
-            isSubDomain={isSubDomain}
-            isFavourite={isFavourite}
-          />
-        </RightContainer>
-        <RightContainer>
-          {expiryDate && (
-            <CheckBoxContainer>
-              <Checkbox
-                testid={`checkbox-${domain.name}`}
-                checked={checkedBoxes[domain.name]}
-                onClick={e => {
-                  e.preventDefault()
-                  setCheckedBoxes &&
-                    setCheckedBoxes(prevState => {
-                      return {
-                        ...prevState,
-                        [domain.name]: !prevState[domain.name]
-                      }
-                    })
-                  if (checkedBoxes[domain.name]) {
-                    setSelectAll(false)
-                  }
-                }}
-              />
-            </CheckBoxContainer>
+          {mediumBP && !hasInvalidCharacter && (
+            <Label domain={domain} isOwner={isOwner} />
           )}
-        </RightContainer>
+        </DomainName>
+        <SecondContainer>
+          <RightContainer>
+            <AddFavourite
+              domain={domain}
+              isSubDomain={isSubDomain}
+              isFavourite={isFavourite}
+            />
+            {expiryDate && (
+              <CheckBoxContainer>
+                <Checkbox
+                  testid={`checkbox-${domain.name}`}
+                  checked={checkedBoxes[domain.name]}
+                  onClick={e => {
+                    e.preventDefault()
+                    setCheckedBoxes &&
+                      setCheckedBoxes(prevState => {
+                        return {
+                          ...prevState,
+                          [domain.name]: !prevState[domain.name]
+                        }
+                      })
+                    if (checkedBoxes[domain.name]) {
+                      setSelectAll(false)
+                    }
+                  }}
+                />
+              </CheckBoxContainer>
+            )}
+          </RightContainer>
+          {!mediumBP && !hasInvalidCharacter && (
+            <Label domain={domain} isOwner={isOwner} />
+          )}
+          <ExpiryDate expiryDate={expiryDate} name={domain.name} />
+        </SecondContainer>
       </DomainContainer>
     </Container>
   )

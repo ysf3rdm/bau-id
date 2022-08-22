@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react'
+import cn from 'classnames'
 import last from 'lodash/last'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled/macro'
 import { useQuery } from '@apollo/client'
 import { GET_TRANSACTION_HISTORY } from '../graphql/queries'
 
-import Loader from './Loader'
+// import Loader from './Loader'
+import AnimationSpin from './AnimationSpin'
 
-const PendingContainer = styled('div')`
-  display: flex;
-`
-
-const Text = styled('span')`
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-right: 10px;
-`
-const Pending = ({ className, children = 'Tx pending' }) => (
-  <PendingContainer className={className}>
-    <Text>{children}</Text>
-    <Loader />
-  </PendingContainer>
+const Pending = ({
+  className,
+  children = 'Tx pending',
+  labelClassName = 'text-[18px]'
+}) => (
+  <div className={cn('flex items-center', className)}>
+    <span
+      className={cn('uppercase mr-[10px] text-[#B1D6D3] mt-1', labelClassName)}
+    >
+      {children}
+    </span>
+    <AnimationSpin />
+  </div>
 )
 
 function MultiplePendingTx(props) {

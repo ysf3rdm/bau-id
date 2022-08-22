@@ -5,7 +5,7 @@ import DomainItem from '../DomainItem/ChildDomainItem'
 
 const NoDomainsContainer = styled('div')`
   display: flex;
-  padding: 40px;
+  padding: 20px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -15,7 +15,7 @@ const NoDomainsContainer = styled('div')`
   margin-bottom: 40px;
 
   h2 {
-    color: #adbbcd;
+    font-size: 24px;
     font-weight: 100;
     margin-bottom: 0;
     padding: 0;
@@ -38,8 +38,8 @@ const NoDomainsContainer = styled('div')`
 const DomainsContainer = styled('div')`
   margin-top: 20px;
   padding-bottom: 30px;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 27px;
+  padding-right: 27px;
 `
 
 export default function DomainList({

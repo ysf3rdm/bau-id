@@ -28,7 +28,7 @@ describe('EtherScanLink', () => {
     )
 
     expect(getByTestId('ether-scan-link-container').href).toBe(
-      'https://etherscan.io/address/0xaddr1'
+      'https://testnet.bscscan.com/address/0xaddr1'
     )
   })
 

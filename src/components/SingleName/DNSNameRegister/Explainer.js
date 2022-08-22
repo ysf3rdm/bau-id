@@ -6,7 +6,7 @@ const Steps = styled('section')`
   display: grid;
   grid-template-columns: 1fr;
   grid-row-gap: 30px;
-  border-bottom: ${p => (p.border ? '1' : '0')}px solid #dfdfdf;
+  border-bottom: ${p => (p.border ? '1' : '0')}px solid #5ed6ab;
 `
 
 const Explainer = ({ step, number, title, text, border }) => {

@@ -33,7 +33,6 @@ const whitelist = [
 
 const removeSurgeDomain = domain => {
   const domainToRemove = domain
-  console.log('domain to remove: ', domainToRemove)
   if (domainToRemove.includes('app')) {
     console.warn(`Not removing domain ${domainToRemove} as it contains 'app'`)
     return
@@ -50,7 +49,6 @@ const removeSurgeDomain = domain => {
     )
     return
   }
-  console.log(`Removing domain: ${domainToRemove}`)
   exec(`surge teardown ${domainToRemove}`)
 }
 

@@ -6,51 +6,48 @@ export const DetailsItem = styled('div')`
   justify-content: flex-start;
   flex-direction: column;
   margin-bottom: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-direction: row;
+`
 
-  ${mq.small`
-    align-items: center;
-    margin-bottom: 20px;
-  `}
-
-  ${p =>
-    p.uneditable
-      ? mq.small`
-    flex-direction: row;
-  `
-      : mq.small`flex-direction: row;`}
+export const DetailsKeyValueContainer = styled('div')`
+  display: flex;
+  align-items: center;
+  @media (max-width: 768px) {
+  }
 `
 
 export const DetailsKey = styled('div')`
-  color: ${({ greyed }) => (greyed ? '#CCD4DA' : '2b2b2b')};
-  font-size: 14px;
+  color: #379070;
   letter-spacing: 0px;
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: capitalize;
   flex-shrink: 0;
   display: flex;
   margin-bottom: 20px;
-
-  ${mq.small`
-    align-items: center;
-    margin-bottom: 0;
-    font-size: 16px;
-    max-width: 220px;
-    min-width: 180px;
-  `}
+  align-items: center;
+  margin-bottom: 0;
+  font-size: 20px;
+  max-width: 220px;
+  min-width: 180px;
+  @media (max-width: 768px) {
+    font-size: 18px;
+    width: 146px;
+    min-width: 146px;
+    max-width: 146px;
+  }
 `
 
 export const DetailsValue = styled('div')`
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 100;
-  font-family: Overpass Mono;
+  font-family: Urbanist Mono;
   white-space: nowrap;
   overflow: hidden;
   display: inline-flex;
   text-overflow: ellipsis;
-  ${mq.small`
-    font-size: 18px;
-    align-items: center;
-  `}
+  color: #379070;
   ${p =>
     p.editing &&
     p.editable &&
@@ -62,18 +59,44 @@ export const DetailsValue = styled('div')`
     display: flex;
     overflow: hidden;
   }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    white-space: normal;
+  }
 `
 /* Container element for key/value */
 export const DetailsContent = styled('div')`
   display: flex;
   justify-content: flex-start;
   position: relative;
-  flex-direction: column;
   width: 100%;
   ${({ editing }) => editing && 'margin-bottom: 30px'};
   transition: 0.3s;
-  ${mq.small`
-    flex-direction: row;
-    align-items: center;
-  `}
+  flex-direction: row;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`
+
+export const DetailsContentContainer = styled('div')`
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  width: 100%;
+  ${({ editing }) => editing && 'margin-bottom: 30px'};
+  transition: 0.3s;
+  flex-direction: row;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`
+
+export const DetailsContentSubContainer = styled('div')`
+  display: flex;
+  align-items: center;
 `

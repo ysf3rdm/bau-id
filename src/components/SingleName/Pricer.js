@@ -1,51 +1,16 @@
 import React from 'react'
-import styled from '@emotion/styled/macro'
+import cn from 'classnames'
+import EthVal from 'ethval'
+import { useSelector } from 'react-redux'
+
 import Years from './NameRegister/Years'
 import Price from './NameRegister/Price'
 import EthRegistrationGasPrice from './NameRegister/EthRegistrationGasPrice'
-import { ReactComponent as DefaultOrangeExclamation } from '../Icons/OrangeExclamation.svg'
-import mq from 'mediaQuery'
-import { ReactComponent as ChainDefault } from '../Icons/chain.svg'
 import { useTranslation } from 'react-i18next'
-
-const PricingContainer = styled('div')`
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-bottom: 20px;
-  ${mq.medium`
-    grid-template-columns:
-      minmax(min-content, 200px) minmax(min-content, min-content)
-      minmax(200px, 1fr);
-  `}
-`
-const Chain = styled(ChainDefault)`
-  display: none;
-
-  ${mq.medium`
-    display: block;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
-  `}
-`
-
-const OrangeExclamation = styled(DefaultOrangeExclamation)`
-  height: 14px;
-  width: 14px;
-  margin-right: 2px;
-`
-
-const Prompt = styled('div')`
-  color: #ffa600;
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-`
 
 function PricerInner({
   years,
   setYears,
-  duration,
   ethUsdPriceLoading,
   ethUsdPrice,
   ethUsdPremiumPrice,
@@ -56,21 +21,25 @@ function PricerInner({
   gasPrice,
   reference,
   underPremium,
-  displayGas = false
+  name,
+  displayGas = false,
+  discount,
+  isAuctionWinner,
 }) {
-  const { t } = useTranslation()
+  const ethVal = new EthVal(`${price || 0}`).toEth()
+  const registrationFee =
+    years === 1 && isAuctionWinner
+      ? ethVal
+      : ethVal / (1 - discount.percent / 100)
   return (
     <>
-      {years <= 1 && (
-        <Prompt>
-          <OrangeExclamation />
-          <div>{t('register.increaseRegistrationPeriod')}</div>
-        </Prompt>
-      )}
-      <PricingContainer className={className} ref={reference}>
+      <div className={cn('flex justify-between', className)} ref={reference}>
         <Years years={years} setYears={setYears} />
-        <Chain />
+        <span className="text-white font-bold font-urbanist text-[18px] flex pt-2 mr-[13px]">
+          =
+        </span>
         <Price
+          isAuctionWinner={isAuctionWinner}
           price={price}
           premiumOnlyPrice={premiumOnlyPrice}
           gasPrice={gasPrice}
@@ -79,11 +48,15 @@ function PricerInner({
           ethUsdPrice={ethUsdPrice}
           ethUsdPremiumPrice={ethUsdPremiumPrice}
           underPremium={underPremium}
+          discount={discount}
+          years={years}
+          registrationFee={registrationFee}
         />
-      </PricingContainer>
+      </div>
       {displayGas && gasPrice && (
         <div>
           <EthRegistrationGasPrice
+            name={name}
             price={price}
             gasPrice={gasPrice}
             loading={loading}
@@ -91,6 +64,11 @@ function PricerInner({
             ethUsdPrice={ethUsdPrice}
             ethUsdPremiumPrice={ethUsdPremiumPrice}
             underPremium={underPremium}
+            discount={discount}
+            years={years}
+            isAuctionWinner={isAuctionWinner}
+            registrationFee={registrationFee}
+            domain={name}
           />
         </div>
       )}

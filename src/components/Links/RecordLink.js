@@ -40,10 +40,11 @@ const NotSet = styled('div')`
 `
 
 const UnlinkedValueContainer = styled('div')`
-  display: inline-flex;
+  display: flex;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  align-items: center;
 `
 
 const AvatarImage = styled('img')`

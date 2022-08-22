@@ -104,7 +104,6 @@ const AddFavourite = ({ domain, isFavourite, isSubDomain }) => {
 }
 
 const AddFavouriteContainer = styled('div')`
-  padding: 5px;
 `
 
 export default AddFavourite

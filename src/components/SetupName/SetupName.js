@@ -9,6 +9,10 @@ const SetupNameContainer = styled('div')`
   background: #f0f6fa;
   padding: 20px 40px;
   margin-bottom: 40px;
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    margin-bottom: 15px;
+  }
 `
 
 const Header = styled('header')`
@@ -33,6 +37,9 @@ const H2 = styled('h2')`
   margin-left: 10px;
   font-size: 20px;
   font-weight: 300;
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `
 
 const Content = styled('div')`
@@ -74,7 +81,7 @@ function SetupName({ initialState = false }) {
     <SetupNameContainer>
       <Header onClick={toggleOpen}>
         <BookPen />
-        <H2>{t('singleName.learnmore.title')}</H2>
+        <H2 style={{ color: '#379070' }}>{t('singleName.learnmore.title')}</H2>
         <RotatingSmallCaret rotated={open ? 1 : 0} />
       </Header>
       <Content open={open}>

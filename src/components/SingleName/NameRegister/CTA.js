@@ -1,296 +1,149 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import styled from '@emotion/styled/macro'
-import moment from 'moment'
-import { css } from 'emotion'
+import { gql, useQuery, useMutation } from '@apollo/client'
 import { useHistory } from 'react-router-dom'
-import { Mutation } from '@apollo/client/react/components'
-import { useTranslation } from 'react-i18next'
-import EthVal from 'ethval'
+import { useDispatch } from 'react-redux'
+import cn from 'classnames'
 
-import { trackReferral } from '../../../utils/analytics'
-import { COMMIT, REGISTER } from '../../../graphql/mutations'
+import InsufficientBalanceModal from 'components/Modal/InsufficientBalanceModal'
+import AnimationSpin from '../../AnimationSpin/index'
 
-import Tooltip from 'components/Tooltip/Tooltip'
-import PendingTx from '../../PendingTx'
-import Button from '../../Forms/Button'
-import AddToCalendar from '../../Calendar/RenewalCalendar'
-import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
-import { ReactComponent as DefaultOrangeExclamation } from '../../Icons/OrangeExclamation.svg'
+import { REGISTER } from 'graphql/mutations'
 import { useAccount } from '../../QueryAccount'
 
-const CTAContainer = styled('div')`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`
+import { startRegistering } from 'app/slices/registerSlice'
 
-const Pencil = styled(DefaultPencil)`
-  margin-right: 5px;
-`
-
-const Prompt = styled('span')`
-  color: #ffa600;
-  margin-right: 10px;
-`
-
-const OrangeExclamation = styled(DefaultOrangeExclamation)`
-  margin-right: 5px;
-  height: 12px;
-  width: 12px;
-`
-
-const LeftLink = styled(Link)`
-  margin-right: 20px;
-`
-
-function getCTA({
-  step,
-  incrementStep,
-  secret,
-  duration,
-  label,
-  hasSufficientBalance,
-  txHash,
-  setTxHash,
-  setCommitmentTimerRunning,
-  commitmentTimerRunning,
-  isAboveMinDuration,
-  refetch,
-  refetchIsMigrated,
-  readOnly,
-  price,
-  years,
-  premium,
-  history,
-  t,
-  ethUsdPrice,
-  account
-}) {
-  const CTAs = {
-    PRICE_DECISION: (
-      <Mutation
-        mutation={COMMIT}
-        variables={{ label, secret, commitmentTimerRunning }}
-        onCompleted={data => {
-          const txHash = Object.values(data)[0]
-          setTxHash(txHash)
-          setCommitmentTimerRunning(true)
-          incrementStep()
-        }}
-      >
-        {mutate =>
-          isAboveMinDuration && !readOnly ? (
-            hasSufficientBalance ? (
-              <Button data-testid="request-register-button" onClick={mutate}>
-                {t('register.buttons.request')}
-              </Button>
-            ) : (
-              <>
-                <Prompt>
-                  <OrangeExclamation />
-                  {t('register.buttons.insufficient')}
-                </Prompt>
-                <Button data-testid="request-register-button" type="disabled">
-                  {t('register.buttons.request')}
-                </Button>
-              </>
-            )
-          ) : readOnly ? (
-            <Tooltip
-              text="<p>You are not connected to a web3 browser. Please connect to a web3 browser and try again</p>"
-              position="top"
-              border={true}
-              offset={{ left: -30, top: 10 }}
-            >
-              {({ showTooltip, hideTooltip }) => {
-                return (
-                  <Button
-                    data-testid="request-register-button"
-                    type="disabled"
-                    onMouseOver={() => {
-                      showTooltip()
-                    }}
-                    onMouseLeave={() => {
-                      hideTooltip()
-                    }}
-                  >
-                    {t('register.buttons.request')}
-                  </Button>
-                )
-              }}
-            </Tooltip>
-          ) : (
-            <Button data-testid="request-register-button" type="disabled">
-              {t('register.buttons.request')}
-            </Button>
-          )
-        }
-      </Mutation>
-    ),
-    COMMIT_SENT: <PendingTx txHash={txHash} />,
-    COMMIT_CONFIRMED: (
-      <Button data-testid="disabled-register-button" type="disabled">
-        {t('register.buttons.register')}
-      </Button>
-    ),
-    AWAITING_REGISTER: (
-      <Mutation
-        mutation={REGISTER}
-        variables={{ label, duration, secret }}
-        onCompleted={data => {
-          const txHash = Object.values(data)[0]
-          setTxHash(txHash)
-          incrementStep()
-        }}
-      >
-        {mutate => (
-          <>
-            {hasSufficientBalance ? (
-              <>
-                <Prompt>
-                  <OrangeExclamation />
-                  {t('register.buttons.warning')}
-                </Prompt>
-                <Button data-testid="register-button" onClick={mutate}>
-                  {t('register.buttons.register')}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Prompt>
-                  <OrangeExclamation />
-                  {t('register.buttons.insufficient')}
-                </Prompt>
-                <Button data-testid="register-button" type="disabled">
-                  {t('register.buttons.register')}
-                </Button>
-              </>
-            )}
-          </>
-        )}
-      </Mutation>
-    ),
-    REVEAL_SENT: (
-      <PendingTx
-        txHash={txHash}
-        onConfirmed={async () => {
-          if (ethUsdPrice) {
-            // this is not set on local test env
-            trackReferral({
-              transactionId: txHash,
-              labels: [label],
-              type: 'register', // renew/register
-              price: new EthVal(`${price._hex}`)
-                .toEth()
-                .mul(ethUsdPrice)
-                .toFixed(2), // in wei, // in wei
-              years,
-              premium
-            })
-          }
-          incrementStep()
-        }}
-      />
-    ),
-    REVEAL_CONFIRMED: (
-      <>
-        <AddToCalendar
-          css={css`
-            margin-right: 20px;
-          `}
-          name={`${label}.eth`}
-          startDatetime={moment()
-            .utc()
-            .local()
-            .add(duration, 'seconds')
-            .subtract(30, 'days')}
-        />
-        <LeftLink
-          onClick={async () => {
-            await Promise.all([refetch(), refetchIsMigrated()])
-            history.push(`/name/${label}.eth`)
-          }}
-          data-testid="manage-name-button"
-        >
-          {t('register.buttons.manage')}
-        </LeftLink>
-        <Button
-          onClick={async () => {
-            await Promise.all([refetchIsMigrated()])
-            history.push(`/address/${account}`)
-          }}
-        >
-          <Pencil />
-          {t('register.buttons.setreverserecord')}
-        </Button>
-      </>
-    )
+export const HOME_DATA = gql`
+  query getHomeData($address: string) @client {
+    network
+    displayName(address: $address)
+    isReadOnly
+    isSafeApp
   }
-  return CTAs[step]
-}
+`
 
 const CTA = ({
-  step,
-  incrementStep,
-  secret,
+  setCustomStep,
   duration,
   label,
   hasSufficientBalance,
-  setTimerRunning,
-  setCommitmentTimerRunning,
-  commitmentTimerRunning,
-  setBlockCreatedAt,
-  isAboveMinDuration,
-  refetch,
-  refetchIsMigrated,
-  readOnly,
-  price,
   years,
-  premium,
-  ethUsdPrice
+  signature,
+  connectHandler,
+  setTransactionHash,
+  isRegisterSuccess,
+  successRegister,
+  registering,
+  setRegistering,
+  paymentSuccess,
+  freeDuration,
+  index,
+  canRegister,
 }) => {
-  const { t } = useTranslation()
   const history = useHistory()
   const account = useAccount()
-  const [txHash, setTxHash] = useState(undefined)
+  const dispatch = useDispatch()
+  const [showSufficientBalanceModal, setShowSufficientBalanceModal] =
+    useState(false)
 
   useEffect(() => {
-    return () => {
-      if (step === 'REVEAL_CONFIRMED') {
-        refetch()
-      }
+    if (isRegisterSuccess) {
+      successRegister()
+      setRegistering(false)
     }
-  }, [step])
+  }, [isRegisterSuccess])
+
+  const { data } = useQuery(HOME_DATA, {
+    variables: {
+      address: account,
+    },
+  })
+
+  const { isReadOnly } = data
+
+  const [mutationRegister] = useMutation(REGISTER, {
+    onCompleted: (data) => {
+      console.log(data)
+      if (data?.register?.err) {
+        setCustomStep('ERROR')
+        errorRegistering()
+        setRegistering(false)
+      } else {
+        setTransactionHash(data.register)
+        paymentSuccess()
+      }
+    },
+  })
+
+  const goBack = () => {
+    history.push('/')
+  }
+
+  const startRegisterFuc = () => {
+    dispatch(startRegistering())
+  }
+
+  const registerHandle = () => {
+    startRegisterFuc()
+    setCustomStep('PENDING')
+    setRegistering(true)
+    const variables = {
+      label,
+      duration,
+      signature,
+      freeDuration,
+      index,
+    }
+    mutationRegister({ variables })
+  }
 
   return (
-    <CTAContainer>
-      {getCTA({
-        step,
-        incrementStep,
-        secret,
-        duration,
-        label,
-        hasSufficientBalance,
-        txHash,
-        setTxHash,
-        setTimerRunning,
-        setBlockCreatedAt,
-        setCommitmentTimerRunning,
-        commitmentTimerRunning,
-        isAboveMinDuration,
-        refetch,
-        refetchIsMigrated,
-        readOnly,
-        price,
-        years,
-        premium,
-        history,
-        t,
-        ethUsdPrice,
-        account
-      })}
-    </CTAContainer>
+    <div className="flex items-end justify-between mt-8">
+      {showSufficientBalanceModal && (
+        <InsufficientBalanceModal
+          closeModal={() => setShowSufficientBalanceModal(false)}
+        />
+      )}
+      <div className="md:flex justify-between md:px-[48px] w-full">
+        {isReadOnly ? (
+          <button
+            className="order-2 font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] w-[160px] flex justify-center items-center bg-[#30DB9E]"
+            onClick={connectHandler}
+          >
+            Connect
+          </button>
+        ) : (
+          <button
+            data-testid="request-register-button"
+            disabled={isReadOnly || parseFloat(years) < 0.1 || !canRegister}
+            onClick={async () => {
+              if (hasSufficientBalance) {
+                registerHandle()
+              } else setShowSufficientBalanceModal(true)
+            }}
+            className={cn(
+              'order-2 font-semibold mx-auto px-[37px] py-[9px] rounded-[16px] w-[160px] flex justify-center items-center',
+              isReadOnly || parseFloat(years) < 0.1 || !canRegister
+                ? 'bg-gray-800 text-white cursor-not-allowed'
+                : 'bg-primary text-dark-common'
+            )}
+          >
+            Register{' '}
+            {registering && (
+              <div className="ml-2">
+                <AnimationSpin />
+              </div>
+            )}
+          </button>
+        )}
+
+        <button
+          onClick={goBack}
+          className="order-1 mt-4 md:mt-0 mx-auto border-[#30DB9E] border text-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
+        >
+          Go Back
+        </button>
+      </div>
+    </div>
   )
 }
 

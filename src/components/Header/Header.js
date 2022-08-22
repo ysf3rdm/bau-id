@@ -1,16 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector, useDispatch } from 'react-redux'
+import { useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled/macro'
 
-import mq, { useMediaMin, useMediaMax } from 'mediaQuery'
+import mq from 'mediaQuery'
+
+import { getAccounts, getHomeData } from 'app/slices/accountSlice'
 
 import DefaultLogo from '../Logo'
 import Search from '../SearchName/Search'
-import Hamburger from './Hamburger'
-import SideNav from '../SideNav/SideNav'
 import Banner from '../Banner'
+import searchIcon from '../../assets/searchWhite.svg'
 
 import { hasNonAscii } from '../../utils/utils'
+import HamburgerIcon from 'components/Icons/HamburgerIcon'
+import MobileMenu from 'components/Menu/MobileMenu'
 
 const StyledBanner = styled(Banner)`
   margin-bottom: 0;
@@ -34,80 +39,139 @@ const StyledBannerInner = styled('div')`
 `
 
 const Header = styled('header')`
-  ${p =>
-    p.isMenuOpen
-      ? `
-    background: #121D46;
-  `
-      : ''}
+  background: #18e199;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  position: fixed;
-  left: 0;
-  top: 0;
   width: 100%;
   z-index: 2;
-  box-shadow: 0 4px 8px 0 rgba(230, 240, 247, 0.8);
-  height: 50px;
-  ${mq.medium`
-    box-shadow: 0 8px 24px 0 rgba(230, 240, 247, 0.8);
-    height: auto;
-  `}
+  height: 80px;
+  align-items: center;
+  padding: 0px 100px;
+  @media (max-width: 768px) {
+    display: block;
+    padding: 0px;
+  }
 `
 
 const SearchHeader = styled(Search)`
-  margin-top: 50px;
   width: 100%;
+  @media (max-width: 768px) {
+    background: rgba(24, 225, 153, 0.6);
+    height: 56px;
+  }
   ${mq.medium`
     margin-top: 0;
-    width: calc(100% - 200px);
+    height: 54px;
+    border: 1px solid #ffffff;
+    border-radius: 16px;
+    // overflow: hidden;
   `}
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translate(0, -50%);
+    display: block;
+    width: 27px;
+    height: 27px;
+    background: url(${searchIcon}) no-repeat;
+  }
+
+  input {
+    background: #18e199;
+    color: #ffffff;
+    font-size: 20px;
+    border-radius: 16px;
+    margin-right: 48px;
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
+
+  button {
+    background: transparent;
+  }
 `
 
-const Logo = styled(DefaultLogo)`
-  background: white;
+const Logo = styled(DefaultLogo)``
+
+const LogoContainer = styled('div')`
+  background: #18e199;
   position: relative;
   display: flex;
-  width: 100%;
-  ${p =>
-    p.isMenuOpen
-      ? `
-    opacity: 0;
-  `
-      : ''}
+  align-items: center;
+  height: 100%;
+  @media (max-width: 768px) {
+    padding: 0px 28px;
+    justify-content: space-between;
+  }
+`
 
-  ${mq.medium`
-    opacity: 1;
-    &:before {
-      background: #d3d3d3;
-      height: 32px;
-      margin-top: 30px;
-      content: '';
-      width: 1px;
-      right: 35px;
-      top: 0;
-      position: absolute;
-    }
-  `}
+const HamburgerIconContainer = styled('div')`
+  color: white;
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+    margin-top: 5px;
+  }
+`
+
+export const GET_ACCOUNT = gql`
+  query getAccounts @client {
+    accounts
+  }
+`
+
+export const HOME_DATA = gql`
+  query getHomeData($address: string) @client {
+    network
+    displayName(address: $address)
+    isReadOnly
+    isSafeApp
+  }
 `
 
 function HeaderContainer() {
   const [isMenuOpen, setMenuOpen] = useState(false)
-  const mediumBP = useMediaMin('medium')
-  const mediumBPMax = useMediaMax('medium')
   const toggleMenu = () => setMenuOpen(!isMenuOpen)
   const { t } = useTranslation()
+  const dispatch = useDispatch()
+
+  const account = useSelector(state => state.account)
+
+  const {
+    data: { accounts }
+  } = useQuery(GET_ACCOUNT)
+
+  const { data } = useQuery(HOME_DATA, {
+    variables: {
+      address: accounts?.[0]
+    }
+  })
+
+  useEffect(() => {
+    if (accounts) {
+      dispatch(getAccounts(accounts))
+    }
+  }, [accounts])
+
+  useEffect(() => {
+    if (data?.network) {
+      dispatch(getHomeData(data))
+    }
+  }, [data])
 
   return (
     <>
       <Header isMenuOpen={isMenuOpen}>
-        <Logo isMenuOpen={isMenuOpen} />
-        {mediumBP ? (
-          <SearchHeader />
-        ) : (
-          <Hamburger isMenuOpen={isMenuOpen} openMenu={toggleMenu} />
-        )}
+        <LogoContainer>
+          <Logo isMenuOpen={isMenuOpen} />
+          <HamburgerIconContainer onClick={toggleMenu}>
+            <HamburgerIcon style={{ color: 'white' }} />
+          </HamburgerIconContainer>
+        </LogoContainer>
+        <SearchHeader />
       </Header>
       {hasNonAscii() && (
         <StyledBanner>
@@ -127,11 +191,16 @@ function HeaderContainer() {
           </StyledBannerInner>
         </StyledBanner>
       )}
-      {mediumBPMax && (
-        <>
-          <SideNav isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
-          <SearchHeader />
-        </>
+      {isMenuOpen && (
+        <MobileMenu
+          accounts={account.accounts}
+          isReadOnly={account.isReadOnly}
+          url={window.location.pathname}
+          network={account.network}
+          displayName={account.displayName}
+          isSafeApp={account.isSafeApp}
+          menuOpen={toggleMenu}
+        />
       )}
     </>
   )

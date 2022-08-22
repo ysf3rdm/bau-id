@@ -1,4 +1,4 @@
-import { getNetwork, getNetworkId, isReadOnly } from '@ensdomains/ui'
+import { getNetwork, getNetworkId, isReadOnly } from '../ui'
 import { setup as setupENS } from '../apollo/mutations/ens'
 import {
   isReadOnlyReactive,
@@ -18,6 +18,13 @@ let provider
 const option = {
   network: 'mainnet', // optional
   cacheProvider: true, // optional
+  theme: {
+    background: '#D7ECE3',
+    main: '#379070',
+    secondary: 'rgb(136, 136, 136)',
+    border: '#47C799',
+    hover: '#47C799'
+  },
   providerOptions: {
     walletconnect: {
       package: () => import('@walletconnect/web3-provider'),
@@ -59,8 +66,7 @@ const option = {
 let web3Modal
 export const connect = async () => {
   try {
-    const Web3Modal = (await import('@ensdomains/web3modal')).default
-
+    const Web3Modal = (await import('@siddomains/web3modal')).default
     web3Modal = new Web3Modal(option)
     provider = await web3Modal.connect()
 

@@ -11,8 +11,8 @@ function getButtonStyles({ type }) {
         }
         &:hover {
           cursor: pointer;
-          border: 2px solid #2c46a6;
-          background: #2c46a6;
+          border: 2px solid #5ED6AB;
+          background: #5ED6AB;
           box-shadow: 0 10px 21px 0 rgba(161, 175, 184, 0.89);
           border-radius: 23px;
         }
@@ -24,8 +24,9 @@ function getButtonStyles({ type }) {
         border: 2px solid #DFDFDF;
         &:hover {
           cursor: pointer;
+          color: #ffffff;
           border: 2px solid transparent;
-          background: #2c46a6;
+          background: #5ED6AB;
           box-shadow: 0 10px 21px 0 rgba(161, 175, 184, 0.89);
         }
       `
@@ -47,16 +48,16 @@ function getButtonStyles({ type }) {
       `
     case 'hollow-primary':
       return `
-        color: #5384FE;
+        color: #5ED6AB;
         background: transparent;
-        border: 2px solid #5384FE;
+        border: 2px solid #5ED6AB;
         &:visited {
-          color: #5384FE;
+          color: #5ED6AB;
         }
         &:hover {
           cursor: pointer;
-          border: 2px solid #2C46A6;
-          color: #2C46A6;
+          border: 2px solid #5ED6AB;
+          color: #5ED6AB;
         }
       `
     case 'hollow-primary-disabled':
@@ -74,8 +75,9 @@ function getButtonStyles({ type }) {
       `
     case 'disabled':
       return `
-        border: 2px solid #dfdfdf;
-        background: #dfdfdf;
+        border: 2px solid #B1B1B1;
+        background: transparent;
+        color: #B1B1B1;
         &:hover {
           cursor: default
         }
@@ -89,16 +91,16 @@ function getButtonStyles({ type }) {
 function getButtonDefaultStyles(p) {
   return `
     color: white;
-    background: #5384FE;
+    background: #5ED6AB;
     padding: 10px 25px;
-    border-radius: 25px;
+    border-radius: 13px;
     font-size: 14px;
     font-weight: 700;
-    font-family: Overpass;
+    font-family: Urbanist;
     text-transform: capitalize;
     letter-spacing: 1.5px;
     transition: 0.2s all;
-    border: 2px solid #5384FE;
+    border: 2px solid #5ED6AB;
     text-align: center;
 
     &:focus {

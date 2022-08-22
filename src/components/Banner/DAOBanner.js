@@ -123,17 +123,17 @@ export function DAOBannerContent() {
           : 'https://ens.mirror.xyz/5cGl-Y37aTxtokdWk21qlULmE1aSM_NuX9fstbOPoWU'
       }
     >
-      <LogoSmall src={ENSIcon} alt="ENS logo" />
+      <LogoSmall src={ENSIcon} alt="SID logo" />
       <BannerContentWrapper>
         <BannerTitle>
           {shouldDelegate
-            ? 'Your ENS Tokens are undelegated'
-            : '$ENS Now Available for Claiming'}
+            ? 'Your SID Tokens are undelegated'
+            : '$SID Now Available for Claiming'}
         </BannerTitle>
         <BannerContent>
           {shouldDelegate
-            ? `Participate more actively in ENS governance by delegating your voting rights to a community member`
-            : 'If you owned an ENS name before October 31st 2021, you can claim $ENS and participate in ENS governance.'}
+            ? `Participate more actively in SID governance by delegating your voting rights to a community member`
+            : 'If you owned an SID name before October 31st 2021, you can claim $SID  and participate in SID governance.'}
         </BannerContent>
       </BannerContentWrapper>
       <ArrowSmall src={Arrow} alt="Arrow right icon" />

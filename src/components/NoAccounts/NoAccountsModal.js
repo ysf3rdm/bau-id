@@ -1,22 +1,25 @@
 import React, { useState } from 'react'
-import styled from '@emotion/styled/macro'
 import NoAccounts from './NoAccounts'
 
-const NoAccountContainer = styled('div')`
-  position: relative;
-  margin-top: 5px;
-`
-export default ({ colour, buttonText, onClick, textColour, className }) => {
-  let [showModal, setShowModal] = useState(false)
+export default ({
+  colour,
+  buttonText,
+  onClick,
+  textColour,
+  className,
+  active,
+  width
+}) => {
   return (
-    <NoAccountContainer className={className}>
+    <div className={className}>
       <NoAccounts
-        colour={colour}
+        colour={colour || '#25FFB1'}
         buttonText={buttonText}
         textColour={textColour}
-        active={showModal}
+        active={active}
         onClick={onClick}
+        width={width}
       />
-    </NoAccountContainer>
+    </div>
   )
 }

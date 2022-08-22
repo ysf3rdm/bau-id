@@ -12,7 +12,7 @@ import ExpiryNotificationModal from './ExpiryNotificationModal'
 //   text-decoration: none;
 //   cursor: pointer;
 //   display: inline;
-//   font-family: "Overpass Mono";
+//   font-family: "Urbanist Mono";
 //   font-size: 18px;
 //   font-weight: 100;
 //   text-align: start;

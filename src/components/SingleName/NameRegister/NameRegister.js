@@ -1,9 +1,14 @@
 import React, { useState, useReducer, useEffect } from 'react'
-import styled from '@emotion/styled/macro'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import { useQuery } from '@apollo/client'
+import cn from 'classnames'
 import moment from 'moment'
-import { gql } from '@apollo/client'
+import { useHistory } from 'react-router'
+import axios from 'axios'
+import last from 'lodash/last'
+import { connectProvider } from 'utils/providerUtils'
+import EthVal from 'ethval'
 
 import {
   CHECK_COMMITMENT,
@@ -13,54 +18,40 @@ import {
   WAIT_BLOCK_TIMESTAMP,
   GET_BALANCE,
   GET_ETH_PRICE,
-  GET_PRICE_CURVE
+  GET_PRICE_CURVE,
 } from 'graphql/queries'
 import { useInterval, useGasPrice, useBlock } from 'components/hooks'
 import { useAccount } from '../../QueryAccount'
 import { registerMachine, registerReducer } from './registerReducer'
+import { successRegistering } from 'app/slices/registerSlice'
 import { calculateDuration, yearInSeconds } from 'utils/dates'
+import { GET_TRANSACTION_HISTORY } from 'graphql/queries'
 
 import Loader from 'components/Loader'
-import Explainer from './Explainer'
 import CTA from './CTA'
-import Progress from './Progress'
 import NotAvailable from './NotAvailable'
 import Pricer from '../Pricer'
-import LineGraph from './LineGraph'
-import Premium from './Premium'
 import ProgressRecorder from './ProgressRecorder'
 import useNetworkInfo from '../../NetworkInformation/useNetworkInfo'
 import { sendNotification } from './notification'
 import PremiumPriceOracle from './PremiumPriceOracle'
-const NameRegisterContainer = styled('div')`
-  padding: 20px 40px;
-`
 
-const PremiumWarning = styled('div')`
-  background-color: #fef6e9;
-  color: black;
-  padding: 1em;
-  margin-bottom: 1em;
-`
+import EditIcon from 'components/Icons/EditIcon'
+import SuccessfulTickIcon from 'components/Icons/SuccessfulTickIcon'
+import FailedIcon from 'components/Icons/FailedIcon'
+import AnimationSpin from 'components/AnimationSpin'
 
-const NameRegister = ({
-  domain,
-  waitTime,
-  refetch,
-  refetchIsMigrated,
-  readOnly,
-  registrationOpen
-}) => {
+const NameRegister = ({ domain, waitTime, registrationOpen }) => {
   const { t } = useTranslation()
   const [secret, setSecret] = useState(false)
   const { networkId } = useNetworkInfo()
+  const dispatchSlice = useDispatch()
   const [step, dispatch] = useReducer(
     registerReducer,
     registerMachine.initialState
   )
-  let now, showPremiumWarning, currentPremium, underPremium
-  const incrementStep = () => dispatch('NEXT')
-  const decrementStep = () => dispatch('PREVIOUS')
+  const [customStep, setCustomStep] = useState('START')
+  let now, currentPremium, underPremium
   const [years, setYears] = useState(false)
   const [secondsPassed, setSecondsPassed] = useState(0)
   const [timerRunning, setTimerRunning] = useState(false)
@@ -68,57 +59,150 @@ const NameRegister = ({
   const [blockCreatedAt, setBlockCreatedAt] = useState(null)
   const [waitUntil, setWaitUntil] = useState(null)
   const [targetDate, setTargetDate] = useState(false)
-  const [targetPremium, setTargetPremium] = useState(false)
-  const [commitmentExpirationDate, setCommitmentExpirationDate] = useState(
-    false
-  )
+  const [commitmentExpirationDate, setCommitmentExpirationDate] =
+    useState(false)
+  const [freeDuration, setFreeDuration] = useState(0)
+  const [index, setIndex] = useState(0)
+  const [registering, setRegistering] = useState(false)
+  const [transactionHash, setTransactionHash] = useState('')
+  const [signature, setSignature] = useState([])
+  const [isAuctionWinner, setIsAuctionWinner] = useState(false)
+  const [discountAmount, setDiscountAmount] = useState(null)
+  const [winnerLoading, setWinnerLoading] = useState(false)
+
+  const [canRegister, setCanRegister] = useState(false)
+
   const {
     data: { getEthPrice: ethUsdPrice } = {},
-    loading: ethUsdPriceLoading
+    loading: ethUsdPriceLoading,
   } = useQuery(GET_ETH_PRICE)
   const { data: { getPriceCurve } = {} } = useQuery(GET_PRICE_CURVE)
   const { loading: gasPriceLoading, price: gasPrice } = useGasPrice()
   const { block } = useBlock()
-  const [invalid, setInvalid] = useState(false)
   const { data: { waitBlockTimestamp } = {} } = useQuery(WAIT_BLOCK_TIMESTAMP, {
     variables: {
-      waitUntil
+      waitUntil,
     },
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
+
+  const { data: { transactionHistory } = {} } = useQuery(
+    GET_TRANSACTION_HISTORY
+  )
+
+  const lastTransaction = last(transactionHistory)
+
+  useEffect(() => {
+    if (
+      lastTransaction &&
+      lastTransaction.txHash === transactionHash &&
+      lastTransaction.txState === 'Confirmed'
+    ) {
+      successRegister()
+      setRegistering(false)
+    }
+    if (
+      lastTransaction &&
+      lastTransaction.txHash === transactionHash &&
+      lastTransaction.txState === 'Error'
+    ) {
+      setCustomStep('ERROR')
+      setRegistering(false)
+    }
+  }, [transactionHistory])
+
+  const history = useHistory()
   const account = useAccount()
+  useEffect(() => {
+    const fetchSignature = async () => {
+      setWinnerLoading(true)
+      try {
+        const result = await axios({
+          method: 'get',
+          url: `${process.env.REACT_APP_BACKEND_URL}/merkleleaf?domain=${domain.label}`,
+        })
+        setFreeDuration(result?.data?.data?.isaution ? 31556952 : 0)
+        if (result?.data?.data?.index) {
+          setCanRegister(true)
+          setIndex(result?.data?.data?.index)
+          if (result?.data?.data?.isaution) {
+            setIsAuctionWinner(true)
+          } else {
+            setIsAuctionWinner(false)
+          }
+          const params = {
+            inputs: [
+              {
+                name: domain.label,
+                index: result?.data?.data?.index,
+                owner: account?.toLowerCase(), //
+                duration,
+                resolver:
+                  process.env.REACT_APP_RESOLVER_ADDRESS.toLocaleLowerCase(),
+                addr: account?.toLowerCase(), //Eth wallet of user connected with metamask
+                freeDuration: result?.data?.data?.isaution ? 31556952 : 0,
+              },
+            ],
+          }
+          const result1 = await axios({
+            method: 'post',
+            url: `${process.env.REACT_APP_MERKLE_BASE_URL}/getproof`,
+            headers: {},
+            data: params,
+          })
+          const proofs = result1?.data
+          if (proofs && proofs.length > 0) {
+            setSignature(proofs)
+          } else {
+            setSignature([])
+          }
+          setWinnerLoading(false)
+        }
+        //Cannot get index from merkletree
+        else {
+          canRegister(false)
+        }
+      } catch (err) {
+        setWinnerLoading(false)
+        console.log('hey err', err)
+      }
+    }
+    fetchSignature()
+  }, [years])
+
   const { data: { getBalance } = {} } = useQuery(GET_BALANCE, {
     variables: { address: account },
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const { data: { getMaximumCommitmentAge } = {} } = useQuery(
     GET_MAXIMUM_COMMITMENT_AGE,
     {
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
     }
   )
+
   if (block) {
     now = moment(block.timestamp * 1000)
   }
+
   if (!commitmentExpirationDate && getMaximumCommitmentAge && blockCreatedAt) {
     setCommitmentExpirationDate(
       moment(blockCreatedAt).add(getMaximumCommitmentAge, 'second')
     )
   }
+
   const { data: { checkCommitment = false } = {} } = useQuery(
     CHECK_COMMITMENT,
     {
       variables: {
         label: domain.label,
         secret,
-        // Add this varialbe so that it keeps polling only during the timer is on
-        commitmentTimerRunning
+        commitmentTimerRunning,
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
     }
   )
-  let i = 0
 
   ProgressRecorder({
     checkCommitment,
@@ -139,18 +223,18 @@ const NameRegister = ({
     setSecondsPassed,
     commitmentExpirationDate,
     setCommitmentExpirationDate,
-    now
+    now,
   })
+
   useInterval(
     () => {
       if (blockCreatedAt && !waitUntil) {
         setWaitUntil(blockCreatedAt + waitTime * 1000)
       }
       if (secondsPassed < waitTime) {
-        setSecondsPassed(s => s + 1)
+        setSecondsPassed((s) => s + 1)
       } else {
         if (waitBlockTimestamp && timerRunning) {
-          incrementStep()
           sendNotification(
             `${domain.name} ${t('register.notifications.ready')}`
           )
@@ -160,40 +244,55 @@ const NameRegister = ({
     },
     timerRunning ? 1000 : null
   )
-  useInterval(
-    () => {
-      if (checkCommitment > 0) {
-        incrementStep()
-        setTimerRunning(true)
-        setCommitmentTimerRunning(false)
-      } else {
-        setCommitmentTimerRunning(new Date())
-      }
-    },
-    commitmentTimerRunning ? 1000 : null
-  )
-  const parsedYears = parseFloat(years)
-  const duration = calculateDuration(years)
+
+  const parsedYears = parseFloat(isAuctionWinner ? years - 1 : years)
+  const duration = calculateDuration(isAuctionWinner ? years - 1 : years)
+
   const { data: { getRentPrice } = {}, loading: rentPriceLoading } = useQuery(
     GET_RENT_PRICE,
     {
       variables: {
         duration,
         label: domain.label,
-        commitmentTimerRunning
-      }
+        commitmentTimerRunning,
+      },
     }
   )
+
   const {
     data: { getRentPrice: getPremiumPrice } = {},
-    loading: getPremiumPriceLoading
+    loading: getPremiumPriceLoading,
   } = useQuery(GET_RENT_PRICE, {
     variables: {
       duration: 0,
       label: domain.label,
-      commitmentTimerRunning
-    }
+      commitmentTimerRunning,
+    },
   })
+
+  useEffect(() => {
+    //Set the 40% discount if the domain length is consist of 3 characters
+    if (getRentPrice) {
+      const ethVal = new EthVal(`${getRentPrice || 0}`).toEth()
+      if (domain.label.length === 3) {
+        const tPrice = {
+          amount: ethVal * 0.4,
+          percent: 40,
+        }
+        setDiscountAmount({ ...tPrice })
+      } else if (domain.label.length === 4) {
+        setDiscountAmount({
+          amount: ethVal * 0.2,
+          percent: 20,
+        })
+      } else {
+        setDiscountAmount({
+          amount: 0,
+          percent: 0,
+        })
+      }
+    }
+  }, [getRentPrice])
 
   let hasSufficientBalance
   if (!blockCreatedAt && checkCommitment > 0) {
@@ -208,149 +307,214 @@ const NameRegister = ({
 
   const oneMonthInSeconds = 2419200
   const twentyEightDaysInYears = oneMonthInSeconds / yearInSeconds
-  const isAboveMinDuration = parsedYears > twentyEightDaysInYears
-  const waitPercentComplete = (secondsPassed / waitTime) * 100
 
   const expiryDate = moment(domain.expiryTime)
   const oracle = new PremiumPriceOracle(expiryDate, getPriceCurve)
-  const { releasedDate, zeroPremiumDate, startingPremiumInUsd } = oracle
+  const { releasedDate, zeroPremiumDate } = oracle
 
   if (!registrationOpen) return <NotAvailable domain={domain} />
-  if (ethUsdPriceLoading || gasPriceLoading) return <></>
+
+  if (ethUsdPriceLoading || gasPriceLoading)
+    return <Loader withWrap={true} large />
 
   if (!targetDate) {
     setTargetDate(zeroPremiumDate)
-    setTargetPremium(
-      oracle.getTargetAmountByDaysPast(oracle.getDaysPast(zeroPremiumDate))
-    )
   }
 
   if (block) {
-    showPremiumWarning = now.isBetween(releasedDate, zeroPremiumDate)
     currentPremium = oracle.getTargetAmountByDaysPast(oracle.getDaysPast(now))
     underPremium = now.isBetween(releasedDate, zeroPremiumDate)
   }
-  const handleTooltip = tooltipItem => {
-    let delimitedParsedValue = tooltipItem.yLabel
-    if (targetPremium !== delimitedParsedValue) {
-      setTargetDate(oracle.getTargetDateByAmount(delimitedParsedValue))
-      setTargetPremium(delimitedParsedValue.toFixed(2))
-    }
+
+  const successRegister = () => {
+    dispatchSlice(successRegistering())
+    setCustomStep('SUCCESS')
   }
 
-  const handlePremium = target => {
-    const { value } = target
-    const parsedValue = value.replace('$', '')
-    if (
-      !isNaN(parsedValue) &&
-      parseInt(parsedValue || 0) <= startingPremiumInUsd
-    ) {
-      if (targetPremium !== parsedValue) {
-        setTargetDate(oracle.getTargetDateByAmount(parsedValue))
-        setTargetPremium(parsedValue)
-      }
-      setInvalid(false)
-    } else {
-      setInvalid(true)
-    }
+  const connectHandler = () => {
+    connectProvider()
   }
+
+  if (winnerLoading) return <AnimationSpin size={40} />
 
   return (
-    <NameRegisterContainer>
-      {step === 'PRICE_DECISION' && (
-        <Pricer
-          name={domain.label}
-          duration={duration}
-          years={years}
-          setYears={setYears}
-          ethUsdPriceLoading={ethUsdPriceLoading}
-          ethUsdPremiumPrice={currentPremium}
-          ethUsdPrice={ethUsdPrice}
-          gasPrice={gasPrice}
-          loading={rentPriceLoading}
-          price={getRentPrice}
-          premiumOnlyPrice={getPremiumPrice}
-          underPremium={underPremium}
-          displayGas={true}
-        />
-      )}
-      {showPremiumWarning ? (
-        <PremiumWarning>
-          <h2>{t('register.premiumWarning.title')}</h2>
-          <p>
-            {getPriceCurve === 'exponential'
-              ? t('register.premiumWarning.exponentialWarningDescripiton')
-              : t('register.premiumWarning.description')}
-          </p>
-          <LineGraph
-            startDate={releasedDate}
-            currentDate={now}
-            targetDate={targetDate}
-            endDate={zeroPremiumDate}
-            targetPremium={targetPremium}
-            ethUsdPrice={ethUsdPrice}
-            handleTooltip={handleTooltip}
-            underPremium={underPremium}
-            oracle={oracle}
-            price={getRentPrice}
-            now={now}
-            premiumOnlyPrice={getPremiumPrice}
+    <div className="max-w-[448px] mx-auto">
+      <div className="flex justify-center">
+        <p className="min-w-full max-w-full block text-ellipsis overflow-hidden break-words font-bold text-[20px] md:text-[28px] text-[#1EEFA4] py-2 border-[4px] border-[#1EEFA4] rounded-[22px] text-center max-w-max px-6">
+          {domain.name}
+        </p>
+      </div>
+      {customStep === 'START' && (
+        <div>
+          <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
+            <Pricer
+              name={domain.label}
+              duration={duration}
+              years={years}
+              setYears={setYears}
+              ethUsdPriceLoading={ethUsdPriceLoading}
+              ethUsdPremiumPrice={currentPremium}
+              ethUsdPrice={ethUsdPrice}
+              gasPrice={gasPrice}
+              loading={rentPriceLoading}
+              price={getRentPrice}
+              premiumOnlyPrice={getPremiumPrice}
+              underPremium={underPremium}
+              displayGas={true}
+              discount={discountAmount}
+              signature={signature}
+              isAuctionWinner={isAuctionWinner}
+            />
+          </div>
+          <CTA
+            setTransactionHash={setTransactionHash}
+            setCustomStep={setCustomStep}
+            signature={signature}
+            hasSufficientBalance={hasSufficientBalance}
+            step={step}
+            label={domain.label}
+            duration={duration}
+            years={years}
+            successRegister={successRegister}
+            connectHandler={connectHandler}
+            setRegistering={setRegistering}
+            registering={registering}
+            paymentSuccess={() => setCustomStep('PAYMENT')}
+            freeDuration={freeDuration}
+            index={index}
+            canRegister={canRegister}
           />
+        </div>
+      )}
+      {(customStep === 'SUCCESS' ||
+        customStep === 'PENDING' ||
+        customStep === 'PAYMENT' ||
+        customStep === 'ERROR') && (
+        <div className="max-w-[436px]">
+          <div className="bg-[#488F8B]/25 backdrop-blur-[5px] rounded-[16px] p-6 mt-8">
+            <div className="flex justify-center">
+              <EditIcon />
+            </div>
+            {customStep === 'PENDING' ? (
+              <div className="font-semibold text-[24px] text-white text-center mt-2">
+                Registration in progress...
+              </div>
+            ) : (
+              <div className="font-semibold text-[24px] text-white text-center mt-2">
+                {customStep === 'ERROR' ? (
+                  <span>Registration incompleted :(</span>
+                ) : (
+                  <span>Registration completed!</span>
+                )}
+              </div>
+            )}
+            {customStep === 'PENDING' ||
+              (customStep === 'PAYMENT' && (
+                <div className="text-[14px] text-gray-700 leading-[22px] text-center">
+                  Please be patient as the process might take a while.
+                </div>
+              ))}
 
-          <Premium
-            handlePremium={handlePremium}
-            targetPremium={targetPremium}
-            name={domain.name}
-            invalid={invalid}
-            targetDate={targetDate}
-          />
-        </PremiumWarning>
-      ) : (
-        ''
+            <div className="mt-8">
+              <div className="text-center">
+                <div
+                  className={cn(
+                    customStep === 'ERROR'
+                      ? 'text-[#ED7E17]'
+                      : 'text-[#30DB9E]',
+                    'font-semibold text-[16px]'
+                  )}
+                >
+                  Confirm Payment
+                </div>
+                {customStep === 'PENDING' ? (
+                  <AnimationSpin className="flex justify-center mt-1" />
+                ) : (
+                  <div>
+                    {customStep === 'ERROR' ? (
+                      <FailedIcon className="text-[#ED7E17] flex justify-center my-2" />
+                    ) : (
+                      <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="mt-1 text-center">
+                <div
+                  className={cn(
+                    'font-semibold text-[16px]',
+                    customStep === 'PENDING'
+                      ? 'text-[#7E9195]'
+                      : customStep === 'ERROR'
+                      ? 'text-[#ED7E17]'
+                      : 'text-[#30DB9E]'
+                  )}
+                >
+                  Successful registration. Name published
+                </div>
+                {customStep === 'PENDING' ? (
+                  <div className="w-2 h-2 bg-[#7E9195] rounded-full flex justify-center mt-[14px] m-auto" />
+                ) : customStep === 'PAYMENT' ? (
+                  <AnimationSpin className="flex justify-center mt-1" />
+                ) : (
+                  <div>
+                    {customStep === 'ERROR' ? (
+                      <FailedIcon className="text-[#ED7E17] flex justify-center my-2" />
+                    ) : (
+                      <SuccessfulTickIcon className="text-[#30DB9E] flex justify-center my-2" />
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            {customStep === 'ERROR' && (
+              <div className="text-[#BDCED1] text-[16px] text-center mt-8">
+                Something went wrong in the registration process. You may choose
+                to retry and be redirected back to the payment review page.
+              </div>
+            )}
+
+            {customStep === 'ERROR' ? (
+              <div className="flex justify-center mt-10">
+                <button
+                  className={cn(
+                    'py-2 border rounded-[16px] text-[#071A2F] font-semibold bg-[#30DB9E] border-0 px-[30px]'
+                  )}
+                  onClick={() => setCustomStep('START')}
+                >
+                  Retry
+                </button>
+              </div>
+            ) : (
+              <div className="flex justify-center mt-10">
+                <button
+                  className={cn(
+                    'py-2 border rounded-[16px] font-semibold border-0 px-[30px]',
+                    customStep === 'SUCCESS'
+                      ? 'text-[#071A2F] bg-[#30DB9E]'
+                      : 'bg-[#7E9195] text-white'
+                  )}
+                  disabled={customStep !== 'SUCCESS'}
+                  onClick={() => history.push('/profile')}
+                >
+                  Manage Profile
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       )}
-      <Explainer
-        step={step}
-        waitTime={waitTime}
-        waitPercentComplete={waitPercentComplete}
-      />
-      <Progress step={step} waitPercentComplete={waitPercentComplete} />
-      <CTA
-        hasSufficientBalance={hasSufficientBalance}
-        waitTime={waitTime}
-        incrementStep={incrementStep}
-        decrementStep={decrementStep}
-        secret={secret}
-        step={step}
-        label={domain.label}
-        duration={duration}
-        secondsPassed={secondsPassed}
-        timerRunning={timerRunning}
-        setTimerRunning={setTimerRunning}
-        setCommitmentTimerRunning={setCommitmentTimerRunning}
-        commitmentTimerRunning={commitmentTimerRunning}
-        setBlockCreatedAt={setBlockCreatedAt}
-        refetch={refetch}
-        refetchIsMigrated={refetchIsMigrated}
-        isAboveMinDuration={isAboveMinDuration}
-        readOnly={readOnly}
-        price={getRentPrice}
-        years={years}
-        premium={currentPremium}
-        ethUsdPrice={!ethUsdPriceLoading && ethUsdPrice}
-      />
-    </NameRegisterContainer>
+    </div>
   )
 }
 
-const NameRegisterDataWrapper = props => {
+const NameRegisterDataWrapper = (props) => {
   const { data, loading, error } = useQuery(GET_MINIMUM_COMMITMENT_AGE)
-
-  if (loading) return <Loader withWrap={true} large />
+  if (loading) return <AnimationSpin size={40} />
   if (error) {
     console.log(error)
   }
-  const { getMinimumCommitmentAge } = data
-  return <NameRegister waitTime={getMinimumCommitmentAge} {...props} />
+  return <NameRegister waitTime={data?.getMinimumCommitmentAge} {...props} />
 }
 
 export default NameRegisterDataWrapper

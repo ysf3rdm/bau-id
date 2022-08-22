@@ -6,41 +6,36 @@ import { Link } from 'react-router-dom'
 import mq from 'mediaQuery'
 
 const TabLink = styled(Link)`
-  font-size: 14px;
-  background: ${({ active }) => (active ? '#2C46A6' : 'transparent')};
-  color: ${({ active }) => (active ? 'white' : '#D2D2D2')};
+  font-size: 18px;
+  background: ${({ active }) => (active ? '#5ED6AB' : 'transparent')};
+  color: ${({ active }) => (active ? 'white!important' : '#B1B1B1 !important')};
   transform: scale(${({ active }) => (active ? '1.08' : '1')});
   transition: background 0.1s ease-out, transform 0.3s ease-out;
-  padding: 10px 20px;
-  ${mq.small`
-    padding: 10px 30px;
-  `}
-  &:hover,
-  &:visited {
-    color: ${({ active }) => (active ? 'white' : '#D2D2D2')};
+  padding: 5px 23px;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 5px 28px;
+  &:hover {
+    background: #5ed6ab;
+    color: white !important;
   }
-  &:first-child {
-    border-radius: 4px 0 0 4px;
-  }
-
-  &:last-child {
-    border-radius: 0 4px 4px 0;
+  @media (max-width: 768px) {
+    padding: 5px 22px;
+    font-size: 14px;
   }
 `
 
 const TabContainer = styled('div')`
   display: inline-flex;
   justify-content: flex-start;
-  border: 2px solid #dfdfdf;
   border-radius: 4px;
   margin-left: 20px;
-  margin-top: 20px;
 
-  ${mq.small`
+  @media (max-width: 768px) {
+    margin-top: 16px;
     margin-right: 0;
-    margin: 0;
-    margin-left: 20px;
-  `}
+    margin-left: 0;
+  }
 `
 function getDetailsActive(domain, pathname, tab) {
   const { name } = domain
@@ -63,7 +58,7 @@ const Tabs = ({ domain, pathname, parent, tab }) => {
   return (
     (state !== 'Auction' || state !== 'Reveal') && (
       <TabContainer>
-        {parent === 'eth' && (
+        {parent === 'bnb' && (
           <TabLink
             active={
               (tab === 'register' || pathname === `/name/${name}/register`) &&

@@ -12,7 +12,7 @@ import { useEditable } from './hooks'
 
 import {
   GET_REVERSE_RECORD,
-  GET_ETH_RECORD_AVAILABLE_NAMES_FROM_SUBGRAPH
+  GET_ETH_RECORD_AVAILABLE_NAMES_FROM_SUBGRAPH,
 } from 'graphql/queries'
 
 import SaveCancel from './SingleName/SaveCancel'
@@ -26,6 +26,7 @@ import Modal from './Modal/Modal'
 import Bin from '../components/Forms/Bin'
 import Gap from '../components/Utils/Gap'
 import { gql } from '@apollo/client'
+import { textLight } from '../utils/textLight'
 
 const Loading = styled('span')`
   color: #adbbcd;
@@ -36,34 +37,32 @@ const Warning = styled('div')`
 `
 
 const AddReverseRecordContainer = styled('div')`
-  background: #f0f6fa;
-  border: 1px solid #ededed;
-  border-radius: 8px;
-  margin: 20px 30px 20px;
+  background: #d7ece3;
+  border-radius: 13px;
+  margin: 20px;
   padding: 10px 15px;
 
   ${mq.medium`
-    margin: 20px 40px 20px;
+    margin: 20px 27px 20px;
   `}
 `
 
 const SetReverseContainer = styled('div')`
-  margin-top: 15px;
-  padding: 10px;
+  padding: 10px 0px;
 `
 
 const Message = styled('div')`
-  font-family: Overpass Mono;
+  font-family: Urbanist Mono;
   font-weight: 700;
   font-size: 14px;
-  color: ${p => (p.nameSet ? '#747f8c' : '#adbbcd')};
+  color: ${(p) => (p.nameSet ? '#747f8c' : '#adbbcd')};
   letter-spacing: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   &:hover {
-    cursor: ${p => (p.pending ? 'default' : 'pointer')};
+    cursor: ${(p) => (p.pending ? 'default' : 'pointer')};
   }
 `
 
@@ -87,19 +86,27 @@ const Check = styled(DefaultCheck)`
 `
 
 const Explanation = styled('div')`
-  font-family: Overpass;
-  font-weight: 300;
+  font-family: Urbanist;
+  font-weight: 400;
   font-size: 14px;
-  color: #2b2b2b;
+  color: #379070;
   letter-spacing: 0;
   line-height: 25px;
   margin-bottom: 10px;
   max-width: 768px;
   hyphens: auto;
+  line-height: 16.8px;
+
+  strong {
+    color: red;
+    font-weight: 400;
+    font-size: 14px;
+  }
 `
 
 const EditableNotSet = styled('div')`
-  color: #5384fe;
+  color: #379070;
+  font-size: 16px;
 `
 
 const ButtonsContainer = styled('div')`
@@ -116,6 +123,38 @@ export const SINGLE_NAME = gql`
   }
 `
 
+const colourStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    border: 0,
+    borderRadius: 8,
+    backgroundColor: '#F0F7F4',
+    color: '#379070',
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    color: '#379070',
+    fontSize: state.selectProps.myFontSize,
+  }),
+  singleValue: (provided, state) => ({
+    ...provided,
+    color: '#379070',
+    fontSize: state.selectProps.myFontSize,
+  }),
+  clearIndicator: (provided, state) => ({
+    ...provided,
+    color: '#379070',
+  }),
+  dropdownIndicator: (provided, state) => ({
+    ...provided,
+    color: '#379070',
+  }),
+  placeholder: (provided, state) => ({
+    ...provided,
+    color: '#379070',
+  }),
+}
+
 function AddReverseRecord({ account, currentAddress }) {
   const { t } = useTranslation()
   const { state, actions } = useEditable()
@@ -127,23 +166,24 @@ function AddReverseRecord({ account, currentAddress }) {
   const { startEditing, stopEditing, startPending, setConfirmed } = actions
   let options
 
-  const { data: { getReverseRecord } = {}, loading, refetch } = useQuery(
-    GET_REVERSE_RECORD,
-    {
-      variables: {
-        address: currentAddress
-      },
-      skip: !currentAddress,
-      fetchPolicy: 'no-cache'
-    }
-  )
+  const {
+    data: { getReverseRecord } = {},
+    loading,
+    refetch,
+  } = useQuery(GET_REVERSE_RECORD, {
+    variables: {
+      address: currentAddress,
+    },
+    skip: !currentAddress,
+    fetchPolicy: 'no-cache',
+  })
 
   const [setName] = useMutation(SET_NAME, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (Object.values(data)[0]) {
         startPending(Object.values(data)[0])
       }
-    }
+    },
   })
 
   useEffect(() => {
@@ -155,21 +195,19 @@ function AddReverseRecord({ account, currentAddress }) {
   }, [loading])
 
   const {
-    data: { networkId }
+    data: { networkId },
   } = useQuery(SINGLE_NAME)
-
-  console.log('networkId: ', networkId)
 
   const { data: { domains } = {}, refetch: refetchNames } = useQuery(
     GET_ETH_RECORD_AVAILABLE_NAMES_FROM_SUBGRAPH,
     {
       variables: {
-        address: currentAddress
+        address: currentAddress,
       },
       fetchPolicy: 'no-cache',
       context: {
-        queryDeduplication: false
-      }
+        queryDeduplication: false,
+      },
     }
   )
 
@@ -185,7 +223,7 @@ function AddReverseRecord({ account, currentAddress }) {
   if (domains) {
     options = uniq(
       domains
-        .map(domain => {
+        .map((domain) => {
           if (checkIsDecrypted(domain?.name)) {
             return domain?.name
           } else {
@@ -198,9 +236,9 @@ function AddReverseRecord({ account, currentAddress }) {
             }
           }
         })
-        .filter(d => !!d)
+        .filter((d) => !!d)
         .sort()
-    ).map(d => {
+    ).map((d) => {
       return { value: d, label: d }
     })
   }
@@ -217,7 +255,7 @@ function AddReverseRecord({ account, currentAddress }) {
     return (
       <>
         <Message
-          onClick={e =>
+          onClick={(e) =>
             editing
               ? stopEditing()
               : pending
@@ -233,8 +271,16 @@ function AddReverseRecord({ account, currentAddress }) {
               {t('singleName.record.messages.setTo') + getReverseRecord.name}
             </MessageContent>
           ) : (
-            <EditableNotSet data-testid="editable-reverse-record-not-set">
-              {t('singleName.record.messages.notSet')}
+            <EditableNotSet
+              dangerouslySetInnerHTML={{
+                __html: textLight(
+                  t('singleName.record.messages.notSet'),
+                  'ENS'
+                ),
+              }}
+              data-testid="editable-reverse-record-not-set"
+            >
+              {/*{t('singleName.record.messages.notSet')}*/}
             </EditableNotSet>
           )}
           {pending && !confirmed && txHash ? (
@@ -262,7 +308,7 @@ function AddReverseRecord({ account, currentAddress }) {
                   name:
                     (hasValidReverseRecord(getReverseRecord) &&
                       getReverseRecord.name) ||
-                    'example.eth'
+                    'example.eth',
                 }}
                 ' rather than the long address '{{ account }}'. If you would
                 like to set up your reverse for a different account, please
@@ -276,6 +322,7 @@ function AddReverseRecord({ account, currentAddress }) {
                 value={newName}
                 onChange={handleSelect}
                 options={options}
+                styles={colourStyles}
               />
             ) : (
               <Warning>
@@ -292,7 +339,7 @@ function AddReverseRecord({ account, currentAddress }) {
             <ButtonsContainer>
               <SaveCancel
                 mutation={() => {
-                  setName({ variables: { name: newName?.value } })
+                  setName({ variables: { name: newName?.value + '.bnb' } })
                 }}
                 stopEditing={stopEditing}
                 isValid={!!newName}
@@ -309,7 +356,7 @@ function AddReverseRecord({ account, currentAddress }) {
                           setName({ variables: { name: emptyAddress } })
                           setIsDeleteModalOpen(false)
                         }}
-                        stopEditing={e => {
+                        stopEditing={(e) => {
                           stopEditing(e)
                           setIsDeleteModalOpen(false)
                         }}

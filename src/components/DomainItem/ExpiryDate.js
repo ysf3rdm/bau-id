@@ -8,10 +8,16 @@ import {
   PREMIUM_PERIOD
 } from 'utils/dates'
 
-const ExpiryDateContainer = styled('p')`
-  font-size: 18px;
+const ExpiryDateContainer = styled('div')`
+  font-size: 16px;
   font-weight: 100;
-  color: ${({ isExpiredSoon }) => (isExpiredSoon ? 'red' : '#adbbcd')};
+  order: 1;
+  margin-right: 23px;
+  color: ${({ isExpiredSoon }) => (isExpiredSoon ? 'red' : '#B1B1B1')};
+  @media (max-width: 768px) {
+    font-size: 12px;
+    margin-right: 0px;
+  }
 `
 
 const ExpiryDate = ({ expiryDate, domain, name }) => {

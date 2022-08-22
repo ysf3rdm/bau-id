@@ -1,138 +1,56 @@
-import React, { Fragment, lazy, useEffect } from 'react'
-import {
-  HashRouter,
-  BrowserRouter,
-  Route as DefaultRoute,
-  Switch
-} from 'react-router-dom'
-import { useQuery } from '@apollo/client'
+import React, { lazy } from 'react'
+import { BrowserRouter, Route as DefaultRoute, Switch } from 'react-router-dom'
 
-const TestRegistrar = lazy(() =>
-  import(
-    /* webpackChunkName: "TestRegistrar", webpackPrefetch:true */
-    './routes/TestRegistrar'
-  )
-)
+const Home = lazy(() => import('./routes/Home'))
+const SingleName = lazy(() => import('./routes/SingleName'))
+const Profile = lazy(() => import('./routes/Profile'))
+const HomePageLayout = lazy(() => import('components/Layout/HomePageLayout'))
+const Error404 = lazy(() => import('components/Error/Errors'))
 
-const Home = lazy(() =>
-  import(
-    /* webpackChunkName: "Home", webpackPrefetch:true */
-    './routes/Home'
-  )
-)
-
-const SearchResults = lazy(() =>
-  import(
-    /* webpackChunkName: "SearchResults", webpackPrefetch:true */
-    './routes/SearchResults'
-  )
-)
-
-const SingleName = lazy(() =>
-  import(
-    /* webpackChunkName: "SingleName", webpackPrefetch:true */
-    './routes/SingleName'
-  )
-)
-
-const Favourites = lazy(() =>
-  import(
-    /* webpackChunkName: "Favourites", webpackPrefetch:true */
-    './routes/Favourites'
-  )
-)
-
-const Faq = lazy(() =>
-  import(
-    /* webpackChunkName: "Faq", webpackPrefetch:true */
-    './routes/Faq'
-  )
-)
-
-const Address = lazy(() =>
-  import(
-    /* webpackChunkName: "Address", webpackPrefetch:true */
-    './routes/AddressPage'
-  )
-)
-
-const Renew = lazy(() =>
-  import(
-    /* webpackChunkName: "Renew", webpackPrefetch:true */
-    './routes/Renew'
-  )
-)
-
-// import TestRegistrar from './routes/TestRegistrar'
-// import Home from './routes/Home'
-// import SearchResults from './routes/SearchResults'
-// import SingleName from './routes/SingleName'
-// import Favourites from './routes/Favourites'
-// import Faq from './routes/Faq'
-// import Address from './routes/AddressPage'
-// import Renew from './routes/Renew'
-
-import { NetworkError, Error404 } from './components/Error/Errors'
-import DefaultLayout from './components/Layout/DefaultLayout'
-import { pageview, setupAnalytics } from './utils/analytics'
 import useReactiveVarListeners from './hooks/useReactiveVarListeners'
-import { GET_ERRORS } from './graphql/queries'
-
-//If we are targeting an IPFS build we need to use HashRouter
-const Router =
-  process.env.REACT_APP_IPFS === 'True' ? HashRouter : BrowserRouter
-
-const HomePageLayout = ({ children }) => <Fragment>{children}</Fragment>
 
 const Route = ({
   component: Component,
-  layout: Layout = DefaultLayout,
+  layout: Layout = HomePageLayout,
   ...rest
 }) => {
-  pageview()
   return (
     <DefaultRoute
       {...rest}
-      render={props => (
-        <Layout>
+      render={(props) =>
+        Layout ? (
+          <Layout>
+            <Component {...props} />
+          </Layout>
+        ) : (
           <Component {...props} />
-        </Layout>
-      )}
+        )
+      }
     />
   )
 }
 
 const App = () => {
   useReactiveVarListeners()
-  const {
-    data: { globalError }
-  } = useQuery(GET_ERRORS)
-
-  useEffect(() => {
-    setupAnalytics()
-  }, [])
-
-  if (globalError.network) {
-    return <NetworkError message={globalError.network} />
-  }
 
   return (
-    <Router>
+    <BrowserRouter basename="app">
       <Switch>
-        <Route exact path="/" component={Home} layout={HomePageLayout} />
-        <Route path="/test-registrar" component={TestRegistrar} />
-        <Route path="/favourites" component={Favourites} />
-        <Route path="/faq" component={Faq} />
-        <Route path="/my-bids" component={SearchResults} />
-        <Route path="/how-it-works" component={SearchResults} />
-        <Route path="/search/:searchTerm" component={SearchResults} />
-        <Route path="/name/:name" component={SingleName} />
-        <Route path="/address/:address/:domainType" component={Address} />
-        <Route path="/address/:address" component={Address} />
-        <Route path="/renew" component={Renew} />
-        <Route path="*" component={Error404} />
+        {/* <Route exact path="/" component={Home} layout={HomePageLayout} /> */}
+        <Route
+          exact
+          path="/profile"
+          component={Profile}
+          layout={HomePageLayout}
+        />
+        <Route
+          path="/name/:name"
+          component={SingleName}
+          layout={HomePageLayout}
+        />
+        <Route path="*" component={Error404} layout={null} />
       </Switch>
-    </Router>
+    </BrowserRouter>
   )
 }
 export default App

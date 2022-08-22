@@ -7,29 +7,23 @@ import ENSLogo from '../assets/ensIconLogo.svg'
 import LogoTyped from '../assets/TypeLogo'
 
 const IconLogo = styled('img')`
-  width: 30px;
-  ${mq.medium`
-    width: 34px
-  `}
+  width: 228px;
 `
 
 const LogoContainer = styled(Link)`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  padding-left: 20px;
   align-items: center;
   width: auto;
-
-  ${mq.medium`
-    width: 200px;
-  `}
+  height: 100%;
+  margin-right: 34px;
 `
 
 const Logo = ({ color, className, to = '' }) => (
   <LogoContainer className={className} to={to}>
     <IconLogo src={ENSLogo} />
-    <LogoTyped color={color} />
+    {/*<LogoTyped color={color} />*/}
   </LogoContainer>
 )
 

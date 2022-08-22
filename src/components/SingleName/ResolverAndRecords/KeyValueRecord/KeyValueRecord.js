@@ -75,11 +75,11 @@ const RecordsListItem = styled('div')`
 `
 
 const KeyValuesContent = styled(RecordsContent)`
-  display: grid;
+  display: flex;
   width: 100%;
-  grid-template-columns: 1fr;
-  align-items: flex-start;
+  align-items: center;
   overflow: hidden;
+  padding: 5px 10px;
   ${p => (p.hasBeenUpdated ? 'border: solid 1px red;' : '')}
   ${mq.small`
     grid-template-columns: 150px 1fr;

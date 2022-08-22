@@ -13,31 +13,10 @@ import { ReactComponent as FaqIcon } from '../../assets/faqIcon.svg'
 import mq from 'mediaQuery'
 import { Link, withRouter } from 'react-router-dom'
 import gql from 'graphql-tag'
-import Info from 'components/Icons/Info'
 
 const SideNavContainer = styled('nav')`
-  display: ${p => (p.isMenuOpen ? 'block' : 'none')};
-  position: fixed;
-  z-index: 1;
-  ${mq.medium`
-    z-index: 1;
-  `}
-
-  left: 0;
-  height: auto;
-  background: #121d46;
-  width: 100%;
-  margin-top: -10px;
-  ${mq.medium`
-    padding: 0;
-    left: 35px;
-    margin-top: 50px;
-    height: auto;
-    background: transparent;
-    width: 165px;
-    display: block;
-  `}
-
+  width: 362px;
+  height: 100%;
   ul {
     padding: 0;
     margin: 0;
@@ -45,26 +24,21 @@ const SideNavContainer = styled('nav')`
   li {
     list-style: none;
   }
-
-  ${p =>
-    p.hasNonAscii
-      ? `
-      top: 200px;
-      ${mq.medium`top: 200px`}
-    `
-      : `
-      top: 100px;
-      ${mq.medium`top: 100px`}
-    `}
+  padding: 15px 62px 0px 100px;
+  font-family: Urbanist;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 200;
-  font-size: 22px;
-  color: ${p => (p.active ? '#5284FF' : '#C7D3E3')};
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  color: ${p => (p.active ? '#47C799' : '#C7D3E3')};
   padding: 10px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 
@@ -80,56 +54,18 @@ const NavLink = styled(Link)`
   span {
     transition: 0.2s;
     margin-left: 15px;
-    color: ${p => (p.active ? '#5284FF' : '#C7D3E3')};
+    color: ${p => (p.active ? '#47C799' : '#B1B1B1')};
   }
 
   &:hover {
     span {
-      color: #5284ff;
+      color: #47c799;
     }
     path {
-      fill: #5284ff;
+      fill: #47c799;
     }
     g {
-      fill: #5284ff;
-    }
-  }
-`
-
-const ThirdPartyLink = styled('a')`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 200;
-  font-size: 22px;
-  color: ${p => (p.active ? '#5284FF' : '#C7D3E3')};
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-
-  ${mq.medium`
-    justify-content: start;
-    border-bottom: 0;
-  `}
-
-  &:visited {
-    color: #c7d3e3;
-  }
-
-  span {
-    transition: 0.2s;
-    margin-left: 15px;
-    color: ${p => (p.active ? '#5284FF' : '#C7D3E3')};
-  }
-
-  &:hover {
-    span {
-      color: #5284ff;
-    }
-    path {
-      fill: #5284ff;
-    }
-    g {
-      fill: #5284ff;
+      fill: #47c799;
     }
   }
 `
@@ -172,22 +108,6 @@ function SideNav({ match, isMenuOpen, toggleMenu }) {
             <Heart active={url === '/favourites'} />
             <span>{t('c.favourites')}</span>
           </NavLink>
-        </li>
-        <li>
-          <NavLink
-            onClick={toggleMenu}
-            active={url === '/faq' ? 1 : 0}
-            to="/faq"
-          >
-            <FaqIcon />
-            <span>{t('c.faq')}</span>
-          </NavLink>
-        </li>
-        <li>
-          <ThirdPartyLink href={aboutPageURL()}>
-            <Info />
-            <span>{t('c.about')}</span>
-          </ThirdPartyLink>
         </li>
       </ul>
     </SideNavContainer>

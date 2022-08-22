@@ -1,65 +1,11 @@
 import React from 'react'
-import styled from '@emotion/styled/macro'
 import { useTranslation } from 'react-i18next'
 
 import mq from 'mediaQuery'
 import Step from './Step'
-import Button from '../../Forms/Button'
-import { ReactComponent as Bell } from '../../Icons/Bell.svg'
 import { ReactComponent as Tick } from '../../Icons/GreyCircleTick.svg'
 
 import { requestPermission, hasPermission } from './notification'
-
-const Steps = styled('section')`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-row-gap: 30px;
-  ${mq.large`
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 30px;
-    grid-template-rows: 1fr;
-  `}
-`
-
-const Header = styled('div')`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-
-  h2 {
-    font-family: Overpass;
-    font-weight: 300;
-    font-size: 18px;
-    color: #2b2b2b;
-    letter-spacing: 0;
-    margin: 0;
-    margin-bottom: 5px;
-
-    ${mq.medium`
-      font-size: 24px;
-      color: #2B2B2B;
-      letter-spacing: 0;
-    `}
-  }
-
-  p {
-    margin: 0;
-    font-weight: 400;
-    font-family: Overpass;
-    font-size: 14px;
-    color: #adbbcd;
-    letter-spacing: 0;
-  }
-`
-
-const NotifyButton = styled(Button)`
-  flex-shrink: 0;
-`
-
-const NotifyButtonDisabled = styled('div')`
-  color: hsla(0, 0%, 82%, 1);
-`
 
 const Explainer = ({ step, waitPercentComplete, waitTime }) => {
   const { t } = useTranslation()
@@ -74,25 +20,24 @@ const Explainer = ({ step, waitPercentComplete, waitTime }) => {
 
   return (
     <>
-      <Header>
+      <div>
         <div>
-          <h2>{titles[step]}</h2>
+          <h2 style={{ color: ' #379070' }}>{titles[step]}</h2>
           <p>{t('register.favourite')}</p>
         </div>
         {hasPermission() ? (
-          <NotifyButtonDisabled>
+          <div>
             <Tick style={{ marginRight: 5 }} />
             {t('register.notify')}
-          </NotifyButtonDisabled>
+          </div>
         ) : (
-          <NotifyButton type="hollow-primary" onClick={requestPermission}>
-            <Bell style={{ marginRight: 5 }} />
+          <button type="hollow-primary" onClick={requestPermission}>
             {t('register.notify')}
-          </NotifyButton>
+          </button>
         )}
-      </Header>
+      </div>
 
-      <Steps>
+      <section>
         <Step
           number={1}
           progress={
@@ -100,6 +45,7 @@ const Explainer = ({ step, waitPercentComplete, waitTime }) => {
           }
           title={t('register.step1.title')}
           text={t('register.step1.text') + ' ' + t('register.step1.text2')}
+          step={step}
         />
         <Step
           number={2}
@@ -118,6 +64,7 @@ const Explainer = ({ step, waitPercentComplete, waitTime }) => {
             .humanize()}` //add back localization of moment*/
           }
           text={t('register.step2.text')}
+          step={step}
         />
         <Step
           number={3}
@@ -126,8 +73,9 @@ const Explainer = ({ step, waitPercentComplete, waitTime }) => {
           }
           title={t('register.step3.title')}
           text={t('register.step3.text')}
+          step={step}
         />
-      </Steps>
+      </section>
     </>
   )
 }

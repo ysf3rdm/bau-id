@@ -20,8 +20,9 @@ const cache = new InMemoryCache({
 const endpoints = {
   '1': 'https://api.thegraph.com/subgraphs/name/ensdomains/ens',
   '3': 'https://api.thegraph.com/subgraphs/name/ensdomains/ensropsten',
-  '4': 'https://api.thegraph.com/subgraphs/name/ensdomains/ensrinkeby',
-  '5': 'https://api.thegraph.com/subgraphs/name/ensdomains/ensgoerli'
+  '4': 'https://api.thegraph.com/subgraphs/name/denaliiceberg/spaceidrink',
+  '5': 'https://api.thegraph.com/subgraphs/name/ensdomains/ensgoerli',
+  '97': 'https://api.thegraph.com/subgraphs/name/denaliiceberg/spaceid'
 }
 
 function getGraphQLAPI() {
@@ -52,6 +53,7 @@ function fromPromise(promise, operation) {
       .catch(e => {
         console.error('fromPromise error: ', e)
         observer.error.bind(observer)
+        throw e
       })
   })
 }

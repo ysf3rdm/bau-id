@@ -31,11 +31,11 @@ import DefaultAddressLink from '../Links/AddressLink'
 import { ReactComponent as DefaultOrangeExclamation } from '../Icons/OrangeExclamation.svg'
 
 const Details = styled('section')`
-  padding: 20px;
+  padding: 35px 27px;
   transition: 0.4s;
-  ${mq.small`
-    padding: 40px;
-  `}
+  @media (max-width: 768px) {
+    padding: 20px 27px;
+  }
 `
 
 const Loader = styled(DefaultLoader)`
@@ -136,7 +136,7 @@ const DomainOwnerAddress = styled('span')`
 `
 
 const GracePeriodWarningContainer = styled('div')`
-  font-family: 'Overpass';
+  font-family: 'Urbanist';
   background: ${p => (p.isExpired ? '#ff926f' : '#fef7e9')};
   padding: 10px 20px;
   margin: 5px 0px;
@@ -213,7 +213,7 @@ function DetailsContainer({
   const showUnclaimableWarning =
     is2ld &&
     parseInt(domain.owner) === 0 &&
-    domain.parent !== 'eth' &&
+    domain.parent !== 'bnb' &&
     !domain.isDNSRegistrar
 
   return (
@@ -260,7 +260,7 @@ function DetailsContainer({
         </GracePeriodWarningContainer>
       )}
       <OwnerFields outOfSync={outOfSync}>
-        {domain.parent === 'eth' && domain.isNewRegistrar ? (
+        {domain.parent === 'bnb' && domain.isNewRegistrar ? (
           <>
             <DetailsItemEditable
               domain={domain}
@@ -292,7 +292,7 @@ function DetailsContainer({
               copyToClipboard={true}
             />
           </>
-        ) : domain.parent === 'eth' && !domain.isNewRegistrar ? (
+        ) : domain.parent === 'bnb' && !domain.isNewRegistrar ? (
           <>
             <DetailsItem uneditable>
               <DetailsKey>{t('c.registrant')}</DetailsKey>

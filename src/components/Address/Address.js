@@ -14,7 +14,7 @@ import {
 } from '../../graphql/queries'
 import { decryptName, checkIsDecrypted } from '../../api/labels'
 
-import mq from 'mediaQuery'
+import mq, { useMediaMin } from 'mediaQuery'
 
 import AddressContainer from '../Basic/MainContainer'
 import DefaultTopBar from '../Basic/TopBar'
@@ -32,7 +32,6 @@ import Sorting from './Sorting'
 import Filtering from './Filtering'
 import Loader from '../Loader'
 import Banner from '../Banner'
-import Checkbox from '../Forms/Checkbox'
 import { SingleNameBlockies } from '../Blockies'
 import Pager from './Pager'
 import AddReverseRecord from '../AddReverseRecord'
@@ -43,27 +42,38 @@ import close from '../../assets/close.svg'
 import { useBlock } from '../hooks'
 import { globalErrorReactive } from '../../apollo/reactiveVars'
 import { gql } from '@apollo/client'
-import {
-  NonMainPageBannerContainerWithMarginBottom,
-  DAOBannerContent
-} from '../Banner/DAOBanner'
 
 const DEFAULT_RESULTS_PER_PAGE = 25
 
 const TopBar = styled(DefaultTopBar)`
-  justify-content: flex-start;
-  margin-bottom: 40px;
+  justify-content: space-between;
+  @media (max-width: 768px) {
+    display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 23px 0px 16px 0px;
+  }
 `
 
 const Title = styled(DefaultTitle)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `
 
 const EtherScanLink = styled(DefaultEtherScanLink)`
-  min-width: 165px;
-  margin-left: auto;
+  color: #47c799;
+  &:hover {
+    color: #47c799;
+  }
+`
+
+const TopBarSubContainer = styled('div')`
+  display: flex;
+  align-items: center;
 `
 
 const Close = styled('img')`
@@ -76,7 +86,6 @@ const Close = styled('img')`
 `
 
 const Controls = styled('div')`
-  padding-left: 8px;
   display: grid;
   align-content: center;
   grid-template-columns: 1fr;
@@ -91,24 +100,13 @@ const Controls = styled('div')`
   margin: 20px;
 
   ${mq.large`
-    margin: 20px 30px;
+    margin: 20px 27px;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
     'filters actions'
     'renew renew'
     'sorting selectall'
     ;
-  `}
-`
-
-const SelectAll = styled('div')`
-  grid-area: selectall;
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 40px;
-
-  ${mq.large`
-    padding-right: 10px;
   `}
 `
 
@@ -226,6 +224,9 @@ export default function Address({
   let [checkedBoxes, setCheckedBoxes] = useState({})
   let [years, setYears] = useState(1)
   const [selectAll, setSelectAll] = useState(false)
+
+  const mediumBP = useMediaMin('medium')
+
   useResetState(
     setYears,
     setCheckedBoxes,
@@ -290,10 +291,11 @@ export default function Address({
     'labelName',
     true
   )
+
   if (globalError.invalidCharacter || !decryptedDomains) {
     return <InvalidCharacterError message={globalError.invalidCharacter} />
   }
-  // let sortedDomains = decryptedDomains.sort(getSortFunc(activeSort))
+
   let domains = decryptedDomains
   const selectedNames = Object.entries(checkedBoxes)
     .filter(([key, value]) => value)
@@ -303,24 +305,13 @@ export default function Address({
     .filter(d => d.domain.labelName)
     .map(d => d.domain.name)
 
-  const selectAllNames = () => {
-    const obj = allNames.reduce((acc, name) => {
-      acc[name] = true
-      return acc
-    }, {})
-
-    setCheckedBoxes(obj)
-  }
-
   const hasNamesExpiringSoon = !!domains.find(domain =>
     calculateIsExpiredSoon(domain.expiryDate)
   )
 
   return (
     <>
-      <NonMainPageBannerContainerWithMarginBottom>
-        <DAOBannerContent />
-      </NonMainPageBannerContainerWithMarginBottom>
+      {/* <NonMainPageBannerContainerWithMarginBottom /> */}
 
       {showOriginBanner && showOriginBannerFlag && (
         <Banner>
@@ -345,8 +336,17 @@ export default function Address({
 
       <AddressContainer>
         <TopBar>
-          <SingleNameBlockies address={address} />
-          <Title>{address}</Title>
+          <TopBarSubContainer>
+            <SingleNameBlockies address={address} />
+            {mediumBP ? (
+              <Title>{address}</Title>
+            ) : (
+              <Title>{`${address.substring(0, 6)}....${address.substring(
+                address.length - 5,
+                address.length - 1
+              )}`}</Title>
+            )}
+          </TopBarSubContainer>
           {etherScanAddr && (
             <EtherScanLink address={address}>
               {t('address.etherscanButton')}
@@ -381,26 +381,6 @@ export default function Address({
             setActiveSort={setActiveSort}
             activeFilter={domainType}
           />
-
-          {domainType === 'registrant' && (
-            <>
-              <SelectAll>
-                <Checkbox
-                  testid="checkbox-renewall"
-                  type="double"
-                  checked={selectAll}
-                  onClick={() => {
-                    if (!selectAll) {
-                      selectAllNames()
-                    } else {
-                      setCheckedBoxes({})
-                    }
-                    setSelectAll(selectAll => !selectAll)
-                  }}
-                />
-              </SelectAll>
-            </>
-          )}
         </Controls>
 
         <DomainList

@@ -62,17 +62,15 @@ export const RecordsKey = styled(DetailsKey)`
 `
 
 export const RecordsSubKey = styled('div')`
-  font-family: Overpass Mono;
+  font-family: Urbanist Mono;
   font-weight: 500;
   font-size: 14px;
   color: #adbbcd;
   letter-spacing: 0;
-
-  ${mq.small`
-    font-size: 16px;
-    max-width: 220px;
-    min-width: 180px;
-  `}
+  display: flex;
+  justify-content: center;
+  min-width: 180px;
+  max-width: 220px;
 `
 
 export const RecordsValue = styled(DetailsValue)`
@@ -234,7 +232,7 @@ const ContentHashEditable = ({
 function ContentHashLinkWithEthLink({ value, contentType, domain }) {
   const { networkId } = useNetworkInfo()
   const displayEthLink =
-    !!domain.name.match('.eth$') && networkId === 1 && value?.match(/^ip/)
+    !!domain.name.match('.bnb$') && networkId === 1 && value?.match(/^ip/)
   return (
     <>
       <div>

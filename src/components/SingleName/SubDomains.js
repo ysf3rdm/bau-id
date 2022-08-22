@@ -10,7 +10,7 @@ import Loader from '../Loader'
 import { H2 } from '../Typography/Basic'
 import AddSubdomain from './AddSubdomain'
 import ChildDomainItem from '../DomainItem/ChildDomainItem'
-import { getNamehash } from '@ensdomains/ui'
+import { getNamehash } from 'ui'
 import { decryptName } from '../../api/labels'
 
 const SubDomainsContainer = styled('div')`
@@ -20,9 +20,13 @@ const SubDomainsContainer = styled('div')`
 `
 
 const SubDomainH2 = styled(H2)`
-  padding: 20px 0 50px;
+  padding: 20px 0 20px 0px;
+  font-family: 'Urbanist';
+  font-weight: 400;
+  font-size: 24px;
   text-align: center;
-  color: #ccd4da;
+  color: #b1b1b1;
+  font-style: italic;
 `
 
 function SubDomainsFromWeb3({ domain, canAddSubdomain }) {

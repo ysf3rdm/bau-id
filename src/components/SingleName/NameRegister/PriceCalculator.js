@@ -7,7 +7,7 @@ function priceCalculator({
   const priceInEth = new EthVal(`${price}`).toEth()
   const premiumInEth = new EthVal(`${premium}`).toEth()
   return {
-    price: priceInEth.toFixed(2),
+    price: priceInEth.toFixed(3),
     premium: premiumInEth.toFixed(2),
     ethUsdPrice,
     priceInUsd: priceInEth.mul(ethUsdPrice).toFixed(2),

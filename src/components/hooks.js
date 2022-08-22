@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { loggedIn, logout } from './IPFS/auth'
 
-import { getBlock, getProvider, ethers } from '@ensdomains/ui'
+import { getBlock, getProvider, ethers } from 'ui'
 import { isCID, networkName, supportedAvatarProtocols } from 'utils/utils'
 
 export function useDocumentTitle(title) {
@@ -160,7 +160,7 @@ export function useInterval(callback, delay) {
   }, [delay])
 }
 
-export function useGasPrice(enabled = true) {
+export function useGasPrice(enabled = true, isReadOnly) {
   const [loading, setLoading] = useState(true)
   const [price, setPrice] = useState({})
 
@@ -180,7 +180,8 @@ export function useGasPrice(enabled = true) {
           }
           setPrice(price)
         } else {
-          setPrice({ slow: 0, fast: 0 })
+          // FIXME this has to be addressed in BNB mainnet
+          setPrice({ slow: 1000000000, fast: 10000000000 })
         }
         setLoading(false)
       }
@@ -188,7 +189,7 @@ export function useGasPrice(enabled = true) {
     } catch (e) {
       console.error('useGasPrice error: ', e)
     }
-  }, [enabled])
+  }, [enabled, isReadOnly])
 
   return {
     loading,

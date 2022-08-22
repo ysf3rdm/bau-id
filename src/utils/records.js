@@ -1,6 +1,6 @@
-import { encodeContenthash, isValidContenthash } from '@ensdomains/ui'
+import { encodeContenthash, isValidContenthash } from 'ui'
 import { addressUtils, supportedAvatarProtocols } from 'utils/utils'
-import { formatsByName } from '@ensdomains/address-encoder'
+import { formatsByName } from '@siddomains/address-encoder'
 import validateTokenURI from 'api/avatar'
 
 export function validateRecord({ key, value, contractFn, addr }) {
@@ -25,6 +25,9 @@ export function validateRecord({ key, value, contractFn, addr }) {
     case 'setAddr(bytes32,uint256,bytes)':
       if (value === '') return false
       if (key === 'ETH') {
+        return addressUtils.isAddress(value)
+      }
+      if (key === 'EVM') {
         return addressUtils.isAddress(value)
       }
       if (key.match(/_LEGACY/)) {

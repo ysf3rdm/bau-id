@@ -16,9 +16,8 @@ const NetworkInformationContainer = styled('div')`
   display: flex;
   justify-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 20px;
   ${mq.medium`
-    margin-top: 80px;
+    margin-top: 0px;
     margin-bottom: 50px;
     display: block;
     border: none;
@@ -28,7 +27,7 @@ const NetworkInformationContainer = styled('div')`
 const Blockies = styled(UnstyledBlockies)`
   border-radius: 50%;
   position: absolute;
-  left: 10px;
+  left: 0px;
   top: 10px;
   ${mq.medium`
     box-shadow: 3px 5px 24px 0 #d5e2ec;
@@ -51,10 +50,10 @@ const NetworkStatus = styled('div')`
   font-size: 14px;
   text-transform: capitalize;
   font-weight: 100;
-  margin-top: -2px;
-  margin-left: 1px;
+  margin-left: 56px;
   display: flex;
   align-items: center;
+  margin-bottom: 16px;
 
   &:before {
     content: '';
@@ -62,7 +61,7 @@ const NetworkStatus = styled('div')`
     width: 6px;
     height: 6px;
     border-radius: 3px;
-    background: #5284ff;
+    background: #47c799;
     margin-right: 5px;
   }
 `
@@ -71,29 +70,18 @@ const Account = styled('div')`
   color: #adbbcd;
   font-size: 16px;
   font-weight: 200;
-  font-family: Overpass Mono;
+  font-family: Urbanist Mono;
   width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-left: 56px;
 `
 
 const AccountContainer = styled('div')`
-  padding: 10px 10px 10px 65px;
+  padding: 15px 0 0;
   position: relative;
-  ${mq.medium`
-    transform: translate(-25px, 5px);
-    width: 225px;
-    &:hover {
-      background: white;
-      box-shadow: -4px 18px 70px 0 rgba(108, 143, 167, 0.32);
-      border-radius: 6px;
-      .account {
-        overflow: visible;
-        white-space: normal;
-      }
-    }
-  `}
+  padding: ${({ isReadOnly }) => (isReadOnly ? '50px 0 0' : '15px 0 0')};
 `
 
 const NETWORK_INFORMATION_QUERY = gql`
@@ -110,23 +98,21 @@ const NETWORK_INFORMATION_QUERY = gql`
 function NetworkInformation() {
   const { t } = useTranslation()
   const {
-    data: { accounts, isSafeApp, network, displayName, isReadOnly }
+    data: { accounts, isSafeApp, network, displayName, isReadOnly },
   } = useQuery(NETWORK_INFORMATION_QUERY)
 
-  const {
-    data: { getReverseRecord } = {},
-    loading: reverseRecordLoading
-  } = useQuery(GET_REVERSE_RECORD, {
-    variables: {
-      address: accounts?.[0]
-    },
-    skip: !accounts?.length
-  })
+  const { data: { getReverseRecord } = {}, loading: reverseRecordLoading } =
+    useQuery(GET_REVERSE_RECORD, {
+      variables: {
+        address: accounts?.[0],
+      },
+      skip: !accounts?.length,
+    })
 
   return (
     <NetworkInformationContainer hasAccount={accounts && accounts.length > 0}>
       {!isReadOnly ? (
-        <AccountContainer>
+        <AccountContainer isReadOnly={isReadOnly}>
           {!reverseRecordLoading &&
           getReverseRecord &&
           getReverseRecord.avatar ? (
@@ -146,22 +132,26 @@ function NetworkInformation() {
             <NoAccountsModal
               onClick={disconnectProvider}
               buttonText={t('c.disconnect')}
-              colour={'#F5A623'}
+              colour={'#0191E2'}
+              active={isReadOnly ? true : false}
+              width="100%"
             />
           )}
         </AccountContainer>
       ) : (
-        <AccountContainer>
-          <Account data-testid="account" className="account">
+        <AccountContainer isReadOnly={isReadOnly}>
+          {/* <Account data-testid="account" className="account">
             {t('c.readonly')}
           </Account>
           <NetworkStatus>
             {network} {t('c.network')}
-          </NetworkStatus>
+          </NetworkStatus> */}
           <NoAccountsModal
             onClick={connectProvider}
-            colour={'#F5A623'}
-            buttonText={t('c.connect')}
+            colour={'#25FFB1'}
+            buttonText="Connect"
+            active={isReadOnly ? true : false}
+            width="100%"
           />
         </AccountContainer>
       )}

@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
 
-import { validateName, parseSearchTerm } from '../utils/utils'
+import { validateName, parseSearchTerm, validateDomain } from '../utils/utils'
 import { useScrollTo } from '../components/hooks'
 import { GET_SINGLE_NAME } from '../graphql/queries'
 import Loader from '../components/Loader'
 import SearchErrors from '../components/SearchErrors/SearchErrors'
 import Name from '../components/SingleName/Name'
-import {
-  NonMainPageBannerContainerWithMarginBottom,
-  DAOBannerContent
-} from '../components/Banner/DAOBanner'
 
 const SINGLE_NAME = gql`
   query singleNameQuery @client {
@@ -22,53 +19,49 @@ const SINGLE_NAME = gql`
 
 function SingleName({
   match: {
-    params: { name: searchTerm }
+    params: { name: searchTerm },
   },
-  location: { pathname }
+  location: { pathname },
 }) {
-  useScrollTo(0)
-
+  let history = useHistory()
   const [valid, setValid] = useState(undefined)
   const [type, setType] = useState(undefined)
-  const [name, setNormalisedName] = useState('')
+  const [name, setNormalizedName] = useState('')
   let errorMessage
-
   const {
-    data: { isENSReady }
+    data: { isENSReady },
   } = useQuery(SINGLE_NAME)
   const { data, loading, error, refetch } = useQuery(GET_SINGLE_NAME, {
     variables: { name },
     fetchPolicy: 'no-cache',
     context: {
-      queryDeduplication: false
-    }
+      queryDeduplication: false,
+    },
   })
 
   useEffect(() => {
-    let normalisedName
+    let normalizedName
     if (isENSReady) {
-      try {
-        // This is under the assumption that validateName never returns false
-        normalisedName = validateName(searchTerm)
-        setNormalisedName(normalisedName)
-        document.title = searchTerm
-      } catch {
-        document.title = 'Error finding name'
-      } finally {
-        parseSearchTerm(normalisedName || searchTerm).then(_type => {
-          if (_type === 'supported' || _type === 'tld' || _type === 'search') {
-            setValid(true)
-
-            setType(_type)
-          } else {
-            if (_type === 'invalid') {
-              setType('domainMalformed')
-            } else {
-              setType(_type)
-            }
-            setValid(false)
-          }
-        })
+      let domain = searchTerm;
+      let suffix = '';
+      let i = domain.lastIndexOf('.');
+      if (i > 0) {
+        domain = searchTerm.substring(0, i);
+        suffix = searchTerm.substring(i);
+      }
+      if (suffix !== '.bnb' || !validateDomain(domain)) {
+        setValid(false)
+        setType('invalid')
+        history.replace('/404')
+      } else {
+        try {
+          normalizedName = validateName(searchTerm)
+          setNormalizedName(normalizedName)
+        } catch {
+          document.title = 'Error finding name'
+        } finally {
+          setValid(true)
+        }
       }
     }
   }, [searchTerm, isENSReady])
@@ -79,9 +72,6 @@ function SingleName({
     if (data?.singleName)
       return (
         <>
-          <NonMainPageBannerContainerWithMarginBottom>
-            <DAOBannerContent />
-          </NonMainPageBannerContainerWithMarginBottom>
           <Name
             details={data.singleName}
             name={name}

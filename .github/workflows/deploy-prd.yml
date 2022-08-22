@@ -1,0 +1,32 @@
+name: Space ID App S3 Deploy - Production
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.FE_DEPLOYER_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.FE_DEPLOYER_AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: yarn install
+      - run: yarn run build && cp -a build/. dist/ && cp -a build/. dist/app/
+
+      - name: Deploy
+        uses: reggionick/s3-deploy@v3
+        with:
+          folder: 'dist'
+          bucket: 'pre-prd-space-id'
+          bucket-region: 'us-west-2'
+          dist-id: 'E2WEVVPV40MG9V'
+          invalidation: /app/
+          delete-removed: true
+          no-cache: false
+          private: true

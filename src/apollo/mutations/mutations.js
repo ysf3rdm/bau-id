@@ -9,7 +9,7 @@ import {
   subDomainFavouritesReactive,
   web3ProviderReactive
 } from '../reactiveVars'
-import { getAccounts, getNetwork, getNetworkId } from '@ensdomains/ui'
+import { getAccounts, getNetwork, getNetworkId } from 'ui'
 import { disconnect, connect } from '../../api/web3modal'
 import { getReverseRecord } from '../sideEffects'
 import { isRunningAsSafeApp } from 'utils/safeApps'
@@ -25,7 +25,6 @@ export const setWeb3ProviderLocalMutation = async provider => {
   }
 
   provider?.on('chainChanged', _chainId => {
-    console.log('chain changed: ', _chainId)
     setNetworkIdLocalMutation(parseInt(_chainId))
   })
 

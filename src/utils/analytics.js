@@ -1,17 +1,24 @@
 import ReactGA from 'react-ga'
-import { getNetworkId } from '@ensdomains/ui'
+import { getNetworkId } from 'ui'
 
 const TrackingID = {
-  live: 'UA-138903307-1',
-  dev: 'UA-138903307-2'
+  live: 'UA-233964103-2',
+  dev: 'UA-233964103-1',
 }
 
 function isProduction() {
-  return window.location.host === 'app.ens.domains'
+  return window.location.host === 'app.space.id'
 }
 
 function isDev() {
-  return window.location.host === 'ensappdev.surge.sh'
+  console.log(
+    "window.location.host === 'localhost:3000'",
+    window.location.host === 'localhost:3000'
+  )
+  return (
+    window.location.host === 'app.stg.space.id' ||
+    window.location.host === 'localhost:3000'
+  )
 }
 
 async function isMainnet() {
@@ -40,15 +47,7 @@ export const setupAnalytics = () => {
     ReactGA.plugin.require('ecommerce', { debug: true })
     console.log('Analytics setup for dev with ', TrackingID.dev)
   }
-
   setUtm()
-}
-
-export const pageview = () => {
-  const page = window.location.pathname + window.location.search
-  if (isProduction() || isDev()) {
-    ReactGA.pageview(page)
-  }
 }
 
 export const trackReferral = async ({
@@ -57,7 +56,7 @@ export const trackReferral = async ({
   type, // renew/register
   price, // in wei,
   premium = 0,
-  years
+  years,
 }) => {
   const mainnet = await isMainnet()
   const referrer = getUtm()
@@ -70,22 +69,22 @@ export const trackReferral = async ({
       labels,
       transactionId,
       type,
-      referrer
+      referrer,
     })
     ReactGA.plugin.execute('ecommerce', 'addTransaction', {
       id: transactionId, // Transaction ID. Required.
       affiliation: referrer, // Affiliation or store name.
-      revenue: price // Grand Total.
+      revenue: price, // Grand Total.
     })
 
-    labels.forEach(label => {
+    labels.forEach((label) => {
       ReactGA.plugin.execute('ecommerce', 'addItem', {
         id: transactionId,
         name: label,
         sku: label,
         category: type,
         price: unitPrice,
-        quantity: years
+        quantity: years,
       })
       if (premium > 0) {
         ReactGA.plugin.execute('ecommerce', 'addItem', {
@@ -94,7 +93,7 @@ export const trackReferral = async ({
           sku: label,
           category: type,
           price: premium,
-          quantity: 1
+          quantity: 1,
         })
       }
     })
@@ -121,7 +120,7 @@ export const trackReferral = async ({
         unitPrice,
         premium,
         years,
-        referrer
+        referrer,
       })
     )
   }

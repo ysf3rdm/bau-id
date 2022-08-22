@@ -1,4 +1,4 @@
-import { setupENS } from '@ensdomains/ui'
+import { setupENS } from 'ui'
 import { isENSReadyReactive } from '../reactiveVars'
 
 const INFURA_ID =
@@ -25,7 +25,9 @@ export async function setup({
     ensAddress
   }
   if (enforceReadOnly) {
-    option.infura = INFURA_ID
+    // FIXME determine network ID
+    option.infura =
+      'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd'
   }
   const {
     ens: ensInstance,

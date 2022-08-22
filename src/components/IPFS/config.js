@@ -1,8 +1,5 @@
-import temporallogo from '../../assets/temporal.png'
-
 const TEMPORAL = {
   name: 'Temporal', // Name of the IPFS service
-  logo: temporallogo, // Logo used for the login/sign up header
   link: 'https://play2.temporal.cloud', // The link when people click on the logo or manage domains notice
   host: 'api.ipfs.temporal.cloud', // the IPFS api endpoint used when the etherium profile is set to mainnet
   dev: 'api.ipfs.temporal.cloud', // the IPFS api endpoint used when not on mainnet
@@ -13,7 +10,7 @@ const TEMPORAL = {
   login: 'https://api.temporal.cloud/v2/auth/login', // the Authentication endpoint to verify users information. Currently supports JWT
   loginDev: 'https://dev.api.temporal.cloud/v2/auth/login', // same as login but used if user is not on mainnet
   signup: 'https://api.temporal.cloud/v2/auth/register',
-  signupDev: 'https://dev.api.temporal.cloud/v2/auth/register'
+  signupDev: 'https://dev.api.temporal.cloud/v2/auth/register',
 }
 
 export function getConfig(service) {

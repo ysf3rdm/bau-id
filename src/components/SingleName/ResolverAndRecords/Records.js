@@ -6,12 +6,12 @@ import differenceWith from 'lodash/differenceWith'
 import { useTranslation } from 'react-i18next'
 import { gql } from '@apollo/client'
 
-import { getNamehash, emptyAddress } from '@ensdomains/ui'
+import { getNamehash, emptyAddress } from 'ui'
 import { useEditable } from '../../hooks'
 import { ADD_MULTI_RECORDS } from '../../../graphql/mutations'
 import COIN_LIST from 'constants/coinList'
 import PendingTx from '../../PendingTx'
-import { formatsByCoinType } from '@ensdomains/address-encoder'
+import { formatsByCoinType } from '@siddomains/address-encoder'
 
 import {
   GET_ADDRESSES,
@@ -224,7 +224,9 @@ const getInitialTextRecords = (dataTextRecords, domain) => {
 
 const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
   const initialTextRecords = getInitialTextRecords(dataTextRecords, domain)
-  const initialCoins = getInitialCoins(dataAddresses)
+  var initialCoins = getInitialCoins(dataAddresses)
+  // FIXME check will fail
+  initialCoins[0].key = 'EVM'
   const initialContent = getInitialContent(domain)
 
   return [...initialTextRecords, ...initialCoins, initialContent]
@@ -233,7 +235,7 @@ const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
 const getCoins = updatedRecords =>
   updatedRecords
     .filter(record => record.contractFn === 'setAddr(bytes32,uint256,bytes)')
-    .sort(record => (record.key === 'ETH' ? -1 : 1))
+    .sort(record => (record.key === 'EVM' ? -1 : 1))
 
 const getContent = updatedRecords => {
   const content = updatedRecords.filter(
@@ -283,8 +285,9 @@ const addOrUpdateRecord = (updateFn, addFn, updatedRecords) => record => {
 const validateAllRecords = (updatedRecords, validRecords) =>
   updatedRecords.length === validRecords.length
 
-const singleValidator = validRecords => record =>
-  validRecords.some(el => el.key === record.key && el.val === record.val)
+const singleValidator = validRecords => record => {
+  return validRecords.some(el => el.key === record.key && el.val === record.val)
+}
 
 const singleValidating = validatingRecords => record =>
   validatingRecords.some(el => el.key === record.key && el.val === record.val)

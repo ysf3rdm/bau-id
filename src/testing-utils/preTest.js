@@ -41,7 +41,6 @@ async function init() {
   const accounts = await getAccounts(web3)
 
   const addresses = await deployTestEns({ web3, accounts, dnssec, exponential })
-  console.log(addresses)
   const {
     ensAddress,
     oldResolverAddresses,
