@@ -25,6 +25,7 @@ import { setSelectedDomain } from 'app/slices/domainSlice'
 
 //Import Assets
 import LogoText from '../../assets/images/space-logo-text.png'
+import { isEmptyAddress } from '../../utils/records'
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -58,8 +59,7 @@ export default function Profile() {
   const { displayName, isReadOnly, isSafeApp, network } = data
 
   useEffect(() => {
-    const tAccountConnected =
-      account !== '0x0000000000000000000000000000000000000000'
+    const tAccountConnected = !isEmptyAddress(account)
     setIsAccountConnected(tAccountConnected)
     if (tAccountConnected) {
       sidSetup()
@@ -75,7 +75,7 @@ export default function Profile() {
       const tSid = new SID({ provider, sidAddress: getSidAddress(networkId) })
       setSid(tSid)
     } catch (error) {
-      console.log('error', error)
+      console.log('tSid-error', error)
     }
   }
 
