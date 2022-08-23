@@ -100,6 +100,9 @@ export async function getEtherScanAddr() {
     case 4:
     case '4':
       return 'https://rinkeby.etherscan.io/'
+    case 56:
+    case '56':
+      return 'https://bscscan.com'
     case 97:
     case '97':
       return 'https://testnet.bscscan.com/'

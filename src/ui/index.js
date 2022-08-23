@@ -9,16 +9,16 @@ export async function setupENS({
   reloadOnAccountsChange,
   enforceReadOnly,
   enforceReload,
-  infura
+  infura,
 } = {}) {
   const { provider } = await setupWeb3({
     customProvider,
     reloadOnAccountsChange,
     enforceReadOnly,
     enforceReload,
-    infura
+    infura,
   })
-  const networkId = await getNetworkId()
+  let networkId = await getNetworkId()
   const ens = new ENS({ provider, networkId, registryAddress: ensAddress })
   const registrar = await setupRegistrar(ens.registryAddress)
   const network = await getNetwork()
@@ -27,7 +27,7 @@ export async function setupENS({
     registrar,
     provider: customProvider,
     network,
-    providerObject: provider
+    providerObject: provider,
   }
 }
 

@@ -19,7 +19,7 @@ const resolvers = {
         const result = await registrar.getEthPrice()
         return result
       } catch (err) {
-        console.error(err)
+        console.error('hey error from ethPrice', err)
       }
     },
     async getRentPrice(_, { label, duration }) {

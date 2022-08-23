@@ -3,7 +3,7 @@ import {
   ApolloLink,
   HttpLink,
   InMemoryCache,
-  split
+  split,
 } from '@apollo/client'
 import Observable from 'zen-observable'
 
@@ -14,15 +14,16 @@ import { networkIdReactive } from './reactiveVars'
 let client
 
 const cache = new InMemoryCache({
-  typePolicies
+  typePolicies,
 })
 
 const endpoints = {
-  '1': 'https://api.thegraph.com/subgraphs/name/ensdomains/ens',
-  '3': 'https://api.thegraph.com/subgraphs/name/ensdomains/ensropsten',
-  '4': 'https://api.thegraph.com/subgraphs/name/denaliiceberg/spaceidrink',
-  '5': 'https://api.thegraph.com/subgraphs/name/ensdomains/ensgoerli',
-  '97': 'https://api.thegraph.com/subgraphs/name/denaliiceberg/spaceid'
+  1: 'https://api.thegraph.com/subgraphs/name/ensdomains/ens',
+  3: 'https://api.thegraph.com/subgraphs/name/ensdomains/ensropsten',
+  4: 'https://api.thegraph.com/subgraphs/name/denaliiceberg/spaceidrink',
+  5: 'https://api.thegraph.com/subgraphs/name/ensdomains/ensgoerli',
+  56: 'https://api.thegraph.com/subgraphs/name/denaliiceberg/spaceid',
+  97: 'https://api.thegraph.com/subgraphs/name/denaliiceberg/spaceid',
 }
 
 function getGraphQLAPI() {
@@ -40,17 +41,17 @@ function getGraphQLAPI() {
 }
 
 function fromPromise(promise, operation) {
-  return new Observable(observer => {
+  return new Observable((observer) => {
     promise
-      .then(value => {
+      .then((value) => {
         operation.setContext({ response: value })
         observer.next({
           data: { [operation.operationName]: value },
-          errors: []
+          errors: [],
         })
         observer.complete()
       })
-      .catch(e => {
+      .catch((e) => {
         console.error('fromPromise error: ', e)
         observer.error.bind(observer)
         throw e
@@ -60,10 +61,10 @@ function fromPromise(promise, operation) {
 
 export function setupClient() {
   const httpLink = new HttpLink({
-    uri: () => getGraphQLAPI()
+    uri: () => getGraphQLAPI(),
   })
 
-  const web3Link = new ApolloLink(operation => {
+  const web3Link = new ApolloLink((operation) => {
     const { variables, operationName } = operation
 
     if (resolvers.Query[operationName]) {
@@ -89,7 +90,7 @@ export function setupClient() {
 
   const option = {
     cache,
-    link: splitLink
+    link: splitLink,
   }
 
   client = new ApolloClient(option)

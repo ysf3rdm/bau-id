@@ -164,7 +164,6 @@ const NameRegister = ({ domain, waitTime, registrationOpen }) => {
         }
       } catch (err) {
         setWinnerLoading(false)
-        console.log('hey err', err)
       }
     }
     fetchSignature()
