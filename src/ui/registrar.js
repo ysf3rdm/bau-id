@@ -406,7 +406,7 @@ export default class Registrar {
     const signer = await getSigner()
     const permanentRegistrarController =
       permanentRegistrarControllerWithoutSigner.connect(signer)
-    const account = await getAccount()
+    const account = (await getAccount()).toLowerCase()
     const price = await this.getRentPrice(label, duration)
     const priceWithBuffer = getBufferedPrice(price)
     const resolverAddr = await this.getAddress('resolver.bnb')
