@@ -18,11 +18,16 @@ module.exports = {
       },
       green: {
         100: '#1EEFA4',
+        200: '#30DB9E',
       },
       dark: {
         common: '#071A2F',
         100: '#134757',
         200: '#1C585A',
+        300: '#205561',
+      },
+      red: {
+        100: '#ED7E17',
       },
       primary: '#134757',
       primaryBg: '#F8F8FC',
@@ -32,6 +37,10 @@ module.exports = {
       purple: '#6852F5',
       white: '#ffffff',
       darkButton: '#134757',
+      blue: {
+        100: '#2980E8',
+        200: '#45A6FF',
+      },
     },
     screens: {
       sm: '640px',
