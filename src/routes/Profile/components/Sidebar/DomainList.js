@@ -54,13 +54,13 @@ export default function DomainList({
   className,
   domainsList,
   clickHandle,
-  selectedDomain
+  selectedDomain,
 }) {
   const [searchKey, setSearchKey] = useState('')
   const [domains, setDomains] = useState(domainsList)
   const [sortBy, setSortBy] = useState(null)
 
-  const onChangeHandler = event => {
+  const onChangeHandler = (event) => {
     setSearchKey(event.target.value.trim())
   }
 
@@ -71,11 +71,11 @@ export default function DomainList({
   }, [domainsList])
 
   const handleSortBy = useCallback(
-    param => {
+    (param) => {
       let lDomains
       if (searchKey) {
         lDomains = domainsList.filter(
-          item => item.name.indexOf(searchKey) !== -1,
+          (item) => item.name.indexOf(searchKey) !== -1
         )
       } else {
         lDomains = [...domainsList]
@@ -103,9 +103,9 @@ export default function DomainList({
 
   return (
     <div className={cn('', className)}>
-      <div className="flex justify-between items-center pr-5">
+      <div className="flex items-center justify-between pr-5">
         <Searchbar className="mr-[14px]" onChangeHandler={onChangeHandler} />
-        <div className="relative group h-full">
+        <div className="relative h-full group">
           <BarIcon className="text-[rgba(204,252,255,0.6)] cursor-pointer h-full flex items-center" />
           <div className="absolute z-[10] bg-[rgba(204,252,255,0.6)] rounded-[12px] p-3 hidden group-hover:block cursor-pointer top-[30px] right-[-20px] backdrop-blur-md">
             <div onClick={() => setSortBy('AToZ')}>
@@ -157,7 +157,7 @@ export default function DomainList({
                   ))
                 }
               >
-                expires {item.expires_at}
+                expires {moment(item.expires_at).format('YYYY-MM-DD')}
               </div>
               {item.name === selectedDomain?.name && (
                 <div className="absolute right-4 top-[calc(50%-7px)]">
