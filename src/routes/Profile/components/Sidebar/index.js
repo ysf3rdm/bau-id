@@ -32,7 +32,7 @@ export default function Sidebar({ className, isReadOnly }) {
       Address: account,
     }
     let result = await axios.post(
-      'https://backend.stg.space.id/listname',
+      `${process.env.REACT_APP_BACKEND_URL}/listname`,
       params
     )
     const data = result?.data?.map((item) => {

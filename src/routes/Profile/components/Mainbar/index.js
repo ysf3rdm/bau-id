@@ -21,7 +21,7 @@ import {
   SET_REGISTRANT,
   SET_RESOLVER,
   RENEW,
-  ADD_MULTI_RECORDS
+  ADD_MULTI_RECORDS,
 } from 'graphql/mutations'
 import { GET_ETH_PRICE, GET_RENT_PRICE, GET_PRICE_CURVE } from 'graphql/queries'
 
@@ -41,7 +41,7 @@ export default function Mainbar({
   selectedDomain,
   account,
   isReadOnly,
-  networkId
+  networkId,
 }) {
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(true)
@@ -77,41 +77,41 @@ export default function Mainbar({
   const { block } = useBlock()
 
   const [mutation] = useMutation(mutationQuery ?? SET_REGISTRANT, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       const txHash = Object.values(data)[0]
       startPending(txHash)
-    }
+    },
   })
 
   const [mutationReNew] = useMutation(RENEW, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       const txHash = Object.values(data)[0]
       startPending(txHash)
       setExtendPeriodShowModal(false)
-    }
+    },
   })
 
   const [addMultiRecords] = useMutation(ADD_MULTI_RECORDS, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       startPending(Object.values(data)[0])
       setUpdatingBNBAddress(param)
-    }
+    },
   })
 
   const {
     data: { getRentPrice: getPremiumPrice } = {},
-    loading: getPremiumPriceLoading
+    loading: getPremiumPriceLoading,
   } = useQuery(GET_RENT_PRICE, {
     variables: {
       duration: 0,
       label: selectedDomain?.name,
-      commitmentTimerRunning: false
-    }
+      commitmentTimerRunning: false,
+    },
   })
 
   const [
     loadEthUSDPriceData,
-    { loading: ethUsdPriceLoading, data: ethUsdPriceData = {} }
+    { loading: ethUsdPriceLoading, data: ethUsdPriceData = {} },
   ] = useLazyQuery(GET_ETH_PRICE)
 
   const { data: { getPriceCurve } = {} } = useQuery(GET_PRICE_CURVE)
@@ -123,8 +123,8 @@ export default function Mainbar({
     {
       variables: {
         duration,
-        label: selectedDomain?.name
-      }
+        label: selectedDomain?.name,
+      },
     }
   )
 
@@ -157,18 +157,19 @@ export default function Mainbar({
   const refetchExpiryDate = async () => {
     const params = {
       ChainID: networkId,
-      Address: account
+      Address: account,
     }
     let result = await axios.post(
-      'https://backend.stg.space.id/listname',
+      `${process.env.REACT_APP_BACKEND_URL}/listname`,
       params
     )
-    const data = result?.data?.map(item => {
+    const data = result?.data?.map((item) => {
       const date = new Date(item?.expires)
       return {
-        expires_at: `${date.getFullYear()}.${date.getMonth() +
-          1}.${date.getDate()}`,
-        ...item
+        expires_at: `${date.getFullYear()}.${
+          date.getMonth() + 1
+        }.${date.getDate()}`,
+        ...item,
       }
     })
     return data
@@ -177,7 +178,9 @@ export default function Mainbar({
   const fetchExpiryDate = async () => {
     let data = await refetchExpiryDate()
     if (data.length > 0) {
-      const matchedData = data.filter(item => item.name === selectedDomain.name)
+      const matchedData = data.filter(
+        (item) => item.name === selectedDomain.name
+      )
       if (matchedData && matchedData.length > 0) {
         dispatch(setSelectedDomain(matchedData[0]))
       }
@@ -225,23 +228,23 @@ export default function Mainbar({
     }
   }, [sid, selectedDomain])
 
-  const transferAddress = values => {
+  const transferAddress = (values) => {
     setTransferShowModal(false)
     if (title === 'Registrant') {
       const variables = {
         address: values.address,
-        name: selectedDomain.name + '.bnb'
+        name: selectedDomain.name + '.bnb',
       }
       setMutationQuery(SET_REGISTRANT)
       mutation({
-        variables
+        variables,
       })
     } else {
       setMutationQuery(SET_RESOLVER)
 
       var variables = {
         address: values.address,
-        name: selectedDomain.name + '.bnb'
+        name: selectedDomain.name + '.bnb',
       }
       mutation({ variables })
     }
@@ -250,18 +253,18 @@ export default function Mainbar({
   const extendExpiryDate = () => {
     const variables = {
       duration,
-      label: selectedDomain.name
+      label: selectedDomain.name,
     }
     mutationReNew({ variables })
   }
 
-  const changeBNBAddress = param => {
+  const changeBNBAddress = (param) => {
     setShowAddressChangeModal(false)
     setTitle('BNBAddress')
     const variables = [{ ...updatedRecords, value: param.address, key: 'ETH' }]
     setParam(param.address)
     addMultiRecords({
-      variables: { name: selectedDomain.name + '.bnb', records: variables }
+      variables: { name: selectedDomain.name + '.bnb', records: variables },
     })
   }
 
@@ -320,7 +323,7 @@ export default function Mainbar({
           fetchAddress={fetchResolverAddress}
           txHash={txHash}
           address={resolverAddress}
-          showAddressChangeModalHandle={param => {
+          showAddressChangeModalHandle={(param) => {
             setUpdatedRecords(param)
             setShowAddressChangeModal(true)
           }}
@@ -341,7 +344,7 @@ export default function Mainbar({
         selectedDomain={selectedDomain}
         duration={duration}
         years={years}
-        setYears={years => {
+        setYears={(years) => {
           setYears(years)
         }}
         ethUsdPriceLoading={ethUsdPriceLoading}
