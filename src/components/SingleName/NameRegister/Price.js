@@ -25,7 +25,7 @@ const Price = ({
     ethPrice =
       isAuctionWinner && years === 1
         ? c.price
-        : (c.price / (1 - discount.percent / 100)).toFixed(3)
+        : (c.price / (100 - discount.percent / 100)).toFixed(3)
     if (underPremium) {
       withPremium =
         underPremium && ethUsdPremiumPrice
