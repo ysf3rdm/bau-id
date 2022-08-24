@@ -87,12 +87,7 @@ const resolvers = {
         )
         return sendHelper(tx)
       } catch (err) {
-        console.log(err)
-        if (
-          err.message.includes(
-            'MetaMask Tx Signature: User denied transaction signature.'
-          )
-        ) {
+        if (err.toString().includes('user rejected transaction')) {
           return { err }
         }
         return err
