@@ -69,9 +69,9 @@ export default function TopAddress({
       })
   }
   return (
-    <div className={cn('md:flex w-full space-x-7', className)}>
+    <div className={cn('md:flex w-full md:space-x-7', className)}>
       <div
-        className="relative bg-cover mr-7 w-[320px] h-[320px] drop-shadow-[0px_0px_55px_rgba(80,255,192,0.6)] rounded-[20px] flex-none"
+        className="relative bg-cover md:mr-7 w-[320px] h-[320px] drop-shadow-[0px_0px_55px_rgba(80,255,192,0.6)] rounded-[20px] flex-none"
         style={{
           backgroundImage: `url("https://meta.image.space.id/image/${
             process.env.REACT_APP_MODE === 'production' ? 'mainnet' : 'stg'
