@@ -125,12 +125,12 @@ function Search({
               className="absolute left-4 top-[14px]"
               data-testid={'home-search-button'}
             >
-              <SearchIcon className="text-[#1EEFA4]" />
+              <SearchIcon className="text-green-100" />
             </button>
             <div>
               <input
                 className={cn(
-                  'w-full bg-[#104151]/[0.25] py-[10px] pl-[40px] text-[#BDCED1] text-[16px] border border-[#1EEFA4] rounded-[18px] focus:bg-transparent text-[#30DB9E] active:bg-transparent focus:outline-none',
+                  'w-full bg-green-100/[0.25] py-[10px] pl-10 text-base border border-green-100 rounded-[18px] focus:bg-transparent text-green-100 active:bg-transparent focus:outline-none',
                   isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]'
                 )}
                 placeholder="Explore the space"
@@ -170,7 +170,7 @@ function Search({
             {isShowSearchBtn && (
               <button
                 type="submit"
-                className="text-darkButton w-[92px] bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px] absolute top-[8px] right-2"
+                className="text-darkButton w-[92px] bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px] absolute top-2 right-2"
               >
                 Search
               </button>
@@ -181,21 +181,20 @@ function Search({
       {showPopup && (
         <div
           className={cn(
-            'shadow-popup flex md:w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]',
+            'shadow-popup flex md:w-full bg-dark-300 px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]',
             suggestionClassName,
             isAbsolutePosition ? 'absolute top-[55px]' : 'relative mt-2'
           )}
         >
           <div className="flex items-center max-w-[calc(100%-170px)]">
             {result.Owner ? (
-              <FaceCryIcon className="text-[#30DB9E]" />
+              <FaceCryIcon className="text-green-200" />
             ) : (
-              <FaceHappyIcon className="text-[#30DB9E]" />
+              <FaceHappyIcon className="text-green-200" />
             )}
-
             <span
               className={cn(
-                'ml-2 text-[16px] font-semibold text-[#30DB9E] truncate'
+                'ml-2 text-[16px] font-semibold text-green-200 truncate'
               )}
             >
               {result.name}.bnb
@@ -204,8 +203,8 @@ function Search({
           <div className="flex items-center">
             <div
               className={cn(
-                'text-[14px]',
-                result.Owner ? 'text-[#ED7E17]' : 'text-[#2980E8]'
+                'text-sm font-semibold leading-[22px] font-urbanist',
+                result.Owner ? 'text-red-100' : 'text-blue-200'
               )}
             >
               {result.Owner ? 'Unavailable' : 'available'}
@@ -213,8 +212,8 @@ function Search({
             <div
               onClick={gotoDetailPage}
               className={cn(
-                'cursor-pointer w-[92px] justify-center flex items-center h-[28px] text-white text-center rounded-[8px] font-urbanist font-semibold ml-3',
-                result.Owner ? 'bg-[#ED7E17]' : 'bg-[#2980E8]'
+                'cursor-pointer w-[92px] justify-center flex items-center h-7 text-white text-center rounded-[8px] font-urbanist font-semibold ml-3',
+                result.Owner ? 'bg-red-100' : 'bg-blue-100'
               )}
             >
               {result.Owner ? <span>View</span> : <span>Register</span>}
