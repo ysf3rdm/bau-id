@@ -31,7 +31,7 @@ export const chainsInfo = [
   { chainId: 88, name: 'tomochain', isSupport: false },
   {
     chainId: 97,
-    name: 'BNBT',
+    name: 'BNB',
     chainName: 'BSC TESTNET',
     rpc: 'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd',
     isSupport: process.env.REACT_APP_MODE !== 'production',

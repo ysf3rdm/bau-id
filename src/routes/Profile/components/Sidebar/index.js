@@ -37,10 +37,9 @@ export default function Sidebar({ className, isReadOnly }) {
     )
     const data = result?.data?.map((item) => {
       const date = new Date(item?.expires)
+      console.log('date', date)
       return {
-        expires_at: `${date.getFullYear()}.${
-          date.getMonth() + 1
-        }.${date.getDate()}`,
+        expires_at: date,
         ...item,
       }
     })
