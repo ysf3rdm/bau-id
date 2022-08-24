@@ -170,7 +170,7 @@ export default function TopAddress({
                   {moment(selectedDomain?.expires_at).format('YYYY.MM.DD')}
                   <span className="mx-1">at</span>
                   {moment(selectedDomain?.expires_at).format('hh:mm')}
-                  <span className="ml-1">(UTC+8:00)</span>
+                  <span className="ml-1">(UTC)</span>
                 </p>
               </div>
             )}
