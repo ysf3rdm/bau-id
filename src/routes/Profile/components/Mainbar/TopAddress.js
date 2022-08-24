@@ -11,6 +11,8 @@ import CopyIcon from 'components/Icons/CopyIcon'
 import AnimationSpin from 'components/AnimationSpin'
 import PendingTx from 'components/PendingTx'
 
+import FailedImage from 'assets/images/image-failed.png'
+
 //Import GraphQL
 import { refetchTilUpdatedSingle } from 'utils/graphql'
 import { Tooltip } from '../../../../components/Tooltip/Tooltip'
@@ -35,7 +37,7 @@ export default function TopAddress({
   expDate,
 }) {
   const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
-  const [tokenId, setTokenId] = useState('')
+  const [imageURL, setImageURL] = useState('')
 
   async function copyTextToClipboard(text) {
     if ('clipboard' in navigator) {
@@ -50,9 +52,16 @@ export default function TopAddress({
       const domain = selectedDomain.name
       let label = keccak256(Buffer.from(domain)).toString('hex')
       let nftId = Web3.utils.toBN(label).toString()
-      setTokenId(nftId)
+      const url = `https://meta.image.space.id/image/${
+        process.env.REACT_APP_MODE === 'production' ? 'mainnet' : 'stg'
+      }/${nftId}.svg`
+      setImageURL(url)
     }
   }, [selectedDomain])
+
+  const nftErrorLoading = () => {
+    setImageURL(FailedImage)
+  }
 
   const handleCopyRegistrantAddress = (e) => {
     e.preventDefault()
@@ -70,14 +79,13 @@ export default function TopAddress({
   }
   return (
     <div className={cn('md:flex w-full md:space-x-7', className)}>
-      <div
-        className="relative bg-cover md:mr-7 w-[320px] h-[320px] drop-shadow-[0px_0px_55px_rgba(80,255,192,0.6)] rounded-[20px] flex-none"
-        style={{
-          backgroundImage: `url("https://meta.image.space.id/image/${
-            process.env.REACT_APP_MODE === 'production' ? 'mainnet' : 'stg'
-          }/${tokenId}.svg")`,
-        }}
-      />
+      <div className="relative bg-cover md:mr-7 w-[320px] h-[320px] drop-shadow-[0px_0px_55px_rgba(80,255,192,0.6)] flex-none">
+        <img
+          className="rounded-[20px]"
+          src={imageURL}
+          onError={nftErrorLoading}
+        />
+      </div>
       <div className="ml-0 pt-6 md:space-y-[120px] md:w-full">
         <div className="justify-between md:flex">
           <div>
