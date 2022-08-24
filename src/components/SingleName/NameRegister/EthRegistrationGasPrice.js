@@ -35,7 +35,7 @@ const EthRegistrationGasPrice = ({
         <div className="flex justify-between">
           <div className="font-semibold text-[14px]">Registration Fee</div>
           <div className="font-bold text-[16px]">
-            {registrationFee.toFixed(3)} BNBT
+            {registrationFee.toFixed(3)} BNB
           </div>
         </div>
 
@@ -50,7 +50,7 @@ const EthRegistrationGasPrice = ({
         <div className="flex justify-between mt-[14px]">
           <div className="font-semibold text-[14px]">Gas Fee (Estimated)</div>
           <div className="font-bold text-[16px]">
-            {registerGasFast.toFixed(3)} BNBT
+            {registerGasFast.toFixed(3)} BNB
           </div>
         </div>
       </div>

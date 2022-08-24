@@ -367,7 +367,7 @@ export default ({ children }) => {
                   {accounts && accounts[0] && !isReadOnly && (
                     <div className="flex items-center">
                       <div
-                        className="block md:hidden"
+                        className="block hidden"
                         onClick={() => setSearchOpen(!searchOpen)}
                       >
                         <SearchIcon className="text-[rgba(204,252,255,0.6)] cursor-pointer" />
@@ -450,7 +450,7 @@ export default ({ children }) => {
                     >
                       <div
                         onClick={moveToWishList}
-                        className="hidden md:flex font-semibold h-10 items-center justify-center cursor-pointer hover:bg-dark-200 hover:rounded-[12px]"
+                        className="flex font-semibold h-10 items-center justify-center cursor-pointer hover:bg-dark-200 hover:rounded-[12px]"
                       >
                         Wishlist
                       </div>
