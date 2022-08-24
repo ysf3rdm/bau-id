@@ -28,7 +28,7 @@ export async function setupWeb3({
   reloadOnAccountsChange = false,
   enforceReadOnly = false,
   enforceReload = false,
-  infura = false
+  infura = false,
 }) {
   if (enforceReload) {
     provider = null
@@ -67,7 +67,7 @@ export async function setupWeb3({
   if (window && window.parent && window.self && window.self !== window.parent) {
     try {
       const iframeProvider = new IFrameEthereumProvider({
-        targetOrigin: 'https://myethvault.com'
+        targetOrigin: 'https://myethvault.com',
       })
 
       await Promise.race([
@@ -75,7 +75,7 @@ export async function setupWeb3({
         // Race the enable with a promise that rejects after 1 second
         new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Timed out after 1 second')), 1000)
-        )
+        ),
       ])
 
       window.web3 = iframeProvider
@@ -90,7 +90,7 @@ export async function setupWeb3({
     signer = provider.getSigner()
     if (window.ethereum.on && reloadOnAccountsChange) {
       address = await signer.getAddress()
-      window.ethereum.on('accountsChanged', async function(accounts) {
+      window.ethereum.on('accountsChanged', async function (accounts) {
         address = await signer.getAddress()
         if (accounts[0] !== address) {
           window.location.reload()
@@ -160,7 +160,7 @@ export function getNetworkProviderUrl(id) {
     case '5':
       return `https://goerli.infura.io/v3/90f210707d3c450f847659dc9a3436ea`
     case '56':
-      return `https://bsc-dataseed.binance.org/`
+      return `https://bsc-dataseed.binance.org`
     case '97':
       return `https://apis-sj.ankr.com/bc19fe97c68d4a99a059465623e46b3e/bb63faaa8f178d26aac2969443ec7e73/binance/full/test`
     default:
@@ -246,13 +246,13 @@ export async function getBlock(number = 'latest') {
     const blockDetails = await provider.getBlock(number)
     return {
       number: blockDetails.number,
-      timestamp: blockDetails.timestamp
+      timestamp: blockDetails.timestamp,
     }
   } catch (e) {
     console.log('error getting block details', e)
     return {
       number: 0,
-      timestamp: 0
+      timestamp: 0,
     }
   }
 }

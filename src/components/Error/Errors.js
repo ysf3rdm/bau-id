@@ -1,11 +1,15 @@
 import React from 'react'
 import { Button } from 'react-daisyui'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router'
 
 export default function Error404() {
+  const backToHome = () => {
+    window.location.href = process.env.REACT_APP_BACK_TO_HOME
+  }
+
   return (
     <div className='min-h-[100vh] bg-[url("assets/images/home-bg.png")] flex items-center justify-center bg-no-repeat bg-cover'>
-      <div className="text-center space-y-12 relative">
+      <div className="relative space-y-12 text-center">
         <div className="text-[160px] font-bold left-[calc(50%-135px)] top-[80px] leading-[66px] absolute text-[rgba(204,252,255,0.2)]">
           404
         </div>
@@ -14,11 +18,12 @@ export default function Error404() {
           We can't find the page you're looking for...
         </p>
         <div>
-          <Link to="/">
-            <Button className="text-[#1EEFA4] border-[#1EEFA4] border rounded-full font-bold text-[24px] leading-[24px] py-3 px-8 font-cocoSharp bg-transparent hover:bg-transparent hover:border-[#1EEFA4]">
-              Back to Home
-            </Button>
-          </Link>
+          <Button
+            onClick={() => backToHome()}
+            className="text-[#1EEFA4] border-[#1EEFA4] border rounded-full font-bold text-[24px] leading-[24px] py-3 px-8 font-cocoSharp bg-transparent hover:bg-transparent hover:border-[#1EEFA4]"
+          >
+            Back to Home
+          </Button>
         </div>
       </div>
     </div>

@@ -62,7 +62,6 @@ const CTA = ({
 
   const [mutationRegister] = useMutation(REGISTER, {
     onCompleted: (data) => {
-      console.log(data)
       if (data?.register?.err) {
         setCustomStep('ERROR')
         errorRegistering()
@@ -75,7 +74,7 @@ const CTA = ({
   })
 
   const goBack = () => {
-    history.push('/')
+    window.location.href = process.env.REACT_APP_AUCTION_WISHLIST_URL
   }
 
   const startRegisterFuc = () => {
@@ -138,7 +137,7 @@ const CTA = ({
 
         <button
           onClick={goBack}
-          className="order-1 mt-4 md:mt-0 mx-auto border-[#30DB9E] border text-[#30DB9E] font-semibold px-[37px] py-[9px] rounded-[16px] flex items-center w-[160px] flex justify-center items-center"
+          className="order-1 mt-4 md:mt-0 mx-auto border-primary border text-primary font-semibold px-[37px] py-[9px] rounded-[16px] w-40 flex justify-center items-center"
         >
           Go Back
         </button>

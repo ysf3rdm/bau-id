@@ -21,6 +21,7 @@ import {
   DiscordIcon,
   RoundedIcon,
   HamburgerIcon,
+  WholeLogoIcon,
 } from 'components/Icons'
 import Modal from 'components/Modal/Modal'
 import { Search } from 'components/SearchName/SearchInHeader'
@@ -215,24 +216,30 @@ export default ({ children }) => {
         <Modal
           cannotCloseFromOutside={false}
           width="574px"
-          className="pt-6 pb-[36px] px-[24px]"
+          className="px-6 pt-6 pb-9"
           showingCrossIcon={true}
           closeModal={closeModal}
         >
           <div className="text-white">
-            <div className="text-[20px] md:text-[28px] font-cocoSharp text-center font-bold text-white">
+            <div className="text-[20px] md:text-[28px] font-cocoSharp text-center font-bold text-white leading-10">
               Unsupported Network
             </div>
             <div className="mt-4 font-semibold text-center text-white text-urbanist">
-              Please change your dapp browser to Binance Smart Chain Testnet to
-              continue.
+              Please change your dapp browser to Binance Smart Chain{' '}
+              {process.env.REACT_APP_MODE === 'production' ? null : (
+                <span>Testnet</span>
+              )}
+              {'  '}to continue.
             </div>
             <div className="justify-center hidden md:flex">
               <Button
                 onClick={() => changeToBSCChain()}
                 className="leading-[26px] text-dark-common border-none mt-9 bg-primary rounded-full text-[18px] font-urbanist py-2 px-9 font-semibold normal-case"
               >
-                Switch to BSC Testnet
+                Switch to BSC{' '}
+                {process.env.REACT_APP_MODE === 'production' ? null : (
+                  <span className="ml-1">Testnet</span>
+                )}
               </Button>
             </div>
           </div>
@@ -250,23 +257,24 @@ export default ({ children }) => {
             : 'h-[80px]'
         )}
       >
-        <div className="flex py-[20px] px-7 md:px-[48px] justify-between items-center">
+        <div className="flex py-[20px] px-7 md:px-12 justify-between items-center">
           {/* Only showing for the desktop device */}
           <a
             href="/"
-            className="hidden lg:flex text-[#1EEFA4] items-center cursor-pointer"
+            className="items-center hidden w-56 h-10 text-green-100 cursor-pointer lg:flex"
           >
-            <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+            {/* <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
             <div className="hidden lg:block font-semibold text-[18px] ml-[31px]">
               <img src={LogoText} />
-            </div>
+            </div> */}
+            <WholeLogoIcon />
           </a>
 
           <div className="items-center hidden md:flex lg:hidden">
             <div onClick={showDrawer}>
-              <HamburgerIcon className="text-[#1EEFA4] mr-5" />
+              <HamburgerIcon className="mr-5 text-green-100" />
             </div>
-            <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+            <SmallLogoIcon size={40} className="text-green-100" />
           </div>
 
           {/* Only show for the mobile device */}
@@ -276,17 +284,17 @@ export default ({ children }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div onClick={menuOpen}>
-                    <HamburgerIcon className="text-[#1EEFA4] mr-5" />
+                    <HamburgerIcon className="mr-5 text-green-100" />
                   </div>
                   <a href="/">
                     <div className="flex items-center">
-                      <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+                      <SmallLogoIcon size={40} className="text-green-100" />
                     </div>
                   </a>
                 </div>
                 <div className="">
                   <button
-                    className="flex items-center bg-[#1EEFA4] text-[#134757] text-[20px] px-5 py-2 text-[20px] rounded-[16px] font-semibold"
+                    className="flex items-center bg-green-100 text-dark-100 text-xl px-5 py-2 rounded-[16px] font-semibold"
                     onClick={connectProvider}
                   >
                     Connect{' '}
@@ -302,11 +310,11 @@ export default ({ children }) => {
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center">
                   <div onClick={menuOpen} className="mr-5">
-                    <HamburgerIcon className="text-[#1EEFA4] font-semibold" />
+                    <HamburgerIcon className="font-semibold text-green-100" />
                   </div>
                   <a href="/">
                     <div className="flex items-center">
-                      <SmallLogoIcon size={40} className="text-[#1EEFA4]" />
+                      <SmallLogoIcon size={40} className="text-green-100" />
                     </div>
                   </a>
                 </div>
@@ -314,7 +322,7 @@ export default ({ children }) => {
                   {isReadOnly && (
                     <div className="">
                       <button
-                        className="flex items-center bg-[#1EEFA4] text-[#134757] text-[20px] px-5 py-2 text-[20px] rounded-[16px] font-semibold"
+                        className="flex items-center bg-green-100 text-dark-100  text-xl px-5 py-2 rounded-[16px] font-semibold"
                         onClick={connectProvider}
                       >
                         Connect{' '}
@@ -419,7 +427,7 @@ export default ({ children }) => {
                             )}
                           />
                         ) : (
-                          <div className="w-[64px] h-[64px]">
+                          <div className="w-8 h-8">
                             <img
                               className="rounded-full"
                               src={DefaultAvatar}
@@ -442,18 +450,18 @@ export default ({ children }) => {
                     >
                       <div
                         onClick={moveToWishList}
-                        className="hidden md:flex font-semibold h-[40px] items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
+                        className="hidden md:flex font-semibold h-10 items-center justify-center cursor-pointer hover:bg-dark-200 hover:rounded-[12px]"
                       >
                         Wishlist
                       </div>
                       <div
-                        className="hidden md:flex font-semibold h-[40px] items-center justify-center cursor-pointer hover:bg-[#1C585A] hover:rounded-[12px]"
+                        className="hidden md:flex font-semibold h-10 items-center justify-center cursor-pointer hover:bg-dark-200 hover:rounded-[12px]"
                         onClick={moveToProfile}
                       >
                         Manage Account
                       </div>
                       <div
-                        className="h-[40px] flex items-center justify-center cursor-pointer bg-[rgba(67,140,136,0.25)] rounded-[12px] md:bg-transparent hover:bg-[#1C585A] hover:rounded-[12px]"
+                        className="h-10 flex items-center justify-center cursor-pointer bg-[rgba(67,140,136,0.25)] rounded-[12px] md:bg-transparent hover:bg-dark-200 hover:rounded-[12px]"
                         onClick={disconnectProvider}
                       >
                         Disconnect
@@ -505,16 +513,18 @@ export default ({ children }) => {
       </div>
 
       {/* Footer component in the home page */}
-      <div className="h-[44px] flex py-[20px]  md:px-[64px] xl:px-[48px] justify-center md:justify-between absolute left-0 bottom-0 items-center w-full bg-[#071A2F]">
+      <div className="h-11 flex py-5 md:px-8 xl:px-12 justify-center md:justify-between absolute left-0 bottom-0 items-center w-full bg-[#071A2F]">
         <a className="hidden md:block" href="https://space.id">
-          <div className="text-[#1EEFA4] text-[16px]">About SPACE ID</div>
+          <p className="text-base font-semibold leading-7 text-center text-green-100 font-urbanist">
+            About SPACE ID
+          </p>
         </a>
         <div className="flex items-center">
           <a target="_blank" href="https://twitter.com/SpaceIDProtocol">
-            <TwitterIcon className="mr-2 text-[#30DB9E]" />
+            <TwitterIcon className="mr-2 text-green-100" />
           </a>
           <a target="_blank" href="https://discord.com/invite/2qrrf79K2A">
-            <DiscordIcon className="mr-2 text-[#30DB9E]" />
+            <DiscordIcon className="mr-2 text-green-100" />
           </a>
           <a target="_blank" href="https://medium.com/@SpaceID">
             <RoundedIcon />

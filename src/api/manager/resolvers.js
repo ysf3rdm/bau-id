@@ -174,9 +174,7 @@ async function getRegistrarEntry(name) {
     if (nameArray.length > 3 || nameArray[1] !== 'bnb') {
       return {}
     }
-
     const entry = await registrar.getEntry(nameArray[0])
-
     const {
       registrant,
       deedOwner,

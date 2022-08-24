@@ -19,7 +19,7 @@ const resolvers = {
         const result = await registrar.getEthPrice()
         return result
       } catch (err) {
-        console.error(err)
+        console.error('hey error from ethPrice', err)
       }
     },
     async getRentPrice(_, { label, duration }) {
@@ -87,12 +87,7 @@ const resolvers = {
         )
         return sendHelper(tx)
       } catch (err) {
-        console.log(err)
-        if (
-          err.message.includes(
-            'MetaMask Tx Signature: User denied transaction signature.'
-          )
-        ) {
+        if (err.toString().includes('user rejected transaction')) {
           return { err }
         }
         return err

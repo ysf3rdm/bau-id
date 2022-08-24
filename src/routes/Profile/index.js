@@ -25,6 +25,7 @@ import { setSelectedDomain } from 'app/slices/domainSlice'
 
 //Import Assets
 import LogoText from '../../assets/images/space-logo-text.png'
+import { isEmptyAddress } from '../../utils/records'
 
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
@@ -58,8 +59,7 @@ export default function Profile() {
   const { displayName, isReadOnly, isSafeApp, network } = data
 
   useEffect(() => {
-    const tAccountConnected =
-      account !== '0x0000000000000000000000000000000000000000'
+    const tAccountConnected = !isEmptyAddress(account)
     setIsAccountConnected(tAccountConnected)
     if (tAccountConnected) {
       sidSetup()
@@ -70,13 +70,12 @@ export default function Profile() {
     try {
       const networkId = await getNetworkId()
       setNetworkId(networkId)
-      const infura =
-        'https://bsc-testnet.nodereal.io/v1/c9bc598b84b14e62b11c0a1b74b37cbd'
+      const infura = process.env.REACT_APP_INFURA_URL
       const provider = new ethers.providers.JsonRpcProvider(infura)
       const tSid = new SID({ provider, sidAddress: getSidAddress(networkId) })
       setSid(tSid)
     } catch (error) {
-      console.log('error', error)
+      console.log('tSid-error', error)
     }
   }
 
@@ -135,7 +134,7 @@ export default function Profile() {
           <div>
             <div className="border-t border-[rgba(204,252,255,0.2)]">
               <DomainList
-                className="mt-4 h-full flex flex-col"
+                className="flex flex-col h-full mt-4"
                 domainsList={domains}
                 clickHandle={selectDomain}
                 selectedDomain={selectedDomain}

@@ -76,7 +76,6 @@ export default class Registrar {
       legacyAuctionRegistrarAddress,
       provider,
     })
-
     const permanentRegistrar = getPermanentRegistrarContract({
       address: ethAddress,
       provider,
@@ -246,7 +245,6 @@ export default class Registrar {
         }
       }
     }
-
     return {
       ...legacyEntry,
       ...ret,
@@ -325,6 +323,7 @@ export default class Registrar {
 
   async getEthPrice() {
     const contractAddress = await this.getAddress('bnb-usd.data.bnb') // get price oracle addr
+    console.log('contractAddress', contractAddress)
     const oracle = await this.getOracle(contractAddress)
     return (await oracle.latestAnswer()).toNumber() / 100000000
   }
@@ -407,7 +406,7 @@ export default class Registrar {
     const signer = await getSigner()
     const permanentRegistrarController =
       permanentRegistrarControllerWithoutSigner.connect(signer)
-    const account = await getAccount()
+    const account = (await getAccount()).toLowerCase()
     const price = await this.getRentPrice(label, duration)
     const priceWithBuffer = getBufferedPrice(price)
     const resolverAddr = await this.getAddress('resolver.bnb')
