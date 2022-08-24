@@ -225,8 +225,11 @@ export default ({ children }) => {
               Unsupported Network
             </div>
             <div className="mt-4 font-semibold text-center text-white text-urbanist">
-              Please change your dapp browser to Binance Smart Chain Testnet to
-              continue.
+              Please change your dapp browser to Binance Smart Chain{' '}
+              {process.env.REACT_APP_MODE === 'production' ? null : (
+                <span>Testnet</span>
+              )}
+              {'  '}to continue.
             </div>
             <div className="justify-center hidden md:flex">
               <Button
@@ -235,7 +238,7 @@ export default ({ children }) => {
               >
                 Switch to BSC{' '}
                 {process.env.REACT_APP_MODE === 'production' ? null : (
-                  <span>Testnet</span>
+                  <span className="ml-1">Testnet</span>
                 )}
               </Button>
             </div>
