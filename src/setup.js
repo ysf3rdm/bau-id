@@ -32,14 +32,7 @@ export const setSubDomainFavourites = () => {
 }
 
 export const isSupportedNetwork = (networkId) => {
-  switch (networkId) {
-    case 56:
-      return true
-    case 97:
-      return true
-    default:
-      return false
-  }
+  return networkId.toString() === process.env.REACT_APP_NETWORK_CHAIN_ID
 }
 
 export const getProvider = async (reconnect) => {

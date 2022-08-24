@@ -216,7 +216,7 @@ export default ({ children }) => {
         <Modal
           cannotCloseFromOutside={false}
           width="574px"
-          className="pt-6 pb-[36px] px-[24px]"
+          className="px-6 pt-6 pb-9"
           showingCrossIcon={true}
           closeModal={closeModal}
         >
@@ -233,7 +233,10 @@ export default ({ children }) => {
                 onClick={() => changeToBSCChain()}
                 className="leading-[26px] text-dark-common border-none mt-9 bg-primary rounded-full text-[18px] font-urbanist py-2 px-9 font-semibold normal-case"
               >
-                Switch to BSC Testnet
+                Switch to BSC{' '}
+                {process.env.REACT_APP_MODE === 'production' ? null : (
+                  <span>Testnet</span>
+                )}
               </Button>
             </div>
           </div>
