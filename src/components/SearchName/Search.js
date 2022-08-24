@@ -38,10 +38,7 @@ function Search({
     setShowPopup(false)
     if (result.Owner) {
       const date = new Date(result?.Expires)
-      const expires_at = `${date.getFullYear()}.${
-        date.getMonth() + 1
-      }.${date.getDate()}`
-      dispatch(setSelectedDomain({ ...result, expires_at }))
+      dispatch(setSelectedDomain({ ...result, expires_at: date }))
       history.push(`/profile`)
     } else {
       history.push(`/name/${result.name}.bnb/register`)
