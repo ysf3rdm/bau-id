@@ -23,7 +23,7 @@ jobs:
         uses: reggionick/s3-deploy@v3
         with:
           folder: 'dist'
-          bucket: 'pre-prd-space-id'
+          bucket: 'alpha-app-space-id'
           bucket-region: 'us-west-2'
           dist-id: 'E3SU0ENOLNWBR6'
           invalidation: /app/
