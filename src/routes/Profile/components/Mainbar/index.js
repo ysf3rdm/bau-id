@@ -166,7 +166,7 @@ export default function Mainbar({
     const data = result?.data?.map((item) => {
       const date = new Date(item?.expires)
       return {
-        expires_at: date,
+        expires_at: date.toISOString(),
         ...item,
       }
     })
@@ -195,9 +195,13 @@ export default function Mainbar({
   }, [isReadOnly])
 
   const refetchRegistrantAddress = async () => {
-    const registrar = getRegistrar()
-    const entry = await registrar.getEntry(selectedDomain.name)
-    return entry.registrant
+    try {
+      const registrar = getRegistrar()
+      const entry = await registrar.getEntry(selectedDomain.name)
+      return entry.registrant
+    } catch (err) {
+      console.log('debug: error: refetchRegistrantAddress', err)
+    }
   }
 
   const refetchResolverAddress = async () => {

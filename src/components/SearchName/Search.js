@@ -49,7 +49,7 @@ function Search({
     if (searchingDomainName) {
       dispatch(setSearchDomainName(''))
       const params = {
-        ChainID: 97,
+        ChainID: parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID),
         name: searchingDomainName,
       }
 
@@ -93,7 +93,7 @@ function Search({
         }}
         onSubmit={(values, { setSubmitting }) => {
           const params = {
-            ChainID: 97,
+            ChainID: parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID),
             name: values.searchKey,
           }
           axios
@@ -128,7 +128,7 @@ function Search({
             <div>
               <input
                 className={cn(
-                  'w-full bg-green-100/[0.25] py-[10px] pl-10 text-base border border-green-100 rounded-[18px] focus:bg-transparent text-green-100 active:bg-transparent focus:outline-none',
+                  'w-full bg-transparent py-[10px] pl-10 text-base border border-green-100 rounded-[18px] focus:bg-transparent text-green-100 active:bg-transparent focus:outline-none',
                   isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]'
                 )}
                 placeholder="Explore the space"
