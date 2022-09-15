@@ -4,8 +4,6 @@ import axios from 'axios'
 import { Formik } from 'formik'
 import { withRouter } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { useLazyQuery, useQuery } from '@apollo/client'
-import { ethers } from '@siddomains/ui'
 import { toArray } from 'lodash'
 import ClickAwayListener from 'react-click-away-listener'
 import { useAccount } from 'components/QueryAccount'
@@ -13,9 +11,9 @@ import SearchIcon from 'components/Icons/SearchIcon'
 import FaceCryIcon from 'components/Icons/FaceCryIcon'
 import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
 import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
-import { GET_HUNGER_PHASE_INFO, GET_IS_CLAIMABLE } from 'graphql/queries'
 import '../../api/subDomainRegistrar'
 import { validateDomain, validateName } from '../../utils/utils'
+import { useGetStagingQuota, useStagingInfo } from '../../hooks/stagingHooks'
 
 function Search({
   history,
@@ -32,40 +30,10 @@ function Search({
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
   const [active, setActive] = useState(false)
-  const [isInHungerPhase, setIsInHungerPhase] = useState(false)
-  // const account = useAccount()
+  const account = useAccount()
   const dispatch = useDispatch()
-
-  // const [getIsClaimable, { data: isClaimable }] = useLazyQuery(
-  //   GET_IS_CLAIMABLE,
-  //   {
-  //     variables: { address: account },
-  //     fetchPolicy: 'no-cache',
-  //   }
-  // )
-
-  // const { data: hungerPhaseInfo } = useQuery(GET_HUNGER_PHASE_INFO)
-
-  // useEffect(() => {
-  //   if (hungerPhaseInfo?.getHungerPhaseInfo) {
-  //     const startTime = new Date(
-  //       hungerPhaseInfo.getHungerPhaseInfo.startTime * 1000
-  //     )
-  //     const endTime = new Date(
-  //       hungerPhaseInfo.getHungerPhaseInfo.endTime * 1000
-  //     )
-  //     const timeNow = new Date().getTime()
-  //     const dailyQuota = ethers.BigNumber.from(
-  //       hungerPhaseInfo.getHungerPhaseInfo.dailyQuota
-  //     )
-  //     const dailyUsed = ethers.BigNumber.from(
-  //       hungerPhaseInfo.getHungerPhaseInfo.dailyUsed
-  //     )
-  //     if (timeNow > startTime && timeNow < endTime && dailyUsed < dailyQuota) {
-  //       setIsInHungerPhase(true)
-  //     }
-  //   }
-  // }, [hungerPhaseInfo])
+  const { fetchStagingQuota } = useGetStagingQuota(account)
+  const { disableRegister } = useStagingInfo()
 
   const gotoDetailPage = () => {
     setShowPopup(false)
@@ -136,7 +104,7 @@ function Search({
         }}
         onSubmit={(values, { setSubmitting }) => {
           setActive(true)
-          // getIsClaimable()
+          fetchStagingQuota()
           const params = {
             ChainID: parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID),
             name: values.searchKey,
@@ -178,7 +146,7 @@ function Search({
             <div>
               <input
                 className={cn(
-                  'w-full bg-[#104151]/[0.25] py-[10px] pl-[40px] text-[16px] border rounded-[18px] focus:bg-transparent text-green-100 active:bg-transparent focus:outline-none',
+                  'w-full bg-[#104151]/[0.25] py-[10px] pl-[40px] text-base border rounded-[18px] focus:bg-transparent text-green-100 active:bg-transparent focus:outline-none',
                   isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]',
                   active ? 'border-green-100' : 'border-[rgba(204,252,255,0.6)]'
                 )}
@@ -199,9 +167,9 @@ function Search({
               values.searchKey.length > 0 && (
                 <div
                   className={cn(
-                    'text-[#ED7E17] text-[14px] md:text-[16px] font-semibold mt-2 md:mt-1 ml-3',
+                    'text-red-100 text-[14px] md:text-base font-semibold mt-2 md:mt-1 ml-3',
                     errorsStyling
-                      ? 'absolute shadow-popup flex w-[calc(100%-12px)] bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]'
+                      ? 'absolute shadow-popup flex w-[calc(100%-12px)] bg-dark-300 px-3 py-3 rounded-xl backdrop-blur-[5px] justify-between z-auto z-[1]'
                       : ''
                   )}
                 >
@@ -210,10 +178,10 @@ function Search({
               )}
             <div
               className={cn(
-                'font-urbanist font-semibold text-[16px] absolute top-[10px] transition-all',
+                'font-urbanist font-semibold text-base absolute top-[10px] transition-all',
                 active
                   ? 'right-[110px] text-green-100'
-                  : 'right-[20px] text-[rgba(204,252,255,0.6)]'
+                  : 'right-5 text-[rgba(204,252,255,0.6)]'
               )}
             >
               .bnb
@@ -233,21 +201,21 @@ function Search({
         <ClickAwayListener onClickAway={() => setShowPopup(false)}>
           <div
             className={cn(
-              'shadow-popup flex md:w-full bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]',
+              'shadow-popup flex md:w-full bg-dark-300 px-3 py-3 rounded-xl backdrop-blur-[5px] justify-between z-auto z-[1]',
               suggestionClassName,
               isAbsolutePosition ? 'absolute top-[55px]' : 'relative mt-2'
             )}
           >
             <div className="flex items-center max-w-[calc(100%-170px)]">
               {result.Owner ? (
-                <FaceCryIcon className="text-[#30DB9E]" />
+                <FaceCryIcon className="text-green-200" />
               ) : (
-                <FaceHappyIcon className="text-[#30DB9E]" />
+                <FaceHappyIcon className="text-green-200" />
               )}
 
               <span
                 className={cn(
-                  'ml-2 text-[16px] font-semibold text-[#30DB9E] truncate'
+                  'ml-2 text-base font-semibold text-green-200 truncate'
                 )}
               >
                 {result.name}.bnb
@@ -256,27 +224,22 @@ function Search({
             <div className="flex items-center">
               <div
                 className={cn(
-                  'text-[14px]',
-                  result.Owner ? 'text-[#ED7E17]' : 'text-[#2980E8]'
+                  'text-sm',
+                  result.Owner ? 'text-red-100' : 'text-blue-100'
                 )}
               >
                 {result.Owner ? 'Unavailable' : 'available'}
               </div>
               <button
-                disabled={
-                  !result.Owner &&
-                  // (!isInHungerPhase || !isClaimable?.getIsClaimable)
-                  !isInHungerPhase
-                }
+                disabled={!result.Owner && disableRegister}
                 onClick={gotoDetailPage}
                 className={cn(
-                  'cursor-pointer w-[92px] justify-center flex items-center h-[28px] text-white text-center rounded-[8px] font-urbanist font-semibold ml-3',
+                  'cursor-pointer w-[92px] justify-center flex items-center h-[28px] text-white text-center rounded-lg font-urbanist font-semibold ml-3',
                   result.Owner
                     ? 'bg-[#ED7E17]'
-                    : // : isInHungerPhase && isClaimable?.getIsClaimable
-                    isInHungerPhase
-                    ? 'bg-[#2980E8]'
-                    : 'bg-gray-800 text-white cursor-not-allowed'
+                    : disableRegister
+                    ? 'bg-gray-800 text-white cursor-not-allowed'
+                    : 'bg-[#2980E8]'
                 )}
               >
                 {result.Owner ? <span>View</span> : <span>Register</span>}

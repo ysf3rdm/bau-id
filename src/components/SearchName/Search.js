@@ -5,22 +5,15 @@ import axios from 'axios'
 import { Formik } from 'formik'
 import { withRouter } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { useQuery } from '@apollo/client'
 import ClickAwayListener from 'react-click-away-listener'
 import { useAccount } from 'components/QueryAccount'
 import SearchIcon from 'components/Icons/SearchIcon'
 import FaceCryIcon from 'components/Icons/FaceCryIcon'
 import FaceHappyIcon from 'components/Icons/FaceHappyIcon'
 import { setSearchDomainName, setSelectedDomain } from 'app/slices/domainSlice'
-
+import { useGetStagingQuota, useStagingInfo } from 'hooks/stagingHooks'
 import '../../api/subDomainRegistrar'
-import {
-  parseSearchTerm,
-  validateName,
-  validateDomain,
-} from '../../utils/utils'
-import { GET_HUNGER_PHASE_INFO, GET_IS_CLAIMABLE } from '../../graphql/queries'
-import { ethers } from '@siddomains/ui'
+import { validateName, validateDomain } from '../../utils/utils'
 
 function Search({
   history,
@@ -35,37 +28,10 @@ function Search({
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [result, setResult] = useState(null)
-  const [isInHungerPhase, setIsInHungerPhase] = useState(false)
-  // const account = useAccount()
+  const account = useAccount()
   const dispatch = useDispatch()
-
-  // const { error: claimError, data: isClaimable } = useQuery(GET_IS_CLAIMABLE, {
-  //   variables: { address: account },
-  //   fetchPolicy: 'no-cache',
-  // })
-
-  // const { data: hungerPhaseInfo } = useQuery(GET_HUNGER_PHASE_INFO)
-
-  // useEffect(() => {
-  //   if (hungerPhaseInfo?.getHungerPhaseInfo) {
-  //     const startTime = new Date(
-  //       hungerPhaseInfo.getHungerPhaseInfo.startTime * 1000
-  //     )
-  //     const endTime = new Date(
-  //       hungerPhaseInfo.getHungerPhaseInfo.endTime * 1000
-  //     )
-  //     const timeNow = new Date().getTime()
-  //     const dailyQuota = ethers.BigNumber.from(
-  //       hungerPhaseInfo.getHungerPhaseInfo.dailyQuota
-  //     )
-  //     const dailyUsed = ethers.BigNumber.from(
-  //       hungerPhaseInfo.getHungerPhaseInfo.dailyUsed
-  //     )
-  //     if (timeNow > startTime && timeNow < endTime && dailyUsed < dailyQuota) {
-  //       setIsInHungerPhase(true)
-  //     }
-  //   }
-  // }, [hungerPhaseInfo])
+  const { fetchStagingQuota } = useGetStagingQuota(account)
+  const { disableRegister } = useStagingInfo()
 
   const gotoDetailPage = () => {
     setShowPopup(false)
@@ -85,7 +51,6 @@ function Search({
         ChainID: parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID),
         name: searchingDomainName,
       }
-
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/nameof`, {
           ...params,
@@ -111,8 +76,7 @@ function Search({
               searchTerm = values.searchKey
             }
             const parsed = await validateName(searchTerm)
-            const filterParsed = parsed.replace('.eth', '')
-            values.searchKey = filterParsed
+            values.searchKey = parsed.replace('.eth', '')
 
             if (toArray(values.searchKey).length < 3) {
               errors.searchKey = 'Name length must be at least 3 characters'
@@ -125,6 +89,7 @@ function Search({
           return errors
         }}
         onSubmit={(values, { setSubmitting }) => {
+          fetchStagingQuota()
           const params = {
             ChainID: parseInt(process.env.REACT_APP_NETWORK_CHAIN_ID),
             name: values.searchKey,
@@ -181,9 +146,9 @@ function Search({
               values.searchKey.length > 0 && (
                 <div
                   className={cn(
-                    'text-[#ED7E17] text-[14px] md:text-[16px] font-semibold mt-2 md:mt-1 ml-3',
+                    'text-red-100 text-sm md:text-base font-semibold mt-2 md:mt-1 ml-3',
                     errorsStyling
-                      ? 'absolute shadow-popup flex w-[calc(100%-12px)] bg-[#205561] px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]'
+                      ? 'absolute shadow-popup flex w-[calc(100%-12px)] bg-dark-300 px-3 py-3 rounded-xl backdrop-blur-[5px] justify-between z-auto z-[1]'
                       : ''
                   )}
                 >
@@ -192,8 +157,8 @@ function Search({
               )}
             <div
               className={cn(
-                'text-primary font-urbanist font-semibold text-[16px] absolute top-[10px]',
-                isShowSearchBtn ? 'right-[110px]' : 'right-[20px]'
+                'text-primary font-urbanist font-semibold text-base absolute top-[10px]',
+                isShowSearchBtn ? 'right-[110px]' : 'right-5'
               )}
             >
               .bnb
@@ -213,7 +178,7 @@ function Search({
         <ClickAwayListener onClickAway={() => setShowPopup(false)}>
           <div
             className={cn(
-              'shadow-popup flex md:w-full bg-dark-300 px-3 py-3 rounded-[12px] backdrop-blur-[5px] justify-between z-auto z-[1]',
+              'shadow-popup flex md:w-full bg-dark-300 px-3 py-3 rounded-xl backdrop-blur-[5px] justify-between z-auto z-[1]',
               suggestionClassName,
               isAbsolutePosition ? 'absolute top-[55px]' : 'relative mt-2'
             )}
@@ -226,7 +191,7 @@ function Search({
               )}
               <span
                 className={cn(
-                  'ml-2 text-[16px] font-semibold text-green-200 truncate'
+                  'ml-2 text-base font-semibold text-green-200 truncate'
                 )}
               >
                 {result.name}.bnb
@@ -242,20 +207,15 @@ function Search({
                 {result.Owner ? 'Unavailable' : 'available'}
               </div>
               <button
-                disabled={
-                  !result.Owner &&
-                  // (!isInHungerPhase || !isClaimable?.getIsClaimable)
-                  !isInHungerPhase
-                }
+                disabled={!result.Owner && disableRegister}
                 onClick={gotoDetailPage}
                 className={cn(
-                  'cursor-pointer w-[92px] justify-center flex items-center h-7 text-white text-center rounded-[8px] font-urbanist font-semibold ml-3',
+                  'cursor-pointer w-[92px] justify-center flex items-center h-7 text-white text-center rounded-lg font-urbanist font-semibold ml-3',
                   result.Owner
                     ? 'bg-red-100'
-                    : // : isInHungerPhase && isClaimable?.getIsClaimable
-                    isInHungerPhase
-                    ? 'bg-blue-100'
-                    : 'bg-gray-800 text-white cursor-not-allowed'
+                    : disableRegister
+                    ? 'bg-gray-800 text-white cursor-not-allowed'
+                    : 'bg-blue-100'
                 )}
               >
                 {result.Owner ? <span>View</span> : <span>Register</span>}
