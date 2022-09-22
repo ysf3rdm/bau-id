@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useQuery, gql } from '@apollo/client'
-import { useTranslation } from 'react-i18next'
 import { getNetworkId } from 'ui'
 import { useSelector, useDispatch } from 'react-redux'
 import cn from 'classnames'
@@ -25,6 +24,7 @@ import {
   WholeLogoIcon,
 } from 'components/Icons'
 import Modal from 'components/Modal/Modal'
+import WalletModal from 'components/Modal/WalletModal'
 import { Search } from 'components/SearchName/SearchInHeader'
 import ProfileCard from 'routes/Profile/components/Sidebar/ProfileCard'
 
@@ -34,7 +34,11 @@ import { setAllDomains, setSelectedDomain } from 'app/slices/domainSlice'
 
 // Import redux assets
 import { getAccounts, getHomeData } from 'app/slices/accountSlice'
-import { toggleDrawer, toggleNetworkError } from 'app/slices/uiSlice'
+import {
+  toggleDrawer,
+  toggleNetworkError,
+  setShowWalletModal,
+} from 'app/slices/uiSlice'
 import { globalErrorReactive } from 'apollo/reactiveVars'
 
 // Import assets
@@ -43,12 +47,11 @@ import DefaultAvatar from 'assets/images/default-avatar.png'
 import { chainsInfo } from 'utils/constants'
 
 // Import custom functions
-import { connectProvider, disconnectProvider } from 'utils/providerUtils'
+import { disconnectProvider } from 'utils/providerUtils'
 import { EMPTY_ADDRESS } from 'utils/records'
 import { GET_ERRORS } from 'graphql/queries'
 
 //Import Assets
-import LogoText from '../../assets/images/space-logo-text.png'
 import SearchIcon from '../Icons/SearchIcon'
 
 // Import custom hooks
@@ -72,7 +75,6 @@ export const GET_ACCOUNT = gql`
 `
 
 export default ({ children }) => {
-  const { t } = useTranslation()
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -80,7 +82,7 @@ export default ({ children }) => {
   const [searchOpen, setSearchOpen] = useState(false)
   const [avatarPopup, setAvatarPopup] = useState(false)
   const [networkId, setNetworkID] = useState('')
-
+  const showWalletModal = useSelector((state) => state.ui.showWalletModal)
   const domains = useSelector((state) => state.domain.domains)
   const selectedDomain = useSelector((state) => state.domain.selectedDomain)
   useReactiveVarListeners()
@@ -240,6 +242,10 @@ export default ({ children }) => {
     dispatch(toggleNetworkError(false))
   }
 
+  const handleConnect = () => {
+    dispatch(setShowWalletModal(true))
+  }
+
   return (
     <section className="bg-[url('assets/images/home-bg.png')] bg-cover relative min-h-[100vh] flex items-center justify-center">
       {globalError.network && (
@@ -274,6 +280,9 @@ export default ({ children }) => {
             </div>
           </div>
         </Modal>
+      )}
+      {showWalletModal && (
+        <WalletModal closeModal={() => dispatch(setShowWalletModal(false))} />
       )}
 
       {/* Header component for mobile and desktop device */}
@@ -327,7 +336,7 @@ export default ({ children }) => {
                     <button
                       disabled={loadingWallet}
                       className="flex items-center px-5 py-2 text-xl font-semibold bg-green-100 text-dark-100 rounded-2xl"
-                      onClick={connectProvider}
+                      onClick={handleConnect}
                     >
                       Connect{' '}
                       {loadingWallet && (
@@ -357,7 +366,7 @@ export default ({ children }) => {
                       <button
                         disabled={loadingWallet}
                         className="flex items-center px-5 py-2 text-xl font-semibold bg-green-100 text-dark-100 rounded-2xl"
-                        onClick={connectProvider}
+                        onClick={handleConnect}
                       >
                         Connect{' '}
                         {loadingWallet && (
@@ -389,7 +398,7 @@ export default ({ children }) => {
                 {isReadOnly && (
                   <div className="hidden md:block">
                     <NoAccountsDefault
-                      onClick={connectProvider}
+                      onClick={handleConnect}
                       loadingWallet={loadingWallet}
                       buttonText={isReadOnly ? 'Connect' : network}
                       isReadOnly={isReadOnly}
