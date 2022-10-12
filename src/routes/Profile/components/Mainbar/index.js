@@ -23,7 +23,13 @@ import {
   RENEW,
   ADD_MULTI_RECORDS,
 } from 'graphql/mutations'
-import { GET_ETH_PRICE, GET_RENT_PRICE, GET_PRICE_CURVE } from 'graphql/queries'
+import {
+  GET_ETH_PRICE,
+  GET_RENT_PRICE,
+  GET_PRICE_CURVE,
+  GET_RENT_PRICE_WITH_POINT,
+  QUERY_POINT_BALANCE,
+} from 'graphql/queries'
 
 //Import custom hooks
 import { useEditable } from 'components/hooks'
@@ -124,9 +130,22 @@ export default function Mainbar({
         duration,
         label: selectedDomain?.name,
       },
+      fetchPolicy: 'no-cache',
     }
   )
-
+  // rent price with point
+  const {
+    data: { getRentPriceWithPoint } = {},
+    loading: rentPriceWithPointLoading,
+    refetch: refetchRentPriceWithPoint,
+  } = useQuery(GET_RENT_PRICE_WITH_POINT, {
+    variables: {
+      duration,
+      label: selectedDomain?.name,
+      account,
+    },
+    fetchPolicy: 'no-cache',
+  })
   const { loading: gasPriceLoading, price: gasPrice } = useGasPrice(
     true,
     isReadOnly
@@ -166,6 +185,10 @@ export default function Mainbar({
   useEffect(() => {
     loadEthUSDPriceData()
   }, [isReadOnly])
+
+  const refetchRent = () => {
+    refetchRentPriceWithPoint()
+  }
 
   const refetchRegistrantAddress = async () => {
     try {
@@ -226,10 +249,11 @@ export default function Mainbar({
     }
   }
 
-  const extendExpiryDate = () => {
+  const extendExpiryDate = (usePoint = false) => {
     const variables = {
       duration,
       label: selectedDomain.name,
+      usePoint,
     }
     mutationReNew({ variables })
   }
@@ -253,7 +277,7 @@ export default function Mainbar({
   }
 
   return (
-    <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm px-5 xl:px-[40px] py-6 md:py-[40px] relative 1400px:w-[962px]">
+    <div className="bg-[rgba(72,143,139,0.25)] rounded-[24px] backdrop-blur-sm px-5 xl:px-[40px] py-6 md:py-[40px] relative max-w-[962px] md:w-[calc(100vw-440px)] w-[calc(100vw-56px)]">
       {selectedDomain && (
         <TopAddress
           isRegsitrant={isRegsitrant}
@@ -319,8 +343,8 @@ export default function Mainbar({
         address={title === 'Registrant' ? registrantAddress : resolverAddress}
       />
       <ExtendPeriodModal
-        show={extendPeriodShowModal}
-        selectedDomain={selectedDomain}
+        open={extendPeriodShowModal}
+        onOpenChange={(v) => setExtendPeriodShowModal(v)}
         duration={duration}
         years={years}
         setYears={(years) => {
@@ -329,14 +353,13 @@ export default function Mainbar({
         ethUsdPriceLoading={ethUsdPriceLoading}
         ethUsdPrice={ethUsdPrice}
         price={getRentPrice}
+        priceWithPoint={getRentPriceWithPoint}
         rentPriceLoading={rentPriceLoading}
         gasPrice={gasPrice}
         ethUsdPremiumPrice={currentPremium}
         premiumOnlyPrice={getPremiumPrice}
-        underPremium={underPremium}
-        displayGas={true}
-        closeModal={() => setExtendPeriodShowModal(false)}
         extendHandler={extendExpiryDate}
+        refetchRent={refetchRent}
       />
       <AddressChangeModal
         defaultValue={updatedRecords.value}

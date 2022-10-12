@@ -21,7 +21,11 @@ import {
   isExpired,
   isExpiresLessThanOneMonth,
 } from 'utils/dates'
-import { Tooltip } from '../../../../components/Tooltip/Tooltip'
+import Tooltip from 'components/Tooltip/index'
+import { useLazyQuery } from '@apollo/client'
+import { QUERY_POINT_BALANCE } from '../../../../graphql/queries'
+import { utils as ethersUtils } from 'ethers/lib/ethers'
+import { useAccount } from '../../../../components/QueryAccount'
 
 export default function TopAddress({
   className,
@@ -41,6 +45,13 @@ export default function TopAddress({
 }) {
   const [tooltipMessage, setTooltipMessage] = useState('Copy to clipboard')
   const [imageURL, setImageURL] = useState('')
+  const account = useAccount()
+  const [queryPointBalance, { data: { getPointBalance = 0 } = {} }] =
+    useLazyQuery(QUERY_POINT_BALANCE, {
+      variables: { account },
+      skip: !ethersUtils.isAddress(account),
+      fetchPolicy: 'network-only',
+    })
 
   async function copyTextToClipboard(text) {
     if ('clipboard' in navigator) {
@@ -123,7 +134,11 @@ export default function TopAddress({
                         : ''}
                     </p>
                     <div className="ml-2" onClick={handleCopyRegistrantAddress}>
-                      <Tooltip message={tooltipMessage} delay={1000}>
+                      <Tooltip
+                        title={tooltipMessage}
+                        color="#508292"
+                        contentClass="text-white text-xs font-semibold"
+                      >
                         <CopyIcon />
                       </Tooltip>
                     </div>
@@ -160,6 +175,7 @@ export default function TopAddress({
                 <PendingTx
                   txHash={txHash}
                   onConfirmed={async () => {
+                    queryPointBalance()
                     setConfirmed()
                   }}
                   className="mt-1"
