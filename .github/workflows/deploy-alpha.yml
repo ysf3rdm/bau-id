@@ -2,7 +2,7 @@ name: Space ID App S3 Deploy - Production
 
 on:
   push:
-    branches: [release]
+    branches: [alpha]
 
 jobs:
   build-and-deploy:
