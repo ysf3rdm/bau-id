@@ -8,10 +8,6 @@ export default function Login() {
   const [pwd, setPwd] = useState('')
   const history = useHistory()
 
-  useEffect(() => {
-    console.log(email)
-  }, [1000])
-
   const moveToRegister = () => {
     history.push('/register')
   }

@@ -37,7 +37,7 @@ import {
 } from 'app/slices/domainSlice'
 
 // Import redux assets
-import { getAccounts, getHomeData } from 'app/slices/accountSlice'
+import { getAccounts, getHomeData, setToken } from 'app/slices/accountSlice'
 import {
   toggleDrawer,
   toggleNetworkError,
@@ -99,6 +99,8 @@ export default ({ children }) => {
   const domains = useSelector((state) => state.domain.domains)
   const primaryDomain = useSelector((state) => state.domain.primaryDomain)
   const selectedDomain = useSelector((state) => state.domain.selectedDomain)
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated)
+
   useReactiveVarListeners()
 
   const { windowDimenion } = useDeviceSize()
@@ -116,6 +118,15 @@ export default ({ children }) => {
       address: accounts?.[0],
     },
   })
+
+  /* // TODO for authentication */
+
+  useEffect(async () => {
+    const token = localStorage.getItem('authToken')
+    if (token) {
+      dispatch(setToken(token))
+    }
+  }, [isAuthenticated])
 
   useEffect(async () => {
     if (accounts) {
@@ -442,7 +453,7 @@ export default ({ children }) => {
                     </div>
                   )}
 
-                  {accounts && accounts[0] && !isReadOnly && (
+                  {accounts && accounts[0] && !isReadOnly && isAuthenticated && (
                     <div className="flex items-center">
                       <div
                         className="hidden block"

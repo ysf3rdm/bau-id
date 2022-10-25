@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   accounts: [],
+  isAuthenticated: false,
   isReadOnly: false,
   isSafeApp: false,
   network: '',
@@ -29,11 +30,20 @@ export const accountsSlice = createSlice({
     setRedeemableQuota: (state, { payload }) => {
       state.redeemableQuota = payload
     },
+    setToken: (state, { payload }) => {
+      state.isAuthenticated = payload ? true : false
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { getAccounts, getHomeData, toggleEditMode, setRedeemableQuota } =
-  accountsSlice.actions
+export const {
+  getAccounts,
+  getHomeData,
+  toggleEditMode,
+  setRedeemableQuota,
+  getToken,
+  setToken,
+} = accountsSlice.actions
 
 export default accountsSlice.reducer

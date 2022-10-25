@@ -10,10 +10,6 @@ export default function Login() {
 
   const history = useHistory()
 
-  useEffect(() => {
-    console.log(email)
-  }, [1000])
-
   const moveToLogin = () => {
     history.push('/login')
   }
