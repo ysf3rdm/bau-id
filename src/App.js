@@ -6,6 +6,8 @@ const SingleName = lazy(() => import('./routes/SingleName'))
 const Profile = lazy(() => import('./routes/Profile'))
 const HomePageLayout = lazy(() => import('components/Layout/HomePageLayout'))
 const Error404 = lazy(() => import('components/Error/Errors'))
+const LoginPage = lazy(() => import('./routes/Entrance/Login'))
+const RegisterPage = lazy(() => import('./routes/Entrance/Register'))
 
 import useReactiveVarListeners from './hooks/useReactiveVarListeners'
 import { useAccount } from './components/QueryAccount'
@@ -84,6 +86,12 @@ const App = () => {
         <Route
           path="/name/:name"
           component={SingleName}
+          layout={HomePageLayout}
+        />
+        <Route path="/login" component={LoginPage} layout={HomePageLayout} />
+        <Route
+          path="/register"
+          component={RegisterPage}
           layout={HomePageLayout}
         />
         <Route path="*" component={Error404} layout={null} />

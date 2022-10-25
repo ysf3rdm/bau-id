@@ -415,10 +415,13 @@ export default ({ children }) => {
               )}
             </div>
 
+            {/* //! here is the corner of the page */}
             <div className="relative">
               {!isSafeApp && (
                 <div className="flex items-center w-full mt-0 md:w-auto">
                   {/* //TODO should show in the public registration */}
+                  {/* //TODO you should delete here and add login button */}
+                  {/* //TODO customize the path for you */}
                   {location.pathname !== '/' && (
                     <Search
                       className="mr-4 xl:w-[400px] hidden md:block"
@@ -482,6 +485,7 @@ export default ({ children }) => {
                 </div>
               )}
 
+              {/* //TODO add login button */}
               {/* DropdownMenu for the avatar popup */}
               {accounts && accounts[0] && avatarPopup && (
                 <ClickAwayListener
