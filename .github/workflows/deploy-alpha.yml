@@ -2,7 +2,7 @@ name: Space ID App S3 Deploy - Production
 
 on:
   push:
-    branches: [release]
+    branches: [alpha]
 
 jobs:
   build-and-deploy:
@@ -25,7 +25,7 @@ jobs:
           folder: 'build'
           bucket: 'alpha-prd-space-id'
           bucket-region: 'us-west-2'
-          dist-id: 'E3SU0ENOLNWBR6'
+          dist-id: 'E2UR6GU5UHBPB0'
           invalidation: /
           delete-removed: true
           no-cache: false
