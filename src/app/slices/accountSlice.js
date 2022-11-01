@@ -31,7 +31,7 @@ export const accountsSlice = createSlice({
       state.redeemableQuota = payload
     },
     setToken: (state, { payload }) => {
-      state.isAuthenticated = payload ? true : false
+      state.isAuthenticated = token ? true : false
     },
   },
 })

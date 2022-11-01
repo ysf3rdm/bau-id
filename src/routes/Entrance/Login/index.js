@@ -1,6 +1,7 @@
 // Import Packages
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
+import axios from 'axios'
 
 export default function Login() {
   const [isLoggedIn, setLoggedIn] = useState(false)
@@ -10,6 +11,27 @@ export default function Login() {
 
   const moveToRegister = () => {
     history.push('/register')
+  }
+  const moveToHome = () => {
+    history.push('/')
+  }
+  const login = async (event) => {
+    event.preventDefault()
+    var data = {
+      email: email,
+      password: pwd,
+    }
+    axios
+      .post('https://localhost:5001/api/auth/login', data)
+      .then((response) => {
+        if (response.data.success) {
+          localStorage.setItem('authToken', response.data.data.token)
+          history.push('/')
+        }
+      })
+      .catch((error) => {
+        console.log(error.response)
+      })
   }
 
   return (
@@ -48,6 +70,7 @@ export default function Login() {
           className="text-darkButton w-[150] bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px]"
           type="submit"
           style={{ width: '130px', alignItems: 'center' }}
+          onClick={login}
         >
           Log in
         </button>

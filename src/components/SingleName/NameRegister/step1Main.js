@@ -88,7 +88,8 @@ const Step1Main = ({
                   ethUsdPrice={ethUsdPrice}
                 />
               </div>
-              <div className="flex 2md:flex-row flex-col 2md:items-center justify-between 2md:space-x-6 2md:space-y-0 space-y-2">
+              {/* Gift Card */}
+              {/* <div className="flex 2md:flex-row flex-col 2md:items-center justify-between 2md:space-x-6 2md:space-y-0 space-y-2">
                 <div className="flex items-center justify-between flex-1 bg-fill-2 rounded-2xl px-4 py-1">
                   <div
                     className={cn(
@@ -146,7 +147,7 @@ const Step1Main = ({
                       3
                     )} BNB`}
                 </div>
-              </div>
+              </div> */}
               <div className="flex flex-row items-center justify-between 2md:px-4 px-2">
                 <span className="font-normal">Estimated Gas Fee</span>
                 <span className="w-[116px] text-right ml-auto">{`${registerGasFast.toFixed(

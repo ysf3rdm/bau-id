@@ -138,16 +138,16 @@ function HeaderContainer() {
   const { t } = useTranslation()
   const dispatch = useDispatch()
 
-  const account = useSelector(state => state.account)
+  const account = useSelector((state) => state.account)
 
   const {
-    data: { accounts }
+    data: { accounts },
   } = useQuery(GET_ACCOUNT)
 
   const { data } = useQuery(HOME_DATA, {
     variables: {
-      address: accounts?.[0]
-    }
+      address: accounts?.[0],
+    },
   })
 
   useEffect(() => {

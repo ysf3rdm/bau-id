@@ -177,7 +177,7 @@ function Search({
                   : 'right-5 text-[rgba(204,252,255,0.6)]'
               )}
             >
-              .bnb
+              .bau
             </div>
             {active && (
               <button
@@ -211,7 +211,7 @@ function Search({
                   'ml-2 text-base font-semibold text-green-200 truncate'
                 )}
               >
-                {result.name}.bnb
+                {result.name}.bau
               </span>
             </div>
             <div className="flex items-center">

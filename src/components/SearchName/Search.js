@@ -154,7 +154,7 @@ function Search({
                 isShowSearchBtn ? 'right-[110px]' : 'right-5'
               )}
             >
-              .bnb
+              .bau
             </div>
             {isShowSearchBtn && (
               <button
@@ -187,7 +187,7 @@ function Search({
                   'ml-2 text-base font-semibold text-green-200 truncate'
                 )}
               >
-                {result.name}.bnb
+                {result.name}.bau
               </span>
             </div>
             <div className="flex items-center">

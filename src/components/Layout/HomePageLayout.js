@@ -10,6 +10,8 @@ import ClickAwayListener from 'react-click-away-listener'
 
 import { Button } from 'react-daisyui'
 
+require('dotenv').config()
+
 // Import components
 import NoAccountsDefault from 'components/NoAccounts/NoAccounts'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
@@ -122,13 +124,8 @@ export default ({ children }) => {
   /* // TODO for authentication */
 
   useEffect(async () => {
-    const token = localStorage.getItem('authToken')
-    if (token) {
-      dispatch(setToken(token))
-    }
-  }, [isAuthenticated])
-
-  useEffect(async () => {
+    console.log(process.env.JWT_SECRET_KEY)
+    dispatch(setToken())
     if (accounts) {
       dispatch(getAccounts(accounts))
       let provider
@@ -352,7 +349,16 @@ export default ({ children }) => {
                 <HamburgerIcon className="mr-5 text-green-100" />
               </div>
               <Link to="/" className="h-10 text-green-100 cursor-pointer">
-                <WholeLogoIcon className="hidden lg:block w-56" />
+                <h1
+                  className="text-green-100"
+                  style={{
+                    fontSize: '50px',
+                    fontWeight: 'bold',
+                    letterSpacing: '4px',
+                  }}
+                >
+                  BAU ID
+                </h1>
                 <SmallLogoIcon
                   size={40}
                   className="text-green-100 block lg:hidden"
@@ -453,7 +459,7 @@ export default ({ children }) => {
                     </div>
                   )}
 
-                  {accounts && accounts[0] && !isReadOnly && isAuthenticated && (
+                  {accounts && accounts[0] && !isReadOnly && (
                     <div className="flex items-center">
                       <div
                         className="hidden block"
@@ -498,7 +504,7 @@ export default ({ children }) => {
 
               {/* //TODO add login button */}
               {/* DropdownMenu for the avatar popup */}
-              {accounts && accounts[0] && avatarPopup && (
+              {accounts && accounts[0] && avatarPopup && isAuthenticated && (
                 <ClickAwayListener
                   onClickAway={() => {
                     setAvatarPopup(false)
@@ -607,7 +613,7 @@ export default ({ children }) => {
         <div className="absolute bottom-0 left-0 flex items-center justify-center w-full py-5 h-11 md:px-8 xl:px-12 md:justify-between bg-dark-common">
           <a className="hidden md:block" href="https://space.id">
             <p className="text-base font-semibold leading-7 text-center text-green-100 font-urbanist">
-              About SPACE ID
+              About BAU ID
             </p>
           </a>
           <div className="flex items-center">

@@ -57,7 +57,16 @@ export default () => {
       <div className="min-h-[202px]">
         <div>
           <div className="flex justify-center">
-            <SpaceIDTextIcon />
+            <h1
+              className="text-green-100"
+              style={{
+                fontSize: '70px',
+                fontWeight: 'bolder',
+                letterSpacing: '4px',
+              }}
+            >
+              BAU ID
+            </h1>
           </div>
         </div>
         {getMainContent()}

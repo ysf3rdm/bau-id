@@ -40,6 +40,7 @@
     "cross-fetch": "^2.2.3",
     "crypto": "npm:crypto-browserify",
     "daisyui": "^2.20.0",
+    "dotenv": "^16.0.3",
     "emotion": "^10.0.9",
     "env-cmd": "^10.1.0",
     "esm": "^3.2.22",
