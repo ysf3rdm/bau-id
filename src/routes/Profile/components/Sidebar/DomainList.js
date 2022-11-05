@@ -5,6 +5,7 @@ import moment from 'moment'
 import { Searchbar } from 'components/Input'
 import { BarIcon } from 'components/Icons'
 import ArrowIcon from 'components/Icons/ArrowIcon'
+import { useHistory } from 'react-router'
 import SortAscendingIcon from '../../../../components/Icons/SortAssendingIcon'
 import SortDescendingIcon from 'components/Icons/SortDecendingIcon'
 import TimeAscendingIcon from 'components/Icons/TimeAscendingIcon'
@@ -69,6 +70,7 @@ export default function DomainList({
   const onChangeHandler = (event) => {
     setSearchKey(event.target.value.trim())
   }
+  const history = useHistory()
 
   useEffect(() => {
     if (domainsList) {
@@ -129,9 +131,42 @@ export default function DomainList({
           </div>
         </div>
       </div>
-      {domainsList.length > 0 ? (
-        <div className="mt-4 relative max-h-[calc(100vh-335px)] md:max-h-[60vh] overflow-y-auto mr-[-4px] pr-1">
-          {domains.map((item, index) => (
+      {/* {domainsList.length >= 0 ? ( */}
+      <div
+        onClick={() => {
+          clickHandle(item, index)
+        }}
+        className="mt-4 relative max-h-[calc(100vh-335px)] md:max-h-[60vh] overflow-y-auto mr-[-4px] pr-1"
+      >
+        <div
+          className={cn(
+            'mb-5 w-full py-2 px-4 relative cursor-pointer overflow-hidden break-all bg-green-100 rounded-2xl'
+          )}
+        >
+          <div
+            className={cn(
+              'text-dark-common text-l pr-5 font-semibold text-base'
+            )}
+          >
+            yusuf.erdem
+          </div>
+
+          <div className="absolute right-4 top-[calc(50%-12px)]">
+            {/* //TODO add onClick for buying this name */}
+            {/* //TODO add if registered or not to show this button */}
+            {/* //TODO if registered already show details directly */}
+            <button className="px-2 text-xs font-semibold text-white rounded-full bg-dark-400">
+              <a
+                style={{ textDecoration: 'none', color: 'white' }}
+                href="http://localhost:3000/name/yusuf.bnb/register"
+              >
+                register
+              </a>
+            </button>
+          </div>
+        </div>
+
+        {/* {domains.map((item, index) => (
             <div
               key={item.name}
               onClick={() => {
@@ -180,13 +215,13 @@ export default function DomainList({
                 </div>
               )}
             </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-gray-700 text-base text-center mt-[40px]">
-          This address doesn't own any domain
-        </div>
-      )}
+          ))} */}
+      </div>
+      {/* ) : ( */}
+      <div className="text-gray-700 text-base text-center mt-[40px]">
+        You didn't buy your domain yet.
+      </div>
+      {/* )} */}
     </div>
   )
 }

@@ -143,7 +143,7 @@ function Search({
                   isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]',
                   active ? 'border-green-100' : 'border-[rgba(204,252,255,0.6)]'
                 )}
-                placeholder="Explore the space"
+                placeholder="Explore the bau"
                 onChange={(e) => {
                   setShowPopup(false)
                   handleChange(e)

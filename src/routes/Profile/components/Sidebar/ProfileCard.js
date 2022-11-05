@@ -141,7 +141,7 @@ export default function ProfileCard({
           )}
 
           <div>
-            <span className="text-xs text-white">Primary SPACE ID Name:</span>
+            <span className="text-xs text-white">Primary BAU ID Name:</span>
           </div>
           {account && !isReadOnly ? (
             <div className="w-full">

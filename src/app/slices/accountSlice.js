@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   accounts: [],
-  isAuthenticated: false,
+  isAuthenticated: true,
   isReadOnly: false,
   isSafeApp: false,
   network: '',

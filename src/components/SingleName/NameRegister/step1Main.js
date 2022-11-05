@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import EthVal from 'ethval'
 import { utils as ethersUtils } from 'ethers'
 import cn from 'classnames'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setShowRedeem } from 'app/slices/giftCardSlice'
 import CheckBox from 'components/CheckBox'
 import Years from './Years'
@@ -16,6 +16,10 @@ import CheckCircle from '../../Icons/CheckCircle'
 import { QUERY_POINT_BALANCE } from '../../../graphql/queries'
 import HelpInfo from '../../Icons/HelpInfo'
 import Tooltip from '../../Tooltip/index'
+
+import { useHistory } from 'react-router'
+// Import redux assets
+import { setToken } from 'app/slices/accountSlice'
 
 const Step1Main = ({
   years,
@@ -40,6 +44,10 @@ const Step1Main = ({
   registrationFeeWithPointInUsd,
   registerGasFast,
 }) => {
+  const history = useHistory()
+  const moveToLogin = () => {
+    history.push('/login')
+  }
   const account = useAccount()
   const dispatch = useDispatch()
   const {
@@ -49,6 +57,8 @@ const Step1Main = ({
       address: account,
     },
   })
+
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated)
 
   const handleRequest = () => {
     onRequest()
@@ -198,7 +208,7 @@ const Step1Main = ({
               </div>
             </>
           )}
-          {!isReadOnly && state === RegisterState.request && (
+          {!isReadOnly && state === RegisterState.request && !isAuthenticated && (
             <button
               className={cn(
                 'w-[160px] h-[42px] rounded-2xl text-lg font-semibold mx-auto mt-[24px]',
@@ -211,6 +221,19 @@ const Step1Main = ({
             >
               Request
             </button>
+          )}
+          {isAuthenticated && (
+            <>
+              <button
+                className="btn-primary w-[160px] h-[42px] rounded-2xl text-lg font-semibold mx-auto"
+                onClick={moveToLogin}
+              >
+                Login
+              </button>
+              <div className="font-semibold text-center text-sm text-red-100">
+                *Please login your account to continue
+              </div>
+            </>
           )}
           {state === RegisterState.requesting && (
             <div className="flex items-center mx-auto mt-[35px] ">

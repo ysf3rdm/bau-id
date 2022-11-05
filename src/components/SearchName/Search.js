@@ -122,7 +122,7 @@ function Search({
                   'w-full bg-transparent py-[10px] pl-10 text-base border border-green-100 rounded-[18px] focus:bg-transparent text-green-100 active:bg-transparent focus:outline-none',
                   isShowSearchBtn ? 'pr-[150px]' : 'pr-[50px]'
                 )}
-                placeholder="Explore the space"
+                placeholder="Explore the bau"
                 onChange={(e) => {
                   setShowPopup(false)
                   handleChange(e)

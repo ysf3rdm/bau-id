@@ -151,7 +151,7 @@ export default ({ children }) => {
   }, [accounts])
 
   useEffect(() => {
-    dispatch(setToken())
+    dispatch(setToken(true))
   })
 
   useEffect(() => {
@@ -508,7 +508,7 @@ export default ({ children }) => {
                     history.location.pathname != '/register' && (
                       <div className="flex items-center">
                         <button
-                          className="flex items-center px-5 py-2 text-xl font-semibold bg-green-100 text-dark-100 rounded-2xl"
+                          className="flex items-center px-5 py-2 text-xl font-semibold bg-green-100 text-dark-100 rounded-2xl ml-5"
                           onClick={() => history.push('/login')}
                         >
                           Login

@@ -10,7 +10,7 @@ import {
   GET_FAVOURITES,
   GET_DOMAINS_SUBGRAPH,
   GET_REGISTRATIONS_SUBGRAPH,
-  GET_ERRORS
+  GET_ERRORS,
 } from '../../graphql/queries'
 import { decryptName, checkIsDecrypted } from '../../api/labels'
 
@@ -23,7 +23,7 @@ import DefaultEtherScanLink from '../Links/EtherScanLink'
 import {
   getEtherScanAddr,
   filterNormalised,
-  normaliseOrMark
+  normaliseOrMark,
 } from '../../utils/utils'
 import { calculateIsExpiredSoon } from '../../utils/dates'
 import DomainList from './DomainList'
@@ -111,7 +111,7 @@ const Controls = styled('div')`
 `
 
 function filterOutReverse(domains) {
-  return domains.filter(domain => domain.parent)
+  return domains.filter((domain) => domain.parent)
 }
 
 function normaliseAddress(address) {
@@ -119,15 +119,15 @@ function normaliseAddress(address) {
 }
 
 function decryptNames(domains) {
-  return domains.map(d => {
+  return domains.map((d) => {
     const name = decryptName(d.domain.name)
     return {
       ...d,
       domain: {
         ...d.domain,
         name: name,
-        labelName: checkIsDecrypted(name[0]) ? name.split('.')[0] : null
-      }
+        labelName: checkIsDecrypted(name[0]) ? name.split('.')[0] : null,
+      },
     }
   })
 }
@@ -138,7 +138,7 @@ function useDomains({
   address,
   sort,
   page,
-  expiryDate
+  expiryDate,
 }) {
   const skip = (page - 1) * resultsPerPage
   const registrationsQuery = useQuery(GET_REGISTRATIONS_SUBGRAPH, {
@@ -148,20 +148,20 @@ function useDomains({
       skip,
       orderBy: sort.type,
       orderDirection: sort.direction,
-      expiryDate
+      expiryDate,
     },
     skip: domainType !== 'registrant',
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   const controllersQuery = useQuery(GET_DOMAINS_SUBGRAPH, {
     variables: {
       id: address,
       first: resultsPerPage,
-      skip
+      skip,
     },
     skip: domainType !== 'controller',
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   })
 
   if (domainType === 'registrant') {
@@ -193,7 +193,7 @@ export const useResetState = (
     setSelectAll(null)
     globalErrorReactive({
       ...globalErrorReactive(),
-      invalidCharacter: null
+      invalidCharacter: null,
     })
   }, [networkId, address])
 }
@@ -202,10 +202,10 @@ export default function Address({
   url,
   address,
   showOriginBanner,
-  domainType = 'registrant'
+  domainType = 'registrant',
 }) {
   const {
-    data: { networkId, isENSReady }
+    data: { networkId, isENSReady },
   } = useQuery(RESET_STATE_QUERY)
   const normalisedAddress = normaliseAddress(address)
   const { search } = useLocation()
@@ -219,7 +219,7 @@ export default function Address({
   let [etherScanAddr, setEtherScanAddr] = useState(null)
   let [activeSort, setActiveSort] = useState({
     type: 'expiryDate',
-    direction: 'asc'
+    direction: 'asc',
   })
   let [checkedBoxes, setCheckedBoxes] = useState({})
   let [years, setYears] = useState(1)
@@ -254,11 +254,11 @@ export default function Address({
     address: normalisedAddress,
     sort: activeSort,
     page,
-    expiryDate
+    expiryDate,
   })
 
   const {
-    data: { globalError }
+    data: { globalError },
   } = useQuery(GET_ERRORS)
   const { data: { favourites } = [] } = useQuery(GET_FAVOURITES)
   useEffect(() => {
@@ -282,7 +282,7 @@ export default function Address({
     normalisedDomains = [...data.account.registrations]
   } else if (domainType === 'controller' && data.account) {
     normalisedDomains = [
-      ...filterOutReverse(data.account.domains).map(domain => ({ domain }))
+      ...filterOutReverse(data.account.domains).map((domain) => ({ domain })),
     ]
   }
 
@@ -302,10 +302,10 @@ export default function Address({
     .map(([key]) => key)
 
   const allNames = domains
-    .filter(d => d.domain.labelName)
-    .map(d => d.domain.name)
+    .filter((d) => d.domain.labelName)
+    .map((d) => d.domain.name)
 
-  const hasNamesExpiringSoon = !!domains.find(domain =>
+  const hasNamesExpiringSoon = !!domains.find((domain) =>
     calculateIsExpiredSoon(domain.expiryDate)
   )
 
