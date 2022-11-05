@@ -15,6 +15,8 @@ import { emptyAddress } from './ui'
 import ToastContainer from 'components/Toast/ToastContainer'
 import { CrossIcon } from './components/Icons'
 
+import { useJwt } from 'react-jwt'
+
 const Route = ({
   component: Component,
   layout: Layout = HomePageLayout,
@@ -37,6 +39,8 @@ const Route = ({
 }
 
 const App = () => {
+  const { decodedToken, isExpired } = useJwt(localStorage.getItem('authToken'))
+
   useReactiveVarListeners()
   const account = useAccount()
   const accountRef = useRef(account)

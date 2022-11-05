@@ -31,7 +31,7 @@ export const accountsSlice = createSlice({
       state.redeemableQuota = payload
     },
     setToken: (state, { payload }) => {
-      state.isAuthenticated = token ? true : false
+      state.isAuthenticated = payload
     },
   },
 })
@@ -42,7 +42,6 @@ export const {
   getHomeData,
   toggleEditMode,
   setRedeemableQuota,
-  getToken,
   setToken,
 } = accountsSlice.actions
 

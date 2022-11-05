@@ -10,8 +10,6 @@ import ClickAwayListener from 'react-click-away-listener'
 
 import { Button } from 'react-daisyui'
 
-require('dotenv').config()
-
 // Import components
 import NoAccountsDefault from 'components/NoAccounts/NoAccounts'
 import SmallLogoIcon from 'components/Icons/SmallLogoIcon'
@@ -70,6 +68,9 @@ import GiftCardModal from '../Modal/GiftCardModal'
 import { ethers } from '../../ui'
 import SID from '@siddomains/sidjs'
 
+// Import JWT
+import { useJwt } from 'react-jwt'
+
 export const HOME_DATA = gql`
   query getHomeData($address: string) @client {
     network
@@ -124,7 +125,6 @@ export default ({ children }) => {
   /* // TODO for authentication */
 
   useEffect(async () => {
-    console.log(process.env.JWT_SECRET_KEY)
     dispatch(setToken())
     if (accounts) {
       dispatch(getAccounts(accounts))
@@ -149,6 +149,10 @@ export default ({ children }) => {
       dispatch(setPrimaryDomain(undefined))
     }
   }, [accounts])
+
+  useEffect(() => {
+    dispatch(setToken())
+  })
 
   useEffect(() => {
     if (data?.network) {
@@ -459,7 +463,7 @@ export default ({ children }) => {
                     </div>
                   )}
 
-                  {accounts && accounts[0] && !isReadOnly && (
+                  {accounts && accounts[0] && !isReadOnly && isAuthenticated && (
                     <div className="flex items-center">
                       <div
                         className="hidden block"
@@ -499,12 +503,24 @@ export default ({ children }) => {
                       </button>
                     </div>
                   )}
+                  {!isAuthenticated &&
+                    history.location.pathname != '/login' &&
+                    history.location.pathname != '/register' && (
+                      <div className="flex items-center">
+                        <button
+                          className="flex items-center px-5 py-2 text-xl font-semibold bg-green-100 text-dark-100 rounded-2xl"
+                          onClick={() => history.push('/login')}
+                        >
+                          Login
+                        </button>
+                      </div>
+                    )}
                 </div>
               )}
 
               {/* //TODO add login button */}
               {/* DropdownMenu for the avatar popup */}
-              {accounts && accounts[0] && avatarPopup && isAuthenticated && (
+              {accounts && accounts[0] && avatarPopup && (
                 <ClickAwayListener
                   onClickAway={() => {
                     setAvatarPopup(false)
