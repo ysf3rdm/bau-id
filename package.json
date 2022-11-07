@@ -73,6 +73,7 @@
     "react-form-stepper": "^2.0.1",
     "react-ga4": "^1.4.1",
     "react-i18next": "^11.18.5",
+    "react-input-verification-code": "^1.0.2",
     "react-jwt": "^1.1.7",
     "react-redux": "^7.2.8",
     "react-router": "5.1.2",
@@ -84,6 +85,7 @@
     "slugify": "^1.4.6",
     "stream": "npm:stream-browserify",
     "stream-http": "^3.2.0",
+    "styled-components": "^5.3.6",
     "swiper": "^8.4.2",
     "walletlink": "2.5.0",
     "web3modal": "^1.9.9"

@@ -2,15 +2,19 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAccounts } from 'app/slices/accountSlice'
 
-export default function Login() {
+export default function Register() {
   const [isLoggedIn, setLoggedIn] = useState(false)
   const [email, setEmail] = useState('')
   const [pwd, setPwd] = useState('')
   const [pwdagain, setPwdAgain] = useState('')
   const [walletAddr, setWalletAddr] = useState('')
+  const accounts = useSelector((state) => state.account.accounts)
 
   const history = useHistory()
+  const dispatch = useDispatch()
 
   const moveToLogin = () => {
     history.push('/login')
@@ -21,7 +25,7 @@ export default function Login() {
     var data = {
       email: email,
       password: pwd,
-      walletAddr: walletAddr,
+      walletAddr: accounts[0],
     }
     axios
       .post('https://localhost:5001/api/auth/register', data)
@@ -55,16 +59,13 @@ export default function Login() {
             setEmail(event.target.value)
           }}
         ></input>
-        <input
-          className="s-input"
-          style={{ width: '350px', marginBottom: '10px', fontSize: '18px' }}
-          value={walletAddr}
-          type="text"
-          placeholder="enter your wallet address"
-          onChange={(event) => {
-            setWalletAddr(event.target.value)
-          }}
-        ></input>
+        {/* //TODO makes button more efficient */}
+        {/* //TODO there is a problem with the if else part */}
+        {accounts && accounts[0] && (
+          <div>
+            <button>Connect to metamask first</button>
+          </div>
+        )}
         <input
           className="s-input"
           style={{ marginBottom: '10px', fontSize: '18px' }}

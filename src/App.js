@@ -8,6 +8,7 @@ const HomePageLayout = lazy(() => import('components/Layout/HomePageLayout'))
 const Error404 = lazy(() => import('components/Error/Errors'))
 const LoginPage = lazy(() => import('./routes/Entrance/Login'))
 const RegisterPage = lazy(() => import('./routes/Entrance/Register'))
+const AuthPage = lazy(() => import('./routes/Entrance/Authentication'))
 
 import useReactiveVarListeners from './hooks/useReactiveVarListeners'
 import { useAccount } from './components/QueryAccount'
@@ -98,6 +99,7 @@ const App = () => {
           component={RegisterPage}
           layout={HomePageLayout}
         />
+        <Route path="/auth" component={AuthPage} layout={HomePageLayout} />
         <Route path="*" component={Error404} layout={null} />
       </Switch>
       <ToastContainer />
