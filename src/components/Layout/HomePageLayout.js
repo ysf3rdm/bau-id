@@ -503,7 +503,7 @@ export default ({ children }) => {
                       </button>
                     </div>
                   )}
-                  {!isAuthenticated &&
+                  {isAuthenticated &&
                     history.location.pathname != '/login' &&
                     history.location.pathname != '/register' && (
                       <div className="flex items-center">

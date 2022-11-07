@@ -208,7 +208,7 @@ const Step1Main = ({
               </div>
             </>
           )}
-          {!isReadOnly && state === RegisterState.request && !isAuthenticated && (
+          {!isReadOnly && state === RegisterState.request && isAuthenticated && (
             <button
               className={cn(
                 'w-[160px] h-[42px] rounded-2xl text-lg font-semibold mx-auto mt-[24px]',
@@ -222,7 +222,7 @@ const Step1Main = ({
               Request
             </button>
           )}
-          {isAuthenticated && (
+          {!isAuthenticated && (
             <>
               <button
                 className="btn-primary w-[160px] h-[42px] rounded-2xl text-lg font-semibold mx-auto"

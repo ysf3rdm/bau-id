@@ -111,32 +111,12 @@ export default function DomainList({
 
   return (
     <div className={cn('', className)}>
-      <div className="flex items-center justify-between">
-        <Searchbar className="mr-[14px]" onChangeHandler={onChangeHandler} />
-        <div className="relative h-full group">
-          <BarIcon className="text-[rgba(204,252,255,0.6)] cursor-pointer h-full flex items-center" />
-          <div className="absolute z-[10] bg-[rgba(204,252,255,0.6)] rounded-xl p-3 hidden group-hover:block cursor-pointer top-[30px] right-[-20px] backdrop-blur-md">
-            <div onClick={() => setSortBy('AToZ')}>
-              <SortAscendingIcon className="text-dark-100 border-b border-b-[rgba(67,140,136,0.25)] p-1" />
-            </div>
-            <div onClick={() => setSortBy('ZToA')}>
-              <SortDescendingIcon className="text-dark-100 border-b border-b-[rgba(67,140,136,0.25)] p-1" />
-            </div>
-            <div onClick={() => setSortBy('TimeAscending')}>
-              <TimeAscendingIcon className="text-dark-100 border-b border-b-[rgba(67,140,136,0.25)] p-1" />
-            </div>
-            <div onClick={() => setSortBy('TimeDescending')}>
-              <TimeDecendingIcon className="p-1 text-dark-100" />
-            </div>
-          </div>
-        </div>
-      </div>
       {/* {domainsList.length >= 0 ? ( */}
       <div
         onClick={() => {
           clickHandle(item, index)
         }}
-        className="mt-4 relative max-h-[calc(100vh-335px)] md:max-h-[60vh] overflow-y-auto mr-[-4px] pr-1"
+        className="mt-1 relative max-h-[calc(100vh-335px)] md:max-h-[60vh] overflow-y-auto mr-[-4px] pr-1"
       >
         <div
           className={cn(
@@ -155,7 +135,93 @@ export default function DomainList({
             {/* //TODO add onClick for buying this name */}
             {/* //TODO add if registered or not to show this button */}
             {/* //TODO if registered already show details directly */}
-            <button className="px-2 text-xs font-semibold text-white rounded-full bg-dark-400">
+            {/* <button className="px-2 text-xs font-semibold text-white rounded-full bg-dark-400">
+              <a
+                style={{ textDecoration: 'none', color: 'white' }}
+                href="http://localhost:3000/name/yusuf.bnb/register"
+              >
+                register
+              </a>
+            </button> */}
+          </div>
+        </div>
+
+        {/* {domains.map((item, index) => (
+            <div
+              key={item.name}
+              onClick={() => {
+                clickHandle(item, index)
+              }}
+              className={cn(
+                'mb-5 w-full py-2 px-4 relative cursor-pointer overflow-hidden break-all',
+                item.name === selectedDomain?.name
+                  ? 'bg-green-100 rounded-2xl'
+                  : ''
+              )}
+            >
+              <div
+                className={cn(
+                  item.name === selectedDomain?.name
+                    ? 'text-dark-common text-xl pr-5'
+                    : 'text-green-200',
+                  'font-semibold text-base'
+                )}
+              >
+                {item.name}
+              </div>
+              <div
+                className={cn(
+                  'text-[14px] pr-6',
+                  item.name === selectedDomain?.name
+                    ? isExpiresLessThanOneMonth(item.expires)
+                      ? 'text-red-300'
+                      : 'text-[#2A9971]'
+                    : isExpiresLessThanOneMonth(item.expires)
+                    ? 'text-red-100'
+                    : 'text-gray-700'
+                )}
+              >
+                {isExpired(item.expires)
+                  ? `Grace period ends ${gracePeriodEndStr(
+                      selectedDomain?.expires
+                    )}`
+                  : `expires ${getLocalTime(item.expires).format(
+                      'YYYY-MM-DD'
+                    )}`}
+              </div>
+              {item.name === selectedDomain?.name && (
+                <div className="absolute right-4 top-[calc(50%-7px)]">
+                  <ArrowIcon size={11} />
+                </div>
+              )}
+            </div>
+          ))} */}
+      </div>
+      <div
+        onClick={() => {
+          clickHandle(item, index)
+        }}
+        className="mt-1 relative max-h-[calc(100vh-335px)] md:max-h-[60vh] overflow-y-auto mr-[-4px] pr-1 opacity-75"
+      >
+        <div
+          className={cn(
+            'mb-5 w-full py-2 px-4 relative cursor-pointer overflow-hidden break-all bg-gray-100 rounded-2xl'
+          )}
+        >
+          <div
+            className={cn(
+              'text-white-common text-l pr-5 font-semibold text-base'
+            )}
+          >
+            yusuf.erdem
+          </div>
+
+          <div className="absolute right-4 top-[calc(50%-12px)]">
+            {/* //* This line is for expired or non-registered names */}
+            {/* //TODO add onClick for buying this name */}
+            {/* //TODO add if registered or not to show this button */}
+            {/* //TODO if registered already show details directly */}
+            <button className="px-2 text-xs font-semibold text-white rounded-full bg-dark-400 opacity-100">
               <a
                 style={{ textDecoration: 'none', color: 'white' }}
                 href="http://localhost:3000/name/yusuf.bnb/register"
@@ -218,7 +284,7 @@ export default function DomainList({
           ))} */}
       </div>
       {/* ) : ( */}
-      <div className="text-gray-700 text-base text-center mt-[40px]">
+      <div className="text-gray-700 text-base text-center mt-[20px]">
         You didn't buy your domain yet.
       </div>
       {/* )} */}
