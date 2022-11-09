@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAccounts } from 'app/slices/accountSlice'
+import { getAccounts, setUser } from 'app/slices/accountSlice'
 
 export default function Register() {
   const [isLoggedIn, setLoggedIn] = useState(false)
@@ -12,6 +12,7 @@ export default function Register() {
   const [pwdagain, setPwdAgain] = useState('')
   const [walletAddr, setWalletAddr] = useState('')
   const accounts = useSelector((state) => state.account.accounts)
+  const user = useSelector((state) => state.account.user)
 
   const history = useHistory()
   const dispatch = useDispatch()
@@ -19,18 +20,24 @@ export default function Register() {
   const moveToLogin = () => {
     history.push('/login')
   }
+
+  useEffect(() => {
+    console.log(user)
+  }, [user])
   /* //TODO wallet address */
   const register = async (event) => {
     event.preventDefault()
     var data = {
       email: email,
       password: pwd,
-      walletAddr: accounts[0],
+      walletAddress: accounts[0],
     }
+    console.log(data)
     axios
       .post('https://localhost:5001/api/auth/register', data)
       .then((response) => {
-        console.log(response)
+        dispatch(setUser(response.data.data.userId))
+        history.push('/auth')
       })
       .catch((error) => {
         console.log(error.response)
@@ -61,11 +68,11 @@ export default function Register() {
         ></input>
         {/* //TODO makes button more efficient */}
         {/* //TODO there is a problem with the if else part */}
-        {accounts && accounts[0] && (
+        {/* {!accounts && !accounts[0] && (
           <div>
             <button>Connect to metamask first</button>
           </div>
-        )}
+        )} */}
         <input
           className="s-input"
           style={{ marginBottom: '10px', fontSize: '18px' }}
@@ -90,6 +97,7 @@ export default function Register() {
           className="text-darkButton bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px]"
           type="submit"
           style={{ width: '130px' }}
+          onClick={register}
         >
           Register
         </button>

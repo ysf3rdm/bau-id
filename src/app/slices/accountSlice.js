@@ -9,6 +9,7 @@ const initialState = {
   displayName: '',
   profileEditMode: false,
   redeemableQuota: 0,
+  user: {},
 }
 
 export const accountsSlice = createSlice({
@@ -33,6 +34,9 @@ export const accountsSlice = createSlice({
     setToken: (state, { payload }) => {
       state.isAuthenticated = payload
     },
+    setUser: (state, { payload }) => {
+      state.user = payload
+    },
   },
 })
 
@@ -43,6 +47,7 @@ export const {
   toggleEditMode,
   setRedeemableQuota,
   setToken,
+  setUser,
 } = accountsSlice.actions
 
 export default accountsSlice.reducer
