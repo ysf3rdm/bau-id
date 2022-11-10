@@ -37,7 +37,12 @@ import {
 } from 'app/slices/domainSlice'
 
 // Import redux assets
-import { getAccounts, getHomeData, setToken } from 'app/slices/accountSlice'
+import {
+  getAccounts,
+  getHomeData,
+  setToken,
+  setUser,
+} from 'app/slices/accountSlice'
 import {
   toggleDrawer,
   toggleNetworkError,
@@ -103,6 +108,7 @@ export default ({ children }) => {
   const primaryDomain = useSelector((state) => state.domain.primaryDomain)
   const selectedDomain = useSelector((state) => state.domain.selectedDomain)
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated)
+  const user = useSelector((state) => state.account.user)
 
   useReactiveVarListeners()
 
@@ -122,7 +128,30 @@ export default ({ children }) => {
     },
   })
 
-  /* // TODO for authentication */
+  const handleLogout = () => {
+    localStorage.removeItem('user')
+    localStorage.removeItem('userEmail')
+    localStorage.removeItem('authToken')
+  }
+
+  {
+    /* //! Authentication Starts */
+  }
+  const loggedInUser = {
+    userId: localStorage.getItem('user'),
+    email: localStorage.getItem('userEmail'),
+  }
+
+  dispatch(setToken())
+
+  /* // TODO: TEST IT */
+  useEffect(() => {
+    dispatch(setUser(loggedInUser))
+  }, [])
+
+  {
+    /* //! Authentication Ends */
+  }
 
   useEffect(async () => {
     dispatch(setToken())
@@ -440,9 +469,6 @@ export default ({ children }) => {
             <div className="relative">
               {!isSafeApp && (
                 <div className="flex items-center w-full mt-0 md:w-auto">
-                  {/* //TODO should show in the public registration */}
-                  {/* //TODO you should delete here and add login button */}
-                  {/* //TODO customize the path for you */}
                   {location.pathname !== '/' && (
                     <Search
                       className="mr-4 xl:w-[400px] hidden md:block"
@@ -503,7 +529,7 @@ export default ({ children }) => {
                       </button>
                     </div>
                   )}
-                  {isAuthenticated &&
+                  {!isAuthenticated &&
                     history.location.pathname != '/login' &&
                     history.location.pathname != '/register' && (
                       <div className="flex items-center">
@@ -515,10 +541,25 @@ export default ({ children }) => {
                         </button>
                       </div>
                     )}
+                  {/* //TODO make it prettier  */}
+                  {/* //TODO only show login or logout */}
+                  {/* //TODO hatta profille birleştir */}
+                  {isAuthenticated &&
+                    history.location.pathname != '/login' &&
+                    history.location.pathname != '/register' &&
+                    user && (
+                      <div className="flex items-center">
+                        <button
+                          className="flex items-center px-5 py-2 text-xl font-semibold bg-green-100 text-dark-100 rounded-2xl ml-5"
+                          onClick={() => handleLogout}
+                        >
+                          Log Out
+                        </button>
+                      </div>
+                    )}
                 </div>
               )}
 
-              {/* //TODO add login button */}
               {/* DropdownMenu for the avatar popup */}
               {accounts && accounts[0] && avatarPopup && (
                 <ClickAwayListener

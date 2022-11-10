@@ -31,8 +31,12 @@ export const accountsSlice = createSlice({
     setRedeemableQuota: (state, { payload }) => {
       state.redeemableQuota = payload
     },
-    setToken: (state, { payload }) => {
-      state.isAuthenticated = payload
+    setToken: (state) => {
+      if (localStorage.getItem('authToken') && state.user != null) {
+        state.isAuthenticated = true
+      } else {
+        state.isAuthenticated = false
+      }
     },
     setUser: (state, { payload }) => {
       state.user = payload

@@ -26,10 +26,12 @@ export default function Login() {
       password: pwd,
     }
     axios
-      .post('https://localhost:44368/api/auth/login', data)
+      .post('https://localhost:5001/api/auth/login', data)
       .then((response) => {
         console.log(response)
         localStorage.setItem('authToken', response.data.data.token)
+        localStorage.setItem('user', response.data.data.userId)
+        localStorage.setItem('userEmail', response.data.email)
         history.push('/')
       })
       .catch((error) => {

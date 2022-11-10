@@ -24,7 +24,7 @@ export default function Auth() {
       form_data.append('secretKey', code)
       form_data.append('userId', user.userId)
       axios
-        .post('https://localhost:44368/api/auth/verifykey', form_data)
+        .post('https://localhost:5001/api/auth/verifykey', form_data)
         .then((response) => {
           if (response.data.success) {
             history.push('/login')
