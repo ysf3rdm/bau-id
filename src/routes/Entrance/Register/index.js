@@ -34,10 +34,17 @@ export default function Register() {
     }
     console.log(data)
     axios
-      .post('https://localhost:5001/api/auth/register', data)
+      .post('https://localhost:44368/api/auth/register', data)
       .then((response) => {
-        dispatch(setUser(response.data.data.userId))
-        history.push('/auth')
+        console.log(response)
+        if (response.data.success) {
+          var userRegistered = {
+            userId: response.data.data.userId,
+            email: response.data.data.email,
+          }
+          dispatch(setUser(userRegistered))
+          history.push('/auth')
+        }
       })
       .catch((error) => {
         console.log(error.response)

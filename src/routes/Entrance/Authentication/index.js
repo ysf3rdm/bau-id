@@ -2,13 +2,15 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import axios from 'axios'
+import AnimationSpin from '../../../../src/components/AnimationSpin'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactInputVerificationCode from 'react-input-verification-code'
 import { response } from 'msw'
 import { setUser } from 'app/slices/accountSlice'
 
-export default function Auth({ props }) {
+export default function Auth() {
   const [code, setCode] = useState('')
+  const history = useHistory()
 
   const user = useSelector((state) => state.account.user)
 
@@ -20,12 +22,13 @@ export default function Auth({ props }) {
       console.log(code)
       var form_data = new FormData()
       form_data.append('secretKey', code)
-      form_data.append('userId', user)
+      form_data.append('userId', user.userId)
       axios
-        .post('https://localhost:5001/api/auth/verifykey', form_data)
+        .post('https://localhost:44368/api/auth/verifykey', form_data)
         .then((response) => {
-          useDispatch(setUser({}))
-          history.pushState('/login')
+          if (response.data.success) {
+            history.push('/login')
+          }
         })
         .catch((e) => {
           console.log(e)
