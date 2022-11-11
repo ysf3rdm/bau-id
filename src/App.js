@@ -1,6 +1,14 @@
 import React, { lazy, useEffect, useRef, useState } from 'react'
 import { BrowserRouter, Route as DefaultRoute, Switch } from 'react-router-dom'
 
+import useReactiveVarListeners from './hooks/useReactiveVarListeners'
+import { useAccount } from './components/QueryAccount'
+import { emptyAddress } from './ui'
+import ToastContainer from 'components/Toast/ToastContainer'
+import { CrossIcon } from './components/Icons'
+
+import { useJwt } from 'react-jwt'
+
 const Home = lazy(() => import('./routes/Home'))
 const SingleName = lazy(() => import('./routes/SingleName'))
 const Profile = lazy(() => import('./routes/Profile'))
@@ -9,14 +17,6 @@ const Error404 = lazy(() => import('components/Error/Errors'))
 const LoginPage = lazy(() => import('./routes/Entrance/Login'))
 const RegisterPage = lazy(() => import('./routes/Entrance/Register'))
 const AuthPage = lazy(() => import('./routes/Entrance/Authentication'))
-
-import useReactiveVarListeners from './hooks/useReactiveVarListeners'
-import { useAccount } from './components/QueryAccount'
-import { emptyAddress } from './ui'
-import ToastContainer from 'components/Toast/ToastContainer'
-import { CrossIcon } from './components/Icons'
-
-import { useJwt } from 'react-jwt'
 
 const Route = ({
   component: Component,

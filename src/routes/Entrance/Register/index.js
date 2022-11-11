@@ -10,7 +10,7 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [pwd, setPwd] = useState('')
   const [pwdagain, setPwdAgain] = useState('')
-  const [walletAddr, setWalletAddr] = useState('')
+  const [loading, setLoading] = useState(false)
   const accounts = useSelector((state) => state.account.accounts)
   const user = useSelector((state) => state.account.user)
 
@@ -21,18 +21,18 @@ export default function Register() {
     history.push('/login')
   }
 
-  useEffect(() => {
-    console.log(user)
-  }, [user])
+  // useEffect(() => {
+  //   console.log(user)
+  // }, [user])
   /* //TODO wallet address */
   const register = async (event) => {
+    setLoading(true)
     event.preventDefault()
     var data = {
       email: email,
       password: pwd,
       walletAddress: accounts[0],
     }
-    console.log(data)
     axios
       .post('https://localhost:44368/api/auth/register', data)
       .then((response) => {
@@ -49,6 +49,7 @@ export default function Register() {
       .catch((error) => {
         console.log(error.response)
       })
+    setLoading(false)
   }
 
   return (
@@ -73,13 +74,6 @@ export default function Register() {
             setEmail(event.target.value)
           }}
         ></input>
-        {/* //TODO makes button more efficient */}
-        {/* //TODO there is a problem with the if else part */}
-        {/* {!accounts && !accounts[0] && (
-          <div>
-            <button>Connect to metamask first</button>
-          </div>
-        )} */}
         <input
           className="s-input"
           style={{ marginBottom: '10px', fontSize: '18px' }}
@@ -100,14 +94,21 @@ export default function Register() {
             setPwdAgain(event.target.value)
           }}
         ></input>
-        <button
-          className="text-darkButton bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px]"
-          type="submit"
-          style={{ width: '130px' }}
-          onClick={register}
-        >
-          Register
-        </button>
+        {accounts && accounts[0] ? (
+          <button
+            className="text-darkButton bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px]"
+            type="submit"
+            style={{ width: '130px' }}
+            onClick={register}
+          >
+            Register
+          </button>
+        ) : (
+          <div>
+            <h1>You need to connect Metamask first.</h1>
+          </div>
+        )}
+
         <p style={{ marginTop: '20px' }}>
           if you have already an account,
           <a onClick={moveToLogin} style={{ cursor: 'pointer' }}>

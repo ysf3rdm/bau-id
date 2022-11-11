@@ -15,6 +15,7 @@ export default function Login() {
   const moveToRegister = () => {
     history.push('/register')
   }
+
   const moveToHome = () => {
     history.push('/')
   }
@@ -25,7 +26,7 @@ export default function Login() {
       email: email,
       password: pwd,
     }
-    axios
+    await axios
       .post('https://localhost:5001/api/auth/login', data)
       .then((response) => {
         console.log(response)
@@ -73,11 +74,7 @@ export default function Login() {
             setPwd(event.target.value)
           }}
         ></input>
-        {loading ? (
-          <div>
-            <AnimationSpin />
-          </div>
-        ) : (
+        {!loading ? (
           <button
             className="text-darkButton w-[150] bg-primary text-semibold text-[14px] font-semibold font-urbanist py-1 px-6 rounded-[10px]"
             type="submit"
@@ -85,6 +82,10 @@ export default function Login() {
           >
             Log in
           </button>
+        ) : (
+          <div>
+            <AnimationSpin />
+          </div>
         )}
 
         <p style={{ marginTop: '20px' }}>

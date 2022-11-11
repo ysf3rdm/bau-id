@@ -41,6 +41,7 @@ import PremiumPriceOracle from 'components/SingleName/NameRegister/PremiumPriceO
 
 //Import Redux
 import { getDomainList } from 'app/slices/domainSlice'
+import { setToken } from 'app/slices/accountSlice'
 
 export default function Mainbar({
   sid,
@@ -64,7 +65,11 @@ export default function Mainbar({
   const [updatingBNBAddress, setUpdatingBNBAddress] = useState('')
   const [param, setParam] = useState('')
 
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated)
+
   const dispatch = useDispatch()
+
+  dispatch(setToken())
 
   const [years, setYears] = useState(1)
 
@@ -281,7 +286,7 @@ export default function Mainbar({
     })
   }
 
-  if (loading) {
+  if (loading || !isAuthenticated) {
     return (
       <div className="p-5 relative min-w-[840px] flex justify-center items-center">
         <AnimationSpin size={60} />
