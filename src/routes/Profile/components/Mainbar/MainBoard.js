@@ -29,7 +29,7 @@ import { isEmptyAddress } from 'utils/records'
 import { usePrevious } from '../../../../utils/utils'
 
 //Import GraphQL
-import { refetchTilUpdatedSingle } from 'utils/graphql'
+import { copyTextToClipboard } from 'utils/utils'
 
 import useTransaction from 'hooks/useTransaction'
 
@@ -147,9 +147,7 @@ const getCoins = (updatedRecords) =>
 
 const getInitialRecords = (domain, dataAddresses, dataTextRecords) => {
   const initialTextRecords = getInitialTextRecords(dataTextRecords, domain)
-  var initialCoins = getInitialCoins(dataAddresses)
-
-  initialCoins[0].key = 'EVM'
+  let initialCoins = getInitialCoins(dataAddresses)
   const initialContent = getInitialContent(domain)
 
   return [...initialTextRecords, ...initialCoins, initialContent]
@@ -216,14 +214,6 @@ export default function MainBoard({
     dataTextRecords,
     setInitialRecords
   )
-
-  async function copyTextToClipboard(text) {
-    if ('clipboard' in navigator) {
-      return await navigator.clipboard.writeText(text)
-    } else {
-      return document.execCommand('copy', true, text)
-    }
-  }
 
   useEffect(() => {
     if (updatedRecords.length > 0) {
